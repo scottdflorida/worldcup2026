@@ -16,13 +16,8 @@ PUBLIC = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))
 
 def main():
     payload = data.refresh()
-    files = render.render_site(payload)
-    for relpath, content in files.items():
-        out = os.path.join(PUBLIC, relpath)
-        os.makedirs(os.path.dirname(out), exist_ok=True)
-        with open(out, "w", encoding="utf-8") as fh:
-            fh.write(content)
-    print(f"[update] refreshed data and wrote {len(files)} files to {PUBLIC}")
+    n = render.write_site(PUBLIC, payload)
+    print(f"[update] refreshed data and wrote {n} files to {PUBLIC}")
 
 
 if __name__ == "__main__":

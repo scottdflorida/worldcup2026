@@ -116,8 +116,14 @@ def analyze_group(group_ms):
 
     # Enumerate remaining outcomes for points-based position bounds.
     possible = {t: set() for t in teams}
+    # Share of remaining-result combinations that leave each team in each final
+    # position (1st..4th). Equal weighting per combo; point-ties split evenly
+    # across the tied positions. Used for the per-group scenario visualisation.
+    dist = {t: [0.0] * len(teams) for t in teams}
     base_pts = {t: cur_stats[t]["Pts"] for t in teams}
+    ncombos = 0
     for combo in _outcomes(remaining):
+        ncombos += 1
         pts = dict(base_pts)
         for outcome, m in zip(combo, remaining):
             if outcome == 0:      # team1 win
@@ -132,6 +138,12 @@ def analyze_group(group_ms):
             best_rank = more + 1
             worst_rank = len(teams) - fewer
             possible[t].update(range(best_rank, worst_rank + 1))
+            span = worst_rank - best_rank + 1
+            for r in range(best_rank, worst_rank + 1):
+                dist[t][r - 1] += 1.0 / span
+    if ncombos:
+        for t in teams:
+            dist[t] = [x / ncombos for x in dist[t]]
 
     status = {}
     for t in teams:
@@ -151,6 +163,8 @@ def analyze_group(group_ms):
         "complete": len(remaining) == 0,
         "remaining": len(remaining),
         "status": status,
+        "dist": dist,
+        "scenarios": ncombos,
     }
 
 

@@ -10,16 +10,17 @@
     var host=document.getElementById('your-teams');
     if(host){
       host.innerHTML='';
-      if(!w.length){host.innerHTML='<p class="muted empty">No teams pinned yet — tap ★ on any team below to follow it here.</p>';}
+      if(!w.length){host.innerHTML='<p class="muted empty">No teams pinned yet — tap ★ on any team to follow it here.</p>';}
       else{w.forEach(function(t){
-        var src=document.querySelector('[data-team-card="'+t.replace(/"/g,'\\"')+'"]');
+        var src=document.querySelector('#team-src [data-team-card="'+t.replace(/"/g,'\\"')+'"]')
+              ||document.querySelector('[data-team-card="'+t.replace(/"/g,'\\"')+'"]');
         if(src)host.appendChild(src.cloneNode(true));
       });}
     }
     document.querySelectorAll('[data-team]').forEach(function(el){
       el.classList.toggle('watched',w.indexOf(el.getAttribute('data-team'))>=0);
     });
-    document.querySelectorAll('.bm,.match').forEach(function(el){
+    document.querySelectorAll('.bm,.match,.km,.dist-row').forEach(function(el){
       el.classList.toggle('has-watched',!!el.querySelector('.watched'));
     });
     document.querySelectorAll('[data-watch]').forEach(function(btn){
@@ -40,8 +41,7 @@
       c.style.display=(!q||n.indexOf(q)>=0)?'':'none';
     });
     document.querySelectorAll('.dir-group').forEach(function(g){
-      var any=g.querySelector('.tcard:not([style*="display: none"])');
-      g.style.display=any?'':'none';
+      g.style.display=g.querySelector('.tcard:not([style*="display: none"])')?'':'none';
     });
   });
   document.addEventListener('DOMContentLoaded',apply);

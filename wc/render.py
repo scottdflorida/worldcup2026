@@ -1,12 +1,14 @@
 """Render the static site (multi-page) from the live data + computed analyses.
 
-The site is team-agnostic: every nation gets a hub page, and visitors pin
-whichever teams they want via a client-side watchlist (assets/app.js).
+Pages: groups home, per-group detail (with scenario viz), a team hub for every
+nation, a searchable team directory, and a redesigned knockout bracket. The site
+is team-agnostic — visitors pin any team(s) via a client-side watchlist.
 """
 from __future__ import annotations
 
 import html
 import json
+import os
 from datetime import datetime, timezone
 
 from . import bracket, config, data, standings, util
@@ -16,7 +18,7 @@ E = html.escape
 
 
 # --------------------------------------------------------------------------
-# Shared context computed once per build
+# Shared context
 # --------------------------------------------------------------------------
 class Context:
     def __init__(self, payload):
@@ -34,8 +36,7 @@ class Context:
         return sorted(self.matches, key=lambda m: (m.get("date", ""), m.get("time", "")))
 
     def recent_results(self, n=6):
-        played = [m for m in self.sorted_matches() if data.has_result(m)]
-        return played[-n:][::-1]
+        return [m for m in self.sorted_matches() if data.has_result(m)][-n:][::-1]
 
     def upcoming(self, n=6):
         return [m for m in self.sorted_matches() if not data.has_result(m)][:n]
@@ -51,11 +52,16 @@ class Context:
 
 
 # --------------------------------------------------------------------------
-# Small components
+# Components
 # --------------------------------------------------------------------------
-def team_name(team):
-    return (f'<span class="team" data-team="{E(team)}">'
-            f'<span class="fl">{flag(team)}</span>{E(team)}</span>')
+def team_link(team, cls="team"):
+    return (f'<a class="{cls}" data-team="{E(team)}" href="{util.page_for(team)}">'
+            f'<span class="fl">{flag(team)}</span><span class="nm">{E(team)}</span></a>')
+
+
+def star_icon(team):
+    return (f'<button class="wl-ic" type="button" data-watch="{E(team)}" '
+            f'aria-pressed="false" title="Watch {E(team)}"></button>')
 
 
 def star(team, label="Watch"):
@@ -66,15 +72,24 @@ def star(team, label="Watch"):
 
 def slot_chip(res):
     if res["team"]:
-        return team_name(res["team"])
+        return team_link(res["team"])
     cands = sorted(res["candidates"])
     if 1 <= len(cands) <= 6:
-        inner = " ".join(
-            f'<span class="cand" data-team="{E(c)}">{flag(c)} {E(c)}</span>' for c in cands)
+        inner = " ".join(team_link(c, "cand") for c in cands)
         return (f'<span class="slot"><span class="slot-label">{E(res["label"])}</span>'
                 f'<span class="slot-cands">{inner}</span></span>')
     extra = f" · {len(cands)} possible" if cands else ""
     return f'<span class="slot"><span class="slot-label">{E(res["label"])}{extra}</span></span>'
+
+
+def bracket_slot(res):
+    if res["team"]:
+        return team_link(res["team"], "bteam")
+    prov = res.get("provisional")
+    code = res.get("slot", "")
+    if prov:
+        return f'{team_link(prov, "bteam prov")}<span class="bcode">{E(code)}</span>'
+    return f'<span class="bslot">{E(res["label"])}</span>'
 
 
 def status_badge(st):
@@ -83,11 +98,12 @@ def status_badge(st):
     if st["clinched_top2"]:
         return '<span class="badge q">Through</span>'
     if st["eliminated_top2"] and not st["can_top2"]:
-        return '<span class="badge out">3rd-place hope</span>'
+        return '<span class="badge out">3rd hope</span>'
     return ""
 
 
-def group_table(info):
+def group_table(info, link_header=False):
+    letter = info["group"].split()[-1]
     rows = []
     for i, row in enumerate(info["table"], 1):
         t = row["team"]
@@ -96,20 +112,72 @@ def group_table(info):
         rows.append(
             f'<tr class="{cls}" data-team="{E(t)}">'
             f'<td class="pos">{i}</td>'
-            f'<td class="tm">{team_name(t)}</td>'
+            f'<td class="star">{star_icon(t)}</td>'
+            f'<td class="tm">{team_link(t)}</td>'
             f'<td>{row["P"]}</td><td>{row["W"]}</td><td>{row["D"]}</td><td>{row["L"]}</td>'
-            f'<td>{row["GF"]}</td><td>{row["GA"]}</td><td class="gd">{row["GD"]:+d}</td>'
-            f'<td class="pts">{row["Pts"]}</td>'
+            f'<td class="hide-s">{row["GF"]}</td><td class="hide-s">{row["GA"]}</td>'
+            f'<td class="gd">{row["GD"]:+d}</td><td class="pts">{row["Pts"]}</td>'
             f'<td class="st">{status_badge(st)}</td></tr>'
         )
     state = "Final" if info["complete"] else f'{info["remaining"]} to play'
+    head = (f'<a class="group-link" href="group-{letter.lower()}.html"><h3>{E(info["group"])} '
+            f'<span class="arrow">→</span></h3></a>') if link_header else f'<h3>{E(info["group"])}</h3>'
     return (
         f'<div class="card group-card">'
-        f'<div class="group-head"><h3>{E(info["group"])}</h3><span class="muted">{state}</span></div>'
+        f'<div class="group-head">{head}<span class="muted">{state}</span></div>'
         f'<table class="standings"><thead><tr>'
-        f'<th></th><th class="tm">Team</th><th>P</th><th>W</th><th>D</th><th>L</th>'
-        f'<th>GF</th><th>GA</th><th>GD</th><th>Pts</th><th></th>'
+        f'<th></th><th></th><th class="tm">Team</th><th>P</th><th>W</th><th>D</th><th>L</th>'
+        f'<th class="hide-s">GF</th><th class="hide-s">GA</th><th>GD</th><th>Pts</th><th></th>'
         f'</tr></thead><tbody>{"".join(rows)}</tbody></table></div>'
+    )
+
+
+def legend():
+    return (
+        '<div class="legend">'
+        '<span class="lg"><i class="dot green"></i> Top 2 — advance to the Round of 32</span>'
+        '<span class="lg"><i class="dot amber"></i> 3rd — in the best-third-place race</span>'
+        '<span class="lg"><i class="star-mini">☆</i> tap to follow a team</span>'
+        '</div>'
+    )
+
+
+def dist_section(info):
+    """Scenario visualisation: share of remaining outcomes by final position."""
+    dist = info["dist"]
+    order = sorted(info["table"],
+                   key=lambda r: (dist[r["team"]][0] + dist[r["team"]][1], r["Pts"], r["GD"]),
+                   reverse=True)
+    rows = []
+    for r in order:
+        t = r["team"]
+        p = [x * 100 for x in dist[t]]
+        adv = round(p[0] + p[1])
+        segs = []
+        for k, val in enumerate(p, 1):
+            if val < 0.5:
+                continue
+            lbl = f"{round(val)}%" if val >= 12 else ""
+            segs.append(f'<span class="seg s{k}" style="width:{val:.3f}%" '
+                        f'title="{round(val)}% finish {_ordinal(k)}">{lbl}</span>')
+        rows.append(
+            f'<div class="dist-row" data-team="{E(t)}">'
+            f'<div class="dist-team">{team_link(t)}</div>'
+            f'<div class="dist-bar">{"".join(segs)}</div>'
+            f'<div class="dist-adv">{adv}%</div></div>'
+        )
+    note = ("These are the group's final standings." if info["complete"]
+            else f'Share of the {info["scenarios"]} possible remaining-result combinations that '
+                 'leave each team in each position (point-ties split evenly). The right-hand number '
+                 'is the chance of finishing in the top two.')
+    return (
+        '<div class="card dist-card">'
+        '<div class="dist-legend">'
+        '<span><i class="sw s1"></i>1st</span><span><i class="sw s2"></i>2nd</span>'
+        '<span><i class="sw s3"></i>3rd</span><span><i class="sw s4"></i>4th</span>'
+        '<span class="dist-advh">advance →</span></div>'
+        f'<div class="dist">{"".join(rows)}</div>'
+        f'<p class="muted dist-note">{note}</p></div>'
     )
 
 
@@ -122,7 +190,7 @@ def match_line(m, ctx):
         score = f'<span class="score">{g1}–{g2}</span>'
         pens = (m.get("score") or {}).get("p")
         if pens:
-            score += f'<span class="pens">({pens[0]}–{pens[1]} pen)</span>'
+            score += f'<span class="pens">({pens[0]}–{pens[1]}p)</span>'
     else:
         score = f'<span class="vs">{E(m.get("time","") or "vs")}</span>'
     rd = m.get("round", "")
@@ -134,6 +202,10 @@ def match_line(m, ctx):
         f'<div class="m-row"><span class="m-side a">{slot_chip(t1)}</span>{score}'
         f'<span class="m-side b">{slot_chip(t2)}</span></div></div>'
     )
+
+
+def match_list(ms, ctx, empty="None"):
+    return "".join(match_line(m, ctx) for m in ms) or f'<div class="muted empty">{E(empty)}</div>'
 
 
 def road_step(step, idx):
@@ -163,17 +235,16 @@ def team_card(ctx, team):
         f'<span class="tcard-flag">{flag(team)}</span>'
         f'<span class="tcard-body"><span class="tcard-name">{E(team)}</span>'
         f'<span class="tcard-meta muted">{E(proj["group"])} · {_ordinal(proj["rank"])} · {rec["Pts"]} pts</span></span>'
-        f'</a>{star(team)}</div>'
+        f'</a>{star_icon(team)}</div>'
     )
 
 
 # --------------------------------------------------------------------------
-# Page shell
+# Shell
 # --------------------------------------------------------------------------
 NAV = [
     ("index.html", "Home"),
-    ("index.html#directory", "Teams"),
-    ("groups.html", "Groups"),
+    ("teams.html", "Teams"),
     ("bracket.html", "Bracket"),
 ]
 
@@ -190,7 +261,6 @@ def shell(title, active, body, ctx):
             updated = dt.strftime("%b %d, %Y · %H:%M UTC")
         except ValueError:
             updated = ctx.last_updated
-    default_watch = json.dumps(config.DEFAULT_WATCH)
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -198,11 +268,12 @@ def shell(title, active, body, ctx):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{E(title)}</title>
 <link rel="stylesheet" href="assets/style.css">
-<script>window.WC_DEFAULT_WATCH={default_watch};</script>
+<script>window.WC_DEFAULT_WATCH={json.dumps(config.DEFAULT_WATCH)};</script>
 </head>
 <body>
+<div class="bg-fx" aria-hidden="true"></div>
 <header class="site-head">
-  <div class="brand"><a href="index.html">World Cup 2026 <span class="brand-sub">tracker</span></a></div>
+  <div class="brand"><a href="index.html"><img class="ball" src="assets/ball.svg" alt="" width="22" height="22">World&nbsp;Cup&nbsp;<span class="grad">2026</span> <span class="brand-sub">tracker</span></a></div>
   <nav class="site-nav">{nav}</nav>
 </header>
 <main>
@@ -221,43 +292,88 @@ def shell(title, active, body, ctx):
 # Pages
 # --------------------------------------------------------------------------
 def page_home(ctx):
-    results = "".join(match_line(m, ctx) for m in ctx.recent_results(6))
-    upcoming = "".join(match_line(m, ctx) for m in ctx.upcoming(6))
-
-    directory = []
-    for g in sorted(ctx.analyses):
-        info = ctx.analyses[g]
-        cards = "".join(team_card(ctx, row["team"]) for row in info["table"])
-        directory.append(
-            f'<div class="dir-group"><div class="dir-head">{E(g)} '
-            f'<span class="muted">{"Final" if info["complete"] else str(info["remaining"]) + " to play"}</span></div>'
-            f'<div class="tcard-grid">{cards}</div></div>'
-        )
-
+    grid = "".join(group_table(ctx.analyses[g], link_header=True) for g in sorted(ctx.analyses))
+    src = "".join(team_card(ctx, t) for t in ctx.teams)
+    thirds_rows = "".join(
+        f'<tr class="{"qual" if r["qualifies"] else ""}" data-team="{E(r["team"])}">'
+        f'<td class="pos">{r["seed"]}</td><td class="star">{star_icon(r["team"])}</td>'
+        f'<td class="tm">{team_link(r["team"])}</td>'
+        f'<td>{E(r["group"])}</td><td>{r["Pts"]}</td><td class="gd">{r["GD"]:+d}</td><td>{r["GF"]}</td>'
+        f'<td>{"✓ in" if r["qualifies"] else "out"}</td></tr>'
+        for r in ctx.thirds
+    )
+    n_played = sum(1 for m in ctx.matches if data.has_result(m))
     body = f"""
 <section class="hero">
-  <h1>{E(config.TOURNAMENT["name"])}</h1>
-  <p class="hero-sub">{E(config.TOURNAMENT["hosts"])} · {E(config.TOURNAMENT["start"])} – {E(config.TOURNAMENT["final_date"])} · {config.TOURNAMENT["teams"]} teams</p>
-  <p class="hero-stage">Now: <strong>{E(ctx.stage())}</strong></p>
+  <h1 class="grad-text">{E(config.TOURNAMENT["name"])}</h1>
+  <p class="hero-sub">{E(config.TOURNAMENT["hosts"])} · {E(config.TOURNAMENT["start"])} – {E(config.TOURNAMENT["final_date"])}</p>
+  <div class="hero-chips">
+    <span class="chip"><b>{E(ctx.stage())}</b></span>
+    <span class="chip">{n_played}/{len(ctx.matches)} matches played</span>
+    <span class="chip">{config.TOURNAMENT["teams"]} teams · {config.TOURNAMENT["groups"]} groups</span>
+  </div>
 </section>
 
 <section>
   <div class="sec-head"><h2>Your teams</h2><span class="muted">Pin any team with ★ — saved in your browser</span></div>
   <div id="your-teams" class="tcard-grid"></div>
+  <div id="team-src" hidden>{src}</div>
+</section>
+
+<section>
+  <div class="sec-head"><h2>Groups</h2><span class="muted">Tap a group title for fixtures &amp; scenarios</span></div>
+  {legend()}
+  <div class="group-grid">{grid}</div>
+</section>
+
+<section>
+  <div class="sec-head"><h2>Best third-placed teams</h2><span class="muted">provisional — eight advance</span></div>
+  <div class="card"><table class="standings thirds">
+  <thead><tr><th></th><th></th><th class="tm">Team</th><th>Group</th><th>Pts</th><th>GD</th><th>GF</th><th>R32</th></tr></thead>
+  <tbody>{thirds_rows}</tbody></table></div>
 </section>
 
 <section class="cols">
-  <div><h2>Latest results</h2><div class="match-list">{results}</div></div>
-  <div><h2>Coming up</h2><div class="match-list">{upcoming}</div></div>
-</section>
-
-<section id="directory">
-  <div class="sec-head"><h2>All teams</h2><span class="muted">Tap a team to inspect its path; ★ to follow it</span></div>
-  <input id="team-search" class="team-search" type="search" placeholder="Search a team…" aria-label="Search teams">
-  <div class="directory">{"".join(directory)}</div>
+  <div><h2>Latest results</h2><div class="match-list">{match_list(ctx.recent_results(5), ctx)}</div></div>
+  <div><h2>Coming up</h2><div class="match-list">{match_list(ctx.upcoming(5), ctx)}</div></div>
 </section>
 """
     return shell(config.TOURNAMENT["name"], "index.html", body, ctx)
+
+
+def page_group(ctx, letter):
+    g = f"Group {letter}"
+    info = ctx.analyses[g]
+    ms = sorted([m for m in ctx.matches if m.get("group") == g],
+                key=lambda m: (m.get("date", ""), m.get("time", "")))
+    completed = [m for m in ms if data.has_result(m)]
+    upcoming = [m for m in ms if not data.has_result(m)]
+    chips = " ".join(team_link(row["team"]) for row in info["table"])
+    state = "Final standings" if info["complete"] else f'{info["remaining"]} games to play'
+    body = f"""
+<section class="group-banner">
+  <div class="gb-tag">Group</div><div class="gb-letter">{E(letter)}</div>
+  <div class="gb-main"><div class="gb-state">{E(state)}</div><div class="gb-teams">{chips}</div></div>
+</section>
+
+<section>
+  <div class="sec-head"><h2>Standings</h2></div>
+  {legend()}
+  {group_table(info)}
+</section>
+
+<section>
+  <div class="sec-head"><h2>Scenarios</h2><span class="muted">how the remaining games could finish the table</span></div>
+  {dist_section(info)}
+</section>
+
+<section><div class="sec-head"><h2>Upcoming games</h2></div>
+  <div class="match-list">{match_list(upcoming, ctx, "Group complete")}</div></section>
+
+<section><div class="sec-head"><h2>Completed games</h2></div>
+  <div class="match-list">{match_list(completed, ctx, "None played yet")}</div></section>
+"""
+    return shell(f"Group {letter} — World Cup 2026", "", body, ctx)
 
 
 def page_team(ctx, team):
@@ -278,80 +394,93 @@ def page_team(ctx, team):
     third_html = _third_scenarios(ctx, proj) if 3 in ranks else ""
 
     group_results = [m for m in ctx.matches if m.get("group") == proj["group"]]
-    gr_played = "".join(match_line(m, ctx) for m in group_results if data.has_result(m))
-    gr_upcoming = "".join(match_line(m, ctx) for m in group_results if not data.has_result(m))
+    gr_played = [m for m in group_results if data.has_result(m)]
+    gr_upcoming = [m for m in group_results if not data.has_result(m)]
 
     body = f"""
 <section class="team-hero" data-team="{E(team)}" style="--accent:{pr};--accent2:{sec}">
   <div class="th-flag">{flag(team)}</div>
   <div class="th-main">
     <h1>{E(team)}</h1>
-    <p class="th-line">{E(proj['group'])} · {_ordinal(proj['rank'])} place · {proj['row']['Pts']} pts ({proj['row']['W']}W {proj['row']['D']}D {proj['row']['L']}L)</p>
+    <p class="th-line"><a class="th-grp" href="group-{g.lower()}.html">{E(proj['group'])}</a> · {_ordinal(proj['rank'])} place · {proj['row']['Pts']} pts ({proj['row']['W']}W {proj['row']['D']}D {proj['row']['L']}L)</p>
     <p class="th-outlook">{_one_line_outlook(proj)}</p>
   </div>
   <div class="th-watch">{star(team, "Watch")}</div>
 </section>
 
-<section><h2>{E(proj['group'])} standings</h2>{group_table(info)}</section>
+<section>
+  <div class="sec-head"><h2>{E(proj['group'])} standings</h2></div>
+  {group_table(info)}
+</section>
 
-<section><h2>Potential futures — road to the final</h2>
-  <p class="muted">Where the current table would send {E(team)} and who they could meet at each round. Real names appear once results are in; otherwise the live candidates are shown.</p>
+<section>
+  <div class="sec-head"><h2>Potential futures — road to the final</h2></div>
+  <p class="muted">Where the current table would send {E(team)} and who they could meet each round. Real names appear once results are in; otherwise the live candidates are shown.</p>
   {third_html}
   <div class="scenarios">{''.join(s for s in scenarios if s) or '<p class="muted">No knockout path yet — still alive in the group.</p>'}</div>
 </section>
 
 <section class="cols">
-  <div><h2>Results</h2><div class="match-list">{gr_played or '<div class="muted">None yet</div>'}</div></div>
-  <div><h2>Remaining group games</h2><div class="match-list">{gr_upcoming or '<div class="muted">Group complete</div>'}</div></div>
+  <div><h2>Results</h2><div class="match-list">{match_list(gr_played, ctx, "None yet")}</div></div>
+  <div><h2>Remaining group games</h2><div class="match-list">{match_list(gr_upcoming, ctx, "Group complete")}</div></div>
 </section>
 """
     return shell(f"{team} — World Cup 2026", "", body, ctx)
 
 
-def page_groups(ctx):
-    cards = "".join(group_table(ctx.analyses[g]) for g in sorted(ctx.analyses))
-    thirds_rows = "".join(
-        f'<tr class="{"qual" if r["qualifies"] else ""}" data-team="{E(r["team"])}">'
-        f'<td class="pos">{r["seed"]}</td><td class="tm">{team_name(r["team"])}</td>'
-        f'<td>{E(r["group"])}</td><td>{r["Pts"]}</td><td class="gd">{r["GD"]:+d}</td><td>{r["GF"]}</td>'
-        f'<td>{"✓ in" if r["qualifies"] else "out"}</td></tr>'
-        for r in ctx.thirds
-    )
+def page_teams(ctx):
+    directory = []
+    for g in sorted(ctx.analyses):
+        info = ctx.analyses[g]
+        cards = "".join(team_card(ctx, row["team"]) for row in info["table"])
+        directory.append(
+            f'<div class="dir-group"><div class="dir-head">'
+            f'<a href="group-{g.split()[-1].lower()}.html">{E(g)}</a> '
+            f'<span class="muted">{"Final" if info["complete"] else str(info["remaining"]) + " to play"}</span></div>'
+            f'<div class="tcard-grid">{cards}</div></div>'
+        )
     body = f"""
-<section><h1>Groups & standings</h1>
-<p class="muted">Top two of each group advance, plus the eight best third-placed teams. Pin teams with ★ to highlight them here.</p></section>
-<section class="group-grid">{cards}</section>
-<section><h2>Best third-placed teams <span class="muted">(provisional)</span></h2>
-<div class="card"><table class="standings thirds">
-<thead><tr><th></th><th class="tm">Team</th><th>Group</th><th>Pts</th><th>GD</th><th>GF</th><th>R32</th></tr></thead>
-<tbody>{thirds_rows}</tbody></table></div></section>
+<section><h1>All teams</h1>
+<p class="muted">Tap a team to inspect its path to the final; ★ to follow it across the site.</p></section>
+<section id="directory">
+  <input id="team-search" class="team-search" type="search" placeholder="Search a team…" aria-label="Search teams">
+  <div class="directory">{"".join(directory)}</div>
+</section>
 """
-    return shell("Groups — World Cup 2026", "groups.html", body, ctx)
+    return shell("Teams — World Cup 2026", "teams.html", body, ctx)
 
 
 def page_bracket(ctx):
+    by_num = bracket.index_matches(ctx.matches)
     cols = []
     for rd, rows in ctx.bracket:
         if rd == "Match for third place":
             continue
         cells = []
         for r in rows:
-            if r["played"]:
-                g1, g2 = data.final_score({"score": r["score"]})
-                sc = f'<span class="bm-score">{g1}–{g2}</span>'
-            else:
-                sc = '<span class="bm-score muted">—</span>'
+            sides = []
+            for key in ("team1", "team2"):
+                res = r[key]
+                g = ""
+                if r["played"]:
+                    g1, g2 = data.final_score({"score": r["score"]})
+                    gv = g1 if key == "team1" else g2
+                    winner = r["winner"]
+                    wcls = " w" if winner and res["team"] == winner else ""
+                    g = f'<span class="km-g{wcls}">{gv}</span>'
+                sides.append(f'<div class="km-team">{bracket_slot(res)}{g}</div>')
             cells.append(
-                f'<div class="bm"><div class="bm-no">M{r["num"]} · {E(r.get("date",""))}</div>'
-                f'<div class="bm-side">{slot_chip(r["team1"])}</div>'
-                f'<div class="bm-mid">{sc}</div>'
-                f'<div class="bm-side">{slot_chip(r["team2"])}</div></div>'
+                f'<div class="km">'
+                f'<div class="km-no">M{r["num"]} · {E((r.get("date") or "")[5:])}</div>'
+                f'{sides[0]}<div class="km-line"></div>{sides[1]}</div>'
             )
-        cols.append(f'<div class="br-col"><h3>{E(rd)}</h3>{"".join(cells)}</div>')
+        head_lbl = (f'<img class="kr-trophy" src="assets/trophy.svg" alt="" width="18" height="18">{E(rd)}'
+                    if rd == "Final" else E(rd))
+        cols.append(f'<div class="kr-col"><div class="kr-head">{head_lbl}</div>{"".join(cells)}</div>')
     body = f"""
-<section><h1>Knockout bracket</h1>
-<p class="muted">Round of 32 through the final. Pin teams with ★ and their matches light up across the bracket. Slots resolve to real teams as results come in.</p></section>
-<section class="bracket-scroll"><div class="bracket">{"".join(cols)}</div></section>
+<section><h1 class="grad-text">Knockout bracket</h1>
+<p class="muted">Round of 32 → Final. Pin teams with ★ and their matches glow across the bracket. Greyed slots resolve to real teams as results land (the small code shows the current table position).</p></section>
+<section class="bracket-wrap"><div class="kbracket">{"".join(cols)}</div></section>
 """
     return shell("Bracket — World Cup 2026", "bracket.html", body, ctx)
 
@@ -404,14 +533,73 @@ def render_site(payload):
     ctx = Context(payload)
     files = {
         "index.html": page_home(ctx),
-        "groups.html": page_groups(ctx),
+        "teams.html": page_teams(ctx),
         "bracket.html": page_bracket(ctx),
         "assets/style.css": STYLE,
         "assets/app.js": APP_JS,
+        "assets/ball.svg": BALL_SVG,
+        "assets/pitch.svg": PITCH_SVG,
+        "assets/trophy.svg": TROPHY_SVG,
     }
+    for g in ctx.analyses:
+        letter = g.split()[-1]
+        files[f"group-{letter.lower()}.html"] = page_group(ctx, letter)
     for team in ctx.teams:
         files[util.page_for(team)] = page_team(ctx, team)
     return files
+
+
+def write_site(public_dir, payload):
+    """Render and write the site, clearing stale HTML pages first."""
+    files = render_site(payload)
+    if os.path.isdir(public_dir):
+        for fn in os.listdir(public_dir):
+            if fn.endswith(".html"):
+                os.remove(os.path.join(public_dir, fn))
+    for rel, content in files.items():
+        out = os.path.join(public_dir, rel)
+        os.makedirs(os.path.dirname(out), exist_ok=True)
+        with open(out, "w", encoding="utf-8") as fh:
+            fh.write(content)
+    return len(files)
+
+
+# --------------------------------------------------------------------------
+# Original, license-free SVG graphics (no FIFA/World Cup trademarks used)
+# --------------------------------------------------------------------------
+BALL_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+<circle cx="32" cy="32" r="30" fill="#fff" stroke="#0a0c12" stroke-width="2.5"/>
+<polygon points="32,23 40.56,29.22 37.29,39.28 26.71,39.28 23.44,29.22" fill="#0a0c12"/>
+<g stroke="#0a0c12" stroke-width="2.2" stroke-linecap="round">
+<line x1="32" y1="23" x2="32" y2="3.5"/>
+<line x1="40.56" y1="29.22" x2="59" y2="23"/>
+<line x1="37.29" y1="39.28" x2="48.6" y2="55"/>
+<line x1="26.71" y1="39.28" x2="15.4" y2="55"/>
+<line x1="23.44" y1="29.22" x2="5" y2="23"/>
+</g></svg>"""
+
+TROPHY_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+<g fill="#fbbf24" stroke="#d97706" stroke-width="1.3" stroke-linejoin="round">
+<path d="M13 7 H35 V14 A11 11 0 0 1 13 14 Z"/>
+<path d="M13 9 H7.5 a4.5 5.5 0 0 0 7 9.2" fill="none"/>
+<path d="M35 9 H40.5 a4.5 5.5 0 0 1 -7 9.2" fill="none"/>
+<rect x="22" y="24" width="4" height="7"/>
+<rect x="15.5" y="31" width="17" height="4.2" rx="1.2"/>
+<rect x="13" y="35" width="22" height="4.4" rx="1.4"/>
+</g></svg>"""
+
+PITCH_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" fill="none" stroke="#fff" stroke-width="2">
+<rect x="6" y="6" width="308" height="188" rx="5"/>
+<line x1="160" y1="6" x2="160" y2="194"/>
+<circle cx="160" cy="100" r="30"/>
+<circle cx="160" cy="100" r="2.6" fill="#fff" stroke="none"/>
+<rect x="6" y="55" width="44" height="90"/>
+<rect x="6" y="80" width="18" height="40"/>
+<rect x="270" y="55" width="44" height="90"/>
+<rect x="296" y="80" width="18" height="40"/>
+<path d="M50 79 A30 30 0 0 1 50 121"/>
+<path d="M270 79 A30 30 0 0 0 270 121"/>
+</svg>"""
 
 
 APP_JS = r"""
@@ -426,16 +614,17 @@ APP_JS = r"""
     var host=document.getElementById('your-teams');
     if(host){
       host.innerHTML='';
-      if(!w.length){host.innerHTML='<p class="muted empty">No teams pinned yet — tap ★ on any team below to follow it here.</p>';}
+      if(!w.length){host.innerHTML='<p class="muted empty">No teams pinned yet — tap ★ on any team to follow it here.</p>';}
       else{w.forEach(function(t){
-        var src=document.querySelector('[data-team-card="'+t.replace(/"/g,'\\"')+'"]');
+        var src=document.querySelector('#team-src [data-team-card="'+t.replace(/"/g,'\\"')+'"]')
+              ||document.querySelector('[data-team-card="'+t.replace(/"/g,'\\"')+'"]');
         if(src)host.appendChild(src.cloneNode(true));
       });}
     }
     document.querySelectorAll('[data-team]').forEach(function(el){
       el.classList.toggle('watched',w.indexOf(el.getAttribute('data-team'))>=0);
     });
-    document.querySelectorAll('.bm,.match').forEach(function(el){
+    document.querySelectorAll('.bm,.match,.km,.dist-row').forEach(function(el){
       el.classList.toggle('has-watched',!!el.querySelector('.watched'));
     });
     document.querySelectorAll('[data-watch]').forEach(function(btn){
@@ -456,162 +645,270 @@ APP_JS = r"""
       c.style.display=(!q||n.indexOf(q)>=0)?'':'none';
     });
     document.querySelectorAll('.dir-group').forEach(function(g){
-      var any=g.querySelector('.tcard:not([style*="display: none"])');
-      g.style.display=any?'':'none';
+      g.style.display=g.querySelector('.tcard:not([style*="display: none"])')?'':'none';
     });
   });
   document.addEventListener('DOMContentLoaded',apply);
 })();
 """
 
-
 STYLE = r"""
 :root{
-  --bg:#0e1116;--panel:#161b22;--panel2:#1c232d;--line:#2b333d;
-  --text:#e7edf3;--muted:#8b97a5;--accent:#3b82f6;
-  --green:#16a34a;--amber:#d97706;--gold:#fbbf24;--maxw:1180px;
+  --bg:#0a0c12;--panel:rgba(22,27,38,.72);--panel2:#1b2233;--line:rgba(255,255,255,.09);
+  --text:#eef2f8;--muted:#93a0b4;--accent:#7c8cff;
+  --i1:#6366f1;--i2:#a855f7;--i3:#ec4899;--cyan:#22d3ee;
+  --green:#34d399;--amber:#fbbf24;--orange:#fb923c;--slate:#64748b;
+  --grad:linear-gradient(120deg,var(--i1),var(--i2),var(--i3));
+  --maxw:1200px;--r:16px;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--text);
-  font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+body{margin:0;background:var(--bg);color:var(--text);overflow-x:hidden;
+  font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
 a{color:inherit;text-decoration:none}
-h1,h2,h3,h4{line-height:1.2;margin:0 0 .5em}
-h1{font-size:2rem}h2{font-size:1.35rem}
+h1,h2,h3,h4{line-height:1.18;margin:0 0 .5em;letter-spacing:-.01em}
+h1{font-size:2.1rem}h2{font-size:1.4rem}
 .muted{color:var(--muted);font-size:.9em}
-main{max-width:var(--maxw);margin:0 auto;padding:24px 18px 60px}
-section{margin:28px 0}
-.sec-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+main{max-width:var(--maxw);margin:0 auto;padding:18px 18px 80px;position:relative;z-index:1}
+
+/* animated background */
+.bg-fx{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(38vw 38vw at 12% -5%,rgba(99,102,241,.30),transparent 60%),
+    radial-gradient(34vw 34vw at 95% 8%,rgba(236,72,153,.22),transparent 60%),
+    radial-gradient(40vw 40vw at 70% 100%,rgba(34,211,238,.16),transparent 60%);
+  filter:saturate(1.1);animation:drift 22s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(0,-3%,0) scale(1.08)}}
+
+/* section spacing + reveal */
+section{margin:46px 0;animation:fadeUp .55s both}
+section:nth-of-type(2){animation-delay:.05s}
+section:nth-of-type(3){animation-delay:.1s}
+section:nth-of-type(4){animation-delay:.15s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.sec-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.sec-head h2,section>h2{position:relative;padding-left:14px}
+.sec-head h2::before,section>h2::before{content:"";position:absolute;left:0;top:.1em;bottom:.1em;width:5px;border-radius:3px;background:var(--grad)}
 .sec-head h2{margin:0}
 
-.site-head{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:18px;
-  justify-content:space-between;padding:12px 18px;background:rgba(14,17,22,.92);
-  backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.brand a{font-weight:800;letter-spacing:.3px;font-size:1.05rem}
-.brand-sub{color:var(--accent);font-weight:600}
+/* header */
+.site-head{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;
+  justify-content:space-between;padding:12px 20px;
+  background:rgba(10,12,18,.72);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.brand a{font-weight:800;font-size:1.06rem;letter-spacing:.2px}
+.brand .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand-sub{color:var(--muted);font-weight:600}
 .site-nav{display:flex;gap:6px;flex-wrap:wrap}
-.site-nav a{padding:7px 12px;border-radius:8px;color:var(--muted);font-weight:600;font-size:.92rem}
-.site-nav a:hover{color:var(--text);background:var(--panel)}
-.site-nav a.on{color:var(--text);background:var(--panel2)}
+.site-nav a{padding:8px 14px;border-radius:11px;color:var(--muted);font-weight:700;font-size:.92rem;transition:.15s}
+.site-nav a:hover{color:var(--text);background:rgba(255,255,255,.06)}
+.site-nav a.on{color:#fff;background:var(--grad);box-shadow:0 6px 20px -8px var(--i2)}
 
-.hero{text-align:center;padding:30px 0 6px}
-.hero h1{font-size:2.4rem;margin-bottom:.2em}
+/* hero */
+.hero{text-align:center;padding:36px 0 4px}
+.hero h1{font-size:3rem;margin-bottom:.1em}
+.grad-text{background:linear-gradient(120deg,var(--i1),var(--i2),var(--i3),var(--cyan));
+  background-size:240% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sheen 8s linear infinite}
+@keyframes sheen{to{background-position:240% center}}
 .hero-sub{color:var(--muted)}
-.hero-stage{margin-top:6px}
+.hero-chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.chip{padding:7px 14px;border-radius:999px;background:var(--panel);border:1px solid var(--line);
+  backdrop-filter:blur(8px);font-size:.9rem}
+.chip b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 
+/* cards (glass) */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+  backdrop-filter:blur(10px);box-shadow:0 12px 40px -24px #000}
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-.match-list{display:flex;flex-direction:column;gap:8px}
+.match-list{display:flex;flex-direction:column;gap:9px}
 
-.match{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
-.match.has-watched{border-color:var(--accent)}
-.m-meta{display:flex;gap:8px;align-items:center;font-size:.78rem;color:var(--muted);margin-bottom:4px}
+/* legend */
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin:0 0 14px;color:var(--muted);font-size:.86rem}
+.legend .lg{display:inline-flex;align-items:center;gap:7px}
+.dot{width:11px;height:11px;border-radius:3px;display:inline-block}
+.dot.green{background:var(--green)}.dot.amber{background:var(--amber)}
+.star-mini{color:var(--amber);font-style:normal}
+
+/* match line */
+.match{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 13px;transition:.15s}
+.match.has-watched{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 8px 26px -16px var(--i2)}
+.m-meta{display:flex;gap:8px;align-items:center;font-size:.76rem;color:var(--muted);margin-bottom:5px}
 .m-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}
-.m-side{display:flex;align-items:center}
-.m-side.b{justify-content:flex-end;text-align:right}
-.score{font-weight:800;font-size:1.1rem;padding:0 8px}
-.pens{font-size:.72rem;color:var(--muted);margin-left:4px}
+.m-side{display:flex;align-items:center}.m-side.b{justify-content:flex-end;text-align:right}
+.score{font-weight:800;font-size:1.08rem;padding:0 8px}
+.pens{font-size:.7rem;color:var(--muted);margin-left:3px}
 .vs{color:var(--muted);font-size:.8rem;white-space:nowrap}
-.rd{background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:.72rem}
+.rd{background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:6px;padding:1px 7px;font-size:.7rem}
 
-.team{display:inline-flex;align-items:center;gap:6px;font-weight:600;border-radius:6px;padding:1px 3px}
-.team .fl{font-size:1.1em}
-.team.watched{background:rgba(59,130,246,.18);box-shadow:inset 0 0 0 1px var(--accent);font-weight:800}
-.slot{display:inline-flex;flex-direction:column;gap:2px}
-.slot-label{color:var(--muted);font-weight:600;font-size:.9em}
+/* team chips/links */
+.team,.cand,.bteam{display:inline-flex;align-items:center;gap:6px;font-weight:650;border-radius:7px;padding:1px 4px;transition:.12s}
+.team .fl,.cand .fl,.bteam .fl{font-size:1.08em}
+.team:hover,.cand:hover,.bteam:hover{color:#fff;background:rgba(255,255,255,.07)}
+.team.watched,.cand.watched,.bteam.watched{background:rgba(124,140,255,.2);box-shadow:inset 0 0 0 1px var(--accent);font-weight:800}
+.cand{font-size:.76rem;background:var(--panel2);border:1px solid var(--line);padding:2px 6px}
+.slot{display:inline-flex;flex-direction:column;gap:3px}
+.slot-label{color:var(--muted);font-weight:600;font-size:.88em}
 .slot-cands{display:flex;flex-wrap:wrap;gap:4px}
-.cand{font-size:.74rem;background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
-.cand.watched{border-color:var(--accent);background:rgba(59,130,246,.18);font-weight:700}
 
-.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:6px 6px 4px}
-.group-card{padding:0;overflow:hidden}
-.group-head{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
-.group-head h3{margin:0}
-table.standings{width:100%;border-collapse:collapse;font-size:.9rem}
-.standings th,.standings td{padding:7px 6px;text-align:center}
-.standings th{color:var(--muted);font-weight:600;font-size:.74rem;text-transform:uppercase;letter-spacing:.4px}
+/* tables */
+.group-card{overflow:hidden;transition:.18s;animation:fadeUp .5s both}
+.group-card:hover{transform:translateY(-3px);border-color:rgba(124,140,255,.5)}
+.group-head{display:flex;justify-content:space-between;align-items:center;padding:11px 15px;border-bottom:1px solid var(--line)}
+.group-head h3{margin:0;font-size:1.05rem}
+.group-link{display:inline-flex}.group-link .arrow{color:var(--accent);transition:.15s;display:inline-block}
+.group-link:hover{color:#fff}.group-link:hover .arrow{transform:translateX(4px)}
+table.standings{width:100%;border-collapse:collapse;font-size:.86rem}
+.standings th,.standings td{padding:7px 5px;text-align:center}
+.standings th{color:var(--muted);font-weight:600;font-size:.7rem;text-transform:uppercase;letter-spacing:.4px}
 .standings .tm{text-align:left;width:100%}
-.standings td.pos{color:var(--muted);width:22px}
+.standings td.pos{color:var(--muted);width:20px;font-weight:700}
+.standings td.star{width:22px;padding:0}
 .standings td.pts{font-weight:800}
 .standings .gd{color:var(--muted)}
-.standings tbody tr{border-top:1px solid var(--line)}
+.standings tbody tr{border-top:1px solid var(--line);transition:.12s}
 .standings tr.qual td.pos{box-shadow:inset 3px 0 0 var(--green)}
 .standings tr.third td.pos{box-shadow:inset 3px 0 0 var(--amber)}
-.standings tr.watched{background:rgba(59,130,246,.12)}
-.badge{font-size:.68rem;font-weight:700;border-radius:20px;padding:2px 9px;white-space:nowrap}
-.badge.win{background:rgba(22,163,74,.18);color:#4ade80}
-.badge.q{background:rgba(22,163,74,.12);color:#86efac}
-.badge.out{background:rgba(217,119,6,.16);color:var(--gold)}
+.standings tr.watched{background:rgba(124,140,255,.12)}
+.badge{font-size:.66rem;font-weight:800;border-radius:20px;padding:2px 8px;white-space:nowrap}
+.badge.win{background:rgba(52,211,153,.18);color:#6ee7b7}
+.badge.q{background:rgba(52,211,153,.12);color:#a7f3d0}
+.badge.out{background:rgba(251,191,36,.16);color:var(--amber)}
+.group-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:18px}
+.thirds td{padding:8px 6px}
 
-.group-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
-
-/* watch button */
-.wl{display:inline-flex;align-items:center;gap:6px;cursor:pointer;border-radius:20px;
-  border:1px solid var(--line);background:var(--panel2);color:var(--muted);
-  font-weight:700;font-size:.82rem;padding:5px 12px}
+/* star buttons */
+.wl-ic{width:24px;height:24px;border:0;background:none;cursor:pointer;color:var(--muted);
+  font-size:1.05rem;line-height:1;padding:0;transition:.12s}
+.wl-ic::before{content:"\2606"}
+.wl-ic:hover{color:var(--amber);transform:scale(1.18)}
+.wl-ic.on{color:var(--amber)}.wl-ic.on::before{content:"\2605"}
+.wl{display:inline-flex;align-items:center;gap:6px;cursor:pointer;border-radius:999px;
+  border:1px solid var(--line);background:var(--panel2);color:var(--muted);font-weight:800;font-size:.84rem;padding:7px 15px;transition:.15s}
 .wl:hover{color:var(--text);border-color:var(--accent)}
-.wl .wl-star{color:var(--muted)}
-.wl.on{background:rgba(251,191,36,.16);border-color:var(--gold);color:var(--gold)}
-.wl.on .wl-star{color:var(--gold)}
+.wl.on{background:linear-gradient(120deg,var(--amber),var(--orange));border-color:transparent;color:#1a1305}
+.wl .wl-star{color:inherit}
 
-/* team directory cards */
-.tcard-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+/* directory + your teams */
+.tcard-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:11px}
 .tcard{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);
-  border-left:4px solid var(--accent);border-radius:10px;padding:8px 10px}
-.tcard.watched{box-shadow:0 0 0 1px var(--accent)}
+  border-left:4px solid var(--accent);border-radius:12px;padding:9px 11px;transition:.15s}
+.tcard:hover{transform:translateY(-2px);border-color:rgba(124,140,255,.5)}
+.tcard.watched{box-shadow:0 0 0 1px var(--accent),0 10px 30px -18px var(--i2)}
 .tcard-main{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
 .tcard-flag{font-size:1.5rem}
 .tcard-body{display:flex;flex-direction:column;min-width:0}
-.tcard-name{font-weight:800}
-.tcard-meta{font-size:.78rem}
-.directory{display:flex;flex-direction:column;gap:18px}
-.dir-group .dir-head{font-weight:700;margin-bottom:8px;color:var(--text)}
-.team-search{width:100%;max-width:360px;margin-bottom:14px;padding:9px 12px;border-radius:9px;
-  border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:.95rem}
-.empty{padding:14px;border:1px dashed var(--line);border-radius:10px}
+.tcard-name{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tcard-meta{font-size:.76rem}
+.directory{display:flex;flex-direction:column;gap:20px}
+.dir-group .dir-head{font-weight:800;margin-bottom:9px}
+.dir-group .dir-head a:hover{color:var(--accent)}
+.team-search{width:100%;max-width:380px;margin-bottom:16px;padding:11px 14px;border-radius:12px;
+  border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:.95rem;backdrop-filter:blur(8px)}
+.empty{padding:16px;border:1px dashed var(--line);border-radius:12px}
+
+/* scenario distribution */
+.dist-card{padding:16px 18px}
+.dist-legend{display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:.78rem;margin-bottom:12px;align-items:center}
+.dist-legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:13px;height:13px;border-radius:4px;display:inline-block}
+.s1{background:var(--amber)}.s2{background:var(--green)}.s3{background:var(--orange)}.s4{background:var(--slate)}
+.dist-advh{margin-left:auto;font-weight:700;color:var(--text)}
+.dist{display:flex;flex-direction:column;gap:10px}
+.dist-row{display:grid;grid-template-columns:160px 1fr 46px;align-items:center;gap:12px}
+.dist-row.has-watched .dist-team{font-weight:800}
+.dist-team{min-width:0;overflow:hidden}
+.dist-bar{display:flex;height:22px;border-radius:7px;overflow:hidden;background:var(--panel2);box-shadow:inset 0 0 0 1px var(--line)}
+.dist-bar .seg{display:flex;align-items:center;justify-content:center;font-size:.66rem;font-weight:800;color:#10131c;
+  min-width:0;transition:width .5s ease}
+.dist-bar .seg.s4{color:#dde3ee}
+.dist-adv{text-align:right;font-weight:800}
+.dist-note{margin:12px 2px 0}
 
 /* team hero */
-.team-hero{display:flex;align-items:center;gap:20px;background:linear-gradient(120deg,var(--accent),var(--accent2));
-  border-radius:16px;padding:22px 24px;color:#fff;flex-wrap:wrap}
-.th-flag{font-size:3.4rem}
-.th-main{flex:1;min-width:200px}
-.team-hero h1{margin:0;font-size:2rem;color:#fff}
-.th-line{margin:4px 0;opacity:.95}
-.th-outlook{margin:6px 0 0;font-weight:600}
-.th-watch .wl{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.5);color:#fff}
-.th-watch .wl .wl-star{color:#fff}
-.th-watch .wl.on{background:#fff;color:#111}
-.th-watch .wl.on .wl-star{color:var(--amber)}
+.team-hero{display:flex;align-items:center;gap:22px;border-radius:22px;padding:26px 28px;color:#fff;flex-wrap:wrap;
+  background:linear-gradient(120deg,var(--accent),var(--accent2));position:relative;overflow:hidden;
+  box-shadow:0 24px 60px -30px var(--accent)}
+.team-hero::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 120% at 100% 0,rgba(255,255,255,.25),transparent 60%)}
+.th-flag{font-size:3.8rem;position:relative}
+.th-main{flex:1;min-width:200px;position:relative}
+.team-hero h1{margin:0;font-size:2.1rem;color:#fff}
+.th-line{margin:5px 0;opacity:.96}.th-grp{text-decoration:underline;text-underline-offset:3px}
+.th-outlook{margin:6px 0 0;font-weight:700}
+.th-watch{position:relative}
+.th-watch .wl{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.55);color:#fff}
+.th-watch .wl.on{background:#fff;color:#16140b;border-color:#fff}
 
-.scenarios{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.scenario{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+/* group banner */
+.group-banner{display:flex;align-items:center;gap:18px;border-radius:22px;padding:22px 26px;
+  background:var(--grad);color:#fff;box-shadow:0 24px 60px -34px var(--i2)}
+.gb-tag{font-weight:700;text-transform:uppercase;letter-spacing:2px;opacity:.85;font-size:.8rem;writing-mode:vertical-rl;transform:rotate(180deg)}
+.gb-letter{font-size:3.6rem;font-weight:900;line-height:1}
+.gb-main{flex:1}.gb-state{font-weight:700;opacity:.95;margin-bottom:8px}
+.gb-teams{display:flex;flex-wrap:wrap;gap:8px}
+.gb-teams .team{background:rgba(255,255,255,.16);color:#fff}
+
+/* road / scenarios */
+.scenarios{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.scenario{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
 .scenario.third{grid-column:1/-1;border-style:dashed}
-.scenario h4{margin:0 0 10px}
-.road{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.scenario h4{margin:0 0 12px}
+.road{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
 .step{display:flex;gap:12px;align-items:flex-start}
-.step-rd{display:flex;align-items:center;gap:8px;min-width:140px;font-weight:600;font-size:.85rem;color:var(--muted)}
-.step-no{display:inline-grid;place-items:center;min-width:34px;height:24px;padding:0 6px;border-radius:6px;
-  background:var(--panel2);border:1px solid var(--line);color:var(--text);font-size:.72rem;font-weight:800}
-.step-body{flex:1;border-left:2px solid var(--line);padding:0 0 6px 12px}
-.vs-lbl{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-.step-meta{margin-top:2px}
+.step-rd{display:flex;align-items:center;gap:8px;min-width:140px;font-weight:700;font-size:.84rem;color:var(--muted)}
+.step-no{display:inline-grid;place-items:center;min-width:34px;height:24px;padding:0 6px;border-radius:7px;
+  background:var(--grad);color:#fff;font-size:.7rem;font-weight:900}
+.step-body{flex:1;border-left:2px solid var(--line);padding:0 0 6px 13px}
+.vs-lbl{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
 
-.bracket-scroll{overflow-x:auto;padding-bottom:10px}
-.bracket{display:flex;gap:14px;min-width:max-content}
-.br-col{min-width:235px}
-.br-col h3{font-size:.95rem;color:var(--muted)}
-.bm{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 10px;margin-bottom:8px}
-.bm.has-watched{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
-.bm-no{font-size:.7rem;color:var(--muted);margin-bottom:4px}
-.bm-side{padding:2px 0}
-.bm-mid{text-align:center}
-.bm-score{font-weight:800}
+/* redesigned bracket */
+.bracket-wrap{overflow-x:auto;padding-bottom:8px}
+.kbracket{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;min-width:920px}
+.kr-col{min-width:0}
+.kr-head{font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);
+  margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid;border-image:var(--grad) 1}
+.km{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:8px 10px;margin-bottom:10px;transition:.15s}
+.km:hover{border-color:rgba(124,140,255,.5)}
+.km.has-watched{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 10px 28px -16px var(--i2)}
+.km-no{font-size:.66rem;color:var(--muted);margin-bottom:5px}
+.km-line{height:1px;background:var(--line);margin:5px 0}
+.km-team{display:flex;align-items:center;gap:5px;min-width:0;font-size:.85rem}
+.km-team .bteam{min-width:0;font-weight:700}
+.km-team .bteam .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.km-team .bteam.prov{color:var(--muted);font-weight:600}
+.bcode{font-size:.62rem;color:var(--muted);background:rgba(255,255,255,.06);border:1px solid var(--line);
+  border-radius:5px;padding:0 5px;margin-left:2px}
+.bslot{color:var(--muted);font-size:.8rem;font-weight:600}
+.km-g{margin-left:auto;font-weight:800;color:var(--muted);min-width:16px;text-align:right}
+.km-g.w{color:var(--text)}
 
-.site-foot{max-width:var(--maxw);margin:0 auto;padding:24px 18px 50px;border-top:1px solid var(--line);
-  display:flex;flex-direction:column;gap:6px}
+/* graphics (original SVGs, no trademarks) */
+.brand a{display:inline-flex;align-items:center;gap:9px}
+.brand .ball{transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.brand a:hover .ball{transform:rotate(360deg)}
+.hero{position:relative}
+.hero::before{content:"";position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);
+  width:min(660px,94%);aspect-ratio:320/200;background:url(pitch.svg) center/contain no-repeat;
+  opacity:.07;z-index:-1;pointer-events:none}
+.team-hero::before{content:"";position:absolute;right:14px;bottom:-34px;width:150px;height:150px;
+  background:url(ball.svg) center/contain no-repeat;opacity:.16;transform:rotate(-12deg);z-index:0}
+.group-banner{position:relative;overflow:hidden}
+.group-banner::before{content:"";position:absolute;right:-22px;top:-30px;width:172px;height:172px;
+  background:url(ball.svg) center/contain no-repeat;opacity:.14;transform:rotate(14deg)}
+.kr-trophy{vertical-align:-3px;margin-right:5px;filter:drop-shadow(0 2px 6px rgba(251,191,36,.5))}
+
+/* footer */
+.site-foot{max-width:var(--maxw);margin:0 auto;padding:26px 18px 60px;border-top:1px solid var(--line);
+  display:flex;flex-direction:column;gap:6px;position:relative;z-index:1}
 
 @media(max-width:760px){
-  .focus-grid,.cols,.scenarios{grid-template-columns:1fr}
-  .team-hero{flex-direction:column;text-align:center}
-  h1{font-size:1.6rem}.hero h1{font-size:1.9rem}
+  .cols,.scenarios{grid-template-columns:1fr}
+  .group-grid{grid-template-columns:1fr}
+  .team-hero,.group-banner{flex-direction:column;text-align:center}
+  .standings .hide-s{display:none}
+  .dist-row{grid-template-columns:120px 1fr 40px}
+  h1{font-size:1.7rem}.hero h1{font-size:2.1rem}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto}
+  .bg-fx{animation:none}
 }
 """
