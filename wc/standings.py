@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import itertools
+import random
 from collections import defaultdict
 
 from . import data
@@ -195,6 +196,63 @@ def best_thirds(group_analyses):
         r["qualifies"] = i < 8
         r["seed"] = i + 1
     return thirds
+
+
+def advance_probabilities(matches, analyses=None, n_sims=20000, seed=20260611):
+    """Monte-Carlo chance each team reaches the knockouts (top 2 OR a best-third).
+
+    Simulates every remaining group match (equal-likely win/draw/loss, with a
+    plausible random scoreline for goal-difference tiebreaks), ranks all 12
+    groups, then takes the eight best third-placed teams — exactly the real
+    qualification rule. Seeded so the published numbers are stable between
+    builds on the same data.
+    """
+    gms = group_matches(matches)
+    groups_data = {}
+    all_teams = []
+    for g, ms in gms.items():
+        teams = sorted({t for m in ms for t in (m["team1"], m["team2"])})
+        st = _stats_from(ms)
+        base = {t: (st[t]["Pts"], st[t]["GF"], st[t]["GA"]) for t in teams}
+        remaining = [m for m in ms if not data.has_result(m)]
+        groups_data[g] = (teams, base, remaining)
+        all_teams.extend(teams)
+
+    rng = random.Random(seed)
+    counts = {t: 0 for t in all_teams}
+    for _ in range(n_sims):
+        thirds = []
+        for teams, base, remaining in groups_data.values():
+            pts = {t: base[t][0] for t in teams}
+            gf = {t: base[t][1] for t in teams}
+            ga = {t: base[t][2] for t in teams}
+            for m in remaining:
+                a, b = m["team1"], m["team2"]
+                r = rng.random()
+                if r < 1 / 3:        # a wins
+                    s1 = rng.randint(1, 3); s2 = rng.randint(0, s1 - 1)
+                elif r < 2 / 3:      # draw
+                    s1 = s2 = rng.randint(0, 2)
+                else:                # b wins
+                    s2 = rng.randint(1, 3); s1 = rng.randint(0, s2 - 1)
+                gf[a] += s1; ga[a] += s2; gf[b] += s2; ga[b] += s1
+                if s1 > s2:
+                    pts[a] += 3
+                elif s2 > s1:
+                    pts[b] += 3
+                else:
+                    pts[a] += 1; pts[b] += 1
+            order = sorted(teams, key=lambda t: (pts[t], gf[t] - ga[t], gf[t], rng.random()),
+                           reverse=True)
+            counts[order[0]] += 1
+            counts[order[1]] += 1
+            t3 = order[2]
+            thirds.append((pts[t3], gf[t3] - ga[t3], gf[t3], rng.random(), t3))
+        thirds.sort(reverse=True)
+        for entry in thirds[:8]:
+            counts[entry[4]] += 1
+
+    return {t: counts[t] / n_sims for t in all_teams}
 
 
 def team_group(matches, team):

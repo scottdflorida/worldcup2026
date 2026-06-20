@@ -3,8 +3,27 @@ from __future__ import annotations
 
 import re
 import unicodedata
+from datetime import datetime
 
 from . import config
+
+
+def fmt_date(d: str) -> str:
+    """'2026-06-19' -> 'Friday, June 19'."""
+    try:
+        dt = datetime.strptime(d, "%Y-%m-%d")
+    except (ValueError, TypeError):
+        return d or ""
+    return f"{dt.strftime('%A, %B')} {dt.day}"
+
+
+def fmt_date_short(d: str) -> str:
+    """'2026-06-28' -> 'Jun 28' (for tight spaces like the bracket)."""
+    try:
+        dt = datetime.strptime(d, "%Y-%m-%d")
+    except (ValueError, TypeError):
+        return d or ""
+    return f"{dt.strftime('%b')} {dt.day}"
 
 
 def slug(team: str) -> str:
