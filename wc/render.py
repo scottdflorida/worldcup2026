@@ -288,8 +288,17 @@ def shell(title, active, body, ctx):
 {body}
 </main>
 <footer class="site-foot">
+  <div class="foot-top">
+    <div class="foot-updated">Last updated <strong>{E(updated) or "—"}</strong></div>
+    <div class="foot-actions">
+      <button id="refresh-btn" class="refresh-btn" type="button">
+        <span class="rf-ic" aria-hidden="true">↻</span><span class="rf-txt">Update now</span>
+      </button>
+      <span id="refresh-msg" class="muted" role="status" aria-live="polite"></span>
+    </div>
+  </div>
   <div>Stage: <strong>{E(ctx.stage())}</strong> · {E(config.TOURNAMENT["hosts"])}</div>
-  <div class="muted">Data: openfootball (public domain). Updated {E(updated) or "—"}. Projections follow the current standings; third-place bracket slots resolve via FIFA's allocation once the group stage ends.</div>
+  <div class="muted">Data: openfootball (public domain). Auto-updates within ~15&nbsp;min of a result landing. Projections follow the current standings; third-place bracket slots resolve via FIFA's allocation once the group stage ends.</div>
 </footer>
 <script src="assets/app.js"></script>
 </body>
@@ -651,7 +660,39 @@ APP_JS = r"""
       g.style.display=g.querySelector('.tcard:not([style*="display: none"])')?'':'none';
     });
   });
-  document.addEventListener('DOMContentLoaded',apply);
+  function wireRefresh(){
+    var btn=document.getElementById('refresh-btn');
+    var msg=document.getElementById('refresh-msg');
+    if(!btn)return;
+    function say(t){if(msg)msg.textContent=t||'';}
+    function reset(label){btn.disabled=false;btn.classList.remove('busy');
+      var t=btn.querySelector('.rf-txt');if(t)t.textContent=label||'Update now';}
+    btn.addEventListener('click',function(){
+      if(btn.disabled)return;
+      btn.disabled=true;btn.classList.add('busy');
+      var t=btn.querySelector('.rf-txt');if(t)t.textContent='Checking…';say('Looking for new results…');
+      fetch('/api/refresh',{method:'POST'}).then(function(r){
+        return r.json().catch(function(){return{};}).then(function(d){return{s:r.status,d:d};});
+      }).then(function(res){
+        var d=res.d||{};
+        if(res.s>=200&&res.s<300&&d.ok){
+          if(t)t.textContent='Queued ✓';
+          say('Fetching the latest results — this page refreshes in ~90 seconds.');
+          setTimeout(function(){location.reload();},90000);
+        }else if(res.s===503||d.error==='not_configured'){
+          say('Auto-updates run every ~15 min. Manual refresh isn’t configured yet.');reset();
+        }else if(res.s===429||d.error==='cooldown'){
+          say('Just refreshed — give it a moment before trying again.');setTimeout(function(){reset();},5000);
+        }else{
+          say('Couldn’t reach the updater. Auto-updates still run on their own.');reset('Try again');
+        }
+      }).catch(function(){
+        say('Couldn’t reach the updater (only works on the live site). Auto-updates still run.');
+        reset('Try again');
+      });
+    });
+  }
+  document.addEventListener('DOMContentLoaded',function(){apply();wireRefresh();});
 })();
 """
 
@@ -937,7 +978,20 @@ table.standings{width:100%;border-collapse:collapse;font-size:.86rem}
 
 /* footer */
 .site-foot{max-width:var(--maxw);margin:0 auto;padding:26px 18px 60px;border-top:1px solid var(--line);
-  display:flex;flex-direction:column;gap:6px;position:relative;z-index:1}
+  display:flex;flex-direction:column;gap:10px;position:relative;z-index:1}
+.foot-top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:4px}
+.foot-updated{font-size:.92rem;color:var(--muted)}
+.foot-updated strong{color:var(--text)}
+.foot-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.refresh-btn{display:inline-flex;align-items:center;gap:8px;cursor:pointer;border:1px solid var(--line);
+  border-radius:999px;padding:9px 18px;font-weight:800;font-size:.9rem;color:#06140f;
+  background:var(--grad);box-shadow:var(--e1),var(--hi);transition:.16s}
+.refresh-btn:hover{transform:translateY(-2px);box-shadow:var(--e2),0 6px 18px -6px var(--glow),var(--hi)}
+.refresh-btn:disabled{cursor:default;opacity:.85;transform:none}
+.refresh-btn .rf-ic{font-size:1.05rem;line-height:1;display:inline-block}
+.refresh-btn.busy .rf-ic{animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#refresh-msg{max-width:340px}
 
 @media(max-width:760px){
   .cols,.scenarios{grid-template-columns:1fr}

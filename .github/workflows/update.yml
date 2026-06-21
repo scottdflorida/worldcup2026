@@ -1,18 +1,26 @@
-name: Daily update
+name: Update site
 
-# Refreshes the live World Cup feed once a day, rebuilds the static site, and
-# commits the result. Cloudflare Pages (connected to this repo) then redeploys
-# automatically on the push. Can also be run on demand from the Actions tab.
+# Polls the live World Cup feed often during match hours and rebuilds the site,
+# but only COMMITS when results actually changed — so each real result is one
+# Cloudflare Pages deploy (well under the free 500/month cap), and the site
+# refreshes within ~15 min of a match result landing in the feed.
+#
+# Triggers:
+#   - schedule: every 15 min across the daily match window (UTC), + a daily safety run
+#   - workflow_dispatch: the on-site "Update now" button calls this via the
+#     Cloudflare Pages Function at functions/api/refresh.js
 on:
   schedule:
-    - cron: "0 12 * * *"   # 12:00 UTC daily (after the previous night's games)
+    - cron: "*/15 14-23 * * *"   # 14:00–23:59 UTC
+    - cron: "*/15 0-5 * * *"     # 00:00–05:59 UTC (late Americas kickoffs)
+    - cron: "0 11 * * *"         # daily safety net
   workflow_dispatch: {}
 
 permissions:
   contents: write
 
 concurrency:
-  group: daily-update
+  group: site-update
   cancel-in-progress: false
 
 jobs:
@@ -28,14 +36,15 @@ jobs:
       - name: Refresh data and rebuild the site
         run: python3 scripts/update.py
 
-      - name: Commit & push if anything changed
+      - name: Commit & push only if results changed
         run: |
           git config user.name "worldcup-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
           if git diff --cached --quiet; then
-            echo "No changes to publish."
+            echo "No new results — nothing to publish."
           else
-            git commit -m "chore: daily refresh $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git commit -m "results: refresh $(date -u +'%Y-%m-%d %H:%M UTC')"
             git push
+            echo "Published updated results."
           fi

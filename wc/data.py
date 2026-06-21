@@ -30,15 +30,37 @@ def load_cache(cache_path: str = config.CACHE_PATH) -> dict:
 
 
 def refresh(cache_path: str = config.CACHE_PATH) -> dict:
-    """Fetch live data and update the cache; fall back to cache on failure."""
+    """Fetch live data; only rewrite the cache + timestamp if results changed.
+
+    Keeping the timestamp stable when nothing changed is what makes the frequent
+    polls idempotent: identical data -> identical generated site -> no git diff ->
+    no commit -> no Cloudflare deploy. So the site only republishes when a match
+    result actually moves, staying well under Cloudflare's monthly deploy cap.
+    """
     try:
         payload = fetch()
-        save_cache(payload, cache_path)
-        print(f"[data] fetched {len(payload.get('matches', []))} matches from live source")
-        return payload
     except Exception as exc:  # noqa: BLE001 - network is best-effort
         print(f"[data] live fetch failed ({exc}); using cached copy")
         return load_cache(cache_path)
+    try:
+        existing = load_cache(cache_path)
+    except (FileNotFoundError, ValueError):
+        existing = None
+    if existing == payload:
+        print("[data] no change since last fetch")
+        return payload
+    save_cache(payload, cache_path)
+    label = "first cache" if existing is None else "results changed"
+    print(f"[data] {label}; cached {len(payload.get('matches', []))} matches")
+    return payload
+
+
+def changed_since_cache(cache_path: str = config.CACHE_PATH) -> bool:
+    """True if a live fetch would differ from the cached copy (best-effort)."""
+    try:
+        return fetch() != load_cache(cache_path)
+    except Exception:  # noqa: BLE001
+        return False
 
 
 def last_updated() -> str | None:

@@ -66,17 +66,48 @@ python3 -m http.server 8765 --directory public
 4. **Save and Deploy.**
 5. In the new Pages project → **Custom domains → Set up a domain →** `worldcup.sflorida.studio` (one click, since `sflorida.studio` is already on Cloudflare).
 
-After that, every push (including the daily Action) auto-deploys.
+After that, every push (including the update Action) auto-deploys. The
+`functions/` directory is picked up automatically — `POST /api/refresh` becomes
+live with no extra config.
 
 > Prefer Cloudflare to build instead of serving the committed output? Set the
 > build command to `python3 scripts/build.py` — Python is available in the Pages
 > build image.
 
-## Daily auto-update
+## Updates: end-of-match + a manual button
 
-`.github/workflows/update.yml` runs at **12:00 UTC daily** (and on demand from
-the Actions tab). It runs `scripts/update.py`, commits any changes, and pushes —
-which triggers the Cloudflare deploy. No secrets required.
+**How "update at the end of each match" works.** `.github/workflows/update.yml`
+polls the live feed **every ~15 min during the daily match window** (plus a daily
+safety run). It rebuilds the site but **commits only when results actually
+changed** (`scripts/update.py` keeps the timestamp stable when nothing moved, so
+an unchanged poll regenerates byte-identical files and produces no commit). Net
+effect: the site republishes within ~15 min of a result landing in the feed, and
+**each real result is exactly one Cloudflare deploy** — staying far under the free
+tier's 500 deploys/month. (Latency is bounded by the openfootball feed, which
+posts results a few minutes after full-time.)
+
+> Tip: a public repo gets unlimited Actions minutes — tighten the cron to `*/5`
+> for faster updates. On a private repo the 15-min window stays within the free
+> 2,000 min/month.
+
+**The "Update now" button.** The footer button triggers the same workflow
+immediately via a Cloudflare Pages Function (`functions/api/refresh.js`) that
+holds a GitHub token server-side (never exposed to the browser). To enable it:
+
+1. Create a **fine-grained Personal Access Token** (GitHub → Settings → Developer
+   settings → Fine-grained tokens) scoped to this repo with **Actions: Read and
+   write**.
+2. In the Cloudflare **Pages project → Settings → Environment variables**, add:
+   - `GH_OWNER` — your GitHub username/org
+   - `GH_REPO` — the repo name (e.g. `worldcup2026`)
+   - `GH_DISPATCH_TOKEN` — the token (mark as **encrypted/secret**)
+   - *(optional)* `GH_WORKFLOW` (default `update.yml`), `GH_BRANCH` (default `main`)
+3. Redeploy. The button now runs an update on click; if nothing changed it simply
+   doesn't republish. Until these vars are set, the button shows a friendly
+   "auto-updates run every ~15 min" message instead of failing.
+
+You can also update from your machine any time with `python3 scripts/update.py`,
+or from the **Actions tab → Update site → Run workflow**.
 
 ## Customize
 

@@ -44,5 +44,37 @@
       g.style.display=g.querySelector('.tcard:not([style*="display: none"])')?'':'none';
     });
   });
-  document.addEventListener('DOMContentLoaded',apply);
+  function wireRefresh(){
+    var btn=document.getElementById('refresh-btn');
+    var msg=document.getElementById('refresh-msg');
+    if(!btn)return;
+    function say(t){if(msg)msg.textContent=t||'';}
+    function reset(label){btn.disabled=false;btn.classList.remove('busy');
+      var t=btn.querySelector('.rf-txt');if(t)t.textContent=label||'Update now';}
+    btn.addEventListener('click',function(){
+      if(btn.disabled)return;
+      btn.disabled=true;btn.classList.add('busy');
+      var t=btn.querySelector('.rf-txt');if(t)t.textContent='Checking…';say('Looking for new results…');
+      fetch('/api/refresh',{method:'POST'}).then(function(r){
+        return r.json().catch(function(){return{};}).then(function(d){return{s:r.status,d:d};});
+      }).then(function(res){
+        var d=res.d||{};
+        if(res.s>=200&&res.s<300&&d.ok){
+          if(t)t.textContent='Queued ✓';
+          say('Fetching the latest results — this page refreshes in ~90 seconds.');
+          setTimeout(function(){location.reload();},90000);
+        }else if(res.s===503||d.error==='not_configured'){
+          say('Auto-updates run every ~15 min. Manual refresh isn’t configured yet.');reset();
+        }else if(res.s===429||d.error==='cooldown'){
+          say('Just refreshed — give it a moment before trying again.');setTimeout(function(){reset();},5000);
+        }else{
+          say('Couldn’t reach the updater. Auto-updates still run on their own.');reset('Try again');
+        }
+      }).catch(function(){
+        say('Couldn’t reach the updater (only works on the live site). Auto-updates still run.');
+        reset('Try again');
+      });
+    });
+  }
+  document.addEventListener('DOMContentLoaded',function(){apply();wireRefresh();});
 })();

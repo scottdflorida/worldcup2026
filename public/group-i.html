@@ -38,8 +38,17 @@
 
 </main>
 <footer class="site-foot">
+  <div class="foot-top">
+    <div class="foot-updated">Last updated <strong>Jun 21, 2026 · 22:59 UTC</strong></div>
+    <div class="foot-actions">
+      <button id="refresh-btn" class="refresh-btn" type="button">
+        <span class="rf-ic" aria-hidden="true">↻</span><span class="rf-txt">Update now</span>
+      </button>
+      <span id="refresh-msg" class="muted" role="status" aria-live="polite"></span>
+    </div>
+  </div>
   <div>Stage: <strong>Group stage</strong> · United States · Canada · Mexico</div>
-  <div class="muted">Data: openfootball (public domain). Updated —. Projections follow the current standings; third-place bracket slots resolve via FIFA's allocation once the group stage ends.</div>
+  <div class="muted">Data: openfootball (public domain). Auto-updates within ~15&nbsp;min of a result landing. Projections follow the current standings; third-place bracket slots resolve via FIFA's allocation once the group stage ends.</div>
 </footer>
 <script src="assets/app.js"></script>
 </body>
