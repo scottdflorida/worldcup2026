@@ -5,27 +5,35 @@
   function get(){try{var v=JSON.parse(localStorage.getItem(KEY));if(Array.isArray(v))return v;}catch(e){}return DEFAULT.slice();}
   function save(a){try{localStorage.setItem(KEY,JSON.stringify(a));}catch(e){}}
   function toggle(t){var a=get();var i=a.indexOf(t);if(i>=0)a.splice(i,1);else a.push(t);save(a);apply();}
+  function esc(t){return (window.CSS&&CSS.escape)?CSS.escape(t):t.replace(/"/g,'\\"');}
   function apply(){
     var w=get();
     var host=document.getElementById('your-teams');
     if(host){
       host.innerHTML='';
-      if(!w.length){host.innerHTML='<p class="muted empty">No teams pinned yet — tap ★ on any team to follow it here.</p>';}
-      else{w.forEach(function(t){
-        var src=document.querySelector('#team-src [data-team-card="'+t.replace(/"/g,'\\"')+'"]')
-              ||document.querySelector('[data-team-card="'+t.replace(/"/g,'\\"')+'"]');
-        if(src)host.appendChild(src.cloneNode(true));
-      });}
+      if(!w.length){
+        host.innerHTML='<div class="yt-empty"><span class="yt-star" aria-hidden="true">★</span>'+
+          '<div class="yt-empty-body"><b>Follow your teams.</b>'+
+          '<span class="muted">Tap the ★ on any team — on a group, a team page or the bracket — '+
+          'and they’ll live here and glow across the whole site.</span></div></div>';
+      } else {
+        w.forEach(function(t){
+          var src=document.querySelector('#team-src [data-team-card="'+esc(t)+'"]')
+                ||document.querySelector('[data-team-card="'+esc(t)+'"]');
+          if(src)host.appendChild(src.cloneNode(true));
+        });
+      }
     }
     document.querySelectorAll('[data-team]').forEach(function(el){
-      el.classList.toggle('watched',w.indexOf(el.getAttribute('data-team'))>=0);
+      var t=el.getAttribute('data-team');
+      el.classList.toggle('watched', !!t && w.indexOf(t)>=0);
     });
-    document.querySelectorAll('.bm,.match,.km,.dist-row').forEach(function(el){
+    document.querySelectorAll('.match,.km,.dist-row,.pz,.road-step,.tcard').forEach(function(el){
       el.classList.toggle('has-watched',!!el.querySelector('.watched'));
     });
     document.querySelectorAll('[data-watch]').forEach(function(btn){
       var on=w.indexOf(btn.getAttribute('data-watch'))>=0;
-      btn.classList.toggle('on',on);btn.setAttribute('aria-pressed',on);
+      btn.classList.toggle('on',on);btn.setAttribute('aria-pressed',on?'true':'false');
       var lab=btn.querySelector('.wl-txt');if(lab)lab.textContent=on?'Watching':'Watch';
     });
   }
@@ -33,48 +41,139 @@
     var b=e.target.closest&&e.target.closest('[data-watch]');
     if(b){e.preventDefault();toggle(b.getAttribute('data-watch'));}
   });
+  // Search the team directory.
   document.addEventListener('input',function(e){
     if(e.target.id!=='team-search')return;
     var q=e.target.value.trim().toLowerCase();
+    var anyVisible=false;
     document.querySelectorAll('#directory .tcard').forEach(function(c){
       var n=(c.getAttribute('data-team-card')||'').toLowerCase();
-      c.style.display=(!q||n.indexOf(q)>=0)?'':'none';
+      var show=(!q||n.indexOf(q)>=0);
+      c.hidden=!show; if(show)anyVisible=true;
     });
     document.querySelectorAll('.dir-group').forEach(function(g){
-      g.style.display=g.querySelector('.tcard:not([style*="display: none"])')?'':'none';
+      g.hidden=!g.querySelector('.tcard:not([hidden])');
     });
+    var em=document.getElementById('search-empty');
+    if(em)em.hidden=anyVisible;
   });
-  function wireRefresh(){
-    var btn=document.getElementById('refresh-btn');
-    var msg=document.getElementById('refresh-msg');
-    if(!btn)return;
-    function say(t){if(msg)msg.textContent=t||'';}
-    function reset(label){btn.disabled=false;btn.classList.remove('busy');
-      var t=btn.querySelector('.rf-txt');if(t)t.textContent=label||'Update now';}
-    btn.addEventListener('click',function(){
-      if(btn.disabled)return;
-      btn.disabled=true;btn.classList.add('busy');
-      var t=btn.querySelector('.rf-txt');if(t)t.textContent='Checking…';say('Looking for new results…');
-      fetch('/api/refresh',{method:'POST'}).then(function(r){
-        return r.json().catch(function(){return{};}).then(function(d){return{s:r.status,d:d};});
-      }).then(function(res){
-        var d=res.d||{};
-        if(res.s>=200&&res.s<300&&d.ok){
-          if(t)t.textContent='Queued ✓';
-          say('Fetching the latest results — this page refreshes in ~90 seconds.');
-          setTimeout(function(){location.reload();},90000);
-        }else if(res.s===503||d.error==='not_configured'){
-          say('Auto-updates run every ~15 min. Manual refresh isn’t configured yet.');reset();
-        }else if(res.s===429||d.error==='cooldown'){
-          say('Just refreshed — give it a moment before trying again.');setTimeout(function(){reset();},5000);
-        }else{
-          say('Couldn’t reach the updater. Auto-updates still run on their own.');reset('Try again');
-        }
-      }).catch(function(){
-        say('Couldn’t reach the updater (only works on the live site). Auto-updates still run.');
-        reset('Try again');
+
+  // ---- Bracket layout: position each later-round card at the vertical midpoint
+  // of its two feeding parents so the columns read as one true tournament tree
+  // (card i in round R sits between cards 2i and 2i+1 of round R-1). Then draw
+  // connector strokes from each card up to its parents. Both are progressive
+  // enhancement; the bracket is fully legible (a clean column stack) without JS.
+  function layoutBracket(){
+    var tree=document.querySelector('.kbracket');
+    if(!tree)return;
+    var cols=[].slice.call(tree.querySelectorAll('.kr-col'));
+    if(cols.length<2)return;
+    var W=window.innerWidth;
+    // Reset any prior positioning first (so resize recomputes from scratch).
+    cols.forEach(function(col){
+      [].slice.call(col.querySelectorAll('.km')).forEach(function(k){
+        k.style.position='';k.style.top='';k.style.left='';k.style.right='';k.style.width='';
       });
+      col.style.position='';
+    });
+    if(W<720){tree.classList.remove('bracket-laid');return;} // narrow: simple stacked layout
+    tree.classList.add('bracket-laid');
+    function cards(col){return [].slice.call(col.querySelectorAll('.km'));}
+    // Establish baseline centers for round 0 in column-local coords.
+    var prevCenters=null;
+    cols.forEach(function(col,ci){
+      col.style.position='relative';
+      var ks=cards(col);
+      if(ci===0){
+        prevCenters=ks.map(function(k){return k.offsetTop+k.offsetHeight/2;});
+        return;
+      }
+      var headH=0;var head=col.querySelector('.kr-head');
+      if(head)headH=head.offsetTop; // cards start after the round header
+      var centers=[];
+      ks.forEach(function(k,i){
+        var pa=prevCenters[i*2],pb=prevCenters[i*2+1];
+        var mid;
+        if(pa!=null&&pb!=null)mid=(pa+pb)/2;
+        else if(pa!=null)mid=pa;
+        else mid=k.offsetTop+k.offsetHeight/2;
+        k.style.position='absolute';
+        k.style.left='0';k.style.right='0';
+        k.style.top=Math.round(mid-k.offsetHeight/2)+'px';
+        centers.push(mid);
+      });
+      // Final column also carries the champion plinth, anchored under its match.
+      var plinth=col.querySelector('.champion-plinth');
+      if(plinth&&ks.length&&centers.length){
+        var fk=ks[0];
+        var topPx=parseFloat(fk.style.top)||0;
+        plinth.style.position='absolute';
+        plinth.style.left='0';plinth.style.right='0';
+        plinth.style.top=Math.round(topPx+fk.offsetHeight+18)+'px';
+      }
+      prevCenters=centers;
     });
   }
-  document.addEventListener('DOMContentLoaded',function(){apply();wireRefresh();});
+  function drawBracket(){
+    var tree=document.querySelector('.kbracket');
+    if(!tree)return;
+    layoutBracket();
+    var svg=tree.querySelector('.bz-layer');
+    if(!svg)return;
+    // On narrow screens the tree is a simple stacked list — no connector layer.
+    if(window.innerWidth<720){while(svg.firstChild)svg.removeChild(svg.firstChild);
+      svg.setAttribute('width',0);svg.setAttribute('height',0);tree.setAttribute('data-links',0);return;}
+    var cols=tree.querySelectorAll('.kr-col');
+    if(cols.length<2)return;
+    var box=tree.getBoundingClientRect();
+    svg.setAttribute('width',tree.scrollWidth);
+    svg.setAttribute('height',tree.scrollHeight);
+    svg.setAttribute('viewBox','0 0 '+tree.scrollWidth+' '+tree.scrollHeight);
+    while(svg.firstChild)svg.removeChild(svg.firstChild);
+    var cards=[];
+    cols.forEach(function(col,ci){cards[ci]=col.querySelectorAll('.km, .champion-plinth');});
+    function center(el){var r=el.getBoundingClientRect();
+      return {x:r.left-box.left+tree.scrollLeft,y:r.top-box.top+tree.scrollTop+r.height/2,
+              left:r.left-box.left+tree.scrollLeft,right:r.right-box.left+tree.scrollLeft,h:r.height};}
+    var made=0;
+    for(var ci=1;ci<cards.length;ci++){
+      var prev=cards[ci-1],cur=cards[ci];
+      for(var i=0;i<cur.length;i++){
+        var child=center(cur[i]);
+        var p1=prev[i*2],p2=prev[i*2+1];
+        [p1,p2].forEach(function(p){
+          if(!p)return;
+          var pc=center(p);
+          var x1=pc.right,y1=pc.y,x2=child.left,y2=child.y;
+          var mx=(x1+x2)/2;
+          var d='M'+x1+' '+y1+' C'+mx+' '+y1+' '+mx+' '+y2+' '+x2+' '+y2;
+          var path=document.createElementNS('http://www.w3.org/2000/svg','path');
+          path.setAttribute('d',d);path.setAttribute('class','bz-link');
+          path.setAttribute('fill','none');
+          if(p.classList.contains('has-watched')||cur[i].classList.contains('has-watched'))
+            path.setAttribute('data-watched','1');
+          svg.appendChild(path);made++;
+        });
+      }
+    }
+    tree.setAttribute('data-links',made);
+  }
+  var rzTimer;
+  function scheduleDraw(){clearTimeout(rzTimer);rzTimer=setTimeout(drawBracket,60);}
+
+
+  // Entrance motion: progressive enhancement only. Content is visible by default
+  // (CSS). We opt the page into a CSS-only fade-up — which always ENDS visible —
+  // unless the user prefers reduced motion, in which case we leave it untouched.
+  function wireReveal(){
+    var mq=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+    if(mq&&mq.matches)return; // honor reduced motion: no entrance animation at all
+    document.documentElement.classList.add('reveal-ready');
+  }
+
+  document.addEventListener('DOMContentLoaded',function(){
+    apply();wireReveal();drawBracket();
+  });
+  window.addEventListener('load',drawBracket);
+  window.addEventListener('resize',scheduleDraw);
 })();

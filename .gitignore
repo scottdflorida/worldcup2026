@@ -4,3 +4,8 @@ __pycache__/
 /tmp/
 *.log
 .venv/
+
+# forge process artifacts
+.playwright-mcp/
+.forge/
+wc-*.png
