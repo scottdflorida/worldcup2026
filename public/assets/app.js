@@ -171,8 +171,84 @@
     document.documentElement.classList.add('reveal-ready');
   }
 
+  // Live scores: overlay ESPN's public feed onto in-progress matches. The static
+  // site only knows FINAL scores (openfootball posts at full time), so a match
+  // that is live right now renders as "Kicks off …" until then. This fills in the
+  // live score + minute and a LIVE pulse, polling every 30s while anything is in
+  // play. Pure progressive enhancement: if /api/live is unreachable (e.g. local
+  // preview) it silently no-ops and the static site stands on its own.
+  function liveCanon(s){
+    // NFKD splits accents off (ü -> u+◌̈); the final [^a-z0-9] strip then drops the
+    // combining marks and punctuation, so "Türkiye"->turkiye, "Curaçao"->curacao.
+    s=(s||'').normalize('NFKD').toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]/g,'');
+    var A={bosniaandherzegovina:'bosnia',bosniaherzegovina:'bosnia',czechrepublic:'czech',
+      czechia:'czech',drcongo:'congodr',congodr:'congodr',turkey:'turkey',turkiye:'turkey',
+      usa:'usa',unitedstates:'usa'};
+    return A[s]||s;
+  }
+  function livePair(a,b){var x=liveCanon(a),y=liveCanon(b);return x<y?x+'~'+y:y+'~'+x;}
+  function wireLive(){
+    var nodes=document.querySelectorAll('[data-live]');
+    if(!nodes.length)return;
+    var idx={};
+    nodes.forEach(function(el){
+      var names=[];
+      el.querySelectorAll('[data-team]').forEach(function(t){
+        var n=t.getAttribute('data-team');if(n)names.push(n);});
+      if(names.length<2)return;
+      var k=livePair(names[0],names[1]);
+      (idx[k]=idx[k]||[]).push(el);
+    });
+    if(!Object.keys(idx).length)return;
+    function paint(el,m){
+      if(el.classList.contains('is-done'))return;        // official FT already shown
+      if(m.s1==null||m.s2==null)return;
+      var teams=el.querySelectorAll('[data-team]');
+      var firstIsHome=liveCanon(teams[0].getAttribute('data-team'))===liveCanon(m.t1);
+      var g1=firstIsHome?m.s1:m.s2, g2=firstIsHome?m.s2:m.s1;
+      var mid=el.querySelector('[data-live-mid]');
+      if(mid){
+        mid.innerHTML='<b class="sg'+(g1>g2?' win':'')+'">'+g1+'</b>'+
+          '<span class="sdash">–</span><b class="sg'+(g2>g1?' win':'')+'">'+g2+'</b>';
+        mid.classList.add('live-mid');
+      }
+      var inplay=m.state==='in';
+      el.classList.toggle('is-live',inplay);
+      el.classList.toggle('is-livedone',m.state==='post');
+      var tag=el.querySelector('[data-live-tag]');
+      if(tag){
+        tag.hidden=false;
+        tag.className=tag.className.replace(/\b(up|done|live)\b/g,'').replace(/\s+/g,' ').trim();
+        if(inplay){tag.textContent=m.clock||'LIVE';tag.className+=' live';}
+        else{tag.textContent='FT';tag.className+=' done';}
+      }
+    }
+    var timer=null;
+    function schedule(any){clearTimeout(timer);
+      if(any&&document.visibilityState!=='hidden')timer=setTimeout(poll,30000);}
+    function poll(){
+      fetch('/api/live',{headers:{accept:'application/json'}})
+       .then(function(r){return r.ok?r.json():null;})
+       .then(function(d){
+         if(!d||!d.ok||!d.matches){schedule(false);return;}
+         var any=false;
+         d.matches.forEach(function(m){
+           if(m.state==='pre')return;
+           var list=idx[livePair(m.t1,m.t2)];if(!list)return;
+           if(m.state==='in')any=true;
+           list.forEach(function(el){paint(el,m);});
+         });
+         schedule(any);
+       }).catch(function(){schedule(false);});
+    }
+    document.addEventListener('visibilitychange',function(){
+      if(document.visibilityState==='visible')poll();});
+    window.__wcPollLive=poll;                              // diagnostic / test seam
+    poll();
+  }
+
   document.addEventListener('DOMContentLoaded',function(){
-    apply();wireReveal();drawBracket();
+    apply();wireReveal();wireLive();drawBracket();
   });
   window.addEventListener('load',drawBracket);
   window.addEventListener('resize',scheduleDraw);

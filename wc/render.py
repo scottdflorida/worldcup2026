@@ -281,21 +281,24 @@ def match_line(m, ctx, compact=False):
         g1, g2 = data.final_score(m)
         cls1 = " win" if g1 > g2 else ""
         cls2 = " win" if g2 > g1 else ""
-        score = (f'<span class="score"><b class="sg{cls1}">{g1}</b>'
+        score = (f'<span class="score" data-live-mid><b class="sg{cls1}">{g1}</b>'
                  f'<span class="sdash">–</span><b class="sg{cls2}">{g2}</b></span>')
         pens = (m.get("score") or {}).get("p")
         if pens:
             score += f'<span class="pens">({pens[0]}–{pens[1]}p)</span>'
     else:
-        score = f'<span class="vs">{E(_kickoff(m) or "vs")}</span>'
+        score = f'<span class="vs" data-live-mid>{E(_kickoff(m) or "vs")}</span>'
     rd = m.get("round", "")
     rd_lbl = "" if str(rd).startswith("Matchday") else f'<span class="rd">{E(rd)}</span>'
     meta = f'{E(fmt_date(m.get("date","")))} · {E(venues.venue_str(m.get("ground","")))}'
     grp = m.get("group")
     grp_lbl = f'<span class="m-grp">{E(grp)}</span>' if grp else ""
+    live = bool(t1["team"] and t2["team"])
+    live_attr = f' data-live data-date="{E(m.get("date",""))}"' if live else ""
+    live_tag = '<span class="live-tag" data-live-tag hidden></span>' if live else ""
     return (
-        f'<div class="match{" is-done" if done else " is-upcoming"}">'
-        f'<div class="m-meta">{grp_lbl}{rd_lbl}<span class="muted">{meta}</span></div>'
+        f'<div class="match{" is-done" if done else " is-upcoming"}"{live_attr}>'
+        f'<div class="m-meta">{grp_lbl}{rd_lbl}{live_tag}<span class="muted">{meta}</span></div>'
         f'<div class="m-row"><span class="m-side a">{slot_chip(t1)}</span>{score}'
         f'<span class="m-side b">{slot_chip(t2)}</span></div>'
         f'{scorers(m) if done else ""}</div>'
@@ -330,17 +333,19 @@ def pulse_band(ctx):
             g1, g2 = data.final_score(m)
             cls1 = " win" if g1 > g2 else ""
             cls2 = " win" if g2 > g1 else ""
-            mid = (f'<div class="pz-score"><b class="sg{cls1}">{g1}</b>'
+            mid = (f'<div class="pz-score" data-live-mid><b class="sg{cls1}">{g1}</b>'
                    f'<span class="sdash">–</span><b class="sg{cls2}">{g2}</b></div>')
             foot = scorers(m) or f'<div class="pz-foot muted">{E(venue_stadium)}</div>'
-            tag = '<span class="pz-tag done">FT</span>'
+            tag = '<span class="pz-tag done" data-live-tag>FT</span>'
         else:
-            mid = f'<div class="pz-ko">{E(_kickoff(m) or "TBD")}</div>'
+            mid = f'<div class="pz-ko" data-live-mid>{E(_kickoff(m) or "TBD")}</div>'
             foot = f'<div class="pz-foot muted">{E(venue_stadium)}</div>'
-            tag = '<span class="pz-tag up">Kicks off</span>'
+            tag = '<span class="pz-tag up" data-live-tag>Kicks off</span>'
+        live = bool(t1["team"] and t2["team"])
+        live_attr = f' data-live data-date="{E(m.get("date",""))}"' if live else ""
         return (
             f'<div class="pz {"is-done" if kind=="done" else "is-upcoming"}" '
-            f'data-ts="{_epoch(m)}">'
+            f'data-ts="{_epoch(m)}"{live_attr}>'
             f'<div class="pz-head"><span class="pz-grp">{E(grp)}</span>{tag}'
             f'<span class="pz-date muted">{E(date)}</span></div>'
             f'<div class="pz-row"><div class="pz-team" data-team="{E(t1["team"] or "")}">'
@@ -1199,8 +1204,84 @@ APP_JS = r"""
     document.documentElement.classList.add('reveal-ready');
   }
 
+  // Live scores: overlay ESPN's public feed onto in-progress matches. The static
+  // site only knows FINAL scores (openfootball posts at full time), so a match
+  // that is live right now renders as "Kicks off …" until then. This fills in the
+  // live score + minute and a LIVE pulse, polling every 30s while anything is in
+  // play. Pure progressive enhancement: if /api/live is unreachable (e.g. local
+  // preview) it silently no-ops and the static site stands on its own.
+  function liveCanon(s){
+    // NFKD splits accents off (ü -> u+◌̈); the final [^a-z0-9] strip then drops the
+    // combining marks and punctuation, so "Türkiye"->turkiye, "Curaçao"->curacao.
+    s=(s||'').normalize('NFKD').toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]/g,'');
+    var A={bosniaandherzegovina:'bosnia',bosniaherzegovina:'bosnia',czechrepublic:'czech',
+      czechia:'czech',drcongo:'congodr',congodr:'congodr',turkey:'turkey',turkiye:'turkey',
+      usa:'usa',unitedstates:'usa'};
+    return A[s]||s;
+  }
+  function livePair(a,b){var x=liveCanon(a),y=liveCanon(b);return x<y?x+'~'+y:y+'~'+x;}
+  function wireLive(){
+    var nodes=document.querySelectorAll('[data-live]');
+    if(!nodes.length)return;
+    var idx={};
+    nodes.forEach(function(el){
+      var names=[];
+      el.querySelectorAll('[data-team]').forEach(function(t){
+        var n=t.getAttribute('data-team');if(n)names.push(n);});
+      if(names.length<2)return;
+      var k=livePair(names[0],names[1]);
+      (idx[k]=idx[k]||[]).push(el);
+    });
+    if(!Object.keys(idx).length)return;
+    function paint(el,m){
+      if(el.classList.contains('is-done'))return;        // official FT already shown
+      if(m.s1==null||m.s2==null)return;
+      var teams=el.querySelectorAll('[data-team]');
+      var firstIsHome=liveCanon(teams[0].getAttribute('data-team'))===liveCanon(m.t1);
+      var g1=firstIsHome?m.s1:m.s2, g2=firstIsHome?m.s2:m.s1;
+      var mid=el.querySelector('[data-live-mid]');
+      if(mid){
+        mid.innerHTML='<b class="sg'+(g1>g2?' win':'')+'">'+g1+'</b>'+
+          '<span class="sdash">–</span><b class="sg'+(g2>g1?' win':'')+'">'+g2+'</b>';
+        mid.classList.add('live-mid');
+      }
+      var inplay=m.state==='in';
+      el.classList.toggle('is-live',inplay);
+      el.classList.toggle('is-livedone',m.state==='post');
+      var tag=el.querySelector('[data-live-tag]');
+      if(tag){
+        tag.hidden=false;
+        tag.className=tag.className.replace(/\b(up|done|live)\b/g,'').replace(/\s+/g,' ').trim();
+        if(inplay){tag.textContent=m.clock||'LIVE';tag.className+=' live';}
+        else{tag.textContent='FT';tag.className+=' done';}
+      }
+    }
+    var timer=null;
+    function schedule(any){clearTimeout(timer);
+      if(any&&document.visibilityState!=='hidden')timer=setTimeout(poll,30000);}
+    function poll(){
+      fetch('/api/live',{headers:{accept:'application/json'}})
+       .then(function(r){return r.ok?r.json():null;})
+       .then(function(d){
+         if(!d||!d.ok||!d.matches){schedule(false);return;}
+         var any=false;
+         d.matches.forEach(function(m){
+           if(m.state==='pre')return;
+           var list=idx[livePair(m.t1,m.t2)];if(!list)return;
+           if(m.state==='in')any=true;
+           list.forEach(function(el){paint(el,m);});
+         });
+         schedule(any);
+       }).catch(function(){schedule(false);});
+    }
+    document.addEventListener('visibilitychange',function(){
+      if(document.visibilityState==='visible')poll();});
+    window.__wcPollLive=poll;                              // diagnostic / test seam
+    poll();
+  }
+
   document.addEventListener('DOMContentLoaded',function(){
-    apply();wireReveal();drawBracket();
+    apply();wireReveal();wireLive();drawBracket();
   });
   window.addEventListener('load',drawBracket);
   window.addEventListener('resize',scheduleDraw);
@@ -1379,6 +1460,20 @@ section:first-of-type{margin-top:var(--s5)}
 .pz-score .sg{opacity:.55}.pz-score .sg.win{opacity:1;color:var(--text)}
 .pz-score .sdash{opacity:.4;margin:0 1px}
 .pz-ko{font-weight:800;font-size:.92rem;color:var(--cyan);font-variant-numeric:tabular-nums;white-space:nowrap}
+/* live scores (ESPN overlay): a red LIVE pulse + the running clock, shown only
+   while a match is in play; .pz-ko is swapped for a live score by app.js. */
+.pz-tag.live,.live-tag.live{background:rgba(255,90,77,.16);color:#ff9a90;
+  display:inline-flex;align-items:center;gap:6px}
+.live-tag{font-weight:800;letter-spacing:.04em;padding:1px 7px;border-radius:6px;
+  font-size:.62rem;text-transform:uppercase;font-variant-numeric:tabular-nums}
+.pz-tag.live::before,.live-tag.live::before{content:"";width:6px;height:6px;border-radius:50%;
+  background:#ff5a4d;box-shadow:0 0 0 0 rgba(255,90,77,.7);animation:livedot 1.5s ease-out infinite}
+@keyframes livedot{70%{box-shadow:0 0 0 6px rgba(255,90,77,0)}100%{box-shadow:0 0 0 0 rgba(255,90,77,0)}}
+.pz.is-live{box-shadow:0 0 0 1px rgba(255,90,77,.45),var(--e2)}
+.match.is-live{outline:1px solid rgba(255,90,77,.4);outline-offset:-1px}
+.pz-ko.live-mid,.vs.live-mid{display:inline-flex;align-items:center;gap:2px;color:var(--text);
+  font-variant-numeric:tabular-nums}
+@media(prefers-reduced-motion:reduce){.pz-tag.live::before,.live-tag.live::before{animation:none}}
 .pz-foot,.m-scorers{margin-top:8px;font-size:.7rem;line-height:1.5;display:flex;flex-wrap:wrap;gap:4px 8px}
 .pz-foot{color:var(--muted)}
 .m-scorers .scorer,.pz .scorer{color:var(--text-dim);white-space:nowrap}

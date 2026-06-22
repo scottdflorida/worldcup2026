@@ -170,6 +170,20 @@ section:first-of-type{margin-top:var(--s5)}
 .pz-score .sg{opacity:.55}.pz-score .sg.win{opacity:1;color:var(--text)}
 .pz-score .sdash{opacity:.4;margin:0 1px}
 .pz-ko{font-weight:800;font-size:.92rem;color:var(--cyan);font-variant-numeric:tabular-nums;white-space:nowrap}
+/* live scores (ESPN overlay): a red LIVE pulse + the running clock, shown only
+   while a match is in play; .pz-ko is swapped for a live score by app.js. */
+.pz-tag.live,.live-tag.live{background:rgba(255,90,77,.16);color:#ff9a90;
+  display:inline-flex;align-items:center;gap:6px}
+.live-tag{font-weight:800;letter-spacing:.04em;padding:1px 7px;border-radius:6px;
+  font-size:.62rem;text-transform:uppercase;font-variant-numeric:tabular-nums}
+.pz-tag.live::before,.live-tag.live::before{content:"";width:6px;height:6px;border-radius:50%;
+  background:#ff5a4d;box-shadow:0 0 0 0 rgba(255,90,77,.7);animation:livedot 1.5s ease-out infinite}
+@keyframes livedot{70%{box-shadow:0 0 0 6px rgba(255,90,77,0)}100%{box-shadow:0 0 0 0 rgba(255,90,77,0)}}
+.pz.is-live{box-shadow:0 0 0 1px rgba(255,90,77,.45),var(--e2)}
+.match.is-live{outline:1px solid rgba(255,90,77,.4);outline-offset:-1px}
+.pz-ko.live-mid,.vs.live-mid{display:inline-flex;align-items:center;gap:2px;color:var(--text);
+  font-variant-numeric:tabular-nums}
+@media(prefers-reduced-motion:reduce){.pz-tag.live::before,.live-tag.live::before{animation:none}}
 .pz-foot,.m-scorers{margin-top:8px;font-size:.7rem;line-height:1.5;display:flex;flex-wrap:wrap;gap:4px 8px}
 .pz-foot{color:var(--muted)}
 .m-scorers .scorer,.pz .scorer{color:var(--text-dim);white-space:nowrap}
