@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>All Teams — World Cup 2026</title>
 <meta name="description" content="Browse and search all 48 nations at the 2026 World Cup. Open any team&#x27;s hub for standings, advance odds and road to the final.">
-<meta name="theme-color" content="#070d0c">
+<meta name="theme-color" content="#F4F2EC">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="apple-touch-icon" href="assets/favicon.svg">
 <meta property="og:type" content="website">
@@ -25,12 +25,10 @@
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
-<div class="bg-fx" aria-hidden="true"></div>
 <header class="site-head">
   <div class="brand"><a href="index.html" aria-label="World Cup 2026 tracker — home">
-    <img class="ball" src="assets/favicon.svg" alt="" width="24" height="24" aria-hidden="true">
-    <span class="brand-wm">World&nbsp;Cup&nbsp;<span class="grad">26</span></span>
-    <span class="brand-sub">tracker</span></a></div>
+    <span class="wm-mark" aria-hidden="true"><svg viewBox="0 0 36 36" width="30" height="30"><rect width="36" height="36" rx="3" fill="var(--ink)"/><text x="18" y="25" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-weight="800" font-size="17" letter-spacing="-1" fill="var(--accent)">26</text></svg></span>
+    <span class="wm-text"><span class="wm-l1">WORLD&nbsp;CUP</span><span class="wm-l2">TRACKER&nbsp;<span class="wm-yr">/26</span></span></span></a></div>
   <nav class="site-nav" aria-label="Primary"><a class="" href="index.html">Home</a><a class="on" href="teams.html" aria-current="page">Teams</a><a class="" href="bracket.html">Bracket</a></nav>
 </header>
 <main id="main">
@@ -50,12 +48,21 @@
 
 </main>
 <footer class="site-foot">
-  <div class="foot-top">
-    <div class="foot-updated"><span class="upd-dot wire" aria-hidden="true"><span class="wire-pulse"></span></span>
-      Last updated <strong>Jun 21, 2026 · 22:59 UTC</strong></div>
+  <div class="foot-rule" aria-hidden="true"></div>
+  <div class="foot-grid">
+    <div class="foot-cell foot-brand">
+      <span class="foot-wm">WORLD&nbsp;CUP&nbsp;<span class="foot-yr">/26</span></span>
+      <span class="foot-sub">Live match-center · United States · Canada · Mexico</span>
+    </div>
+    <div class="foot-cell foot-stat">
+      <span class="foot-k">STAGE</span><span class="foot-v">Group stage</span>
+    </div>
+    <div class="foot-cell foot-stat">
+      <span class="foot-k">UPDATED</span>
+      <span class="foot-v"><span class="upd-dot wire" aria-hidden="true"><span class="wire-pulse"></span></span>Jun 21, 2026 · 22:59 UTC</span>
+    </div>
   </div>
-  <div class="foot-meta">Stage: <strong>Group stage</strong> · United States · Canada · Mexico</div>
-  <div class="muted foot-fine">Data: openfootball (public domain). Auto-updates within ~15&nbsp;min of a result landing. Projections follow the current standings; third-place bracket slots resolve via FIFA's allocation once the group stage ends. Original artwork — not affiliated with FIFA.</div>
+  <div class="foot-fine">Data: openfootball (public domain). Auto-updates within ~15&nbsp;min of a result landing. Projections follow the current standings; third-place bracket slots resolve via FIFA's allocation once the group stage ends. Original artwork — not affiliated with FIFA.</div>
 </footer>
 <script src="assets/app.js"></script>
 </body>
