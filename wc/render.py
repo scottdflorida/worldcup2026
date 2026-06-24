@@ -560,13 +560,7 @@ def page_home(ctx):
 
     body = f"""
 <section class="hero" aria-label="Tournament status">
-  <div class="hero-strip" aria-hidden="true">
-    <span class="hs-cell"><span class="hs-k">EDITION</span><span class="hs-v">2026</span></span>
-    <span class="hs-cell"><span class="hs-k">STAGE</span><span class="hs-v">{E(ctx.stage())}</span></span>
-    <span class="hs-cell"><span class="hs-k">PLAYED</span><span class="hs-v">{n_played}<span class="hs-of">/{n_total}</span></span></span>
-    <span class="hs-cell hs-host"><span class="hs-k">HOSTS</span><span class="hs-v">USA · CAN · MEX</span></span>
-  </div>
-  <h1 class="hero-title">THE<br><span class="ht-big">WORLD&nbsp;CUP</span><br>IS&nbsp;<span class="ht-live">LIVE</span></h1>
+  <h1 class="hero-title">THE&nbsp;2026<br><span class="ht-big">WORLD&nbsp;CUP</span><br>IS&nbsp;<span class="ht-live">LIVE</span></h1>
   <div class="hero-foot">
     <div class="hero-prog">
       <div class="hp-head"><span class="hp-k">TOURNAMENT&nbsp;PROGRESS</span><span class="hp-pct">{round(pct_played)}<span class="hp-of">%</span></span></div>
@@ -574,7 +568,7 @@ def page_home(ctx):
         <span class="tally-fill" data-pct="{pct_played:.2f}" style="width:{pct_played:.3f}%"></span>
         <span class="tally-tick" style="left:100%" aria-hidden="true"></span>
       </div>
-      <div class="hp-scale"><span>R32 begins at full group stage</span><span>{n_played} of {n_total} played</span></div>
+      <div class="hp-scale"><span>{n_played} of {n_total} matches played</span></div>
     </div>
     {"<div class='hero-next'><span class='hn-k'>NEXT&nbsp;UP</span><span class='hn-v'>" + next_str + "</span></div>" if next_str else ""}
   </div>
@@ -1353,6 +1347,8 @@ STYLE = r"""
   --line:rgba(19,17,13,.16);      /* hairline rule */
   --line2:rgba(19,17,13,.30);     /* heavier rule */
   --hair:rgba(19,17,13,.09);
+  --bg-rule:rgba(19,17,13,.055);  /* faint background ruling — subtler than hairlines */
+  --zebra:rgba(19,17,13,.04);     /* alternating standings row tint */
   --text:var(--ink);--text-dim:var(--ink2);--muted:var(--muted-c);
   --vermilion:#FF3B14;    /* THE single accent literal (one source) */
   --accent:var(--vermilion);      /* global signal token (overridden per-team on tcard/team-hero only) */
@@ -1385,7 +1381,7 @@ html{scroll-behavior:smooth}
 body{margin:0;background:var(--paper);color:var(--ink);overflow-x:hidden;-webkit-font-smoothing:antialiased;
   font:16px/1.5 var(--sans);
   /* baseline-grid newsprint motif: a faint horizontal ruling, no aurora/pitch */
-  background-image:repeating-linear-gradient(180deg,transparent 0,transparent 31px,var(--hair) 31px,var(--hair) 32px);
+  background-image:repeating-linear-gradient(180deg,transparent 0,transparent 31px,var(--bg-rule) 31px,var(--bg-rule) 32px);
   background-attachment:fixed}
 a{color:inherit;text-decoration:none}
 img{max-width:100%}
@@ -1603,7 +1599,7 @@ section:first-of-type{margin-top:var(--s4)}
 .group-link:hover .arrow{transform:translateX(4px)}
 .group-head .muted{font-size:.62rem;color:var(--muted);letter-spacing:.1em}
 table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
-.standings th,.standings td{padding:9px 5px;text-align:center}
+.standings th,.standings td{padding:9px 8px;text-align:center}
 .standings thead tr{border-bottom:2px solid var(--ink)}
 .standings th{color:var(--muted);font-size:.56rem;letter-spacing:.08em}
 .standings .tm{text-align:left;width:100%}
@@ -1613,17 +1609,19 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .standings td.pts{font-family:var(--mono);font-weight:800;font-variant-numeric:tabular-nums}
 .standings td:not(.tm):not(.st):not(.odds):not(.race){font-family:var(--mono);font-variant-numeric:tabular-nums}
 .standings .gd{color:var(--muted)}
-.standings tbody tr{border-top:1px solid var(--hair);transition:background .12s}
+.group-card:not(.solo) .standings .hide-s{display:none}  /* GF/GA only on the detail page; compact home boxes show P W D L GD Pts */
+.standings tbody tr{transition:background .12s}
+.standings tbody tr:nth-child(even){background:var(--zebra)}
 .standings tbody tr:hover{background:var(--paper2)}
 .standings tr.qual td.pos{box-shadow:inset 4px 0 0 var(--vermilion)}
 .standings tr.third td.pos{box-shadow:inset 4px 0 0 var(--ink)}
 .standings tr.gone td.pos{box-shadow:inset 4px 0 0 var(--c-out)}
 .standings tr.gone{opacity:.55}
-.standings tr.watched{background:var(--paper2)}
+.standings tbody tr.watched{background:var(--paper2)}
 .standings tr.watched td.tm{box-shadow:inset 0 -2px 0 var(--sig)}
 .standings .st{white-space:nowrap}
-.standings td.odds,.standings td.race{min-width:84px}
-.standings td.odds .mini-tally,.standings td.race .mini-tally{display:inline-block;width:60px;vertical-align:middle}
+.standings td.odds,.standings td.race{min-width:92px;white-space:nowrap;padding-right:10px}
+.standings td.odds .mini-tally,.standings td.race .mini-tally{display:inline-block;width:58px;vertical-align:middle}
 .odds-n{font-family:var(--mono);font-weight:800;font-size:.74rem;margin-left:6px;font-variant-numeric:tabular-nums}
 .r32{font-family:var(--mono);font-weight:800;font-size:.72rem}
 .badge,.th-badge{display:inline-flex;align-items:center;gap:5px;font-size:.58rem;border:1.5px solid var(--ink);padding:3px 8px;white-space:nowrap}
@@ -1633,7 +1631,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .badge.bub,.th-badge.bub{background:transparent;color:var(--ink);border-color:var(--ink)}
 .badge.gone,.th-badge.gone{background:transparent;color:var(--muted);border-color:var(--line2)}
 .th-badge.work{background:transparent;color:var(--ink2);border-color:var(--line2)}
-.group-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:var(--s4)}
+.group-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(430px,1fr));gap:var(--s4)}
 .thirds-card{overflow-x:auto}
 .thirds td{padding:9px 6px}
 
@@ -1889,12 +1887,12 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   .gb-main{text-align:center;align-items:center}
   .gb-teams{justify-content:center}
   .standings .hide-s{display:none}
-  .standings th,.standings td{padding:8px 3px}
+  .standings th,.standings td{padding:8px 6px}
   /* keep team names on one line on phones; give the odds tally just enough room */
   .standings .tm{white-space:nowrap}
   .group-card.solo .standings .tm .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:34vw;display:inline-block;vertical-align:middle}
-  .standings td.odds,.standings td.race{min-width:40px}
-  .standings td.odds .mini-tally,.standings td.race .mini-tally{width:26px;min-width:26px}
+  .standings td.odds,.standings td.race{min-width:74px;white-space:nowrap}
+  .standings td.odds .mini-tally,.standings td.race .mini-tally{width:34px;min-width:34px}
   .standings .odds-n{margin-left:3px;font-size:.66rem}
   /* solo standings can scroll horizontally if truly cramped (wrap already clips) */
   .group-card.solo{overflow-x:auto}
