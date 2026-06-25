@@ -118,6 +118,64 @@ def _unknown(token):
     return {"team": None, "decided": False, "label": token, "candidates": set(), "slot": token}
 
 
+def tree_order_keys(matches):
+    """Order knockout matches as a bracket *tree*, not by match number.
+
+    Returns {match_num: sort_key}. Sorting each round's matches by this key lays
+    the bracket out so the two games feeding a given next-round game sit directly
+    above/below it — consecutive pairs in one column feed one game in the next —
+    which is exactly what the column layout and the connector lines assume.
+    """
+    by_num = index_matches(matches)
+
+    def feeders(m):
+        out = []
+        for slot in (m.get("team1"), m.get("team2")):
+            mm = WIN_SLOT.match(str(slot))
+            if mm and int(mm.group(1)) in by_num:
+                out.append(int(mm.group(1)))
+        return out
+
+    # Depth-first from the Final, numbering Round-of-32 leaves in tree order.
+    leaf_idx = {}
+    counter = [0]
+
+    def number_leaves(num, depth=0):
+        m = by_num.get(num)
+        if m is None or depth > 12:
+            return
+        kids = feeders(m)
+        if not kids:
+            if num not in leaf_idx:
+                leaf_idx[num] = counter[0]
+                counter[0] += 1
+            return
+        for k in kids:
+            number_leaves(k, depth + 1)
+
+    root = next((m["num"] for m in matches
+                 if m.get("round") == "Final" and "num" in m), None)
+    if root is not None:
+        number_leaves(root)
+    # Defensive: any leaf not reachable from the Final gets a trailing index.
+    for m in sorted(matches, key=lambda x: x.get("num", 0)):
+        n = m.get("num")
+        if n is not None and not feeders(m) and n not in leaf_idx:
+            leaf_idx[n] = counter[0]
+            counter[0] += 1
+
+    def min_leaf(num, depth=0):
+        m = by_num.get(num)
+        if m is None or depth > 12:
+            return leaf_idx.get(num, 10 ** 9)
+        kids = feeders(m)
+        if not kids:
+            return leaf_idx.get(num, 10 ** 9)
+        return min(min_leaf(k, depth + 1) for k in kids)
+
+    return {m["num"]: min_leaf(m["num"]) for m in matches if "num" in m}
+
+
 def build_bracket(matches, analyses, focus_teams):
     """Resolve every knockout match into rendered rows grouped by round."""
     by_num = index_matches(matches)
@@ -144,7 +202,9 @@ def build_bracket(matches, analyses, focus_teams):
             "round": rd,
         }
         rounds.setdefault(rd, []).append(row)
-    return [(rd, rounds[rd]) for rd in order if rd in rounds]
+    keys = tree_order_keys(matches)
+    return [(rd, sorted(rounds[rd], key=lambda r: keys.get(r["num"], 10 ** 9)))
+            for rd in order if rd in rounds]
 
 
 def forward_map(matches):
