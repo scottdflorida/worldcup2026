@@ -88,6 +88,31 @@ class Context:
         recent = next((m for m in reversed(mine) if data.has_result(m)), None)
         return nxt, recent
 
+    def next_match(self, team):
+        """The team's next unplayed fixture as (match, opponent, round_label), or
+        None. Falls back to the projected bracket path so a side that has advanced
+        into a knockout slot still carried as a winner token (not yet named in the
+        feed) still surfaces its next match — with the opponent as a live candidate
+        set when it isn't decided yet."""
+        nxt, _ = self.team_fixtures(team)
+        by_num = bracket.index_matches(self.matches)
+        if nxt is not None:
+            opp_token = nxt["team2"] if nxt.get("team1") == team else nxt["team1"]
+            return nxt, bracket.resolve_slot(opp_token, self.analyses, by_num), nxt.get("round", "")
+        if self.knocked_out(team):
+            return None
+        proj = self.projections.get(team)
+        if not proj:
+            return None
+        g = proj["group_letter"]
+        entry = f'{proj["rank"]}{g}' if proj["rank"] in (1, 2) else None
+        path = bracket.project_path(team, self.matches, self.analyses, g, entry) or []
+        for step in path:
+            m = by_num.get(step["num"])
+            if m is not None and not data.has_result(m):
+                return m, step["opponent"], step["round"]
+        return None
+
     def sorted_matches(self):
         return sorted(self.matches, key=lambda m: (m.get("date", ""), m.get("time", "")))
 
@@ -553,11 +578,11 @@ def _opp_inline(opp, cls="tc-opp"):
 def _tcard_fixtures(ctx, team):
     """The next match (primary) and the most recent result (secondary) for a
     team — the spine of a watchlist card."""
-    nxt, recent = ctx.team_fixtures(team)
+    nm = ctx.next_match(team)
+    _, recent = ctx.team_fixtures(team)
     rows = []
-    if nxt is not None:
-        opp = _card_opponent(ctx, nxt, team)
-        rd = nxt.get("round", "")
+    if nm is not None:
+        nxt, opp, rd = nm
         tag = nxt.get("group", "") if str(rd).startswith("Matchday") else _round_short(rd)
         rows.append(
             f'<div class="tc-fix tc-next">'
