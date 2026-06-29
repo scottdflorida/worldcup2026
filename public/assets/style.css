@@ -642,6 +642,15 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .foot-v{font-family:var(--mono);font-weight:800;font-size:.92rem;color:var(--ink);display:inline-flex;align-items:center;gap:8px}
 .upd-dot{display:inline-flex}.upd-dot .wire-pulse{width:8px;height:8px}
 .foot-fine{font-family:var(--mono);font-size:.64rem;line-height:1.7;color:var(--muted);max-width:780px;margin-top:16px;letter-spacing:.02em}
+.foot-tz{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:9px;margin-top:14px;font-family:var(--mono)}
+.foot-tz-k{font-size:.58rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.tz-select{font-family:var(--mono);font-size:.7rem;font-weight:700;color:var(--ink);background-color:var(--paper);
+  border:1.5px solid var(--ink);padding:5px 26px 5px 9px;cursor:pointer;letter-spacing:.02em;border-radius:0;
+  -webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%2313110d' stroke-width='1.6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 9px center}
+.tz-select:hover{background-color:var(--paper2)}
+.tz-select:focus-visible{outline:2px solid var(--vermilion);outline-offset:2px}
 
 /* cols (team page fixtures) ----------------------------------------- */
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:var(--s5)}

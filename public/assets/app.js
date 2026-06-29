@@ -42,6 +42,43 @@
       var lab=btn.querySelector('.wl-txt');if(lab)lab.textContent=on?'Watching':'Watch';
     });
     if(document.querySelector('.kbracket'))scheduleDraw();  // recolor watched strokes
+    applyTZ();  // re-render times (incl. the freshly cloned Your-teams cards)
+  }
+  // ---- time zone: re-render every [data-utc] time in the viewer's chosen zone ----
+  var TZS={'America/New_York':'ET','America/Chicago':'CT','America/Denver':'MT',
+           'America/Los_Angeles':'PT','America/Sao_Paulo':'BRT'};
+  var TZ_KEY='wc26.tz', TZ_DEFAULT='America/Los_Angeles';
+  function getTZ(){try{var v=localStorage.getItem(TZ_KEY);if(v&&TZS[v])return v;}catch(e){}return TZ_DEFAULT;}
+  function setTZ(v){try{localStorage.setItem(TZ_KEY,v);}catch(e){}}
+  function tzParts(utc,tz){
+    var d=new Date(utc);
+    if(isNaN(d))return null;
+    var day=new Intl.DateTimeFormat('en-US',{timeZone:tz,weekday:'short',month:'short',day:'numeric'}).format(d).replace(/,/g,'');
+    var time=new Intl.DateTimeFormat('en-US',{timeZone:tz,hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(d);
+    return {day:day,time:time};
+  }
+  function applyTZ(){
+    var tz=getTZ(), label=TZS[tz]||'';
+    document.querySelectorAll('[data-utc]').forEach(function(el){
+      if(el.classList.contains('live-mid'))return;          // currently showing a live score
+      var p=tzParts(el.getAttribute('data-utc'),tz); if(!p)return;
+      var fmt=el.getAttribute('data-tfmt');
+      if(fmt==='day'){el.textContent=p.day;return;}
+      if(fmt==='daytime'){
+        var dy=el.querySelector('.ko-day'); if(dy)dy.textContent=p.day;
+        var tm=el.querySelector('.ko-time');
+        if(tm){var c=(tm.querySelector('.tz')||{}).className||'ko-tz tz';
+          tm.innerHTML=p.time+'<span class="'+c+'">'+label+'</span>';}
+        return;
+      }
+      var cc=(el.querySelector('.tz')||{}).className||'tz';   // 'time'
+      el.innerHTML=p.time+'<span class="'+cc+'">'+label+'</span>';
+    });
+  }
+  function wireTZ(){
+    var sel=document.getElementById('tz-select'); if(!sel)return;
+    sel.value=getTZ();
+    sel.addEventListener('change',function(){setTZ(sel.value);applyTZ();});
   }
   document.addEventListener('click',function(e){
     var b=e.target.closest&&e.target.closest('[data-watch]');
@@ -288,7 +325,7 @@
   }
 
   document.addEventListener('DOMContentLoaded',function(){
-    apply();wireReveal();wireLive();wireBracketScroll();wireBracketObserver();drawBracket();
+    wireTZ();apply();wireReveal();wireLive();wireBracketScroll();wireBracketObserver();drawBracket();
     landOnActiveColumn();
   });
   window.addEventListener('load',drawBracket);
