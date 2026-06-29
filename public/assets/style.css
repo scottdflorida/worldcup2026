@@ -468,6 +468,9 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .road-node{display:flex;flex-direction:column;gap:3px}
 .road-rd{display:inline-grid;place-items:center;min-width:46px;height:24px;padding:0 9px;background:var(--ink);color:var(--paper);font-size:.66rem;font-weight:800;width:fit-content;letter-spacing:.06em}
 .road-date{font-family:var(--mono);font-size:.62rem;color:var(--muted)}
+/* keep the kickoff inside its column — wrap day/time instead of spilling onto the connector */
+.road-date .ko{flex-wrap:wrap;white-space:normal;gap:0 .6ch}
+.road-date .ko-day,.road-date .ko-time{white-space:nowrap}
 .road-branch{position:relative;align-self:stretch;width:22px}
 .road-branch::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;transform:translateX(-50%);background:var(--vermilion);opacity:.5}
 .road-branch::after{content:"";position:absolute;left:50%;top:50%;width:11px;height:2px;background:var(--vermilion);transform:translateY(-50%)}
@@ -594,9 +597,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .cal-m.is-done{border-left-color:var(--ink)}
 .cal-m.is-live{border-left-color:var(--vermilion)}
 /* a pinned team plays in this match — light it up */
-.cal-m.has-watched{border-left:3px solid var(--sig);padding-left:6px;background:rgba(255,59,20,.06)}
-.cal-day.has-watched{box-shadow:inset 0 0 0 1.5px var(--sig)}
-.cal-day.today.has-watched{box-shadow:inset 0 3px 0 var(--vermilion),inset 0 0 0 1.5px var(--sig)}
+.cal-m.has-watched{background:rgba(255,59,20,.06);border-left-color:var(--ink);outline:2px solid var(--ink);outline-offset:-1px}
 .cal-m-head{display:flex;align-items:center;gap:6px;margin-bottom:2px}
 .cal-tag{font-family:var(--mono);font-size:.5rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
   color:var(--paper);background:var(--ink2);padding:0 4px}
