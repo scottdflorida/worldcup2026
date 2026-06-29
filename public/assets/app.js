@@ -392,7 +392,32 @@
     document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!modal.hidden)closeModal();});
     var reset=document.getElementById('fb-reset');
     if(reset)reset.addEventListener('click',function(){picks={};render();});
-    render();
+    // right-angle connectors from each pair of feeders into the game they feed
+    function drawLines(){
+      var svg=root.querySelector('.fb-lines'),p=svg&&svg.querySelector('path');
+      if(!p)return;
+      var rb=root.getBoundingClientRect(); if(!rb.width)return;
+      svg.setAttribute('viewBox','0 0 '+rb.width+' '+rb.height);
+      function geom(el){var r=el.getBoundingClientRect();
+        return {y:(r.top+r.bottom)/2-rb.top,l:r.left-rb.left,r:r.right-rb.left,cx:(r.left+r.right)/2-rb.left};}
+      var d=[];
+      root.querySelectorAll('.fb-pick').forEach(function(bx){
+        var num=bx.getAttribute('data-m'),m=M[num],fe=[];
+        if(m.round==='R32')fe=[].slice.call(root.querySelectorAll('.fb-ent[data-r32="'+num+'"]'));
+        else (m.feeders||[]).forEach(function(f){var el=root.querySelector('.fb-pick[data-m="'+f+'"]');if(el)fe.push(el);});
+        var b=geom(bx);
+        fe.forEach(function(el){
+          var f=geom(el),right=b.cx>f.cx,x1=right?f.r:f.l,x2=right?b.l:b.r,mx=(x1+x2)/2;
+          d.push('M'+x1.toFixed(1)+' '+f.y.toFixed(1)+'H'+mx.toFixed(1)+'V'+b.y.toFixed(1)+'H'+x2.toFixed(1));
+        });
+      });
+      p.setAttribute('d',d.join(' '));
+    }
+    var lt=null;
+    window.addEventListener('resize',function(){clearTimeout(lt);lt=setTimeout(drawLines,100);});
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(drawLines);
+    render();drawLines();
+    requestAnimationFrame(drawLines);
   }
 
   document.addEventListener('DOMContentLoaded',function(){

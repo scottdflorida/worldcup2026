@@ -634,11 +634,14 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .fb-reset{font-family:var(--mono);font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
   color:var(--ink);background:var(--paper);border:1.5px solid var(--ink);padding:6px 12px;cursor:pointer}
 .fb-reset:hover{background:var(--paper2)}
-.fb-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
-.fb{--fb-fl:clamp(13px,3.5vw,36px);
-  display:flex;align-items:stretch;justify-content:center;gap:clamp(2px,1.6vw,24px);padding:6px 0}
-.fb-side{display:flex;align-items:stretch;gap:clamp(2px,1.6vw,24px)}
-.fb-col{display:flex;flex-direction:column;justify-content:space-around;align-items:center;gap:5px}
+.fb-wrap{background:var(--paper2);border:1.5px solid var(--line2);
+  padding:clamp(10px,1.6vw,20px) clamp(6px,1.2vw,16px);overflow:hidden}
+.fb{--fb-fl:clamp(13px,3.4vw,38px);
+  position:relative;display:flex;align-items:stretch;width:100%;gap:0;padding:4px 0}
+.fb-lines{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible}
+.fb-lines path{fill:none;stroke:var(--line2);stroke-width:1.4}
+.fb-side{position:relative;z-index:1;display:flex;align-items:stretch;flex:5}
+.fb-col{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;justify-content:space-around;align-items:center;gap:5px}
 .fb-node{display:flex;flex-direction:column;align-items:center;justify-content:center}
 .fb-fl{font-size:var(--fb-fl);line-height:1;display:block}
 /* outer flag layer: the qualified teams that feed each R32 box */
