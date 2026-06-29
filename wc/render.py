@@ -11,6 +11,7 @@ build contract — never hand-edit the generated assets).
 """
 from __future__ import annotations
 
+import hashlib
 import html
 import json
 import os
@@ -663,7 +664,7 @@ def shell(title, active, body, ctx, desc=None, page="index.html"):
 <html lang="en">
 <head>
 {head_meta(title, desc, page)}
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v={ASSET_VER}">
 <script>window.WC_DEFAULT_WATCH={json.dumps(config.DEFAULT_WATCH)};</script>
 </head>
 <body>
@@ -694,7 +695,7 @@ def shell(title, active, body, ctx, desc=None, page="index.html"):
   </div>
   <div class="foot-fine">Data: openfootball (public domain). Auto-updates within ~15&nbsp;min of a result landing. Projections follow the current standings; third-place bracket slots resolve via FIFA's allocation once the group stage ends. Original artwork — not affiliated with FIFA.</div>
 </footer>
-<script src="assets/app.js"></script>
+<script src="assets/app.js?v={ASSET_VER}"></script>
 </body>
 </html>"""
 
@@ -2414,3 +2415,9 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   [data-reveal]{opacity:1!important;transform:none!important}
 }
 """
+
+# Cache-busting fingerprint for the CSS/JS assets. The HTML links them as
+# style.css?v=<ASSET_VER> / app.js?v=<ASSET_VER>; when either asset changes the
+# version changes, so returning visitors fetch the new file instead of a stale
+# cached one. Referenced by shell().
+ASSET_VER = hashlib.sha256((STYLE + APP_JS).encode("utf-8")).hexdigest()[:10]
