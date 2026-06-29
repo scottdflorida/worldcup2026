@@ -1194,38 +1194,44 @@ def fantasy_data(ctx):
     return {"matches": matches, "order": order, "flags": {t: flag(t) for t in sorted(teams)}}
 
 
-def _fb_node(num, e):
-    """Render one bracket node: an R32 match shows its two entrant flags (tap to
-    pick the winner); every later round is an empty winner-slot the client fills."""
-    if e["round"] == "R32":
-        cells = []
-        for ent in e["entrants"]:
-            if ent.get("team"):
-                t = ent["team"]
-                cells.append(f'<button class="fb-team" type="button" data-pick="{E(t)}" '
-                             f'aria-label="{E(t)}"><span class="fb-fl">{flag(t)}</span></button>')
-            else:  # entrant still a candidate pool (e.g. an unresolved 3rd place)
-                cells.append('<button class="fb-team fb-poolpick" type="button" aria-label="Pick team">'
-                             '<span class="fb-fl"></span></button>')
-        locked = " fb-locked" if e.get("winner") else ""
-        return (f'<div class="fb-node fb-r32{locked}" data-m="{num}" data-round="R32">'
-                + "".join(cells) + "</div>")
+def _fb_box(num, e):
+    """One winner-slot box for a match (every round, including the R32) — empty
+    until the client fills it; shows the locked winner for a settled tie."""
     champ = " fb-champ" if e["round"] == "F" else ""
-    return (f'<div class="fb-node fb-pick fb-empty{champ}" data-m="{num}" data-round="{e["round"]}">'
+    locked = " fb-locked" if e.get("winner") else ""
+    return (f'<div class="fb-node fb-pick fb-empty{champ}{locked}" data-m="{num}" data-round="{e["round"]}">'
             '<button class="fb-slot" type="button" aria-label="Pick winner">'
             '<span class="fb-fl"></span></button></div>')
 
 
+def _fb_entrants_col(r32_nums, matches):
+    """The outer flag layer: the two qualified teams that feed each R32 box, in
+    tree order, so every R32 box sits midway between its pair."""
+    cells = []
+    for num in r32_nums:
+        for ent in matches[str(num)]["entrants"]:
+            if ent.get("team"):
+                t = ent["team"]
+                cells.append(f'<div class="fb-ent" data-r32="{num}" data-team="{E(t)}" '
+                             f'title="{E(t)}"><span class="fb-fl">{flag(t)}</span></div>')
+            else:  # still a candidate pool (e.g. an unresolved 3rd place)
+                cells.append(f'<div class="fb-ent fb-ent-tbd" data-r32="{num}"><span class="fb-fl">·</span></div>')
+    return f'<div class="fb-col fb-entrants" data-round="ENT">{"".join(cells)}</div>'
+
+
 def _fb_col(rkey, nums, matches):
-    cells = "".join(_fb_node(n, matches[str(n)]) for n in nums)
+    cells = "".join(_fb_box(n, matches[str(n)]) for n in nums)
     return f'<div class="fb-col" data-round="{rkey}">{cells}</div>'
 
 
 def page_fantasy(ctx):
     fb = fantasy_data(ctx)
     m, od = fb["matches"], fb["order"]
-    left = "".join(_fb_col(rk, od["L"].get(rk, []), m) for rk in ("R32", "R16", "QF", "SF"))
-    right = "".join(_fb_col(rk, od["R"].get(rk, []), m) for rk in ("SF", "QF", "R16", "R32"))
+    lr32, rr32 = od["L"].get("R32", []), od["R"].get("R32", [])
+    left = (_fb_entrants_col(lr32, m)
+            + "".join(_fb_col(rk, od["L"].get(rk, []), m) for rk in ("R32", "R16", "QF", "SF")))
+    right = ("".join(_fb_col(rk, od["R"].get(rk, []), m) for rk in ("SF", "QF", "R16", "R32"))
+             + _fb_entrants_col(rr32, m))
     final = _fb_col("F", od["F"], m)
     body = f"""
 <section class="fb-intro" aria-label="Fantasy bracket">
@@ -1946,30 +1952,22 @@ APP_JS = r"""
     function render(){
       prune();
       root.querySelectorAll('.fb-node').forEach(function(node){
-        var num=node.getAttribute('data-m'),m=M[num];
-        if(m.round==='R32'){
-          var w=occupant(num);
-          node.querySelectorAll('.fb-team').forEach(function(b){
-            var t=b.getAttribute('data-pick');
-            b.classList.toggle('fb-win',!!w&&t===w);
-            b.classList.toggle('fb-lose',!!w&&t!==w);
-          });
-        }else{
-          var occ=occupant(num),fl=node.querySelector('.fb-fl');
-          if(fl)fl.textContent=occ?(FLAGS[occ]||''):'';
-          node.classList.toggle('fb-filled',!!occ);
-          node.classList.toggle('fb-empty',!occ);
-        }
+        var occ=occupant(node.getAttribute('data-m')),fl=node.querySelector('.fb-fl');
+        if(fl)fl.textContent=occ?(FLAGS[occ]||''):'';
+        node.classList.toggle('fb-filled',!!occ);
+        node.classList.toggle('fb-empty',!occ);
+      });
+      // outer flag layer: once an R32 is decided, dim the team that didn't advance
+      root.querySelectorAll('.fb-ent[data-r32]').forEach(function(el){
+        var occ=occupant(el.getAttribute('data-r32')),t=el.getAttribute('data-team');
+        el.classList.toggle('fb-ent-out',!!occ&&t!==occ);
       });
       savePicks();
     }
-    // R32: tap an entrant flag to set that match's winner
+    // every match is one box: tap it to pick the winner (settled ties are locked)
     root.addEventListener('click',function(e){
-      var tb=e.target.closest('.fb-team[data-pick]');
-      if(tb){var n=tb.closest('.fb-node');if(n.classList.contains('fb-locked'))return;
-        picks[n.getAttribute('data-m')]=tb.getAttribute('data-pick');render();return;}
       var pk=e.target.closest('.fb-pick');
-      if(pk)openModal(pk.getAttribute('data-m'));
+      if(pk&&!pk.classList.contains('fb-locked'))openModal(pk.getAttribute('data-m'));
     });
     // modal picker for later rounds
     var modal=document.getElementById('fb-modal'),
@@ -2641,26 +2639,26 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   color:var(--ink);background:var(--paper);border:1.5px solid var(--ink);padding:6px 12px;cursor:pointer}
 .fb-reset:hover{background:var(--paper2)}
 .fb-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
-.fb{--fb-fl:clamp(15px,4.6vw,40px);
-  display:flex;align-items:stretch;justify-content:center;gap:clamp(2px,2.1vw,34px);padding:6px 0}
-.fb-side{display:flex;align-items:stretch;gap:clamp(2px,2.1vw,34px)}
+.fb{--fb-fl:clamp(13px,3.5vw,36px);
+  display:flex;align-items:stretch;justify-content:center;gap:clamp(2px,1.6vw,24px);padding:6px 0}
+.fb-side{display:flex;align-items:stretch;gap:clamp(2px,1.6vw,24px)}
 .fb-col{display:flex;flex-direction:column;justify-content:space-around;align-items:center;gap:5px}
 .fb-node{display:flex;flex-direction:column;align-items:center;justify-content:center}
 .fb-fl{font-size:var(--fb-fl);line-height:1;display:block}
-.fb-r32{gap:3px}
-.fb-team{display:flex;align-items:center;justify-content:center;padding:2px;border:1.5px solid var(--line2);
-  background:var(--paper);cursor:pointer;line-height:0;transition:opacity .12s,border-color .12s}
-.fb-team:hover{border-color:var(--ink)}
-.fb-team.fb-win{border-color:var(--ink);box-shadow:0 0 0 1.5px var(--ink)}
-.fb-team.fb-lose{opacity:.3}
-.fb-r32.fb-locked .fb-team{cursor:default}
-.fb-r32.fb-locked .fb-team.fb-win{border-color:var(--vermilion);box-shadow:0 0 0 1.5px var(--vermilion)}
+/* outer flag layer: the qualified teams that feed each R32 box */
+.fb-entrants{gap:3px}
+.fb-ent{display:flex;align-items:center;justify-content:center;line-height:0;transition:opacity .12s}
+.fb-entrants .fb-fl{font-size:calc(var(--fb-fl)*.84)}
+.fb-ent.fb-ent-out{opacity:.24}
+.fb-ent-tbd .fb-fl{color:var(--muted)}
+/* every match is one winner-slot box */
 .fb-pick .fb-slot{display:flex;align-items:center;justify-content:center;cursor:pointer;line-height:0;padding:2px;
-  border:1.5px solid var(--line2);background:var(--paper);width:calc(var(--fb-fl)*1.5);height:calc(var(--fb-fl)*1.15)}
+  border:1.5px solid var(--line2);background:var(--paper);width:calc(var(--fb-fl)*1.42);height:calc(var(--fb-fl)*1.18)}
 .fb-pick.fb-empty .fb-slot{border-style:dashed;background:var(--paper3)}
 .fb-pick .fb-slot:hover{border-color:var(--ink)}
 .fb-pick.fb-filled .fb-slot{border-color:var(--ink)}
-.fb-champ .fb-slot{border-width:2px;border-color:var(--vermilion);width:calc(var(--fb-fl)*1.7);height:calc(var(--fb-fl)*1.3)}
+.fb-pick.fb-locked .fb-slot{cursor:default;border-color:var(--vermilion);box-shadow:0 0 0 1.5px var(--vermilion)}
+.fb-champ .fb-slot{border-width:2px;border-color:var(--vermilion);width:calc(var(--fb-fl)*1.62);height:calc(var(--fb-fl)*1.34)}
 .fb-champ.fb-filled .fb-slot{box-shadow:0 0 0 2px var(--vermilion)}
 .fb-modal[hidden]{display:none}
 .fb-modal{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:18px}
@@ -2670,10 +2668,10 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .fb-modal-head{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:2px solid var(--ink)}
 .fb-modal-k{font-family:var(--mono);font-size:.64rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
 .fb-modal-x{border:0;background:none;font-size:1rem;cursor:pointer;color:var(--ink);line-height:1;padding:2px 4px}
-.fb-modal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:8px;padding:14px;overflow-y:auto}
-.fb-opt{display:flex;align-items:center;justify-content:center;font-size:26px;line-height:0;padding:8px 6px;
-  border:1.5px solid var(--line2);background:var(--paper);cursor:pointer}
-.fb-opt:hover{border-color:var(--ink);background:var(--paper2)}
+.fb-modal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:6px;padding:14px;overflow-y:auto;justify-items:center}
+.fb-opt{display:flex;align-items:center;justify-content:center;font-size:32px;line-height:0;padding:6px;
+  border:0;background:none;cursor:pointer;transition:transform .1s}
+.fb-opt:hover{transform:scale(1.14)}
 .fb-modal-clear{font-family:var(--mono);font-size:.58rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
   color:var(--muted);background:var(--paper);border:0;border-top:1.5px solid var(--line);padding:10px;cursor:pointer}
 .fb-modal-clear:hover{color:var(--ink);background:var(--paper2)}
