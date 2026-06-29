@@ -127,13 +127,24 @@ def tree_order_keys(matches):
     which is exactly what the column layout and the connector lines assume.
     """
     by_num = index_matches(matches)
+    prev_round = {b: a for a, b in zip(_KO_ORDER, _KO_ORDER[1:])}
 
     def feeders(m):
+        # Each side is either a W{n} edge or — once that feeder match is played —
+        # the winner's actual NAME (the feed overwrites the token). Recover the
+        # edge in the played case so the tree ordering doesn't lose a branch and
+        # shift every later pairing by one.
         out = []
+        pr = prev_round.get(m.get("round"))
         for slot in (m.get("team1"), m.get("team2")):
             mm = WIN_SLOT.match(str(slot))
             if mm and int(mm.group(1)) in by_num:
                 out.append(int(mm.group(1)))
+            elif pr:
+                for cand in matches:
+                    if cand.get("round") == pr and match_winner(cand) == slot:
+                        out.append(cand["num"])
+                        break
         return out
 
     # Depth-first from the Final, numbering Round-of-32 leaves in tree order.
