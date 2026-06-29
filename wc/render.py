@@ -1051,9 +1051,12 @@ def _cal_match(ctx, m, by_num):
     tag = m.get("group", "") if str(rd).startswith("Matchday") else _round_short(rd)
     done = data.has_result(m)
     _, time = _pt_parts(m)
+    time_html = (f'<span class="cal-time">{E(time)}<span class="cal-tz">PT</span></span>'
+                 if time else '')
     if done:
         g1, g2 = data.final_score(m)
-        mid = f'<span class="cal-score" data-live-mid>{g1}–{g2}</span>'
+        # a calendar is about WHEN — keep the kickoff time, add the final score
+        mid = f'{time_html}<span class="cal-score">{g1}–{g2}</span>'
     else:
         mid = (f'<span class="cal-time" data-live-mid>{E(time)}<span class="cal-tz">PT</span></span>'
                if time else '<span class="cal-time" data-live-mid>TBD</span>')
@@ -2332,13 +2335,14 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .cal-m.is-live{border-left-color:var(--vermilion)}
 /* a pinned team plays in this match — light it up */
 .cal-m.has-watched{background:rgba(255,59,20,.06);border-left-color:var(--ink);outline:2px solid var(--ink);outline-offset:-1px}
-.cal-m-head{display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.cal-m-head{display:flex;align-items:center;flex-wrap:wrap;gap:2px 6px;margin-bottom:2px}
 .cal-tag{font-family:var(--mono);font-size:.5rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
   color:var(--paper);background:var(--ink2);padding:0 4px}
 .cal-time{font-family:var(--mono);font-size:.62rem;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
 .cal-tz{color:var(--vermilion);margin-left:1px;font-size:.85em}
 .cal-score{font-family:var(--mono);font-size:.66rem;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
 .cal-m.is-live .cal-time,.cal-m.is-live .cal-score{color:var(--vermilion)}
+.cal-m.is-done .cal-time{font-weight:600;color:var(--muted)}  /* time = context; score leads on a played match */
 .cal-m-teams{display:flex;flex-direction:column;gap:1px;font-size:.72rem;min-width:0}
 .cal-side{display:flex;align-items:center;min-width:0}
 .cal-side .cal-tm{font-weight:700;gap:4px;padding:0;min-width:0}
