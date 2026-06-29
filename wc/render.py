@@ -16,7 +16,7 @@ import json
 import os
 from datetime import datetime, timedelta, timezone
 
-from . import bracket, config, data, standings, util, venues
+from . import blurbs, bracket, config, data, standings, util, venues
 from .flags import flag
 from .util import fmt_date, fmt_date_short  # noqa: F401
 
@@ -40,6 +40,7 @@ class Context:
                             for t in self.teams}
         self.advance = standings.advance_probabilities(self.matches, self.analyses)
         self.last_updated = data.last_updated()
+        self.blurbs = blurbs.load_cache()   # LLM road-to-final write-ups (may be empty)
         self._wire_knockout()
 
     def _wire_knockout(self):
@@ -884,6 +885,7 @@ def page_team(ctx, team):
 
 <section aria-label="Road to the final">
   <div class="sec-head"><h2>Road to the final</h2><span class="muted">potential futures — who {E(team)} could meet each round</span></div>
+  {f'<p class="road-blurb">{E(blurbs.blurb_for(ctx.blurbs, team))}</p>' if blurbs.blurb_for(ctx.blurbs, team) else ''}
   <p class="muted road-intro">Live candidates fan out from each round before names resolve; the branch collapses to one as results land.</p>
   {road_body}
 </section>
@@ -2043,6 +2045,8 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 
 /* ============ ROAD-TO-THE-FINAL (branch graph) =================== */
 .roads{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4)}
+.road-blurb{margin:2px 0 14px;font-size:1.02rem;line-height:1.6;color:var(--ink);max-width:64ch;
+  border-left:3px solid var(--vermilion);padding-left:14px}
 .road-intro{margin:-8px 0 var(--s5);font-size:.88rem;color:var(--ink2)}
 .road-line{background:var(--paper);border:2px solid var(--ink);padding:18px 20px}
 .road-line.third{grid-column:1/-1}

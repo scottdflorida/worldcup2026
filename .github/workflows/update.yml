@@ -33,7 +33,15 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install dependencies (Anthropic SDK for blurb generation)
+        run: pip install anthropic
+
       - name: Refresh data and rebuild the site
+        # ANTHROPIC_API_KEY is optional: set it as a repo secret to regenerate the
+        # road-to-final blurbs after each match. Without it, the site still builds
+        # with whatever blurbs are already committed in data/blurbs.json.
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python3 scripts/update.py
 
       - name: Commit & push only if results changed
