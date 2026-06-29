@@ -665,6 +665,7 @@ NAV = [
     ("index.html", "Home"),
     ("teams.html", "Teams"),
     ("bracket.html", "Bracket"),
+    ("fantasy.html", "Fantasy"),
     ("calendar.html", "Calendar"),
 ]
 
@@ -1147,6 +1148,115 @@ def page_calendar(ctx):
                  page="calendar.html")
 
 
+_FB_RND = {"Round of 32": "R32", "Round of 16": "R16", "Quarter-final": "QF",
+           "Semi-final": "SF", "Final": "F"}
+
+
+def fantasy_data(ctx):
+    """The knockout tree as a pick-able structure: every match with its feeders
+    (or R32 entrants) and any winner already locked by a real result. The client
+    builds the picker options from this — a slot's feasible teams are its feeders'
+    picked/locked occupants, or, while those are open, their whole candidate pool."""
+    by_num = bracket.index_matches(ctx.matches)
+    fmap = bracket.forward_map(ctx.matches)
+    rev = {}
+    for a, b in fmap.items():
+        rev.setdefault(b, []).append(a)
+    keys = bracket.tree_order_keys(ctx.matches)
+    matches, order = {}, {"L": {}, "R": {}, "F": []}
+    for rd in ("Round of 32", "Round of 16", "Quarter-final", "Semi-final", "Final"):
+        ms = sorted([m for m in ctx.matches if m.get("round") == rd],
+                    key=lambda m: keys.get(m["num"], 10 ** 9))
+        rkey, half = _FB_RND[rd], len(ms) // 2
+        for i, m in enumerate(ms):
+            num = m["num"]
+            side = "F" if rd == "Final" else ("L" if i < half else "R")
+            entry = {"round": rkey, "side": side,
+                     "winner": bracket.match_winner(m) if data.has_result(m) else None}
+            if rd == "Round of 32":
+                ents = []
+                for slot in (m["team1"], m["team2"]):
+                    r = bracket.resolve_slot(slot, ctx.analyses, by_num)
+                    ents.append({"team": r["team"]} if r["team"]
+                                else {"pool": sorted(r["candidates"])})
+                entry["entrants"] = ents
+            else:
+                entry["feeders"] = sorted(rev.get(num, []), key=lambda n: keys.get(n, 10 ** 9))
+            matches[str(num)] = entry
+            (order["F"].append(num) if side == "F"
+             else order[side].setdefault(rkey, []).append(num))
+    teams = set()
+    for e in matches.values():
+        if e.get("winner"):
+            teams.add(e["winner"])
+        for ent in e.get("entrants", []):
+            teams.update([ent["team"]] if ent.get("team") else ent.get("pool", []))
+    return {"matches": matches, "order": order, "flags": {t: flag(t) for t in sorted(teams)}}
+
+
+def _fb_node(num, e):
+    """Render one bracket node: an R32 match shows its two entrant flags (tap to
+    pick the winner); every later round is an empty winner-slot the client fills."""
+    if e["round"] == "R32":
+        cells = []
+        for ent in e["entrants"]:
+            if ent.get("team"):
+                t = ent["team"]
+                cells.append(f'<button class="fb-team" type="button" data-pick="{E(t)}" '
+                             f'aria-label="{E(t)}"><span class="fb-fl">{flag(t)}</span></button>')
+            else:  # entrant still a candidate pool (e.g. an unresolved 3rd place)
+                cells.append('<button class="fb-team fb-poolpick" type="button" aria-label="Pick team">'
+                             '<span class="fb-fl"></span></button>')
+        locked = " fb-locked" if e.get("winner") else ""
+        return (f'<div class="fb-node fb-r32{locked}" data-m="{num}" data-round="R32">'
+                + "".join(cells) + "</div>")
+    champ = " fb-champ" if e["round"] == "F" else ""
+    return (f'<div class="fb-node fb-pick fb-empty{champ}" data-m="{num}" data-round="{e["round"]}">'
+            '<button class="fb-slot" type="button" aria-label="Pick winner">'
+            '<span class="fb-fl"></span></button></div>')
+
+
+def _fb_col(rkey, nums, matches):
+    cells = "".join(_fb_node(n, matches[str(n)]) for n in nums)
+    return f'<div class="fb-col" data-round="{rkey}">{cells}</div>'
+
+
+def page_fantasy(ctx):
+    fb = fantasy_data(ctx)
+    m, od = fb["matches"], fb["order"]
+    left = "".join(_fb_col(rk, od["L"].get(rk, []), m) for rk in ("R32", "R16", "QF", "SF"))
+    right = "".join(_fb_col(rk, od["R"].get(rk, []), m) for rk in ("SF", "QF", "R16", "R32"))
+    final = _fb_col("F", od["F"], m)
+    body = f"""
+<section class="fb-intro" aria-label="Fantasy bracket">
+  <div class="fb-head"><h1>Fantasy bracket</h1>
+    <button id="fb-reset" class="fb-reset" type="button">Reset</button></div>
+  <p class="muted">Tap to pick a winner in every undecided tie — settled results are locked. Saved on this device.</p>
+</section>
+<div class="fb-wrap" aria-label="Knockout bracket">
+  <div class="fb">
+    <div class="fb-side fb-left">{left}</div>
+    {final}
+    <div class="fb-side fb-right">{right}</div>
+  </div>
+</div>
+<div class="fb-modal" id="fb-modal" hidden>
+  <div class="fb-modal-back" data-fb-close></div>
+  <div class="fb-modal-panel" role="dialog" aria-modal="true" aria-label="Pick the winner">
+    <div class="fb-modal-head"><span class="fb-modal-k">Pick the winner</span>
+      <button class="fb-modal-x" type="button" data-fb-close aria-label="Close">✕</button></div>
+    <div class="fb-modal-grid" id="fb-modal-grid"></div>
+    <button class="fb-modal-clear" type="button" data-fb-clear>Clear this pick</button>
+  </div>
+</div>
+<script>window.FB_DATA={json.dumps(fb, ensure_ascii=False, separators=(",", ":"))};</script>
+"""
+    return shell("Fantasy Bracket — World Cup 2026", "fantasy.html", body, ctx,
+                 desc="Fill in your own 2026 World Cup knockout bracket — a compact, flags-only "
+                      "picker where every undecided tie is yours to call.",
+                 page="fantasy.html")
+
+
 def page_bracket(ctx):
     rounds = [(rd, rows) for rd, rows in ctx.bracket if rd != "Match for third place"]
     n_round = len(rounds)
@@ -1387,6 +1497,7 @@ def render_site(payload):
         "index.html": page_home(ctx),
         "teams.html": page_teams(ctx),
         "bracket.html": page_bracket(ctx),
+        "fantasy.html": page_fantasy(ctx),
         "calendar.html": page_calendar(ctx),
         "assets/style.css": STYLE,
         "assets/app.js": APP_JS,
@@ -1805,9 +1916,88 @@ APP_JS = r"""
     updateEdges();
   }
 
+  // ---- Fantasy bracket: a flags-only pick-the-winner knockout tree ----
+  function initFantasy(){
+    var root=document.querySelector('.fb'); if(!root||!window.FB_DATA)return;
+    var M=window.FB_DATA.matches, FLAGS=window.FB_DATA.flags, FKEY='wc26.fantasy';
+    var picks={}; try{var v=JSON.parse(localStorage.getItem(FKEY));if(v&&typeof v==='object')picks=v;}catch(e){}
+    function savePicks(){try{localStorage.setItem(FKEY,JSON.stringify(picks));}catch(e){}}
+    function occupant(num){var m=M[num];if(!m)return null;return m.winner||picks[num]||null;}
+    function feasible(num,depth){
+      depth=depth||0;var m=M[num];if(!m||depth>10)return [];
+      if(m.winner)return [m.winner];
+      if(m.round==='R32'){
+        var o=[];(m.entrants||[]).forEach(function(e){if(e.team)o.push(e.team);else (e.pool||[]).forEach(function(t){o.push(t);});});return o;
+      }
+      var seen={},res=[];
+      (m.feeders||[]).forEach(function(f){
+        var p=occupant(f),arr=p?[p]:feasible(f,depth+1);
+        arr.forEach(function(t){if(!seen[t]){seen[t]=1;res.push(t);}});
+      });
+      return res;
+    }
+    function prune(){  // drop any pick that's no longer reachable, parents first
+      ['R32','R16','QF','SF','F'].forEach(function(rd){
+        Object.keys(picks).forEach(function(num){
+          if(M[num]&&M[num].round===rd&&feasible(num).indexOf(picks[num])<0)delete picks[num];
+        });
+      });
+    }
+    function render(){
+      prune();
+      root.querySelectorAll('.fb-node').forEach(function(node){
+        var num=node.getAttribute('data-m'),m=M[num];
+        if(m.round==='R32'){
+          var w=occupant(num);
+          node.querySelectorAll('.fb-team').forEach(function(b){
+            var t=b.getAttribute('data-pick');
+            b.classList.toggle('fb-win',!!w&&t===w);
+            b.classList.toggle('fb-lose',!!w&&t!==w);
+          });
+        }else{
+          var occ=occupant(num),fl=node.querySelector('.fb-fl');
+          if(fl)fl.textContent=occ?(FLAGS[occ]||''):'';
+          node.classList.toggle('fb-filled',!!occ);
+          node.classList.toggle('fb-empty',!occ);
+        }
+      });
+      savePicks();
+    }
+    // R32: tap an entrant flag to set that match's winner
+    root.addEventListener('click',function(e){
+      var tb=e.target.closest('.fb-team[data-pick]');
+      if(tb){var n=tb.closest('.fb-node');if(n.classList.contains('fb-locked'))return;
+        picks[n.getAttribute('data-m')]=tb.getAttribute('data-pick');render();return;}
+      var pk=e.target.closest('.fb-pick');
+      if(pk)openModal(pk.getAttribute('data-m'));
+    });
+    // modal picker for later rounds
+    var modal=document.getElementById('fb-modal'),
+        grid=document.getElementById('fb-modal-grid'),cur=null;
+    function openModal(num){
+      cur=num;var opts=feasible(num);
+      if(!opts.length)return;
+      grid.innerHTML=opts.map(function(t){
+        return '<button class="fb-opt" type="button" data-team="'+t.replace(/"/g,'&quot;')+'">'+(FLAGS[t]||'')+'</button>';
+      }).join('');
+      modal.hidden=false;
+    }
+    function closeModal(){modal.hidden=true;cur=null;}
+    modal.addEventListener('click',function(e){
+      if(e.target.closest('[data-fb-close]')){closeModal();return;}
+      if(e.target.closest('[data-fb-clear]')){if(cur)delete picks[cur];closeModal();render();return;}
+      var o=e.target.closest('.fb-opt');
+      if(o&&cur){picks[cur]=o.getAttribute('data-team');closeModal();render();}
+    });
+    document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!modal.hidden)closeModal();});
+    var reset=document.getElementById('fb-reset');
+    if(reset)reset.addEventListener('click',function(){picks={};render();});
+    render();
+  }
+
   document.addEventListener('DOMContentLoaded',function(){
     wireTZ();apply();wireReveal();wireLive();wireBracketScroll();wireBracketObserver();drawBracket();
-    landOnActiveColumn();
+    landOnActiveColumn();initFantasy();
   });
   window.addEventListener('load',drawBracket);
   window.addEventListener('resize',scheduleDraw);
@@ -2442,6 +2632,51 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   /* lay the day's matches two across instead of a single stacked column */
   .cal-d-body{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;align-items:start}
 }
+
+/* Fantasy bracket -------------------------------------------------- */
+.fb-intro{margin-bottom:8px}
+.fb-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.fb-head h1{margin:0}
+.fb-reset{font-family:var(--mono);font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink);background:var(--paper);border:1.5px solid var(--ink);padding:6px 12px;cursor:pointer}
+.fb-reset:hover{background:var(--paper2)}
+.fb-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+.fb{--fb-fl:clamp(15px,4.6vw,40px);
+  display:flex;align-items:stretch;justify-content:center;gap:clamp(2px,2.1vw,34px);padding:6px 0}
+.fb-side{display:flex;align-items:stretch;gap:clamp(2px,2.1vw,34px)}
+.fb-col{display:flex;flex-direction:column;justify-content:space-around;align-items:center;gap:5px}
+.fb-node{display:flex;flex-direction:column;align-items:center;justify-content:center}
+.fb-fl{font-size:var(--fb-fl);line-height:1;display:block}
+.fb-r32{gap:3px}
+.fb-team{display:flex;align-items:center;justify-content:center;padding:2px;border:1.5px solid var(--line2);
+  background:var(--paper);cursor:pointer;line-height:0;transition:opacity .12s,border-color .12s}
+.fb-team:hover{border-color:var(--ink)}
+.fb-team.fb-win{border-color:var(--ink);box-shadow:0 0 0 1.5px var(--ink)}
+.fb-team.fb-lose{opacity:.3}
+.fb-r32.fb-locked .fb-team{cursor:default}
+.fb-r32.fb-locked .fb-team.fb-win{border-color:var(--vermilion);box-shadow:0 0 0 1.5px var(--vermilion)}
+.fb-pick .fb-slot{display:flex;align-items:center;justify-content:center;cursor:pointer;line-height:0;padding:2px;
+  border:1.5px solid var(--line2);background:var(--paper);width:calc(var(--fb-fl)*1.5);height:calc(var(--fb-fl)*1.15)}
+.fb-pick.fb-empty .fb-slot{border-style:dashed;background:var(--paper3)}
+.fb-pick .fb-slot:hover{border-color:var(--ink)}
+.fb-pick.fb-filled .fb-slot{border-color:var(--ink)}
+.fb-champ .fb-slot{border-width:2px;border-color:var(--vermilion);width:calc(var(--fb-fl)*1.7);height:calc(var(--fb-fl)*1.3)}
+.fb-champ.fb-filled .fb-slot{box-shadow:0 0 0 2px var(--vermilion)}
+.fb-modal[hidden]{display:none}
+.fb-modal{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:18px}
+.fb-modal-back{position:absolute;inset:0;background:rgba(19,17,13,.55)}
+.fb-modal-panel{position:relative;background:var(--paper);border:2px solid var(--ink);width:100%;max-width:340px;
+  max-height:80vh;display:flex;flex-direction:column;box-shadow:6px 6px 0 var(--ink)}
+.fb-modal-head{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:2px solid var(--ink)}
+.fb-modal-k{font-family:var(--mono);font-size:.64rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.fb-modal-x{border:0;background:none;font-size:1rem;cursor:pointer;color:var(--ink);line-height:1;padding:2px 4px}
+.fb-modal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:8px;padding:14px;overflow-y:auto}
+.fb-opt{display:flex;align-items:center;justify-content:center;font-size:26px;line-height:0;padding:8px 6px;
+  border:1.5px solid var(--line2);background:var(--paper);cursor:pointer}
+.fb-opt:hover{border-color:var(--ink);background:var(--paper2)}
+.fb-modal-clear{font-family:var(--mono);font-size:.58rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);background:var(--paper);border:0;border-top:1.5px solid var(--line);padding:10px;cursor:pointer}
+.fb-modal-clear:hover{color:var(--ink);background:var(--paper2)}
 
 /* footer ----------------------------------------------------------- */
 .site-foot{max-width:var(--maxw);margin:0 auto;padding:0 clamp(14px,4vw,28px) var(--s8);position:relative;z-index:1}
