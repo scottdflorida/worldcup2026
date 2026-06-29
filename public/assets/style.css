@@ -561,11 +561,63 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .champ-name.pending{font-family:var(--mono);font-weight:700;font-size:.8rem;color:rgba(244,242,236,.7);text-transform:uppercase;letter-spacing:.06em}
 .champ-name.watched{color:var(--vermilion)}
 /* Narrow screens: a plain stacked list of columns, no connector geometry. */
-.bracket-narrow{display:block;min-width:0;min-height:0}
-.bracket-narrow .kr-col{min-width:0;margin-bottom:26px}
-.bracket-narrow .kr-body{height:auto!important}
-.bracket-narrow .km{position:static!important;top:auto!important;margin:8px 0}
-.bracket-narrow .champion-plinth{position:static!important;top:auto!important;margin-top:10px}
+/* Phones: keep the real tree (columns + connectors + watched highlights), but
+   make each column ~one screen wide with a peek of the next, and snap-scroll
+   column-by-column so a swipe always lands a column flush to the left edge (the
+   far-right column lands flush right). JS opens on the current round. */
+@media(max-width:720px){
+  .kbracket{min-width:0;gap:16px;padding:14px 14px 22px}
+  .kr-col{flex:0 0 82vw;min-width:0;scroll-snap-align:start}
+  .kr-col:last-child{scroll-snap-align:end}
+  .bracket-wrap{scroll-snap-type:x mandatory;scroll-padding-left:14px;
+    overscroll-behavior-x:contain}
+  .km{min-height:72px}
+}
+
+/* ============ CALENDAR ============================================ */
+.cal-intro h1{margin-bottom:.1em}
+.cal-grid{margin-top:6px}
+.cal-dow-row{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:8px}
+.cal-dow-h{font-family:var(--mono);font-size:.6rem;font-weight:800;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);text-align:center;padding-bottom:4px;border-bottom:2px solid var(--ink)}
+.cal-week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:8px}
+.cal-day{border:1.5px solid var(--line2);background:var(--paper);min-height:96px;padding:7px 8px;display:flex;flex-direction:column;gap:6px}
+.cal-day.empty{border-style:dashed;border-color:var(--line);background:transparent}
+.cal-day.today{border-color:var(--vermilion);border-width:2px;box-shadow:inset 0 3px 0 var(--vermilion)}
+.cal-d-head{display:flex;align-items:baseline;gap:5px;font-family:var(--mono)}
+.cal-dow{font-size:.58rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.cal-dom{font-size:1rem;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.cal-mon{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.cal-day.today .cal-dom{color:var(--vermilion)}
+.cal-d-body{display:flex;flex-direction:column;gap:6px}
+.cal-m{border-left:2px solid var(--line2);padding:2px 0 2px 7px}
+.cal-m.is-done{border-left-color:var(--ink)}
+.cal-m.is-live{border-left-color:var(--vermilion)}
+.cal-m-head{display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.cal-tag{font-family:var(--mono);font-size:.5rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--paper);background:var(--ink2);padding:0 4px}
+.cal-time{font-family:var(--mono);font-size:.62rem;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.cal-tz{color:var(--vermilion);margin-left:1px;font-size:.85em}
+.cal-score{font-family:var(--mono);font-size:.66rem;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.cal-m.is-live .cal-time,.cal-m.is-live .cal-score{color:var(--vermilion)}
+.cal-m-teams{display:flex;flex-direction:column;gap:1px;font-size:.72rem;min-width:0}
+.cal-side{display:flex;align-items:center;min-width:0}
+.cal-side .cal-tm{font-weight:700;gap:4px;padding:0;min-width:0}
+.cal-side .cal-tm .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-cands{display:inline-flex;flex-wrap:wrap;gap:2px 6px;min-width:0}
+.cal-cands .cand .nm{font-weight:600;color:var(--ink2)}
+.cal-tbd{font-family:var(--mono);font-size:.62rem;color:var(--muted)}
+.cal-v{font-size:.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:0 0 0 1px}
+.cal-m.is-done .cal-side{opacity:.82}
+/* Phones: drop the 7-up grid for a single-column agenda (skip empty days). */
+@media(max-width:760px){
+  .cal-dow-row{display:none}
+  .cal-week{grid-template-columns:1fr;gap:0;margin-bottom:0}
+  .cal-day{border-width:0 0 1.5px 0;min-height:0;border-bottom:1.5px solid var(--line)}
+  .cal-day.empty{display:none}
+  .cal-day.today{border:2px solid var(--vermilion)}
+  .cal-d-head{position:sticky}
+}
 
 /* footer ----------------------------------------------------------- */
 .site-foot{max-width:var(--maxw);margin:0 auto;padding:0 clamp(14px,4vw,28px) var(--s8);position:relative;z-index:1}
@@ -640,6 +692,9 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   .pz{flex:1 1 100%;border-right:0;border-bottom:1px solid var(--line)}
   .now-divider{flex:1 1 100%;flex-direction:row;align-self:auto;padding:8px 0;gap:10px}
   .now-lbl{writing-mode:horizontal-tb;transform:none}
+  /* 4-item nav: collapse the brand to just the mark so the tabs fit */
+  .wm-text{display:none}
+  .site-nav a{padding:0 9px;font-size:.6rem;letter-spacing:.03em}
 }
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important;scroll-behavior:auto!important}

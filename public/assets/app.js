@@ -93,8 +93,6 @@
       if(pl){pl.style.position='';pl.style.top='';pl.style.left='';pl.style.right='';}
       body(col).style.height='';
     });
-    if(window.innerWidth<720){tree.classList.add('bracket-narrow');return 0;}
-    tree.classList.remove('bracket-narrow');
 
     var leaves=cards(cols[0]);
     if(!leaves.length)return 0;
@@ -132,10 +130,6 @@
     var svg=tree.querySelector('.bz-layer');
     if(!svg)return;
     while(svg.firstChild)svg.removeChild(svg.firstChild);
-    var narrow=window.innerWidth<720;
-    tree.classList.toggle('bracket-narrow',narrow);
-    if(narrow){svg.setAttribute('width',0);svg.setAttribute('height',0);
-      tree.setAttribute('data-links',0);return;}
     var cols=[].slice.call(tree.querySelectorAll('.kr-col'));
     if(cols.length<2)return;
     var W=tree.scrollWidth,H=tree.scrollHeight;
@@ -274,9 +268,28 @@
     if(!wrap)return;
     wrap.addEventListener('scroll',updateEdges,{passive:true});
   }
+  // On a phone the columns scroll-snap one at a time; open on the CURRENT round
+  // (left-aligned), or the far-right column right-aligned. Once only — don't yank
+  // the user back on later redraws.
+  function landOnActiveColumn(){
+    if(window.innerWidth>=720)return;
+    var wrap=document.querySelector('[data-bracket] .bracket-wrap');
+    var tree=wrap&&wrap.querySelector('.kbracket');
+    if(!wrap||!tree)return;
+    var cols=tree.querySelectorAll('.kr-col');
+    var on=document.querySelector('.brn-item.on');
+    var idx=Math.min(on?parseInt(on.getAttribute('data-rd'),10)||0:0, cols.length-1);
+    var col=cols[idx]; if(!col)return;
+    var target=(idx===cols.length-1)
+      ? col.offsetLeft+col.offsetWidth-wrap.clientWidth     // last: right-aligned
+      : col.offsetLeft-14;                                  // else: left-aligned
+    wrap.scrollLeft=Math.max(0,target);
+    updateEdges();
+  }
 
   document.addEventListener('DOMContentLoaded',function(){
     apply();wireReveal();wireLive();wireBracketScroll();wireBracketObserver();drawBracket();
+    landOnActiveColumn();
   });
   window.addEventListener('load',drawBracket);
   window.addEventListener('resize',scheduleDraw);
