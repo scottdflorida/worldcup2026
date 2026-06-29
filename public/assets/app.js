@@ -151,7 +151,6 @@
     for(var ci=1;ci<cards.length;ci++){
       for(var i=0;i<cards[ci].length;i++){
         var child=box(cards[ci][i]);
-        var watchedChild=cards[ci][i].classList.contains('has-watched');
         [cards[ci-1][i*2],cards[ci-1][i*2+1]].forEach(function(p){
           if(!p)return;
           var pc=box(p);
@@ -159,7 +158,9 @@
           var d='M'+x1+' '+y1+' H'+mx+' V'+y2+' H'+x2;   // right angles only
           var path=document.createElementNS('http://www.w3.org/2000/svg','path');
           path.setAttribute('d',d);path.setAttribute('class','bz-link');path.setAttribute('fill','none');
-          if(watchedChild||p.classList.contains('has-watched'))path.setAttribute('data-watched','1');
+          // Highlight only the segment LEAVING a watched team's game (its path
+          // forward) — never the opponent's feed into that next game.
+          if(p.classList.contains('has-watched'))path.setAttribute('data-watched','1');
           svg.appendChild(path);made++;
         });
       }
