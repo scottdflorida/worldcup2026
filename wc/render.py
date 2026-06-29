@@ -2356,6 +2356,8 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   .cal-day.empty{display:none}
   .cal-day.today{border:2px solid var(--vermilion)}
   .cal-d-head{position:sticky}
+  /* lay the day's matches two across instead of a single stacked column */
+  .cal-d-body{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;align-items:start}
 }
 
 /* footer ----------------------------------------------------------- */
