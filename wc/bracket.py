@@ -207,14 +207,36 @@ def build_bracket(matches, analyses, focus_teams):
             for rd in order if rd in rounds]
 
 
+_KO_ORDER = ["Round of 32", "Round of 16", "Quarter-final", "Semi-final", "Final"]
+
+
 def forward_map(matches):
-    """num -> the match number that consumes this match's winner (W{num})."""
+    """num -> the match number that consumes this match's winner (W{num}).
+
+    The feed encodes the edge as a W{num} token, but overwrites it with the
+    actual winner's NAME once a match is played — which would erase the edge and
+    snap a team's road mid-tournament. So we also recover played edges by finding
+    where each played match's winner reappears in the next round.
+    """
     fmap = {}
     for m in matches:
         for slot in (m.get("team1"), m.get("team2")):
             mm = WIN_SLOT.match(str(slot))
             if mm:
                 fmap[int(mm.group(1))] = m["num"]
+    nxt_round = dict(zip(_KO_ORDER, _KO_ORDER[1:]))
+    for m in matches:
+        num = m.get("num")
+        if num is None or num in fmap:
+            continue
+        w = match_winner(m)
+        target_round = nxt_round.get(m.get("round"))
+        if not w or not target_round:
+            continue
+        for cand in matches:
+            if cand.get("round") == target_round and w in (cand.get("team1"), cand.get("team2")):
+                fmap[num] = cand["num"]
+                break
     return fmap
 
 
@@ -238,29 +260,67 @@ def _find_r32_with_group_third(matches, letter):
     return out
 
 
+def _our_side(match, our_ids):
+    """Given the tokens that identify our team in `match`, return the OTHER side's
+    token, or None if our team isn't actually in this match (we lost / unknown)."""
+    t1, t2 = str(match.get("team1")), str(match.get("team2"))
+    if t1 in our_ids:
+        return match.get("team2")
+    if t2 in our_ids:
+        return match.get("team1")
+    return None
+
+
+def find_ko_match(matches, team):
+    """The Round-of-32 match a team is confirmed into (by name), once the group
+    stage has resolved its slot token to the actual nation. None pre-knockout."""
+    for m in matches:
+        if m.get("round") == "Round of 32" and team in (m.get("team1"), m.get("team2")):
+            return m
+    return None
+
+
 def project_path(team, matches, analyses, group_letter, entry_slot):
-    """Trace a team forward from its Round-of-32 entry slot to the final."""
+    """Trace a team forward from its Round-of-32 entry to the final.
+
+    Robust to the feed resolving slot tokens ('1C') into nation names ('Brazil')
+    once a group finishes: we enter by NAME when the draw is set, otherwise by the
+    provisional slot token, and identify ourselves at each subsequent round by
+    either the carried W{num} edge or our resolved name.
+    """
     by_num = index_matches(matches)
     fmap = forward_map(matches)
-    entries = _find_r32_with_slot(matches, entry_slot)
-    if not entries:
+
+    cur = find_ko_match(matches, team)
+    if cur is not None:
+        our_ids = {team}
+    elif entry_slot:
+        entries = _find_r32_with_slot(matches, entry_slot)
+        if not entries:
+            return None
+        cur = entries[0]
+        our_ids = {entry_slot, team}
+    else:
         return None
-    cur = entries[0]
-    our_token = entry_slot
+
     steps = []
     seen = set()
     while cur and cur["num"] not in seen:
         seen.add(cur["num"])
-        opp_token = cur["team2"] if cur["team1"] == our_token else cur["team1"]
+        opp_token = _our_side(cur, our_ids)
+        if opp_token is None:
+            break
         opp = resolve_slot(opp_token, analyses, by_num)
         steps.append({
             "round": cur["round"], "num": cur["num"], "date": cur.get("date"),
-            "ground": cur.get("ground"), "opponent": opp,
+            "time": cur.get("time"), "ground": cur.get("ground"), "opponent": opp,
         })
         nxt = fmap.get(cur["num"])
         if not nxt:
             break
-        our_token = f"W{cur['num']}"
+        # In the next round we appear either as the winner-edge token or, once the
+        # match is played and we advanced, by our own name.
+        our_ids = {f"W{cur['num']}", team}
         cur = by_num.get(nxt)
     return steps
 

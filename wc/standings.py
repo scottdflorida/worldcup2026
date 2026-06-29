@@ -146,6 +146,15 @@ def analyze_group(group_ms):
         for t in teams:
             dist[t] = [x / ncombos for x in dist[t]]
 
+    # Once every game is played, the table is final: a team's only "possible"
+    # finish IS where it actually placed (full tiebreakers already applied in
+    # `table`). The points-only enumeration above leaves point-tied teams sharing
+    # positions, so collapse to the real standings here — otherwise a group winner
+    # still reads as "could finish 2nd" and its knockout slot never resolves.
+    if not remaining:
+        final_rank = {row["team"]: i + 1 for i, row in enumerate(table)}
+        possible = {t: {final_rank[t]} for t in teams}
+
     status = {}
     for t in teams:
         ranks = possible[t]

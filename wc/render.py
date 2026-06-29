@@ -14,7 +14,7 @@ from __future__ import annotations
 import html
 import json
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from . import bracket, config, data, standings, util, venues
 from .flags import flag
@@ -40,6 +40,51 @@ class Context:
                             for t in self.teams}
         self.advance = standings.advance_probabilities(self.matches, self.analyses)
         self.last_updated = data.last_updated()
+        self._wire_knockout()
+
+    def _wire_knockout(self):
+        """Once the bracket draw is set, the Round-of-32 participants ARE the teams
+        that advanced — the authoritative truth (group winners, runners-up and the
+        eight best thirds all in one place). Capture it, then mark every other team
+        in a finished group as knocked out so badges and tables reflect reality
+        without re-deriving the cross-group best-third allocation."""
+        by_num = bracket.index_matches(self.matches)
+        advanced = set()
+        for m in self.matches:
+            if m.get("round") == "Round of 32":
+                for slot in (m.get("team1"), m.get("team2")):
+                    res = bracket.resolve_slot(slot, self.analyses, by_num)
+                    if res["team"]:
+                        advanced.add(res["team"])
+        self.advanced = advanced
+        # The draw is "known" once enough slots resolve to real nations (24 group
+        # winners + runners-up at minimum); before then we don't claim eliminations.
+        self.ko_resolved = len(advanced) >= 24
+        self.knocked = set()
+        if not self.ko_resolved:
+            return
+        for info in self.analyses.values():
+            if not info["complete"]:
+                continue
+            for t, st in info["status"].items():
+                st["advanced"] = t in advanced
+                if t not in advanced:
+                    st["eliminated"] = True
+                    self.knocked.add(t)
+
+    def knocked_out(self, team):
+        """True when a team's group is finished and it did NOT make the bracket."""
+        return self.ko_resolved and team not in self.advanced and team in self.teams
+
+    def team_fixtures(self, team):
+        """(next_match, recent_match) for a team across group + knockout play,
+        counting only games it is CONFIRMED in (resolved by name), newest-relevant
+        first. Either may be None."""
+        mine = [m for m in self.sorted_matches()
+                if team in (m.get("team1"), m.get("team2"))]
+        nxt = next((m for m in mine if not data.has_result(m)), None)
+        recent = next((m for m in reversed(mine) if data.has_result(m)), None)
+        return nxt, recent
 
     def sorted_matches(self):
         return sorted(self.matches, key=lambda m: (m.get("date", ""), m.get("time", "")))
@@ -95,10 +140,68 @@ def _epoch(m):
     return base + hh * 3600 + mm * 60 - off * 3600
 
 
-def _kickoff(m):
-    """Just the clock portion of a kickoff time for display ('13:00')."""
+# US Pacific is UTC-7 (PDT) for the entire tournament window (Jun 11 – Jul 19,
+# 2026 are all inside US daylight time), so a fixed offset is exact here.
+PT_OFFSET_HOURS = -7
+PT_LABEL = "PT"
+
+
+def _pt_datetime(m):
+    """Fold a match's local kickoff ('13:00 UTC-6') into a single instant shifted
+    to US Pacific. Returns (pt_datetime, has_clock). pt_datetime is date-only
+    (midnight) when the feed carries no usable clock; None when there's no date."""
+    d = m.get("date")
+    if not d:
+        return None, False
+    try:
+        base_day = datetime.strptime(d, "%Y-%m-%d")
+    except (ValueError, TypeError):
+        return None, False
     t = m.get("time") or ""
-    return t.split()[0] if t else ""
+    hh = mm = 0
+    off = None
+    has_time = False
+    try:
+        clock = t.split()[0]
+        hh, mm = (int(x) for x in clock.split(":")[:2])
+        has_time = True
+    except (ValueError, IndexError):
+        has_time = False
+    if has_time and "UTC" in t:
+        sign = -1 if "UTC-" in t else 1
+        off = sign * int("".join(ch for ch in t.split("UTC")[1] if ch.isdigit()) or 0)
+    if has_time and off is not None:
+        utc = datetime(base_day.year, base_day.month, base_day.day, hh, mm,
+                       tzinfo=timezone.utc) - timedelta(hours=off)
+        return (utc + timedelta(hours=PT_OFFSET_HOURS)).replace(tzinfo=None), True
+    return base_day, False
+
+
+def _pt_parts(m):
+    """(day, time) for display, e.g. ('Sat Jun 27', '12:00'); time None if absent."""
+    pt, has_clock = _pt_datetime(m)
+    if pt is None:
+        return None, None
+    day = f"{pt.strftime('%a %b')} {pt.day}"
+    return day, (f"{pt.hour:02d}:{pt.minute:02d}" if has_clock else None)
+
+
+def kickoff_label(m, sep=" "):
+    """Inline 'Sat Jun 27 12:00PT' with day/time spans for typographic contrast."""
+    day, time = _pt_parts(m)
+    if not day:
+        return ""
+    if time:
+        return (f'<span class="ko"><span class="ko-day">{E(day)}</span>{sep}'
+                f'<span class="ko-time">{E(time)}<span class="ko-tz">{PT_LABEL}</span>'
+                f'</span></span>')
+    return f'<span class="ko"><span class="ko-day">{E(day)}</span></span>'
+
+
+def kickoff_time_pt(m):
+    """Bare Pacific clock for the focal 'score-or-time' slot, e.g. '12:00PT'."""
+    _, time = _pt_parts(m)
+    return f'{time}{PT_LABEL}' if time else ""
 
 
 # --------------------------------------------------------------------------
@@ -141,36 +244,48 @@ def status_badge(st, group_complete=False):
     if st["clinched_top2"]:
         return '<span class="badge q"><span class="bcheck" aria-hidden="true">✓</span>Through</span>'
     if st.get("eliminated"):
-        return '<span class="badge gone"><span class="bx" aria-hidden="true">✕</span>Eliminated</span>'
+        return '<span class="badge gone"><span class="bx" aria-hidden="true">✕</span>Knocked out</span>'
     if st["eliminated_top2"] and not st["can_top2"]:
         return '<span class="badge bub"><span class="btri" aria-hidden="true">◆</span>3rd hope</span>'
     return ''
 
 
-def group_table(info, link_header=False, solo=False, advance=None):
+def group_table(info, link_header=False, solo=False, advance=None, knocked=None):
     """Render a group standings table.
 
     solo=True  -> standalone page (shows the qualify-status column + badges)
     link_header=True -> the group title links to its detail page (home grid)
     advance    -> if given, inject a compact advance-odds Tally cell (P reach KO),
                   so standings read as a glanceable data graphic, not a flat table.
+    knocked    -> set of teams confirmed out (group finished, didn't make the
+                  bracket); drives the "Knocked out" marker and drops the qualify
+                  rail now that the table is settled.
     """
     letter = info["group"].split()[-1]
     show_odds = advance is not None
+    knocked = knocked or set()
     rows = []
     for i, row in enumerate(info["table"], 1):
         t = row["team"]
         st = info["status"][t]
+        out = t in knocked
         # status class drives the left accent rail (shape, not hue-alone, paired
-        # with the badge text in solo view).
-        if i <= 2:
+        # with the badge text in solo view). Once the group is final we drop the
+        # qualify rail on the top two and mark only who's knocked out.
+        if out:
+            cls = "gone"
+        elif info["complete"]:
+            cls = ""
+        elif i <= 2:
             cls = "qual"
-        elif i == 3 and not info["complete"]:
+        elif i == 3:
             cls = "third"
         elif st.get("eliminated"):
             cls = "gone"
         else:
             cls = ""
+        out_chip = ('<span class="ko-out" title="Knocked out">OUT</span>'
+                    if out and not solo else "")
         status_cell = (f'<td class="st">{status_badge(st, info["complete"])}</td>'
                        if solo else "")
         odds_cell = ""
@@ -188,7 +303,7 @@ def group_table(info, link_header=False, solo=False, advance=None):
             f'<tr class="{cls}" data-team="{E(t)}">'
             f'<td class="pos">{i}</td>'
             f'<td class="star">{star_icon(t)}</td>'
-            f'<td class="tm">{team_link(t)}</td>'
+            f'<td class="tm">{team_link(t)}{out_chip}</td>'
             f'<td>{row["P"]}</td><td>{row["W"]}</td><td>{row["D"]}</td><td>{row["L"]}</td>'
             f'<td class="hide-s">{row["GF"]}</td><td class="hide-s">{row["GA"]}</td>'
             f'<td class="gd">{row["GD"]:+d}</td><td class="pts">{row["Pts"]}</td>'
@@ -307,10 +422,11 @@ def match_line(m, ctx, compact=False):
         if pens:
             score += f'<span class="pens">({pens[0]}–{pens[1]}p)</span>'
     else:
-        score = f'<span class="vs" data-live-mid>{E(_kickoff(m) or "vs")}</span>'
+        score = '<span class="vs" data-live-mid>vs</span>'
     rd = m.get("round", "")
     rd_lbl = "" if str(rd).startswith("Matchday") else f'<span class="rd">{E(rd)}</span>'
-    meta = f'{E(fmt_date(m.get("date","")))} · {E(venues.venue_str(m.get("ground","")))}'
+    ko = kickoff_label(m)
+    meta = f'{ko} · {E(venues.venue_str(m.get("ground","")))}'
     grp = m.get("group")
     grp_lbl = f'<span class="m-grp">{E(grp)}</span>' if grp else ""
     live = bool(t1["team"] and t2["team"])
@@ -338,8 +454,20 @@ def pulse_band(ctx):
     + .wire-pulse), shared with the bracket's live edge and the watched glow.
     """
     by_num = bracket.index_matches(ctx.matches)
-    done = ctx.recent_results(5)[::-1]      # oldest->newest of the recent results
-    up = ctx.upcoming(5)                    # soonest first
+    # A tight "now" window: yesterday + today behind us, today + tomorrow ahead —
+    # the pulse is about what just happened and what's next, not the whole schedule.
+    today = (datetime.now(timezone.utc) + timedelta(hours=PT_OFFSET_HOURS)).date()
+    yesterday, tomorrow = today - timedelta(days=1), today + timedelta(days=1)
+
+    def pt_date(m):
+        pt, _ = _pt_datetime(m)
+        return pt.date() if pt is not None else None
+
+    sm = ctx.sorted_matches()               # by (date, time): oldest->newest
+    done = [m for m in sm if data.has_result(m)
+            and (d := pt_date(m)) is not None and yesterday <= d <= today]
+    up = [m for m in sm if not data.has_result(m)
+          and (d := pt_date(m)) is not None and today <= d <= tomorrow]
     if not done and not up:
         return ""
 
@@ -348,7 +476,8 @@ def pulse_band(ctx):
         t2 = bracket.resolve_slot(m["team2"], ctx.analyses, by_num)
         grp = m.get("group") or m.get("round") or ""
         venue_stadium, _ = venues.venue(m.get("ground", ""))
-        date = fmt_date_short(m.get("date", ""))
+        pt_day, pt_time = _pt_parts(m)
+        date = pt_day or ""
         if kind == "done":
             g1, g2 = data.final_score(m)
             cls1 = " win" if g1 > g2 else ""
@@ -358,7 +487,8 @@ def pulse_band(ctx):
             foot = scorers(m) or f'<div class="pz-foot muted">{E(venue_stadium)}</div>'
             tag = '<span class="pz-tag done" data-live-tag>FT</span>'
         else:
-            mid = f'<div class="pz-ko" data-live-mid>{E(_kickoff(m) or "TBD")}</div>'
+            ko = (f'{E(pt_time)}<span class="pz-tz">{PT_LABEL}</span>') if pt_time else "TBD"
+            mid = f'<div class="pz-ko" data-live-mid>{ko}</div>'
             foot = f'<div class="pz-foot muted">{E(venue_stadium)}</div>'
             tag = '<span class="pz-tag up" data-live-tag>Kicks off</span>'
         live = bool(t1["team"] and t2["team"])
@@ -399,18 +529,75 @@ def pulse_band(ctx):
     )
 
 
-def team_card(ctx, team):
+def _card_opponent(ctx, m, team):
+    """Resolve a team's opponent in match m to a concrete nation or candidate set."""
+    by_num = bracket.index_matches(ctx.matches)
+    opp_token = m["team2"] if m.get("team1") == team else m["team1"]
+    return bracket.resolve_slot(opp_token, ctx.analyses, by_num)
+
+
+def _opp_inline(opp, cls="tc-opp"):
+    """Compact opponent for a team card: a nation, or its live candidate set."""
+    if opp["team"]:
+        return team_link(opp["team"], cls)
+    cands = sorted(opp.get("candidates") or [])
+    if 1 <= len(cands) <= 2:
+        return " / ".join(team_link(c, "cand") for c in cands)
+    if cands:
+        return f'<span class="tc-cands">{len(cands)} possible</span>'
+    return f'<span class="muted">{E(opp["label"])}</span>'
+
+
+def _tcard_fixtures(ctx, team):
+    """The next match (primary) and the most recent result (secondary) for a
+    team — the spine of a watchlist card."""
+    nxt, recent = ctx.team_fixtures(team)
+    rows = []
+    if nxt is not None:
+        opp = _card_opponent(ctx, nxt, team)
+        rd = nxt.get("round", "")
+        tag = nxt.get("group", "") if str(rd).startswith("Matchday") else _round_short(rd)
+        rows.append(
+            f'<div class="tc-fix tc-next">'
+            f'<span class="tc-k">Next</span>'
+            f'<span class="tc-line"><span class="tc-when">{kickoff_label(nxt)}</span>'
+            f'<span class="tc-vs">v {_opp_inline(opp)}</span>'
+            f'{f"<span class=tc-rd>{E(tag)}</span>" if tag else ""}</span></div>'
+        )
+    elif ctx.knocked_out(team):
+        rows.append('<div class="tc-fix tc-out"><span class="tc-k out">Out</span>'
+                    '<span class="tc-line muted">Knocked out of the tournament</span></div>')
+    if recent is not None:
+        opp = _card_opponent(ctx, recent, team)
+        g1, g2 = data.final_score(recent)
+        ts, os_ = (g1, g2) if recent.get("team1") == team else (g2, g1)
+        res = "W" if ts > os_ else ("L" if ts < os_ else "D")
+        rows.append(
+            f'<div class="tc-fix tc-last">'
+            f'<span class="tc-k">Last</span>'
+            f'<span class="tc-line"><span class="tc-res {res.lower()}">{res} {ts}–{os_}</span>'
+            f'<span class="tc-vs">v {_opp_inline(opp)}</span></span></div>'
+        )
+    if not rows:
+        rows.append('<div class="tc-fix muted">No upcoming or recent match</div>')
+    return f'<div class="tcard-fix">{"".join(rows)}</div>'
+
+
+def team_card(ctx, team, rich=False):
     proj = ctx.projections[team]
     pr, sec = util.accent(team)
     rec = proj["row"]
+    fixtures = _tcard_fixtures(ctx, team) if rich else ""
     return (
-        f'<div class="tcard" data-team-card="{E(team)}" data-team="{E(team)}" '
+        f'<div class="tcard{" rich" if rich else ""}" data-team-card="{E(team)}" data-team="{E(team)}" '
         f'style="--accent:{pr};--accent2:{sec}">'
+        f'<div class="tcard-top">'
         f'<a class="tcard-main" href="{util.page_for(team)}">'
         f'<span class="tcard-flag">{flag(team)}</span>'
         f'<span class="tcard-body"><span class="tcard-name">{E(team)}</span>'
         f'<span class="tcard-meta muted">{E(proj["group"])} · {_ordinal(proj["rank"])} · {rec["Pts"]} pts</span></span>'
         f'</a>{star_icon(team)}</div>'
+        f'{fixtures}</div>'
     )
 
 
@@ -514,9 +701,9 @@ def shell(title, active, body, ctx, desc=None, page="index.html"):
 # Pages
 # --------------------------------------------------------------------------
 def page_home(ctx):
-    grid = "".join(group_table(ctx.analyses[g], link_header=True, advance=ctx.advance)
+    grid = "".join(group_table(ctx.analyses[g], link_header=True, advance=ctx.advance, knocked=ctx.knocked)
                    for g in sorted(ctx.analyses))
-    src = "".join(team_card(ctx, t) for t in ctx.teams)
+    src = "".join(team_card(ctx, t, rich=True) for t in ctx.teams)
 
     resolvable = ctx.thirds_resolvable()
     # Best-third allocation race rendered as the Tally device: each team's points
@@ -528,7 +715,7 @@ def page_home(ctx):
     _cut = sorted(_tpts, reverse=True)[7] if len(_tpts) >= 8 else (min(_tpts) if _tpts else 0)
     _cut_pct = (_cut / _tmax * 100) if _tmax else 0
     thirds_rows = "".join(
-        f'<tr class="{"qual" if (resolvable and r["qualifies"]) else ""}" data-team="{E(r["team"])}">'
+        f'<tr class="{"qual" if (resolvable and _third_in(ctx, r)) else ""}" data-team="{E(r["team"])}">'
         f'<td class="pos">{r["seed"]}</td><td class="star">{star_icon(r["team"])}</td>'
         f'<td class="tm">{team_link(r["team"])}</td>'
         f'<td>{E(r["group"].split()[-1])}</td><td>{r["Pts"]}</td><td class="gd">{r["GD"]:+d}</td><td>{r["GF"]}</td>'
@@ -536,7 +723,7 @@ def page_home(ctx):
         f'<span class="tally mini-tally" data-pct="{(r["Pts"]/_tmax*100):.2f}" title="{r["Pts"]} pts">'
         f'<span class="tally-fill" style="width:{(r["Pts"]/_tmax*100):.3f}%"></span>'
         f'<span class="tally-tick" style="left:{_cut_pct:.3f}%" aria-hidden="true" title="8th-best cutoff"></span></span></td>'
-        f'<td class="r32">{(("✓ in" if r["qualifies"] else "out") if resolvable else "—")}</td></tr>'
+        f'<td class="r32">{(("✓ in" if _third_in(ctx, r) else "out") if resolvable else "—")}</td></tr>'
         for r in ctx.thirds
     )
     thirds_state = "resolved" if resolvable else "provisional"
@@ -547,16 +734,6 @@ def page_home(ctx):
     n_played = sum(1 for m in ctx.matches if data.has_result(m))
     n_total = len(ctx.matches)
     pct_played = (n_played / n_total * 100) if n_total else 0
-    nxt = ctx.upcoming(1)
-    next_str = ""
-    if nxt:
-        m0 = nxt[0]
-        by_num = bracket.index_matches(ctx.matches)
-        a = bracket.resolve_slot(m0["team1"], ctx.analyses, by_num)
-        b = bracket.resolve_slot(m0["team2"], ctx.analyses, by_num)
-        na = a["team"] or a["label"]
-        nb = b["team"] or b["label"]
-        next_str = f"{E(na)} v {E(nb)}"
 
     body = f"""
 <section class="hero" aria-label="Tournament status">
@@ -570,17 +747,16 @@ def page_home(ctx):
       </div>
       <div class="hp-scale"><span>{n_played} of {n_total} matches played</span></div>
     </div>
-    {"<div class='hero-next'><span class='hn-k'>NEXT&nbsp;UP</span><span class='hn-v'>" + next_str + "</span></div>" if next_str else ""}
   </div>
 </section>
 
-{pulse_band(ctx)}
-
 <section id="your-teams-sec" class="your-teams-sec" data-reveal aria-label="Your teams">
-  <div class="sec-head"><h2>Your teams</h2><span class="muted">Pin any team with ★ — saved in your browser, lit up everywhere</span></div>
+  <div class="sec-head"><h2>Your teams</h2><span class="muted">Pin any team with ★ — next &amp; latest match, lit up everywhere</span></div>
   <div id="your-teams" class="tcard-grid yt-grid"></div>
   <div id="team-src" hidden>{src}</div>
 </section>
+
+{pulse_band(ctx)}
 
 <section class="groups-sec" data-reveal aria-label="Groups">
   <div class="sec-head"><h2>The twelve groups</h2><span class="muted">Tap a group for fixtures &amp; scenarios</span></div>
@@ -619,7 +795,7 @@ def page_group(ctx, letter):
 
 <section aria-label="Standings">
   <div class="sec-head"><h2>Standings</h2><span class="muted">live table · advance odds as a tally</span></div>
-  {group_table(info, solo=True, advance=ctx.advance)}
+  {group_table(info, solo=True, advance=ctx.advance, knocked=ctx.knocked)}
 </section>
 
 <section aria-label="Scenarios">
@@ -647,24 +823,45 @@ def page_team(ctx, team):
     ranks = set(proj["possible_ranks"])
     cur = proj["rank"]
 
+    ko_match = bracket.find_ko_match(ctx.matches, team)
+    knocked = ctx.knocked_out(team)
     roads = []
-    if 1 in ranks:
-        roads.append(road_branch(team, g, ctx, f"1{g}",
-                     "Win the group", entered=(cur == 1)))
-    if 2 in ranks:
-        roads.append(road_branch(team, g, ctx, f"2{g}",
-                     "Finish runner-up", entered=(cur == 2)))
-    third_html = _third_road(ctx, proj) if 3 in ranks else ""
+    third_html = ""
+    if ko_match is not None:
+        # The draw is set: trace the one real road forward from the confirmed slot.
+        entry = f"{cur}{g}" if cur in (1, 2) else None
+        roads.append(road_branch(team, g, ctx, entry, _ko_entry_heading(proj, cur),
+                                 entered=True))
+    elif not knocked:
+        # Group still in progress: show each finish's hypothetical branch.
+        if 1 in ranks:
+            roads.append(road_branch(team, g, ctx, f"1{g}",
+                         "Win the group", entered=(cur == 1)))
+        if 2 in ranks:
+            roads.append(road_branch(team, g, ctx, f"2{g}",
+                         "Finish runner-up", entered=(cur == 2)))
+        third_html = _third_road(ctx, proj) if 3 in ranks else ""
     roads = [r for r in roads if r]
 
     group_results = [m for m in ctx.matches if m.get("group") == proj["group"]]
     gr_played = [m for m in group_results if data.has_result(m)]
     gr_upcoming = [m for m in group_results if not data.has_result(m)]
 
+    next_ko = ""
+    if ko_match is not None and not data.has_result(ko_match):
+        next_ko = (
+            '<div class="next-ko" data-reveal>'
+            '<div class="nk-head"><span class="nk-k">Next knockout match</span>'
+            f'<span class="nk-rd">{E(_round_short(ko_match.get("round","")))}</span></div>'
+            f'{match_line(ko_match, ctx)}</div>'
+        )
+
     if roads or third_html:
-        road_body = f'<div class="roads">{"".join(roads)}{third_html}</div>'
+        road_body = next_ko + f'<div class="roads">{"".join(roads)}{third_html}</div>'
+    elif knocked:
+        road_body = '<p class="muted">Knocked out — the road ends in the group stage this time.</p>'
     else:
-        road_body = '<p class="muted">No knockout path yet — still alive in the group.</p>'
+        road_body = '<p class="muted">No knockout path yet — the bracket opens once the group stage ends.</p>'
 
     body = f"""
 <section class="team-hero" data-team="{E(team)}" style="--accent:{pr};--accent2:{sec}">
@@ -682,7 +879,7 @@ def page_team(ctx, team):
 
 <section aria-label="Group standings">
   <div class="sec-head"><h2>{E(proj['group'])} standings</h2><span class="muted">your team highlighted · advance odds as a tally</span></div>
-  {group_table(info, solo=True, advance=ctx.advance)}
+  {group_table(info, solo=True, advance=ctx.advance, knocked=ctx.knocked)}
 </section>
 
 <section aria-label="Road to the final">
@@ -714,10 +911,16 @@ def page_teams(ctx):
             f'<span class="muted">{"Final" if info["complete"] else str(info["remaining"]) + " to play"}</span></div>'
             f'<div class="tcard-grid">{cards}</div></div>'
         )
+    src = "".join(team_card(ctx, t, rich=True) for t in ctx.teams)
     body = f"""
 <section class="teams-intro" aria-label="All teams">
   <h1>All 48 teams</h1>
   <p class="muted">Tap a team to inspect its path to the final; ★ to follow it across the site.</p>
+</section>
+<section id="your-teams-sec" class="your-teams-sec" data-reveal aria-label="Your teams">
+  <div class="sec-head"><h2>Your teams</h2><span class="muted">Pin any team with ★ — next &amp; latest match, lit up everywhere</span></div>
+  <div id="your-teams" class="tcard-grid yt-grid"></div>
+  <div id="team-src" hidden>{src}</div>
 </section>
 <section id="directory" aria-label="Team directory">
   <div class="search-wrap">
@@ -734,43 +937,50 @@ def page_teams(ctx):
                  page="teams.html")
 
 
+_BRACKET_RAIL = [("R32", "Round of 32"), ("R16", "Round of 16"),
+                 ("QF", "Quarter-final"), ("SF", "Semi-final"), ("F", "Final")]
+
+
+def _km_cell(r, ci):
+    """One fixed-size match box: a kickoff line and two team rows. No match
+    numbers, no 'winner of M…' — unresolved sides fan to their candidate nations
+    (the connectors carry the structure)."""
+    sides = []
+    any_candidate = False
+    for key in ("team1", "team2"):
+        res = r[key]
+        resolved = bool(res["team"])
+        if not resolved:
+            any_candidate = True
+        g = ""
+        if r["played"]:
+            g1, g2 = data.final_score({"score": r["score"]})
+            gv = g1 if key == "team1" else g2
+            winner = r["winner"]
+            is_win = bool(winner and res["team"] == winner)
+            g = f'<span class="km-g{" kwin" if is_win else " kloss"}">{gv}</span>'
+        side_cls = "km-team" + ("" if resolved else " is-candidate")
+        sides.append(f'<div class="{side_cls}">{_bracket_side(res)}{g}</div>')
+    km_cls = "km" + (" km-live" if any_candidate and ci == 0 else "") + \
+             (" km-done" if r["played"] else "")
+    when = kickoff_label(r) or '<span class="ko"><span class="ko-day">TBD</span></span>'
+    return (
+        f'<div class="{km_cls}" data-mnum="{r["num"]}">'
+        f'<div class="km-when">{when}</div>'
+        f'{sides[0]}'
+        f'<div class="km-line"><span class="km-wire wire"><span class="wire-pulse"></span></span></div>'
+        f'{sides[1]}</div>'
+    )
+
+
 def page_bracket(ctx):
     rounds = [(rd, rows) for rd, rows in ctx.bracket if rd != "Match for third place"]
-    cols = []
     n_round = len(rounds)
+    cols = []
     for ci, (rd, rows) in enumerate(rounds):
         is_final = rd == "Final"
-        cells = []
-        for r in rows:
-            sides = []
-            any_candidate = False
-            for key in ("team1", "team2"):
-                res = r[key]
-                resolved = bool(res["team"])
-                if not resolved:
-                    any_candidate = True
-                g = ""
-                if r["played"]:
-                    g1, g2 = data.final_score({"score": r["score"]})
-                    gv = g1 if key == "team1" else g2
-                    winner = r["winner"]
-                    is_win = bool(winner and res["team"] == winner)
-                    g = f'<span class="km-g{" kwin" if is_win else " kloss"}">{gv}</span>'
-                side_cls = "km-team" + ("" if resolved else " is-candidate")
-                sides.append(f'<div class="{side_cls}">{_bracket_side(res)}{g}</div>')
-            live = (not r["played"] and r.get("touches_focus") is not None
-                    and not r.get("team1", {}).get("team") and ci == 0)
-            km_cls = "km" + (" km-live" if any_candidate and ci == 0 else "")
-            date = fmt_date_short(r.get("date", ""))
-            cells.append(
-                f'<div class="{km_cls}" data-mnum="{r["num"]}">'
-                f'<div class="km-no"><span class="km-m">M{r["num"]}</span>'
-                f'<span class="km-d muted">{E(date)}</span></div>'
-                f'{sides[0]}<div class="km-line"><span class="km-wire wire"><span class="wire-pulse"></span></span></div>{sides[1]}</div>'
-            )
+        cells = "".join(_km_cell(r, ci) for r in rows)
         if is_final:
-            # The Final column is a designed climax: a champion plinth.
-            champ = ""
             final_row = rows[0] if rows else None
             if final_row and final_row["played"] and final_row.get("winner"):
                 champ_team = final_row["winner"]
@@ -788,33 +998,40 @@ def page_bracket(ctx):
             cols.append(
                 f'<div class="kr-col kr-final">'
                 f'<div class="kr-head"><img class="kr-trophy" src="assets/trophy.svg" alt="" width="18" height="18" aria-hidden="true">{E(rd)}</div>'
-                f'{"".join(cells)}{plinth}</div>'
+                f'<div class="kr-body">{cells}</div>{plinth}</div>'
             )
         else:
             cols.append(
                 f'<div class="kr-col"><div class="kr-head">{E(rd)} '
-                f'<span class="kr-count">{len(rows)}</span></div>{"".join(cells)}</div>'
+                f'<span class="kr-count">{len(rows)}</span></div>'
+                f'<div class="kr-body">{cells}</div></div>'
             )
 
-    # SVG connector layer drawn under the cards (the "one tree" feeling). The
-    # client positions the strokes; here we emit one path placeholder per
-    # later-round match so the structure exists even with JS off.
+    stage = ctx.stage()
+    active = next((i for i, (_, key) in enumerate(_BRACKET_RAIL) if key == stage), 0)
+    rail_items = "".join(
+        f'<span class="brn-item{" on" if i == active else ""}" data-rd="{i}">{E(short)}</span>'
+        for i, (short, _) in enumerate(_BRACKET_RAIL))
+
     body = f"""
 <section class="bracket-intro" aria-label="Knockout bracket">
   <h1>Knockout bracket</h1>
-  <p class="muted">Round of 32 → Final as one connected tree. Pin teams with ★ and their matches mark across the bracket; greyed slots show live candidates and resolve as results land.</p>
-  <div class="bracket-rail-nav" aria-label="Bracket rounds">
-    <span class="brn-item on" data-rd="0">R32</span><span class="brn-item" data-rd="1">R16</span><span class="brn-item" data-rd="2">QF</span><span class="brn-item" data-rd="3">SF</span><span class="brn-item" data-rd="4">F</span>
+  <p class="muted">Round of 32 → Final as one connected tree. Pin teams with ★ and their matches mark across the bracket; greyed slots show the live candidates and resolve as results land.</p>
+  <div class="bracket-rail" aria-label="Bracket rounds">
+    <span class="brn-label">Current round:</span>
+    <div class="bracket-rail-nav">{rail_items}</div>
   </div>
 </section>
-<section class="bracket-wrap" data-hscroll>
+<div class="bracket-frame at-start" data-bracket>
   <span class="bz-edge-l" aria-hidden="true"></span>
   <span class="bz-edge-r" aria-hidden="true"></span>
-  <div class="kbracket" data-hscroll data-rounds="{n_round}">
-    <svg class="bz-layer" aria-hidden="true" preserveAspectRatio="none"></svg>
-    {"".join(cols)}
+  <div class="bracket-wrap" data-hscroll>
+    <div class="kbracket" data-rounds="{n_round}">
+      <svg class="bz-layer" aria-hidden="true"></svg>
+      {"".join(cols)}
+    </div>
   </div>
-</section>
+</div>
 """
     return shell("Knockout Bracket — World Cup 2026", "bracket.html", body, ctx,
                  desc="The full 2026 World Cup knockout bracket as one connected tree, "
@@ -824,20 +1041,24 @@ def page_bracket(ctx):
 
 
 def _bracket_side(res):
+    """A bracket slot: a resolved nation, or the set of teams that could fill it.
+
+    Never shows 'Winner of M…'. Two or fewer candidates read as named chips; more
+    collapse to a flags row (names hidden via CSS) so the box stays a fixed size."""
     if res["team"]:
         return team_link(res["team"], "bteam")
     prov = res.get("provisional")
-    code = res.get("slot", "")
-    cands = sorted(res.get("candidates") or [])
-    if prov:
+    if prov:  # group still in progress: show who currently holds the slot
         return (f'{team_link(prov, "bteam prov")}'
-                f'<span class="bcode" title="current table position">{E(code)}</span>')
-    if 1 <= len(cands) <= 4:
-        chips = " ".join(team_link(c, "cand") for c in cands)
-        return (f'<span class="bcands"><span class="bcode">{E(res["label"])}</span>'
-                f'<span class="bcands-list">{chips}</span></span>')
-    extra = f" · {len(cands)} live" if cands else ""
-    return f'<span class="bslot">{E(res["label"])}{extra}</span>'
+                f'<span class="bcode" title="current table position">{E(res.get("slot",""))}</span>')
+    cands = sorted(res.get("candidates") or [])
+    if not cands:
+        return '<span class="bslot muted">TBD</span>'
+    shown = cands[:8]
+    chips = "".join(team_link(c, "bcand") for c in shown)
+    more = f'<span class="bmore">+{len(cands) - 8}</span>' if len(cands) > 8 else ""
+    cls = "bcands" + (" many" if len(cands) > 2 else "")
+    return f'<span class="{cls}" data-n="{len(cands)}">{chips}{more}</span>'
 
 
 # --------------------------------------------------------------------------
@@ -854,7 +1075,7 @@ def road_branch(team, group_letter, ctx, entry_slot, heading, entered=False):
     for i, s in enumerate(path):
         opp = s["opponent"]
         rd_short = _round_short(s["round"])
-        date = fmt_date_short(s.get("date", ""))
+        date = kickoff_label({"date": s.get("date"), "time": s.get("time")})
         if opp["team"]:
             fan = (f'<div class="road-fan single">'
                    f'<span class="road-cand resolved">{team_link(opp["team"], "cand")}</span></div>')
@@ -878,7 +1099,7 @@ def road_branch(team, group_letter, ctx, entry_slot, heading, entered=False):
         steps.append(
             f'<li class="road-step" data-cands="{n_cand}">'
             f'<div class="road-node"><span class="road-rd">{E(rd_short)}</span>'
-            f'<span class="road-date muted">{E(date)}</span></div>'
+            f'<span class="road-date muted">{date}</span></div>'
             f'{branch}'
             f'<div class="road-opp"><span class="road-vs">vs</span>{fan}</div>'
             f'</li>'
@@ -896,7 +1117,7 @@ def _third_road(ctx, proj):
         m = by_num[tgt["num"]]
         opp_slot = m["team2"] if str(m["team1"]).startswith("3") else m["team1"]
         opp = bracket.resolve_slot(opp_slot, ctx.analyses, by_num)
-        date = fmt_date_short(m.get("date", ""))
+        date = kickoff_label(m)
         if opp["team"]:
             fan = f'<div class="road-fan single"><span class="road-cand resolved">{team_link(opp["team"], "cand")}</span></div>'
             nc = 1
@@ -909,7 +1130,7 @@ def _third_road(ctx, proj):
         steps.append(
             f'<li class="road-step" data-cands="{nc}">'
             f'<div class="road-node"><span class="road-rd">R32</span>'
-            f'<span class="road-date muted">M{m["num"]} · {E(date)}</span></div>'
+            f'<span class="road-date muted">{date}</span></div>'
             f'<span class="road-branch{" single" if nc <= 1 else ""}" aria-hidden="true"></span>'
             f'<div class="road-opp"><span class="road-vs">vs</span>{fan}</div></li>'
         )
@@ -930,9 +1151,27 @@ def _ordinal(n):
     return {1: "1st", 2: "2nd", 3: "3rd", 4: "4th"}.get(n, f"{n}th")
 
 
+def _third_in(ctx, r):
+    """Whether a third-placed team made the Round of 32 — the actual bracket
+    participants once the draw is set, else the provisional points ranking."""
+    if getattr(ctx, "ko_resolved", False):
+        return r["team"] in ctx.advanced
+    return r["qualifies"]
+
+
 def _round_short(rd):
     return {"Round of 32": "R32", "Round of 16": "R16", "Quarter-final": "QF",
             "Semi-final": "SF", "Final": "Final"}.get(rd, rd)
+
+
+def _ko_entry_heading(proj, cur):
+    """Headline for a team's confirmed knockout road (how it entered the bracket)."""
+    g = proj["group"]
+    if cur == 1:
+        return f"{g} winners"
+    if cur == 2:
+        return f"{g} runners-up"
+    return "Through as a best third"
 
 
 def _one_line_outlook(proj):
@@ -1110,6 +1349,7 @@ APP_JS = r"""
       btn.classList.toggle('on',on);btn.setAttribute('aria-pressed',on?'true':'false');
       var lab=btn.querySelector('.wl-txt');if(lab)lab.textContent=on?'Watching':'Watch';
     });
+    if(document.querySelector('.kbracket'))scheduleDraw();  // recolor watched strokes
   }
   document.addEventListener('click',function(e){
     var b=e.target.closest&&e.target.closest('[data-watch]');
@@ -1132,100 +1372,55 @@ APP_JS = r"""
     if(em)em.hidden=anyVisible;
   });
 
-  // ---- Bracket layout: position each later-round card at the vertical midpoint
-  // of its two feeding parents so the columns read as one true tournament tree
-  // (card i in round R sits between cards 2i and 2i+1 of round R-1). Then draw
-  // connector strokes from each card up to its parents. Both are progressive
-  // enhancement; the bracket is fully legible (a clean column stack) without JS.
-  function layoutBracket(){
-    var tree=document.querySelector('.kbracket');
-    if(!tree)return;
-    var cols=[].slice.call(tree.querySelectorAll('.kr-col'));
-    if(cols.length<2)return;
-    var W=window.innerWidth;
-    // Reset any prior positioning first (so resize recomputes from scratch).
-    cols.forEach(function(col){
-      [].slice.call(col.querySelectorAll('.km')).forEach(function(k){
-        k.style.position='';k.style.top='';k.style.left='';k.style.right='';k.style.width='';
-      });
-      col.style.position='';
-    });
-    if(W<720){tree.classList.remove('bracket-laid');return;} // narrow: simple stacked layout
-    tree.classList.add('bracket-laid');
-    function cards(col){return [].slice.call(col.querySelectorAll('.km'));}
-    // Establish baseline centers for round 0 in column-local coords.
-    var prevCenters=null;
-    cols.forEach(function(col,ci){
-      col.style.position='relative';
-      var ks=cards(col);
-      if(ci===0){
-        prevCenters=ks.map(function(k){return k.offsetTop+k.offsetHeight/2;});
-        return;
-      }
-      var headH=0;var head=col.querySelector('.kr-head');
-      if(head)headH=head.offsetTop; // cards start after the round header
-      var centers=[];
-      ks.forEach(function(k,i){
-        var pa=prevCenters[i*2],pb=prevCenters[i*2+1];
-        var mid;
-        if(pa!=null&&pb!=null)mid=(pa+pb)/2;
-        else if(pa!=null)mid=pa;
-        else mid=k.offsetTop+k.offsetHeight/2;
-        k.style.position='absolute';
-        k.style.left='0';k.style.right='0';
-        k.style.top=Math.round(mid-k.offsetHeight/2)+'px';
-        centers.push(mid);
-      });
-      // Final column also carries the champion plinth, anchored under its match.
-      var plinth=col.querySelector('.champion-plinth');
-      if(plinth&&ks.length&&centers.length){
-        var fk=ks[0];
-        var topPx=parseFloat(fk.style.top)||0;
-        plinth.style.position='absolute';
-        plinth.style.left='0';plinth.style.right='0';
-        plinth.style.top=Math.round(topPx+fk.offsetHeight+18)+'px';
-      }
-      prevCenters=centers;
-    });
+  // ---- Bracket connectors. Vertical centering of each round between the two
+  // games that feed it is done in pure CSS (equal-height columns + space-around),
+  // so card i in round R always lands at the midpoint of cards 2i / 2i+1 in round
+  // R-1 with no measurement. Here we only draw the right-angle strokes that join
+  // them, and toggle the edge fades. Progressive enhancement: with JS off the
+  // tree is still a clean, correctly-centered column stack (just no strokes).
+  function updateEdges(){
+    var frame=document.querySelector('[data-bracket]');
+    var wrap=frame&&frame.querySelector('.bracket-wrap');
+    if(!frame||!wrap)return;
+    var max=wrap.scrollWidth-wrap.clientWidth;
+    frame.classList.toggle('at-start',wrap.scrollLeft<=1);
+    frame.classList.toggle('at-end',max<=1||wrap.scrollLeft>=max-1);
   }
   function drawBracket(){
     var tree=document.querySelector('.kbracket');
     if(!tree)return;
-    layoutBracket();
+    updateEdges();
     var svg=tree.querySelector('.bz-layer');
     if(!svg)return;
-    // On narrow screens the tree is a simple stacked list — no connector layer.
-    if(window.innerWidth<720){while(svg.firstChild)svg.removeChild(svg.firstChild);
-      svg.setAttribute('width',0);svg.setAttribute('height',0);tree.setAttribute('data-links',0);return;}
-    var cols=tree.querySelectorAll('.kr-col');
-    if(cols.length<2)return;
-    var box=tree.getBoundingClientRect();
-    svg.setAttribute('width',tree.scrollWidth);
-    svg.setAttribute('height',tree.scrollHeight);
-    svg.setAttribute('viewBox','0 0 '+tree.scrollWidth+' '+tree.scrollHeight);
     while(svg.firstChild)svg.removeChild(svg.firstChild);
-    var cards=[];
-    cols.forEach(function(col,ci){cards[ci]=col.querySelectorAll('.km, .champion-plinth');});
-    function center(el){var r=el.getBoundingClientRect();
-      return {x:r.left-box.left+tree.scrollLeft,y:r.top-box.top+tree.scrollTop+r.height/2,
-              left:r.left-box.left+tree.scrollLeft,right:r.right-box.left+tree.scrollLeft,h:r.height};}
+    var narrow=window.innerWidth<720;
+    tree.classList.toggle('bracket-narrow',narrow);
+    if(narrow){svg.setAttribute('width',0);svg.setAttribute('height',0);
+      tree.setAttribute('data-links',0);return;}
+    var cols=[].slice.call(tree.querySelectorAll('.kr-col'));
+    if(cols.length<2)return;
+    var W=tree.scrollWidth,H=tree.scrollHeight;
+    svg.setAttribute('width',W);svg.setAttribute('height',H);
+    svg.setAttribute('viewBox','0 0 '+W+' '+H);
+    var kb=tree.getBoundingClientRect();
+    // km positions are scroll-invariant relative to .kbracket (both move with the
+    // scroller together), so no scrollLeft term is needed.
+    function box(el){var r=el.getBoundingClientRect();
+      return {left:r.left-kb.left,right:r.right-kb.left,y:r.top-kb.top+r.height/2};}
+    var cards=cols.map(function(col){return [].slice.call(col.querySelectorAll('.km'));});
     var made=0;
     for(var ci=1;ci<cards.length;ci++){
-      var prev=cards[ci-1],cur=cards[ci];
-      for(var i=0;i<cur.length;i++){
-        var child=center(cur[i]);
-        var p1=prev[i*2],p2=prev[i*2+1];
-        [p1,p2].forEach(function(p){
+      for(var i=0;i<cards[ci].length;i++){
+        var child=box(cards[ci][i]);
+        var watchedChild=cards[ci][i].classList.contains('has-watched');
+        [cards[ci-1][i*2],cards[ci-1][i*2+1]].forEach(function(p){
           if(!p)return;
-          var pc=center(p);
-          var x1=pc.right,y1=pc.y,x2=child.left,y2=child.y;
-          var mx=(x1+x2)/2;
-          var d='M'+x1+' '+y1+' C'+mx+' '+y1+' '+mx+' '+y2+' '+x2+' '+y2;
+          var pc=box(p);
+          var x1=pc.right,y1=pc.y,x2=child.left,y2=child.y,mx=Math.round((x1+x2)/2);
+          var d='M'+x1+' '+y1+' H'+mx+' V'+y2+' H'+x2;   // right angles only
           var path=document.createElementNS('http://www.w3.org/2000/svg','path');
-          path.setAttribute('d',d);path.setAttribute('class','bz-link');
-          path.setAttribute('fill','none');
-          if(p.classList.contains('has-watched')||cur[i].classList.contains('has-watched'))
-            path.setAttribute('data-watched','1');
+          path.setAttribute('d',d);path.setAttribute('class','bz-link');path.setAttribute('fill','none');
+          if(watchedChild||p.classList.contains('has-watched'))path.setAttribute('data-watched','1');
           svg.appendChild(path);made++;
         });
       }
@@ -1321,8 +1516,14 @@ APP_JS = r"""
     poll();
   }
 
+  function wireBracketScroll(){
+    var wrap=document.querySelector('[data-bracket] .bracket-wrap');
+    if(!wrap)return;
+    wrap.addEventListener('scroll',updateEdges,{passive:true});
+  }
+
   document.addEventListener('DOMContentLoaded',function(){
-    apply();wireReveal();wireLive();drawBracket();
+    apply();wireReveal();wireLive();wireBracketScroll();drawBracket();
   });
   window.addEventListener('load',drawBracket);
   window.addEventListener('resize',scheduleDraw);
@@ -1575,6 +1776,25 @@ section:first-of-type{margin-top:var(--s4)}
 .pens{font-family:var(--mono);font-size:.66rem;color:var(--muted);margin-left:4px}
 .vs{font-family:var(--mono);color:var(--muted);font-weight:700;font-size:.84rem;white-space:nowrap;font-variant-numeric:tabular-nums}
 .rd{font-family:var(--mono);background:var(--ink);color:var(--paper);padding:1px 7px;font-size:.6rem;font-weight:700;letter-spacing:.08em}
+/* Kickoff stamp — day vs time carry distinct weight/colour (typographic contrast),
+   PT marked in the one accent. Sizes are em-relative so it scales to any context. */
+.ko{display:inline-flex;align-items:baseline;gap:.55ch;white-space:nowrap}
+.ko-day{font-weight:700;letter-spacing:.02em;color:var(--ink2)}
+.ko-time{font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:0}
+.ko-tz{font-size:.8em;font-weight:700;color:var(--vermilion);margin-left:.5px;letter-spacing:.02em}
+.m-meta .ko-day,.m-meta .ko-time{text-transform:none}
+.pz-tz{font-size:.5em;font-weight:800;color:var(--vermilion);vertical-align:super;margin-left:1px;letter-spacing:.02em}
+/* "Knocked out" marker in standings (compact tables) */
+.ko-out{display:inline-block;margin-left:7px;font-family:var(--mono);font-size:.5rem;font-weight:800;
+  letter-spacing:.1em;color:var(--muted);border:1px solid var(--line2);padding:0 4px;vertical-align:middle}
+.standings tr.gone .ko-out{border-color:var(--c-out)}
+/* Next-knockout callout on a team page */
+.next-ko{border:2px solid var(--ink);background:var(--paper2);margin-bottom:18px}
+.nk-head{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--ink);color:var(--paper);padding:7px 13px}
+.nk-k{font-family:var(--mono);font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.nk-rd{font-family:var(--mono);font-size:.6rem;font-weight:800;letter-spacing:.08em;color:var(--vermilion)}
+.next-ko .match{padding:13px 15px}
+.next-ko .match.is-upcoming{border-left:0}
 
 /* ============ TEAM LINKS / CHIPS ================================== */
 .team,.cand,.bteam{display:inline-flex;align-items:center;gap:6px;font-weight:700;padding:1px 4px;transition:background .12s,color .12s}
@@ -1652,17 +1872,31 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .your-teams-sec{position:relative}
 .tcard-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:12px}
 .yt-grid{grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:14px}
-.tcard{position:relative;display:flex;align-items:center;gap:11px;background:var(--paper);border:2px solid var(--ink);
-  padding:13px 15px;overflow:hidden;transition:transform .14s}
-.tcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent)}
+.tcard{position:relative;display:flex;flex-direction:column;background:var(--paper);border:2px solid var(--ink);
+  overflow:hidden;transition:transform .14s}
+.tcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent);z-index:1}
 .tcard:hover{transform:translateY(-2px)}
 .tcard.watched{box-shadow:4px 4px 0 var(--sig)}
 .tcard.watched::before{width:6px;background:var(--sig)}
+.tcard-top{display:flex;align-items:center;gap:11px;padding:13px 15px}
 .tcard-main{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
 .tcard-flag{font-size:1.7rem;line-height:1}
 .tcard-body{display:flex;flex-direction:column;min-width:0;gap:2px}
 .tcard-name{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase;letter-spacing:-.01em}
 .tcard-meta{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.05em}
+/* watchlist card: next match (primary) + most recent result (secondary) */
+.tcard-fix{display:flex;flex-direction:column;gap:7px;padding:0 15px 13px;border-top:1px solid var(--line);margin-top:-2px;padding-top:11px}
+.tc-fix{display:flex;align-items:baseline;gap:9px;min-width:0;font-size:.74rem}
+.tc-k{flex:0 0 30px;font-family:var(--mono);font-size:.54rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.tc-k.out{color:var(--vermilion)}
+.tc-line{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;min-width:0}
+.tc-vs{color:var(--ink2)}
+.tc-vs .tc-opp,.tc-vs .cand{font-weight:700;color:var(--ink)}
+.tc-rd{font-family:var(--mono);font-size:.52rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--paper);background:var(--ink2);padding:1px 5px}
+.tc-res{font-family:var(--mono);font-weight:800;font-variant-numeric:tabular-nums}
+.tc-res.w{color:var(--ink)}.tc-res.l{color:var(--muted)}.tc-res.d{color:var(--ink2)}
+.tc-cands{color:var(--muted);font-style:italic}
+.tc-next .tc-k{color:var(--vermilion)}
 .yt-empty{display:flex;align-items:center;gap:22px;padding:30px 30px;border:2px dashed var(--line2);background:var(--paper2)}
 .yt-star{font-size:3rem;color:var(--vermilion);line-height:1;flex:0 0 auto}
 .yt-empty-body{display:flex;flex-direction:column;gap:8px;max-width:560px}
@@ -1778,58 +2012,69 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .road-more{display:inline-grid;place-items:center;font-family:var(--mono);font-size:.64rem;font-weight:800;color:var(--muted);border:1px dashed var(--line2);padding:2px 7px}
 .road-step.has-watched .road-rd{background:var(--vermilion);color:var(--on-accent)}
 
-/* ============ BRACKET (contained rail, designed) ================= */
+/* ============ BRACKET (one fixed tree, right-angle connectors) ====
+   Every box is the SAME fixed size, every column the same height, and each
+   column's matches are distributed with `space-around` — which makes match i of
+   round R land exactly at the midpoint of matches 2i / 2i+1 of round R-1, in
+   pure CSS, no measurement. JS only paints the connector strokes and toggles the
+   edge fades. Horizontal overflow scrolls the inner wrap; the fades live on the
+   non-scrolling frame so they pin to the visible edges (never drift mid-column).*/
 .bracket-intro h1{margin-bottom:.1em}
-/* The single intentional horizontal region: scroll-snap rail, edge-fade, round
-   indicator. The wrap is exactly viewport-wide and clips its wide grid child so
-   the PAGE never overflows; movement inside is a designed, snapping rail. */
-.bracket-rail-nav{display:flex;gap:0;margin-bottom:14px;border:2px solid var(--ink);width:fit-content;max-width:100%;overflow:hidden}
+.bracket-rail{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.brn-label{font-family:var(--mono);font-weight:800;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.bracket-rail-nav{display:flex;gap:0;border:2px solid var(--ink);width:fit-content;max-width:100%;overflow:hidden}
 .brn-item{font-family:var(--mono);font-weight:800;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;
-  padding:8px 14px;color:var(--muted);border-right:1px solid var(--line);background:var(--paper);white-space:nowrap}
+  padding:7px 13px;color:var(--muted);border-right:1px solid var(--line);background:var(--paper);white-space:nowrap}
 .brn-item:last-child{border-right:0}
 .brn-item.on{background:var(--ink);color:var(--paper)}
-.bracket-wrap{position:relative;width:100%;max-width:100%;overflow-x:auto;overflow-y:visible;-webkit-overflow-scrolling:touch;
-  scroll-snap-type:x mandatory;border:2px solid var(--ink);background:var(--paper)}
-.bracket-wrap::before,.bracket-wrap::after{content:"";position:sticky;top:0;z-index:5;display:block;width:34px;height:0;pointer-events:none}
-.bz-edge-l,.bz-edge-r{position:absolute;top:0;bottom:0;width:38px;z-index:4;pointer-events:none}
+.bracket-frame{position:relative;border:2px solid var(--ink);background:var(--paper);overflow:hidden}
+.bracket-wrap{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch}
+.bz-edge-l,.bz-edge-r{position:absolute;top:0;bottom:0;width:40px;z-index:6;pointer-events:none;transition:opacity .2s}
 .bz-edge-l{left:0;background:linear-gradient(90deg,var(--paper),rgba(244,242,236,0))}
 .bz-edge-r{right:0;background:linear-gradient(270deg,var(--paper),rgba(244,242,236,0))}
-.kbracket{position:relative;display:grid;grid-template-columns:repeat(5,minmax(168px,1fr));gap:clamp(18px,3vw,44px);
-  min-width:980px;padding:14px 16px 22px}
+.bracket-frame.at-start .bz-edge-l{opacity:0}
+.bracket-frame.at-end .bz-edge-r{opacity:0}
+.kbracket{--km-h:84px;position:relative;display:flex;gap:clamp(22px,3.4vw,56px);
+  min-width:1120px;padding:16px 22px 24px;min-height:calc(var(--km-h) * 16 + 270px)}
 .bz-layer{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:visible}
-.bz-link{stroke:var(--line2);stroke-width:1.6}
+.bz-link{stroke:var(--line2);stroke-width:1.6;fill:none}
 .bz-link[data-watched]{stroke:var(--vermilion);stroke-width:2.4}
-.kr-col{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:space-around;min-width:0;scroll-snap-align:start}
-.kr-head{display:flex;align-items:center;gap:8px;font-size:.66rem;color:var(--ink);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
-.bracket-laid .kr-col{justify-content:flex-start}
-.bracket-laid .kr-head{position:sticky;top:0;background:var(--paper);z-index:2}
+.kr-col{position:relative;z-index:1;flex:1 1 0;min-width:196px;display:flex;flex-direction:column}
+.kr-head{flex:0 0 auto;display:flex;align-items:center;gap:8px;height:30px;font-size:.66rem;color:var(--ink);
+  margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+.kr-body{flex:1 1 auto;display:flex;flex-direction:column;justify-content:space-around}
 .kr-count{margin-left:auto;font-family:var(--mono);font-size:.6rem;color:var(--paper);background:var(--ink);padding:1px 8px}
-.km{position:relative;background:var(--paper);border:1.5px solid var(--ink);padding:9px 11px;margin:8px 0;transition:background .14s}
+.km{position:relative;flex:0 0 var(--km-h);height:var(--km-h);box-sizing:border-box;background:var(--paper);
+  border:1.5px solid var(--ink);padding:7px 10px;display:flex;flex-direction:column;justify-content:center;
+  gap:2px;overflow:hidden;transition:background .14s}
 .km:hover{background:var(--paper2)}
 .km.has-watched{box-shadow:inset 5px 0 0 var(--sig)}
 .km-live{border-color:var(--vermilion);border-width:2px}
-.km-no{display:flex;align-items:center;gap:6px;font-size:.58rem;color:var(--muted);margin-bottom:6px;letter-spacing:.06em}
-.km-m{font-weight:800;color:var(--ink)}
-.km-d{font-family:var(--mono);font-size:.58rem}
-.km-line{position:relative;height:1px;background:var(--line);margin:6px 0}
+.km-when{font-family:var(--mono);font-size:.55rem;line-height:1.1;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.km-when .ko-day{color:var(--ink2)}
+.km-line{position:relative;height:1px;background:var(--line);margin:3px 0}
 .km-wire{position:absolute;right:-1px;top:50%;transform:translateY(-50%);opacity:0}
 .km-live .km-wire{opacity:1}
 .km-live .km-wire .wire-pulse{width:7px;height:7px}
-.km-team{display:flex;align-items:center;gap:5px;min-width:0;font-size:.84rem;padding:1px 0}
+.km-team{display:flex;align-items:center;gap:5px;min-width:0;min-height:20px;font-size:.84rem}
 .km-team .bteam{min-width:0;font-weight:700}
 .km-team .bteam .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .km-team.is-candidate{color:var(--muted)}
 .km-team .bteam.prov{color:var(--ink2);font-weight:600}
 .bcode{font-family:var(--mono);font-size:.56rem;color:var(--muted);background:var(--paper2);border:1px solid var(--line);padding:0 5px;margin-left:3px;white-space:nowrap}
-.bcands{display:inline-flex;flex-direction:column;gap:3px;min-width:0}
-.bcands-list{display:flex;flex-wrap:wrap;gap:3px}
-.bcands-list .cand{font-size:.64rem;padding:1px 5px}
+.bcands{display:inline-flex;flex-wrap:wrap;align-items:center;gap:2px 8px;min-width:0;overflow:hidden}
+.bcands .bcand{display:inline-flex;align-items:center;gap:4px;font-size:.78rem;min-width:0}
+.bcands .bcand .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:78px}
+.bcands.many{gap:2px 6px}
+.bcands.many .bcand .nm{display:none}          /* >2 possible: a row of flags */
+.bcands.many .bcand .fl{font-size:1.05rem}
+.bmore{font-family:var(--mono);font-size:.56rem;font-weight:700;color:var(--muted)}
 .bslot{font-family:var(--mono);color:var(--muted);font-size:.74rem;font-weight:600}
 .km-g{margin-left:auto;font-family:var(--mono);font-weight:800;font-variant-numeric:tabular-nums;min-width:16px;text-align:right}
 .km-g.kloss{color:var(--muted)}.km-g.kwin{color:var(--ink)}
 .km-team .bteam.win,.km-team:has(.kwin) .bteam{color:var(--ink);font-weight:800}
-.kr-final{justify-content:center}
-.champion-plinth{position:relative;text-align:center;margin-top:18px;padding:22px 16px 20px;border:2px solid var(--ink);background:var(--ink);color:var(--paper)}
+.kr-final .kr-body{justify-content:center}
+.champion-plinth{position:absolute;left:0;right:0;bottom:0;text-align:center;padding:18px 14px 16px;border-top:2px solid var(--ink);background:var(--ink);color:var(--paper)}
 .champion-plinth::before{content:"";position:absolute;left:0;right:0;top:0;height:8px;background:var(--vermilion)}
 .cp-trophy{filter:invert(1)}
 .cp-lbl{font-size:.62rem;letter-spacing:.14em;color:var(--vermilion);margin:8px 0 8px}
@@ -1837,8 +2082,12 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .champ-name .fl{font-size:1.3em}
 .champ-name.pending{font-family:var(--mono);font-weight:700;font-size:.8rem;color:rgba(244,242,236,.7);text-transform:uppercase;letter-spacing:.06em}
 .champ-name.watched{color:var(--vermilion)}
-.kr-trophy{}
-.kr-final .kr-head .kr-trophy{}
+/* Narrow screens: a plain stacked list of columns, no connector geometry. */
+.bracket-narrow{display:block;min-width:0;min-height:0}
+.bracket-narrow .kr-col{min-width:0;margin-bottom:26px}
+.bracket-narrow .kr-body{display:block}
+.bracket-narrow .km{height:auto;min-height:var(--km-h);margin:8px 0}
+.bracket-narrow .champion-plinth{position:relative}
 
 /* footer ----------------------------------------------------------- */
 .site-foot{max-width:var(--maxw);margin:0 auto;padding:0 clamp(14px,4vw,28px) var(--s8);position:relative;z-index:1}
