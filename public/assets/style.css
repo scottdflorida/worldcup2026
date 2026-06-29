@@ -452,6 +452,8 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 
 /* ============ ROAD-TO-THE-FINAL (branch graph) =================== */
 .roads{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4)}
+.road-blurb{margin:2px 0 14px;font-size:1.02rem;line-height:1.6;color:var(--ink);max-width:64ch;
+  border-left:3px solid var(--vermilion);padding-left:14px}
 .road-intro{margin:-8px 0 var(--s5);font-size:.88rem;color:var(--ink2)}
 .road-line{background:var(--paper);border:2px solid var(--ink);padding:18px 20px}
 .road-line.third{grid-column:1/-1}
