@@ -64,12 +64,13 @@
     if(em)em.hidden=anyVisible;
   });
 
-  // ---- Bracket connectors. Vertical centering of each round between the two
-  // games that feed it is done in pure CSS (equal-height columns + space-around),
-  // so card i in round R always lands at the midpoint of cards 2i / 2i+1 in round
-  // R-1 with no measurement. Here we only draw the right-angle strokes that join
-  // them, and toggle the edge fades. Progressive enhancement: with JS off the
-  // tree is still a clean, correctly-centered column stack (just no strokes).
+  // ---- Bracket layout + connectors. Boxes size to their content (a deep round
+  // can hold many candidate flags), so we can't rely on CSS alone for vertical
+  // centering. We lay the Round-of-32 leaves on an even grid, then place every
+  // later box at the midpoint of its two feeders' centres (works for ANY box
+  // height), drop the champion plinth right under the final, and draw the
+  // right-angle strokes. Progressive enhancement: with JS off the columns just
+  // stack top-aligned (still legible); narrow screens use the stacked fallback.
   function updateEdges(){
     var frame=document.querySelector('[data-bracket]');
     var wrap=frame&&frame.querySelector('.bracket-wrap');
@@ -78,9 +79,55 @@
     frame.classList.toggle('at-start',wrap.scrollLeft<=1);
     frame.classList.toggle('at-end',max<=1||wrap.scrollLeft>=max-1);
   }
+  function layoutBracket(){
+    var tree=document.querySelector('.kbracket');
+    if(!tree)return 0;
+    var cols=[].slice.call(tree.querySelectorAll('.kr-col'));
+    if(!cols.length)return 0;
+    function body(col){return col.querySelector('.kr-body')||col;}
+    function cards(col){return [].slice.call(body(col).querySelectorAll('.km'));}
+    // Reset prior positioning so heights measure naturally.
+    cols.forEach(function(col){
+      cards(col).forEach(function(k){k.style.position='';k.style.top='';k.style.left='';k.style.right='';});
+      var pl=col.querySelector('.champion-plinth');
+      if(pl){pl.style.position='';pl.style.top='';pl.style.left='';pl.style.right='';}
+      body(col).style.height='';
+    });
+    if(window.innerWidth<720){tree.classList.add('bracket-narrow');return 0;}
+    tree.classList.remove('bracket-narrow');
+
+    var leaves=cards(cols[0]);
+    if(!leaves.length)return 0;
+    var maxLeafH=0;leaves.forEach(function(k){maxLeafH=Math.max(maxLeafH,k.offsetHeight);});
+    var slot=maxLeafH+28;                       // even vertical pitch for the leaves
+    var bodyH=leaves.length*slot;
+    var prev=null;
+    cols.forEach(function(col,ci){
+      var b=body(col);b.style.position='relative';b.style.height=bodyH+'px';
+      var ks=cards(col),centers=[];
+      ks.forEach(function(k,i){
+        var c;
+        if(ci===0){c=(i+0.5)*slot;}
+        else{var a=prev[i*2],z=prev[i*2+1];
+          c=(a!=null&&z!=null)?(a+z)/2:(a!=null?a:(z!=null?z:(i+0.5)*slot));}
+        k.style.position='absolute';k.style.left='0';k.style.right='0';
+        k.style.top=Math.round(c-k.offsetHeight/2)+'px';
+        centers.push(c);
+      });
+      var plinth=col.querySelector('.champion-plinth');
+      if(plinth&&ks.length){
+        var fb=ks[ks.length-1];
+        plinth.style.position='absolute';plinth.style.left='0';plinth.style.right='0';
+        plinth.style.top=Math.round((parseFloat(fb.style.top)||0)+fb.offsetHeight+16)+'px';
+      }
+      prev=centers;
+    });
+    return bodyH;
+  }
   function drawBracket(){
     var tree=document.querySelector('.kbracket');
     if(!tree)return;
+    layoutBracket();
     updateEdges();
     var svg=tree.querySelector('.bz-layer');
     if(!svg)return;
