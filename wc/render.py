@@ -693,7 +693,6 @@ def shell(title, active, body, ctx, desc=None, page="index.html"):
       <span class="foot-v"><span class="upd-dot wire" aria-hidden="true"><span class="wire-pulse"></span></span>{E(updated) or "—"}</span>
     </div>
   </div>
-  <div class="foot-fine">Data: openfootball (public domain). Auto-updates within ~15&nbsp;min of a result landing. Projections follow the current standings; third-place bracket slots resolve via FIFA's allocation once the group stage ends. Original artwork — not affiliated with FIFA.</div>
 </footer>
 <script src="assets/app.js?v={ASSET_VER}"></script>
 </body>
@@ -888,7 +887,6 @@ def page_team(ctx, team):
 <section aria-label="Road to the final">
   <div class="sec-head"><h2>Road to the final</h2><span class="muted">potential futures — who {E(team)} could meet each round</span></div>
   {f'<p class="road-blurb">{E(blurbs.blurb_for(ctx.blurbs, team))}</p>' if blurbs.blurb_for(ctx.blurbs, team) else ''}
-  <p class="muted road-intro">Live candidates fan out from each round before names resolve; the branch collapses to one as results land.</p>
   {road_body}
 </section>
 
@@ -1066,8 +1064,7 @@ def page_calendar(ctx):
     body = f"""
 <section class="cal-intro" aria-label="Match calendar">
   <h1>Match calendar</h1>
-  <p class="muted">Every matchday in Pacific time — group stage to the Final. Confirmed
-  fixtures show their teams; knockout ties still being decided show the live candidate pool.</p>
+  <p class="muted">Every matchday in Pacific time — group stage to the Final.</p>
 </section>
 <div class="cal-grid" aria-label="Tournament calendar">
   <div class="cal-dow-row" aria-hidden="true">{dow_head}</div>
@@ -1123,7 +1120,7 @@ def page_bracket(ctx):
     body = f"""
 <section class="bracket-intro" aria-label="Knockout bracket">
   <h1>Knockout bracket</h1>
-  <p class="muted">Round of 32 → Final as one connected tree. Pin teams with ★ and their matches mark across the bracket; greyed slots show the live candidates and resolve as results land.</p>
+  <p class="muted">Round of 32 → Final as one connected tree. Pin teams with ★ to mark their path.</p>
   <div class="bracket-rail" aria-label="Bracket rounds">
     <span class="brn-label">Current round:</span>
     <div class="bracket-rail-nav">{rail_items}</div>
@@ -1449,9 +1446,6 @@ APP_JS = r"""
     });
     document.querySelectorAll('.match,.km,.dist-row,.pz,.road-step,.tcard,.cal-m').forEach(function(el){
       el.classList.toggle('has-watched',!!el.querySelector('.watched'));
-    });
-    document.querySelectorAll('.cal-day').forEach(function(el){
-      el.classList.toggle('has-watched',!!el.querySelector('.cal-m.has-watched'));
     });
     document.querySelectorAll('[data-watch]').forEach(function(btn){
       var on=w.indexOf(btn.getAttribute('data-watch'))>=0;
@@ -2183,6 +2177,9 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .road-node{display:flex;flex-direction:column;gap:3px}
 .road-rd{display:inline-grid;place-items:center;min-width:46px;height:24px;padding:0 9px;background:var(--ink);color:var(--paper);font-size:.66rem;font-weight:800;width:fit-content;letter-spacing:.06em}
 .road-date{font-family:var(--mono);font-size:.62rem;color:var(--muted)}
+/* keep the kickoff inside its column — wrap day/time instead of spilling onto the connector */
+.road-date .ko{flex-wrap:wrap;white-space:normal;gap:0 .6ch}
+.road-date .ko-day,.road-date .ko-time{white-space:nowrap}
 .road-branch{position:relative;align-self:stretch;width:22px}
 .road-branch::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;transform:translateX(-50%);background:var(--vermilion);opacity:.5}
 .road-branch::after{content:"";position:absolute;left:50%;top:50%;width:11px;height:2px;background:var(--vermilion);transform:translateY(-50%)}
@@ -2309,9 +2306,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .cal-m.is-done{border-left-color:var(--ink)}
 .cal-m.is-live{border-left-color:var(--vermilion)}
 /* a pinned team plays in this match — light it up */
-.cal-m.has-watched{border-left:3px solid var(--sig);padding-left:6px;background:rgba(255,59,20,.06)}
-.cal-day.has-watched{box-shadow:inset 0 0 0 1.5px var(--sig)}
-.cal-day.today.has-watched{box-shadow:inset 0 3px 0 var(--vermilion),inset 0 0 0 1.5px var(--sig)}
+.cal-m.has-watched{background:rgba(255,59,20,.06);border-left-color:var(--ink);outline:2px solid var(--ink);outline-offset:-1px}
 .cal-m-head{display:flex;align-items:center;gap:6px;margin-bottom:2px}
 .cal-tag{font-family:var(--mono);font-size:.5rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
   color:var(--paper);background:var(--ink2);padding:0 4px}
