@@ -354,30 +354,22 @@
     function render(){
       prune();
       root.querySelectorAll('.fb-node').forEach(function(node){
-        var num=node.getAttribute('data-m'),m=M[num];
-        if(m.round==='R32'){
-          var w=occupant(num);
-          node.querySelectorAll('.fb-team').forEach(function(b){
-            var t=b.getAttribute('data-pick');
-            b.classList.toggle('fb-win',!!w&&t===w);
-            b.classList.toggle('fb-lose',!!w&&t!==w);
-          });
-        }else{
-          var occ=occupant(num),fl=node.querySelector('.fb-fl');
-          if(fl)fl.textContent=occ?(FLAGS[occ]||''):'';
-          node.classList.toggle('fb-filled',!!occ);
-          node.classList.toggle('fb-empty',!occ);
-        }
+        var occ=occupant(node.getAttribute('data-m')),fl=node.querySelector('.fb-fl');
+        if(fl)fl.textContent=occ?(FLAGS[occ]||''):'';
+        node.classList.toggle('fb-filled',!!occ);
+        node.classList.toggle('fb-empty',!occ);
+      });
+      // outer flag layer: once an R32 is decided, dim the team that didn't advance
+      root.querySelectorAll('.fb-ent[data-r32]').forEach(function(el){
+        var occ=occupant(el.getAttribute('data-r32')),t=el.getAttribute('data-team');
+        el.classList.toggle('fb-ent-out',!!occ&&t!==occ);
       });
       savePicks();
     }
-    // R32: tap an entrant flag to set that match's winner
+    // every match is one box: tap it to pick the winner (settled ties are locked)
     root.addEventListener('click',function(e){
-      var tb=e.target.closest('.fb-team[data-pick]');
-      if(tb){var n=tb.closest('.fb-node');if(n.classList.contains('fb-locked'))return;
-        picks[n.getAttribute('data-m')]=tb.getAttribute('data-pick');render();return;}
       var pk=e.target.closest('.fb-pick');
-      if(pk)openModal(pk.getAttribute('data-m'));
+      if(pk&&!pk.classList.contains('fb-locked'))openModal(pk.getAttribute('data-m'));
     });
     // modal picker for later rounds
     var modal=document.getElementById('fb-modal'),
