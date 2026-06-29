@@ -998,7 +998,7 @@ def page_bracket(ctx):
             cols.append(
                 f'<div class="kr-col kr-final">'
                 f'<div class="kr-head"><img class="kr-trophy" src="assets/trophy.svg" alt="" width="18" height="18" aria-hidden="true">{E(rd)}</div>'
-                f'<div class="kr-body">{cells}</div>{plinth}</div>'
+                f'<div class="kr-body">{cells}{plinth}</div></div>'
             )
         else:
             cols.append(
@@ -1044,7 +1044,7 @@ def _bracket_side(res):
     """A bracket slot: a resolved nation, or the set of teams that could fill it.
 
     Never shows 'Winner of M…'. Two or fewer candidates read as named chips; more
-    collapse to a flags row (names hidden via CSS) so the box stays a fixed size."""
+    collapse to a flags row (names hidden via CSS). The box grows to show them all."""
     if res["team"]:
         return team_link(res["team"], "bteam")
     prov = res.get("provisional")
@@ -1054,11 +1054,9 @@ def _bracket_side(res):
     cands = sorted(res.get("candidates") or [])
     if not cands:
         return '<span class="bslot muted">TBD</span>'
-    shown = cands[:8]
-    chips = "".join(team_link(c, "bcand") for c in shown)
-    more = f'<span class="bmore">+{len(cands) - 8}</span>' if len(cands) > 8 else ""
+    chips = "".join(team_link(c, "bcand") for c in cands)
     cls = "bcands" + (" many" if len(cands) > 2 else "")
-    return f'<span class="{cls}" data-n="{len(cands)}">{chips}{more}</span>'
+    return f'<span class="{cls}" data-n="{len(cands)}">{chips}</span>'
 
 
 # --------------------------------------------------------------------------
@@ -1372,12 +1370,13 @@ APP_JS = r"""
     if(em)em.hidden=anyVisible;
   });
 
-  // ---- Bracket connectors. Vertical centering of each round between the two
-  // games that feed it is done in pure CSS (equal-height columns + space-around),
-  // so card i in round R always lands at the midpoint of cards 2i / 2i+1 in round
-  // R-1 with no measurement. Here we only draw the right-angle strokes that join
-  // them, and toggle the edge fades. Progressive enhancement: with JS off the
-  // tree is still a clean, correctly-centered column stack (just no strokes).
+  // ---- Bracket layout + connectors. Boxes size to their content (a deep round
+  // can hold many candidate flags), so we can't rely on CSS alone for vertical
+  // centering. We lay the Round-of-32 leaves on an even grid, then place every
+  // later box at the midpoint of its two feeders' centres (works for ANY box
+  // height), drop the champion plinth right under the final, and draw the
+  // right-angle strokes. Progressive enhancement: with JS off the columns just
+  // stack top-aligned (still legible); narrow screens use the stacked fallback.
   function updateEdges(){
     var frame=document.querySelector('[data-bracket]');
     var wrap=frame&&frame.querySelector('.bracket-wrap');
@@ -1386,9 +1385,55 @@ APP_JS = r"""
     frame.classList.toggle('at-start',wrap.scrollLeft<=1);
     frame.classList.toggle('at-end',max<=1||wrap.scrollLeft>=max-1);
   }
+  function layoutBracket(){
+    var tree=document.querySelector('.kbracket');
+    if(!tree)return 0;
+    var cols=[].slice.call(tree.querySelectorAll('.kr-col'));
+    if(!cols.length)return 0;
+    function body(col){return col.querySelector('.kr-body')||col;}
+    function cards(col){return [].slice.call(body(col).querySelectorAll('.km'));}
+    // Reset prior positioning so heights measure naturally.
+    cols.forEach(function(col){
+      cards(col).forEach(function(k){k.style.position='';k.style.top='';k.style.left='';k.style.right='';});
+      var pl=col.querySelector('.champion-plinth');
+      if(pl){pl.style.position='';pl.style.top='';pl.style.left='';pl.style.right='';}
+      body(col).style.height='';
+    });
+    if(window.innerWidth<720){tree.classList.add('bracket-narrow');return 0;}
+    tree.classList.remove('bracket-narrow');
+
+    var leaves=cards(cols[0]);
+    if(!leaves.length)return 0;
+    var maxLeafH=0;leaves.forEach(function(k){maxLeafH=Math.max(maxLeafH,k.offsetHeight);});
+    var slot=maxLeafH+28;                       // even vertical pitch for the leaves
+    var bodyH=leaves.length*slot;
+    var prev=null;
+    cols.forEach(function(col,ci){
+      var b=body(col);b.style.position='relative';b.style.height=bodyH+'px';
+      var ks=cards(col),centers=[];
+      ks.forEach(function(k,i){
+        var c;
+        if(ci===0){c=(i+0.5)*slot;}
+        else{var a=prev[i*2],z=prev[i*2+1];
+          c=(a!=null&&z!=null)?(a+z)/2:(a!=null?a:(z!=null?z:(i+0.5)*slot));}
+        k.style.position='absolute';k.style.left='0';k.style.right='0';
+        k.style.top=Math.round(c-k.offsetHeight/2)+'px';
+        centers.push(c);
+      });
+      var plinth=col.querySelector('.champion-plinth');
+      if(plinth&&ks.length){
+        var fb=ks[ks.length-1];
+        plinth.style.position='absolute';plinth.style.left='0';plinth.style.right='0';
+        plinth.style.top=Math.round((parseFloat(fb.style.top)||0)+fb.offsetHeight+16)+'px';
+      }
+      prev=centers;
+    });
+    return bodyH;
+  }
   function drawBracket(){
     var tree=document.querySelector('.kbracket');
     if(!tree)return;
+    layoutBracket();
     updateEdges();
     var svg=tree.querySelector('.bz-layer');
     if(!svg)return;
@@ -1776,14 +1821,14 @@ section:first-of-type{margin-top:var(--s4)}
 .pens{font-family:var(--mono);font-size:.66rem;color:var(--muted);margin-left:4px}
 .vs{font-family:var(--mono);color:var(--muted);font-weight:700;font-size:.84rem;white-space:nowrap;font-variant-numeric:tabular-nums}
 .rd{font-family:var(--mono);background:var(--ink);color:var(--paper);padding:1px 7px;font-size:.6rem;font-weight:700;letter-spacing:.08em}
-/* Kickoff stamp — day vs time carry distinct weight/colour (typographic contrast),
-   PT marked in the one accent. Sizes are em-relative so it scales to any context. */
-.ko{display:inline-flex;align-items:baseline;gap:.55ch;white-space:nowrap}
-.ko-day{font-weight:700;letter-spacing:.02em;color:var(--ink2)}
-.ko-time{font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:0}
-.ko-tz{font-size:.8em;font-weight:700;color:var(--vermilion);margin-left:.5px;letter-spacing:.02em}
+/* Kickoff stamp — the day reads muted, the time in ink, the zone in the one
+   accent: variance by colour, not by jarring size jumps. Em-relative everywhere. */
+.ko{display:inline-flex;align-items:baseline;gap:.6ch;white-space:nowrap}
+.ko-day{font-weight:600;color:var(--muted);letter-spacing:.02em}
+.ko-time{font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.ko-tz{font-weight:700;color:var(--vermilion);margin-left:.4ch;font-size:.9em;letter-spacing:.03em}
 .m-meta .ko-day,.m-meta .ko-time{text-transform:none}
-.pz-tz{font-size:.5em;font-weight:800;color:var(--vermilion);vertical-align:super;margin-left:1px;letter-spacing:.02em}
+.pz-tz{font-weight:700;color:var(--vermilion);margin-left:.3ch;font-size:.62em;letter-spacing:.03em}
 /* "Knocked out" marker in standings (compact tables) */
 .ko-out{display:inline-block;margin-left:7px;font-family:var(--mono);font-size:.5rem;font-weight:800;
   letter-spacing:.1em;color:var(--muted);border:1px solid var(--line2);padding:0 4px;vertical-align:middle}
@@ -2042,11 +2087,14 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .kr-col{position:relative;z-index:1;flex:1 1 0;min-width:196px;display:flex;flex-direction:column}
 .kr-head{flex:0 0 auto;display:flex;align-items:center;gap:8px;height:30px;font-size:.66rem;color:var(--ink);
   margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
-.kr-body{flex:1 1 auto;display:flex;flex-direction:column;justify-content:space-around}
+.kr-body{flex:1 1 auto;position:relative}
 .kr-count{margin-left:auto;font-family:var(--mono);font-size:.6rem;color:var(--paper);background:var(--ink);padding:1px 8px}
-.km{position:relative;flex:0 0 var(--km-h);height:var(--km-h);box-sizing:border-box;background:var(--paper);
-  border:1.5px solid var(--ink);padding:7px 10px;display:flex;flex-direction:column;justify-content:center;
-  gap:2px;overflow:hidden;transition:background .14s}
+/* Boxes size to their content (so a deep round can show every candidate flag);
+   JS then centres each one between its two feeders. min-height keeps the early,
+   short boxes from looking cramped. */
+.km{position:relative;min-height:var(--km-h);box-sizing:border-box;background:var(--paper);
+  border:1.5px solid var(--ink);padding:7px 10px;margin:0 0 10px;display:flex;flex-direction:column;
+  justify-content:center;gap:3px;transition:background .14s}
 .km:hover{background:var(--paper2)}
 .km.has-watched{box-shadow:inset 5px 0 0 var(--sig)}
 .km-live{border-color:var(--vermilion);border-width:2px}
@@ -2057,24 +2105,24 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .km-live .km-wire{opacity:1}
 .km-live .km-wire .wire-pulse{width:7px;height:7px}
 .km-team{display:flex;align-items:center;gap:5px;min-width:0;min-height:20px;font-size:.84rem}
+.km-team.is-candidate{align-items:flex-start}
 .km-team .bteam{min-width:0;font-weight:700}
 .km-team .bteam .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .km-team.is-candidate{color:var(--muted)}
 .km-team .bteam.prov{color:var(--ink2);font-weight:600}
 .bcode{font-family:var(--mono);font-size:.56rem;color:var(--muted);background:var(--paper2);border:1px solid var(--line);padding:0 5px;margin-left:3px;white-space:nowrap}
-.bcands{display:inline-flex;flex-wrap:wrap;align-items:center;gap:2px 8px;min-width:0;overflow:hidden}
+.bcands{display:flex;flex-wrap:wrap;align-items:center;gap:4px 9px;min-width:0}
 .bcands .bcand{display:inline-flex;align-items:center;gap:4px;font-size:.78rem;min-width:0}
 .bcands .bcand .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:78px}
-.bcands.many{gap:2px 6px}
+.bcands.many{gap:5px 9px}
 .bcands.many .bcand .nm{display:none}          /* >2 possible: a row of flags */
-.bcands.many .bcand .fl{font-size:1.05rem}
-.bmore{font-family:var(--mono);font-size:.56rem;font-weight:700;color:var(--muted)}
+.bcands.many .bcand .fl{font-size:1.15rem}
 .bslot{font-family:var(--mono);color:var(--muted);font-size:.74rem;font-weight:600}
 .km-g{margin-left:auto;font-family:var(--mono);font-weight:800;font-variant-numeric:tabular-nums;min-width:16px;text-align:right}
 .km-g.kloss{color:var(--muted)}.km-g.kwin{color:var(--ink)}
 .km-team .bteam.win,.km-team:has(.kwin) .bteam{color:var(--ink);font-weight:800}
-.kr-final .kr-body{justify-content:center}
-.champion-plinth{position:absolute;left:0;right:0;bottom:0;text-align:center;padding:18px 14px 16px;border-top:2px solid var(--ink);background:var(--ink);color:var(--paper)}
+/* The plinth is positioned by JS directly beneath the final match box. */
+.champion-plinth{position:relative;text-align:center;padding:18px 14px 16px;border:2px solid var(--ink);background:var(--ink);color:var(--paper)}
 .champion-plinth::before{content:"";position:absolute;left:0;right:0;top:0;height:8px;background:var(--vermilion)}
 .cp-trophy{filter:invert(1)}
 .cp-lbl{font-size:.62rem;letter-spacing:.14em;color:var(--vermilion);margin:8px 0 8px}
@@ -2085,9 +2133,9 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 /* Narrow screens: a plain stacked list of columns, no connector geometry. */
 .bracket-narrow{display:block;min-width:0;min-height:0}
 .bracket-narrow .kr-col{min-width:0;margin-bottom:26px}
-.bracket-narrow .kr-body{display:block}
-.bracket-narrow .km{height:auto;min-height:var(--km-h);margin:8px 0}
-.bracket-narrow .champion-plinth{position:relative}
+.bracket-narrow .kr-body{height:auto!important}
+.bracket-narrow .km{position:static!important;top:auto!important;margin:8px 0}
+.bracket-narrow .champion-plinth{position:static!important;top:auto!important;margin-top:10px}
 
 /* footer ----------------------------------------------------------- */
 .site-foot{max-width:var(--maxw);margin:0 auto;padding:0 clamp(14px,4vw,28px) var(--s8);position:relative;z-index:1}
