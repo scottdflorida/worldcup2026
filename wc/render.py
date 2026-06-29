@@ -609,6 +609,7 @@ NAV = [
     ("index.html", "Home"),
     ("teams.html", "Teams"),
     ("bracket.html", "Bracket"),
+    ("calendar.html", "Calendar"),
 ]
 
 OG_IMG = "assets/og.svg"
@@ -975,6 +976,109 @@ def _km_cell(r, ci):
     )
 
 
+# --------------------------------------------------------------------------
+# Calendar
+# --------------------------------------------------------------------------
+def _calendar_weeks(ctx):
+    """Group every match by its Pacific calendar day, then lay the tournament out
+    as full Sun→Sat weeks from the opening week through the Final's week. Returns
+    a list of weeks, each a list of 7 (date, [matches]) tuples."""
+    by_day = {}
+    for m in ctx.matches:
+        pt, _ = _pt_datetime(m)
+        if pt is None:
+            continue
+        by_day.setdefault(pt.date(), []).append(m)
+    if not by_day:
+        return []
+    days = sorted(by_day)
+    first, last = days[0], days[-1]
+    start = first - timedelta(days=(first.weekday() + 1) % 7)   # back to Sunday
+    end = last + timedelta(days=(5 - last.weekday()) % 7)       # forward to Saturday
+    weeks, cur = [], start
+    while cur <= end:
+        week = []
+        for i in range(7):
+            d = cur + timedelta(days=i)
+            ms = sorted(by_day.get(d, []), key=lambda m: (m.get("time") or ""))
+            week.append((d, ms))
+        weeks.append(week)
+        cur += timedelta(days=7)
+    return weeks
+
+
+def _cal_match(ctx, m, by_num):
+    """One compact calendar entry: round/group tag, kickoff (or final score), and
+    the two sides (resolved nation or live candidate pool)."""
+    t1 = bracket.resolve_slot(m["team1"], ctx.analyses, by_num)
+    t2 = bracket.resolve_slot(m["team2"], ctx.analyses, by_num)
+
+    def side(res):
+        if res["team"]:
+            return team_link(res["team"], "cal-tm")
+        cands = sorted(res.get("candidates") or [])
+        if 1 <= len(cands) <= 2:
+            return '<span class="cal-cands">' + "".join(team_link(c, "cal-tm cand") for c in cands) + '</span>'
+        if cands:
+            return f'<span class="cal-tbd">{len(cands)} possible</span>'
+        return f'<span class="cal-tbd">{E(res["label"])}</span>'
+
+    rd = m.get("round", "")
+    tag = m.get("group", "") if str(rd).startswith("Matchday") else _round_short(rd)
+    done = data.has_result(m)
+    _, time = _pt_parts(m)
+    if done:
+        g1, g2 = data.final_score(m)
+        mid = f'<span class="cal-score" data-live-mid>{g1}–{g2}</span>'
+    else:
+        mid = (f'<span class="cal-time" data-live-mid>{E(time)}<span class="cal-tz">PT</span></span>'
+               if time else '<span class="cal-time" data-live-mid>TBD</span>')
+    live = bool(t1["team"] and t2["team"]) and not done
+    live_attr = f' data-live data-date="{E(m.get("date",""))}"' if live else ""
+    return (
+        f'<div class="cal-m{" is-done" if done else ""}"{live_attr}>'
+        f'<div class="cal-m-head">{f"<span class=cal-tag>{E(tag)}</span>" if tag else ""}{mid}</div>'
+        f'<div class="cal-m-teams"><span class="cal-side">{side(t1)}</span>'
+        f'<span class="cal-v">v</span><span class="cal-side">{side(t2)}</span></div>'
+        f'</div>'
+    )
+
+
+def page_calendar(ctx):
+    by_num = bracket.index_matches(ctx.matches)
+    weeks = _calendar_weeks(ctx)
+    today = (datetime.now(timezone.utc) + timedelta(hours=PT_OFFSET_HOURS)).date()
+    dow_head = "".join(f'<div class="cal-dow-h">{d}</div>'
+                       for d in ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
+    week_html = []
+    for week in weeks:
+        cells = []
+        for d, ms in week:
+            cls = "cal-day" + (" today" if d == today else "") + (" empty" if not ms else "")
+            head = (f'<div class="cal-d-head"><span class="cal-dow">{d.strftime("%a")}</span>'
+                    f'<span class="cal-dom">{d.day}</span>'
+                    f'<span class="cal-mon">{d.strftime("%b")}</span></div>')
+            body = "".join(_cal_match(ctx, m, by_num) for m in ms)
+            cells.append(f'<div class="{cls}">{head}<div class="cal-d-body">{body}</div></div>')
+        week_html.append(f'<div class="cal-week">{"".join(cells)}</div>')
+
+    body = f"""
+<section class="cal-intro" aria-label="Match calendar">
+  <h1>Match calendar</h1>
+  <p class="muted">Every matchday in Pacific time — group stage to the Final. Confirmed
+  fixtures show their teams; knockout ties still being decided show the live candidate pool.</p>
+</section>
+<div class="cal-grid" aria-label="Tournament calendar">
+  <div class="cal-dow-row" aria-hidden="true">{dow_head}</div>
+  {"".join(week_html)}
+</div>
+"""
+    return shell("Match Calendar — World Cup 2026", "calendar.html", body, ctx,
+                 desc="Day-by-day fixture calendar for the 2026 World Cup in Pacific time — "
+                      "kickoffs, results, and the teams (or still-possible teams) for every match.",
+                 page="calendar.html")
+
+
 def page_bracket(ctx):
     rounds = [(rd, rows) for rd, rows in ctx.bracket if rd != "Match for third place"]
     n_round = len(rounds)
@@ -1215,6 +1319,7 @@ def render_site(payload):
         "index.html": page_home(ctx),
         "teams.html": page_teams(ctx),
         "bracket.html": page_bracket(ctx),
+        "calendar.html": page_calendar(ctx),
         "assets/style.css": STYLE,
         "assets/app.js": APP_JS,
         "assets/ball.svg": BALL_SVG,
@@ -1401,8 +1506,6 @@ APP_JS = r"""
       if(pl){pl.style.position='';pl.style.top='';pl.style.left='';pl.style.right='';}
       body(col).style.height='';
     });
-    if(window.innerWidth<720){tree.classList.add('bracket-narrow');return 0;}
-    tree.classList.remove('bracket-narrow');
 
     var leaves=cards(cols[0]);
     if(!leaves.length)return 0;
@@ -1440,10 +1543,6 @@ APP_JS = r"""
     var svg=tree.querySelector('.bz-layer');
     if(!svg)return;
     while(svg.firstChild)svg.removeChild(svg.firstChild);
-    var narrow=window.innerWidth<720;
-    tree.classList.toggle('bracket-narrow',narrow);
-    if(narrow){svg.setAttribute('width',0);svg.setAttribute('height',0);
-      tree.setAttribute('data-links',0);return;}
     var cols=[].slice.call(tree.querySelectorAll('.kr-col'));
     if(cols.length<2)return;
     var W=tree.scrollWidth,H=tree.scrollHeight;
@@ -1582,9 +1681,28 @@ APP_JS = r"""
     if(!wrap)return;
     wrap.addEventListener('scroll',updateEdges,{passive:true});
   }
+  // On a phone the columns scroll-snap one at a time; open on the CURRENT round
+  // (left-aligned), or the far-right column right-aligned. Once only — don't yank
+  // the user back on later redraws.
+  function landOnActiveColumn(){
+    if(window.innerWidth>=720)return;
+    var wrap=document.querySelector('[data-bracket] .bracket-wrap');
+    var tree=wrap&&wrap.querySelector('.kbracket');
+    if(!wrap||!tree)return;
+    var cols=tree.querySelectorAll('.kr-col');
+    var on=document.querySelector('.brn-item.on');
+    var idx=Math.min(on?parseInt(on.getAttribute('data-rd'),10)||0:0, cols.length-1);
+    var col=cols[idx]; if(!col)return;
+    var target=(idx===cols.length-1)
+      ? col.offsetLeft+col.offsetWidth-wrap.clientWidth     // last: right-aligned
+      : col.offsetLeft-14;                                  // else: left-aligned
+    wrap.scrollLeft=Math.max(0,target);
+    updateEdges();
+  }
 
   document.addEventListener('DOMContentLoaded',function(){
     apply();wireReveal();wireLive();wireBracketScroll();wireBracketObserver();drawBracket();
+    landOnActiveColumn();
   });
   window.addEventListener('load',drawBracket);
   window.addEventListener('resize',scheduleDraw);
@@ -2154,11 +2272,63 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .champ-name.pending{font-family:var(--mono);font-weight:700;font-size:.8rem;color:rgba(244,242,236,.7);text-transform:uppercase;letter-spacing:.06em}
 .champ-name.watched{color:var(--vermilion)}
 /* Narrow screens: a plain stacked list of columns, no connector geometry. */
-.bracket-narrow{display:block;min-width:0;min-height:0}
-.bracket-narrow .kr-col{min-width:0;margin-bottom:26px}
-.bracket-narrow .kr-body{height:auto!important}
-.bracket-narrow .km{position:static!important;top:auto!important;margin:8px 0}
-.bracket-narrow .champion-plinth{position:static!important;top:auto!important;margin-top:10px}
+/* Phones: keep the real tree (columns + connectors + watched highlights), but
+   make each column ~one screen wide with a peek of the next, and snap-scroll
+   column-by-column so a swipe always lands a column flush to the left edge (the
+   far-right column lands flush right). JS opens on the current round. */
+@media(max-width:720px){
+  .kbracket{min-width:0;gap:16px;padding:14px 14px 22px}
+  .kr-col{flex:0 0 82vw;min-width:0;scroll-snap-align:start}
+  .kr-col:last-child{scroll-snap-align:end}
+  .bracket-wrap{scroll-snap-type:x mandatory;scroll-padding-left:14px;
+    overscroll-behavior-x:contain}
+  .km{min-height:72px}
+}
+
+/* ============ CALENDAR ============================================ */
+.cal-intro h1{margin-bottom:.1em}
+.cal-grid{margin-top:6px}
+.cal-dow-row{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:8px}
+.cal-dow-h{font-family:var(--mono);font-size:.6rem;font-weight:800;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);text-align:center;padding-bottom:4px;border-bottom:2px solid var(--ink)}
+.cal-week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:8px}
+.cal-day{border:1.5px solid var(--line2);background:var(--paper);min-height:96px;padding:7px 8px;display:flex;flex-direction:column;gap:6px}
+.cal-day.empty{border-style:dashed;border-color:var(--line);background:transparent}
+.cal-day.today{border-color:var(--vermilion);border-width:2px;box-shadow:inset 0 3px 0 var(--vermilion)}
+.cal-d-head{display:flex;align-items:baseline;gap:5px;font-family:var(--mono)}
+.cal-dow{font-size:.58rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.cal-dom{font-size:1rem;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.cal-mon{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.cal-day.today .cal-dom{color:var(--vermilion)}
+.cal-d-body{display:flex;flex-direction:column;gap:6px}
+.cal-m{border-left:2px solid var(--line2);padding:2px 0 2px 7px}
+.cal-m.is-done{border-left-color:var(--ink)}
+.cal-m.is-live{border-left-color:var(--vermilion)}
+.cal-m-head{display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.cal-tag{font-family:var(--mono);font-size:.5rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--paper);background:var(--ink2);padding:0 4px}
+.cal-time{font-family:var(--mono);font-size:.62rem;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.cal-tz{color:var(--vermilion);margin-left:1px;font-size:.85em}
+.cal-score{font-family:var(--mono);font-size:.66rem;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.cal-m.is-live .cal-time,.cal-m.is-live .cal-score{color:var(--vermilion)}
+.cal-m-teams{display:flex;flex-direction:column;gap:1px;font-size:.72rem;min-width:0}
+.cal-side{display:flex;align-items:center;min-width:0}
+.cal-side .cal-tm{font-weight:700;gap:4px;padding:0;min-width:0}
+.cal-side .cal-tm .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-cands{display:inline-flex;flex-wrap:wrap;gap:2px 6px;min-width:0}
+.cal-cands .cand .nm{font-weight:600;color:var(--ink2)}
+.cal-tbd{font-family:var(--mono);font-size:.62rem;color:var(--muted)}
+.cal-v{font-size:.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:0 0 0 1px}
+.cal-m.is-done .cal-side{opacity:.82}
+/* Phones: drop the 7-up grid for a single-column agenda (skip empty days). */
+@media(max-width:760px){
+  .cal-dow-row{display:none}
+  .cal-week{grid-template-columns:1fr;gap:0;margin-bottom:0}
+  .cal-day{border-width:0 0 1.5px 0;min-height:0;border-bottom:1.5px solid var(--line)}
+  .cal-day.empty{display:none}
+  .cal-day.today{border:2px solid var(--vermilion)}
+  .cal-d-head{position:sticky}
+}
 
 /* footer ----------------------------------------------------------- */
 .site-foot{max-width:var(--maxw);margin:0 auto;padding:0 clamp(14px,4vw,28px) var(--s8);position:relative;z-index:1}
@@ -2233,6 +2403,9 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   .pz{flex:1 1 100%;border-right:0;border-bottom:1px solid var(--line)}
   .now-divider{flex:1 1 100%;flex-direction:row;align-self:auto;padding:8px 0;gap:10px}
   .now-lbl{writing-mode:horizontal-tb;transform:none}
+  /* 4-item nav: collapse the brand to just the mark so the tabs fit */
+  .wm-text{display:none}
+  .site-nav a{padding:0 9px;font-size:.6rem;letter-spacing:.03em}
 }
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
