@@ -1241,6 +1241,7 @@ def page_fantasy(ctx):
 </section>
 <div class="fb-wrap" aria-label="Knockout bracket">
   <div class="fb">
+    <svg class="fb-lines" aria-hidden="true"><path d=""/></svg>
     <div class="fb-side fb-left">{left}</div>
     {final}
     <div class="fb-side fb-right">{right}</div>
@@ -1990,7 +1991,32 @@ APP_JS = r"""
     document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!modal.hidden)closeModal();});
     var reset=document.getElementById('fb-reset');
     if(reset)reset.addEventListener('click',function(){picks={};render();});
-    render();
+    // right-angle connectors from each pair of feeders into the game they feed
+    function drawLines(){
+      var svg=root.querySelector('.fb-lines'),p=svg&&svg.querySelector('path');
+      if(!p)return;
+      var rb=root.getBoundingClientRect(); if(!rb.width)return;
+      svg.setAttribute('viewBox','0 0 '+rb.width+' '+rb.height);
+      function geom(el){var r=el.getBoundingClientRect();
+        return {y:(r.top+r.bottom)/2-rb.top,l:r.left-rb.left,r:r.right-rb.left,cx:(r.left+r.right)/2-rb.left};}
+      var d=[];
+      root.querySelectorAll('.fb-pick').forEach(function(bx){
+        var num=bx.getAttribute('data-m'),m=M[num],fe=[];
+        if(m.round==='R32')fe=[].slice.call(root.querySelectorAll('.fb-ent[data-r32="'+num+'"]'));
+        else (m.feeders||[]).forEach(function(f){var el=root.querySelector('.fb-pick[data-m="'+f+'"]');if(el)fe.push(el);});
+        var b=geom(bx);
+        fe.forEach(function(el){
+          var f=geom(el),right=b.cx>f.cx,x1=right?f.r:f.l,x2=right?b.l:b.r,mx=(x1+x2)/2;
+          d.push('M'+x1.toFixed(1)+' '+f.y.toFixed(1)+'H'+mx.toFixed(1)+'V'+b.y.toFixed(1)+'H'+x2.toFixed(1));
+        });
+      });
+      p.setAttribute('d',d.join(' '));
+    }
+    var lt=null;
+    window.addEventListener('resize',function(){clearTimeout(lt);lt=setTimeout(drawLines,100);});
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(drawLines);
+    render();drawLines();
+    requestAnimationFrame(drawLines);
   }
 
   document.addEventListener('DOMContentLoaded',function(){
@@ -2638,11 +2664,14 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .fb-reset{font-family:var(--mono);font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
   color:var(--ink);background:var(--paper);border:1.5px solid var(--ink);padding:6px 12px;cursor:pointer}
 .fb-reset:hover{background:var(--paper2)}
-.fb-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
-.fb{--fb-fl:clamp(13px,3.5vw,36px);
-  display:flex;align-items:stretch;justify-content:center;gap:clamp(2px,1.6vw,24px);padding:6px 0}
-.fb-side{display:flex;align-items:stretch;gap:clamp(2px,1.6vw,24px)}
-.fb-col{display:flex;flex-direction:column;justify-content:space-around;align-items:center;gap:5px}
+.fb-wrap{background:var(--paper2);border:1.5px solid var(--line2);
+  padding:clamp(10px,1.6vw,20px) clamp(6px,1.2vw,16px);overflow:hidden}
+.fb{--fb-fl:clamp(13px,3.4vw,38px);
+  position:relative;display:flex;align-items:stretch;width:100%;gap:0;padding:4px 0}
+.fb-lines{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible}
+.fb-lines path{fill:none;stroke:var(--line2);stroke-width:1.4}
+.fb-side{position:relative;z-index:1;display:flex;align-items:stretch;flex:5}
+.fb-col{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;justify-content:space-around;align-items:center;gap:5px}
 .fb-node{display:flex;flex-direction:column;align-items:center;justify-content:center}
 .fb-fl{font-size:var(--fb-fl);line-height:1;display:block}
 /* outer flag layer: the qualified teams that feed each R32 box */
