@@ -244,6 +244,25 @@ section:first-of-type{margin-top:var(--s4)}
 .pens{font-family:var(--mono);font-size:.66rem;color:var(--muted);margin-left:4px}
 .vs{font-family:var(--mono);color:var(--muted);font-weight:700;font-size:.84rem;white-space:nowrap;font-variant-numeric:tabular-nums}
 .rd{font-family:var(--mono);background:var(--ink);color:var(--paper);padding:1px 7px;font-size:.6rem;font-weight:700;letter-spacing:.08em}
+/* Kickoff stamp — day vs time carry distinct weight/colour (typographic contrast),
+   PT marked in the one accent. Sizes are em-relative so it scales to any context. */
+.ko{display:inline-flex;align-items:baseline;gap:.55ch;white-space:nowrap}
+.ko-day{font-weight:700;letter-spacing:.02em;color:var(--ink2)}
+.ko-time{font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:0}
+.ko-tz{font-size:.8em;font-weight:700;color:var(--vermilion);margin-left:.5px;letter-spacing:.02em}
+.m-meta .ko-day,.m-meta .ko-time{text-transform:none}
+.pz-tz{font-size:.5em;font-weight:800;color:var(--vermilion);vertical-align:super;margin-left:1px;letter-spacing:.02em}
+/* "Knocked out" marker in standings (compact tables) */
+.ko-out{display:inline-block;margin-left:7px;font-family:var(--mono);font-size:.5rem;font-weight:800;
+  letter-spacing:.1em;color:var(--muted);border:1px solid var(--line2);padding:0 4px;vertical-align:middle}
+.standings tr.gone .ko-out{border-color:var(--c-out)}
+/* Next-knockout callout on a team page */
+.next-ko{border:2px solid var(--ink);background:var(--paper2);margin-bottom:18px}
+.nk-head{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--ink);color:var(--paper);padding:7px 13px}
+.nk-k{font-family:var(--mono);font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.nk-rd{font-family:var(--mono);font-size:.6rem;font-weight:800;letter-spacing:.08em;color:var(--vermilion)}
+.next-ko .match{padding:13px 15px}
+.next-ko .match.is-upcoming{border-left:0}
 
 /* ============ TEAM LINKS / CHIPS ================================== */
 .team,.cand,.bteam{display:inline-flex;align-items:center;gap:6px;font-weight:700;padding:1px 4px;transition:background .12s,color .12s}
@@ -321,17 +340,31 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .your-teams-sec{position:relative}
 .tcard-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:12px}
 .yt-grid{grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:14px}
-.tcard{position:relative;display:flex;align-items:center;gap:11px;background:var(--paper);border:2px solid var(--ink);
-  padding:13px 15px;overflow:hidden;transition:transform .14s}
-.tcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent)}
+.tcard{position:relative;display:flex;flex-direction:column;background:var(--paper);border:2px solid var(--ink);
+  overflow:hidden;transition:transform .14s}
+.tcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent);z-index:1}
 .tcard:hover{transform:translateY(-2px)}
 .tcard.watched{box-shadow:4px 4px 0 var(--sig)}
 .tcard.watched::before{width:6px;background:var(--sig)}
+.tcard-top{display:flex;align-items:center;gap:11px;padding:13px 15px}
 .tcard-main{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
 .tcard-flag{font-size:1.7rem;line-height:1}
 .tcard-body{display:flex;flex-direction:column;min-width:0;gap:2px}
 .tcard-name{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase;letter-spacing:-.01em}
 .tcard-meta{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.05em}
+/* watchlist card: next match (primary) + most recent result (secondary) */
+.tcard-fix{display:flex;flex-direction:column;gap:7px;padding:0 15px 13px;border-top:1px solid var(--line);margin-top:-2px;padding-top:11px}
+.tc-fix{display:flex;align-items:baseline;gap:9px;min-width:0;font-size:.74rem}
+.tc-k{flex:0 0 30px;font-family:var(--mono);font-size:.54rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.tc-k.out{color:var(--vermilion)}
+.tc-line{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;min-width:0}
+.tc-vs{color:var(--ink2)}
+.tc-vs .tc-opp,.tc-vs .cand{font-weight:700;color:var(--ink)}
+.tc-rd{font-family:var(--mono);font-size:.52rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--paper);background:var(--ink2);padding:1px 5px}
+.tc-res{font-family:var(--mono);font-weight:800;font-variant-numeric:tabular-nums}
+.tc-res.w{color:var(--ink)}.tc-res.l{color:var(--muted)}.tc-res.d{color:var(--ink2)}
+.tc-cands{color:var(--muted);font-style:italic}
+.tc-next .tc-k{color:var(--vermilion)}
 .yt-empty{display:flex;align-items:center;gap:22px;padding:30px 30px;border:2px dashed var(--line2);background:var(--paper2)}
 .yt-star{font-size:3rem;color:var(--vermilion);line-height:1;flex:0 0 auto}
 .yt-empty-body{display:flex;flex-direction:column;gap:8px;max-width:560px}
@@ -447,58 +480,69 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .road-more{display:inline-grid;place-items:center;font-family:var(--mono);font-size:.64rem;font-weight:800;color:var(--muted);border:1px dashed var(--line2);padding:2px 7px}
 .road-step.has-watched .road-rd{background:var(--vermilion);color:var(--on-accent)}
 
-/* ============ BRACKET (contained rail, designed) ================= */
+/* ============ BRACKET (one fixed tree, right-angle connectors) ====
+   Every box is the SAME fixed size, every column the same height, and each
+   column's matches are distributed with `space-around` — which makes match i of
+   round R land exactly at the midpoint of matches 2i / 2i+1 of round R-1, in
+   pure CSS, no measurement. JS only paints the connector strokes and toggles the
+   edge fades. Horizontal overflow scrolls the inner wrap; the fades live on the
+   non-scrolling frame so they pin to the visible edges (never drift mid-column).*/
 .bracket-intro h1{margin-bottom:.1em}
-/* The single intentional horizontal region: scroll-snap rail, edge-fade, round
-   indicator. The wrap is exactly viewport-wide and clips its wide grid child so
-   the PAGE never overflows; movement inside is a designed, snapping rail. */
-.bracket-rail-nav{display:flex;gap:0;margin-bottom:14px;border:2px solid var(--ink);width:fit-content;max-width:100%;overflow:hidden}
+.bracket-rail{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.brn-label{font-family:var(--mono);font-weight:800;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.bracket-rail-nav{display:flex;gap:0;border:2px solid var(--ink);width:fit-content;max-width:100%;overflow:hidden}
 .brn-item{font-family:var(--mono);font-weight:800;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;
-  padding:8px 14px;color:var(--muted);border-right:1px solid var(--line);background:var(--paper);white-space:nowrap}
+  padding:7px 13px;color:var(--muted);border-right:1px solid var(--line);background:var(--paper);white-space:nowrap}
 .brn-item:last-child{border-right:0}
 .brn-item.on{background:var(--ink);color:var(--paper)}
-.bracket-wrap{position:relative;width:100%;max-width:100%;overflow-x:auto;overflow-y:visible;-webkit-overflow-scrolling:touch;
-  scroll-snap-type:x mandatory;border:2px solid var(--ink);background:var(--paper)}
-.bracket-wrap::before,.bracket-wrap::after{content:"";position:sticky;top:0;z-index:5;display:block;width:34px;height:0;pointer-events:none}
-.bz-edge-l,.bz-edge-r{position:absolute;top:0;bottom:0;width:38px;z-index:4;pointer-events:none}
+.bracket-frame{position:relative;border:2px solid var(--ink);background:var(--paper);overflow:hidden}
+.bracket-wrap{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch}
+.bz-edge-l,.bz-edge-r{position:absolute;top:0;bottom:0;width:40px;z-index:6;pointer-events:none;transition:opacity .2s}
 .bz-edge-l{left:0;background:linear-gradient(90deg,var(--paper),rgba(244,242,236,0))}
 .bz-edge-r{right:0;background:linear-gradient(270deg,var(--paper),rgba(244,242,236,0))}
-.kbracket{position:relative;display:grid;grid-template-columns:repeat(5,minmax(168px,1fr));gap:clamp(18px,3vw,44px);
-  min-width:980px;padding:14px 16px 22px}
+.bracket-frame.at-start .bz-edge-l{opacity:0}
+.bracket-frame.at-end .bz-edge-r{opacity:0}
+.kbracket{--km-h:84px;position:relative;display:flex;gap:clamp(22px,3.4vw,56px);
+  min-width:1120px;padding:16px 22px 24px;min-height:calc(var(--km-h) * 16 + 270px)}
 .bz-layer{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:visible}
-.bz-link{stroke:var(--line2);stroke-width:1.6}
+.bz-link{stroke:var(--line2);stroke-width:1.6;fill:none}
 .bz-link[data-watched]{stroke:var(--vermilion);stroke-width:2.4}
-.kr-col{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:space-around;min-width:0;scroll-snap-align:start}
-.kr-head{display:flex;align-items:center;gap:8px;font-size:.66rem;color:var(--ink);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
-.bracket-laid .kr-col{justify-content:flex-start}
-.bracket-laid .kr-head{position:sticky;top:0;background:var(--paper);z-index:2}
+.kr-col{position:relative;z-index:1;flex:1 1 0;min-width:196px;display:flex;flex-direction:column}
+.kr-head{flex:0 0 auto;display:flex;align-items:center;gap:8px;height:30px;font-size:.66rem;color:var(--ink);
+  margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+.kr-body{flex:1 1 auto;display:flex;flex-direction:column;justify-content:space-around}
 .kr-count{margin-left:auto;font-family:var(--mono);font-size:.6rem;color:var(--paper);background:var(--ink);padding:1px 8px}
-.km{position:relative;background:var(--paper);border:1.5px solid var(--ink);padding:9px 11px;margin:8px 0;transition:background .14s}
+.km{position:relative;flex:0 0 var(--km-h);height:var(--km-h);box-sizing:border-box;background:var(--paper);
+  border:1.5px solid var(--ink);padding:7px 10px;display:flex;flex-direction:column;justify-content:center;
+  gap:2px;overflow:hidden;transition:background .14s}
 .km:hover{background:var(--paper2)}
 .km.has-watched{box-shadow:inset 5px 0 0 var(--sig)}
 .km-live{border-color:var(--vermilion);border-width:2px}
-.km-no{display:flex;align-items:center;gap:6px;font-size:.58rem;color:var(--muted);margin-bottom:6px;letter-spacing:.06em}
-.km-m{font-weight:800;color:var(--ink)}
-.km-d{font-family:var(--mono);font-size:.58rem}
-.km-line{position:relative;height:1px;background:var(--line);margin:6px 0}
+.km-when{font-family:var(--mono);font-size:.55rem;line-height:1.1;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.km-when .ko-day{color:var(--ink2)}
+.km-line{position:relative;height:1px;background:var(--line);margin:3px 0}
 .km-wire{position:absolute;right:-1px;top:50%;transform:translateY(-50%);opacity:0}
 .km-live .km-wire{opacity:1}
 .km-live .km-wire .wire-pulse{width:7px;height:7px}
-.km-team{display:flex;align-items:center;gap:5px;min-width:0;font-size:.84rem;padding:1px 0}
+.km-team{display:flex;align-items:center;gap:5px;min-width:0;min-height:20px;font-size:.84rem}
 .km-team .bteam{min-width:0;font-weight:700}
 .km-team .bteam .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .km-team.is-candidate{color:var(--muted)}
 .km-team .bteam.prov{color:var(--ink2);font-weight:600}
 .bcode{font-family:var(--mono);font-size:.56rem;color:var(--muted);background:var(--paper2);border:1px solid var(--line);padding:0 5px;margin-left:3px;white-space:nowrap}
-.bcands{display:inline-flex;flex-direction:column;gap:3px;min-width:0}
-.bcands-list{display:flex;flex-wrap:wrap;gap:3px}
-.bcands-list .cand{font-size:.64rem;padding:1px 5px}
+.bcands{display:inline-flex;flex-wrap:wrap;align-items:center;gap:2px 8px;min-width:0;overflow:hidden}
+.bcands .bcand{display:inline-flex;align-items:center;gap:4px;font-size:.78rem;min-width:0}
+.bcands .bcand .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:78px}
+.bcands.many{gap:2px 6px}
+.bcands.many .bcand .nm{display:none}          /* >2 possible: a row of flags */
+.bcands.many .bcand .fl{font-size:1.05rem}
+.bmore{font-family:var(--mono);font-size:.56rem;font-weight:700;color:var(--muted)}
 .bslot{font-family:var(--mono);color:var(--muted);font-size:.74rem;font-weight:600}
 .km-g{margin-left:auto;font-family:var(--mono);font-weight:800;font-variant-numeric:tabular-nums;min-width:16px;text-align:right}
 .km-g.kloss{color:var(--muted)}.km-g.kwin{color:var(--ink)}
 .km-team .bteam.win,.km-team:has(.kwin) .bteam{color:var(--ink);font-weight:800}
-.kr-final{justify-content:center}
-.champion-plinth{position:relative;text-align:center;margin-top:18px;padding:22px 16px 20px;border:2px solid var(--ink);background:var(--ink);color:var(--paper)}
+.kr-final .kr-body{justify-content:center}
+.champion-plinth{position:absolute;left:0;right:0;bottom:0;text-align:center;padding:18px 14px 16px;border-top:2px solid var(--ink);background:var(--ink);color:var(--paper)}
 .champion-plinth::before{content:"";position:absolute;left:0;right:0;top:0;height:8px;background:var(--vermilion)}
 .cp-trophy{filter:invert(1)}
 .cp-lbl{font-size:.62rem;letter-spacing:.14em;color:var(--vermilion);margin:8px 0 8px}
@@ -506,8 +550,12 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .champ-name .fl{font-size:1.3em}
 .champ-name.pending{font-family:var(--mono);font-weight:700;font-size:.8rem;color:rgba(244,242,236,.7);text-transform:uppercase;letter-spacing:.06em}
 .champ-name.watched{color:var(--vermilion)}
-.kr-trophy{}
-.kr-final .kr-head .kr-trophy{}
+/* Narrow screens: a plain stacked list of columns, no connector geometry. */
+.bracket-narrow{display:block;min-width:0;min-height:0}
+.bracket-narrow .kr-col{min-width:0;margin-bottom:26px}
+.bracket-narrow .kr-body{display:block}
+.bracket-narrow .km{height:auto;min-height:var(--km-h);margin:8px 0}
+.bracket-narrow .champion-plinth{position:relative}
 
 /* footer ----------------------------------------------------------- */
 .site-foot{max-width:var(--maxw);margin:0 auto;padding:0 clamp(14px,4vw,28px) var(--s8);position:relative;z-index:1}

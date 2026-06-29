@@ -41,6 +41,7 @@
       btn.classList.toggle('on',on);btn.setAttribute('aria-pressed',on?'true':'false');
       var lab=btn.querySelector('.wl-txt');if(lab)lab.textContent=on?'Watching':'Watch';
     });
+    if(document.querySelector('.kbracket'))scheduleDraw();  // recolor watched strokes
   }
   document.addEventListener('click',function(e){
     var b=e.target.closest&&e.target.closest('[data-watch]');
@@ -63,100 +64,55 @@
     if(em)em.hidden=anyVisible;
   });
 
-  // ---- Bracket layout: position each later-round card at the vertical midpoint
-  // of its two feeding parents so the columns read as one true tournament tree
-  // (card i in round R sits between cards 2i and 2i+1 of round R-1). Then draw
-  // connector strokes from each card up to its parents. Both are progressive
-  // enhancement; the bracket is fully legible (a clean column stack) without JS.
-  function layoutBracket(){
-    var tree=document.querySelector('.kbracket');
-    if(!tree)return;
-    var cols=[].slice.call(tree.querySelectorAll('.kr-col'));
-    if(cols.length<2)return;
-    var W=window.innerWidth;
-    // Reset any prior positioning first (so resize recomputes from scratch).
-    cols.forEach(function(col){
-      [].slice.call(col.querySelectorAll('.km')).forEach(function(k){
-        k.style.position='';k.style.top='';k.style.left='';k.style.right='';k.style.width='';
-      });
-      col.style.position='';
-    });
-    if(W<720){tree.classList.remove('bracket-laid');return;} // narrow: simple stacked layout
-    tree.classList.add('bracket-laid');
-    function cards(col){return [].slice.call(col.querySelectorAll('.km'));}
-    // Establish baseline centers for round 0 in column-local coords.
-    var prevCenters=null;
-    cols.forEach(function(col,ci){
-      col.style.position='relative';
-      var ks=cards(col);
-      if(ci===0){
-        prevCenters=ks.map(function(k){return k.offsetTop+k.offsetHeight/2;});
-        return;
-      }
-      var headH=0;var head=col.querySelector('.kr-head');
-      if(head)headH=head.offsetTop; // cards start after the round header
-      var centers=[];
-      ks.forEach(function(k,i){
-        var pa=prevCenters[i*2],pb=prevCenters[i*2+1];
-        var mid;
-        if(pa!=null&&pb!=null)mid=(pa+pb)/2;
-        else if(pa!=null)mid=pa;
-        else mid=k.offsetTop+k.offsetHeight/2;
-        k.style.position='absolute';
-        k.style.left='0';k.style.right='0';
-        k.style.top=Math.round(mid-k.offsetHeight/2)+'px';
-        centers.push(mid);
-      });
-      // Final column also carries the champion plinth, anchored under its match.
-      var plinth=col.querySelector('.champion-plinth');
-      if(plinth&&ks.length&&centers.length){
-        var fk=ks[0];
-        var topPx=parseFloat(fk.style.top)||0;
-        plinth.style.position='absolute';
-        plinth.style.left='0';plinth.style.right='0';
-        plinth.style.top=Math.round(topPx+fk.offsetHeight+18)+'px';
-      }
-      prevCenters=centers;
-    });
+  // ---- Bracket connectors. Vertical centering of each round between the two
+  // games that feed it is done in pure CSS (equal-height columns + space-around),
+  // so card i in round R always lands at the midpoint of cards 2i / 2i+1 in round
+  // R-1 with no measurement. Here we only draw the right-angle strokes that join
+  // them, and toggle the edge fades. Progressive enhancement: with JS off the
+  // tree is still a clean, correctly-centered column stack (just no strokes).
+  function updateEdges(){
+    var frame=document.querySelector('[data-bracket]');
+    var wrap=frame&&frame.querySelector('.bracket-wrap');
+    if(!frame||!wrap)return;
+    var max=wrap.scrollWidth-wrap.clientWidth;
+    frame.classList.toggle('at-start',wrap.scrollLeft<=1);
+    frame.classList.toggle('at-end',max<=1||wrap.scrollLeft>=max-1);
   }
   function drawBracket(){
     var tree=document.querySelector('.kbracket');
     if(!tree)return;
-    layoutBracket();
+    updateEdges();
     var svg=tree.querySelector('.bz-layer');
     if(!svg)return;
-    // On narrow screens the tree is a simple stacked list — no connector layer.
-    if(window.innerWidth<720){while(svg.firstChild)svg.removeChild(svg.firstChild);
-      svg.setAttribute('width',0);svg.setAttribute('height',0);tree.setAttribute('data-links',0);return;}
-    var cols=tree.querySelectorAll('.kr-col');
-    if(cols.length<2)return;
-    var box=tree.getBoundingClientRect();
-    svg.setAttribute('width',tree.scrollWidth);
-    svg.setAttribute('height',tree.scrollHeight);
-    svg.setAttribute('viewBox','0 0 '+tree.scrollWidth+' '+tree.scrollHeight);
     while(svg.firstChild)svg.removeChild(svg.firstChild);
-    var cards=[];
-    cols.forEach(function(col,ci){cards[ci]=col.querySelectorAll('.km, .champion-plinth');});
-    function center(el){var r=el.getBoundingClientRect();
-      return {x:r.left-box.left+tree.scrollLeft,y:r.top-box.top+tree.scrollTop+r.height/2,
-              left:r.left-box.left+tree.scrollLeft,right:r.right-box.left+tree.scrollLeft,h:r.height};}
+    var narrow=window.innerWidth<720;
+    tree.classList.toggle('bracket-narrow',narrow);
+    if(narrow){svg.setAttribute('width',0);svg.setAttribute('height',0);
+      tree.setAttribute('data-links',0);return;}
+    var cols=[].slice.call(tree.querySelectorAll('.kr-col'));
+    if(cols.length<2)return;
+    var W=tree.scrollWidth,H=tree.scrollHeight;
+    svg.setAttribute('width',W);svg.setAttribute('height',H);
+    svg.setAttribute('viewBox','0 0 '+W+' '+H);
+    var kb=tree.getBoundingClientRect();
+    // km positions are scroll-invariant relative to .kbracket (both move with the
+    // scroller together), so no scrollLeft term is needed.
+    function box(el){var r=el.getBoundingClientRect();
+      return {left:r.left-kb.left,right:r.right-kb.left,y:r.top-kb.top+r.height/2};}
+    var cards=cols.map(function(col){return [].slice.call(col.querySelectorAll('.km'));});
     var made=0;
     for(var ci=1;ci<cards.length;ci++){
-      var prev=cards[ci-1],cur=cards[ci];
-      for(var i=0;i<cur.length;i++){
-        var child=center(cur[i]);
-        var p1=prev[i*2],p2=prev[i*2+1];
-        [p1,p2].forEach(function(p){
+      for(var i=0;i<cards[ci].length;i++){
+        var child=box(cards[ci][i]);
+        var watchedChild=cards[ci][i].classList.contains('has-watched');
+        [cards[ci-1][i*2],cards[ci-1][i*2+1]].forEach(function(p){
           if(!p)return;
-          var pc=center(p);
-          var x1=pc.right,y1=pc.y,x2=child.left,y2=child.y;
-          var mx=(x1+x2)/2;
-          var d='M'+x1+' '+y1+' C'+mx+' '+y1+' '+mx+' '+y2+' '+x2+' '+y2;
+          var pc=box(p);
+          var x1=pc.right,y1=pc.y,x2=child.left,y2=child.y,mx=Math.round((x1+x2)/2);
+          var d='M'+x1+' '+y1+' H'+mx+' V'+y2+' H'+x2;   // right angles only
           var path=document.createElementNS('http://www.w3.org/2000/svg','path');
-          path.setAttribute('d',d);path.setAttribute('class','bz-link');
-          path.setAttribute('fill','none');
-          if(p.classList.contains('has-watched')||cur[i].classList.contains('has-watched'))
-            path.setAttribute('data-watched','1');
+          path.setAttribute('d',d);path.setAttribute('class','bz-link');path.setAttribute('fill','none');
+          if(watchedChild||p.classList.contains('has-watched'))path.setAttribute('data-watched','1');
           svg.appendChild(path);made++;
         });
       }
@@ -252,8 +208,14 @@
     poll();
   }
 
+  function wireBracketScroll(){
+    var wrap=document.querySelector('[data-bracket] .bracket-wrap');
+    if(!wrap)return;
+    wrap.addEventListener('scroll',updateEdges,{passive:true});
+  }
+
   document.addEventListener('DOMContentLoaded',function(){
-    apply();wireReveal();wireLive();drawBracket();
+    apply();wireReveal();wireLive();wireBracketScroll();drawBracket();
   });
   window.addEventListener('load',drawBracket);
   window.addEventListener('resize',scheduleDraw);
