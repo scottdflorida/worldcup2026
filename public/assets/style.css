@@ -268,7 +268,7 @@ section:first-of-type{margin-top:var(--s4)}
 .team,.cand,.bteam{display:inline-flex;align-items:center;gap:6px;font-weight:700;padding:1px 4px;transition:background .12s,color .12s}
 .team .fl,.cand .fl,.bteam .fl{font-size:1.08em;line-height:1}
 .team:hover,.cand:hover,.bteam:hover{color:var(--ink);background:var(--paper3)}
-.team.watched,.cand.watched,.bteam.watched{box-shadow:inset 0 -2px 0 var(--sig);color:var(--ink);font-weight:800}
+.team.watched,.cand.watched,.bteam.watched,.cal-tm.watched{box-shadow:inset 0 -2px 0 var(--sig);color:var(--ink);font-weight:800}
 .cand{font-family:var(--mono);font-size:.72rem;background:var(--paper2);border:1px solid var(--line);padding:2px 7px}
 .cand.watched{background:var(--paper);box-shadow:inset 0 0 0 1.5px var(--sig)}
 .slot{display:inline-flex;flex-direction:column;gap:3px}
@@ -593,6 +593,10 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .cal-m{border-left:2px solid var(--line2);padding:2px 0 2px 7px}
 .cal-m.is-done{border-left-color:var(--ink)}
 .cal-m.is-live{border-left-color:var(--vermilion)}
+/* a pinned team plays in this match — light it up */
+.cal-m.has-watched{border-left:3px solid var(--sig);padding-left:6px;background:rgba(255,59,20,.06)}
+.cal-day.has-watched{box-shadow:inset 0 0 0 1.5px var(--sig)}
+.cal-day.today.has-watched{box-shadow:inset 0 3px 0 var(--vermilion),inset 0 0 0 1.5px var(--sig)}
 .cal-m-head{display:flex;align-items:center;gap:6px;margin-bottom:2px}
 .cal-tag{font-family:var(--mono);font-size:.5rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
   color:var(--paper);background:var(--ink2);padding:0 4px}

@@ -33,8 +33,11 @@
       var t=el.getAttribute('data-team');
       el.classList.toggle('watched', !!t && w.indexOf(t)>=0);
     });
-    document.querySelectorAll('.match,.km,.dist-row,.pz,.road-step,.tcard').forEach(function(el){
+    document.querySelectorAll('.match,.km,.dist-row,.pz,.road-step,.tcard,.cal-m').forEach(function(el){
       el.classList.toggle('has-watched',!!el.querySelector('.watched'));
+    });
+    document.querySelectorAll('.cal-day').forEach(function(el){
+      el.classList.toggle('has-watched',!!el.querySelector('.cal-m.has-watched'));
     });
     document.querySelectorAll('[data-watch]').forEach(function(btn){
       var on=w.indexOf(btn.getAttribute('data-watch'))>=0;
