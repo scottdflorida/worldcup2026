@@ -686,6 +686,10 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   .yt-empty{flex-direction:column;text-align:center;gap:14px;padding:26px 20px}
   .yt-empty-body{align-items:center}
   .nm,.tcard-name,.m-side .nm,.pz-team .nm{white-space:normal;overflow:visible;text-overflow:clip;word-break:break-word;min-width:0}
+  /* the thirds table carries the extra Race-to-8th column; on WebKit (iPhone
+     Chrome/Safari) that compresses the team cell until names break one letter
+     per line. Keep names whole and let .thirds-card scroll instead. */
+  .thirds .tm .nm{white-space:nowrap;word-break:normal;overflow:visible}
   .m-side{min-width:0}
   .m-row{gap:8px}
   .pz-grp{max-width:none}
