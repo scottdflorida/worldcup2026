@@ -168,6 +168,19 @@
   }
   var rzTimer;
   function scheduleDraw(){clearTimeout(rzTimer);rzTimer=setTimeout(drawBracket,60);}
+  // Box heights depend on how many candidate flags wrap, which depends on the
+  // emoji metrics — and those can land AFTER our first measure (font/emoji paint),
+  // leaving stale positions (overlaps). Re-lay out once fonts are ready and again
+  // whenever any box actually changes size. Layout only moves boxes (never resizes
+  // them), so observing size changes can't loop.
+  function wireBracketObserver(){
+    var tree=document.querySelector('.kbracket');
+    if(!tree)return;
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(scheduleDraw);
+    if(typeof ResizeObserver==='undefined')return;
+    var ro=new ResizeObserver(scheduleDraw);
+    tree.querySelectorAll('.km,.champion-plinth').forEach(function(el){ro.observe(el);});
+  }
 
 
   // Entrance motion: progressive enhancement only. Content is visible by default
@@ -262,7 +275,7 @@
   }
 
   document.addEventListener('DOMContentLoaded',function(){
-    apply();wireReveal();wireLive();wireBracketScroll();drawBracket();
+    apply();wireReveal();wireLive();wireBracketScroll();wireBracketObserver();drawBracket();
   });
   window.addEventListener('load',drawBracket);
   window.addEventListener('resize',scheduleDraw);
