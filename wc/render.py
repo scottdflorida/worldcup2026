@@ -213,14 +213,41 @@ def _pt_parts(m):
     return day, (f"{pt.hour:02d}:{pt.minute:02d}" if has_clock else None)
 
 
+def _utc_iso(m):
+    """The match's kickoff as a UTC instant ('2026-06-27T19:00:00Z'), or None when
+    the feed carries no usable clock+offset (date-only). This is the raw timestamp
+    the client uses to re-render times in the viewer's chosen time zone."""
+    d = m.get("date")
+    if not d:
+        return None
+    try:
+        base = datetime.strptime(d, "%Y-%m-%d")
+    except (ValueError, TypeError):
+        return None
+    t = m.get("time") or ""
+    if "UTC" not in t:
+        return None
+    try:
+        hh, mm = (int(x) for x in t.split()[0].split(":")[:2])
+    except (ValueError, IndexError):
+        return None
+    sign = -1 if "UTC-" in t else 1
+    off = sign * int("".join(ch for ch in t.split("UTC")[1] if ch.isdigit()) or 0)
+    utc = datetime(base.year, base.month, base.day, hh, mm,
+                   tzinfo=timezone.utc) - timedelta(hours=off)
+    return utc.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
 def kickoff_label(m, sep=" "):
     """Inline 'Sat Jun 27 12:00PT' with day/time spans for typographic contrast."""
     day, time = _pt_parts(m)
     if not day:
         return ""
-    if time:
-        return (f'<span class="ko"><span class="ko-day">{E(day)}</span>{sep}'
-                f'<span class="ko-time">{E(time)}<span class="ko-tz">{PT_LABEL}</span>'
+    utc = _utc_iso(m)
+    if time and utc:
+        return (f'<span class="ko" data-utc="{utc}" data-tfmt="daytime">'
+                f'<span class="ko-day">{E(day)}</span>{sep}'
+                f'<span class="ko-time">{E(time)}<span class="ko-tz tz">{PT_LABEL}</span>'
                 f'</span></span>')
     return f'<span class="ko"><span class="ko-day">{E(day)}</span></span>'
 
@@ -505,6 +532,8 @@ def pulse_band(ctx):
         venue_stadium, _ = venues.venue(m.get("ground", ""))
         pt_day, pt_time = _pt_parts(m)
         date = pt_day or ""
+        utc = _utc_iso(m)
+        date_attr = f' data-utc="{utc}" data-tfmt="day"' if (date and utc) else ""
         if kind == "done":
             g1, g2 = data.final_score(m)
             cls1 = " win" if g1 > g2 else ""
@@ -514,8 +543,9 @@ def pulse_band(ctx):
             foot = scorers(m) or f'<div class="pz-foot muted">{E(venue_stadium)}</div>'
             tag = '<span class="pz-tag done" data-live-tag>FT</span>'
         else:
-            ko = (f'{E(pt_time)}<span class="pz-tz">{PT_LABEL}</span>') if pt_time else "TBD"
-            mid = f'<div class="pz-ko" data-live-mid>{ko}</div>'
+            ko = (f'{E(pt_time)}<span class="pz-tz tz">{PT_LABEL}</span>') if pt_time else "TBD"
+            ko_attr = f' data-utc="{utc}" data-tfmt="time"' if (pt_time and utc) else ""
+            mid = f'<div class="pz-ko" data-live-mid{ko_attr}>{ko}</div>'
             foot = f'<div class="pz-foot muted">{E(venue_stadium)}</div>'
             tag = '<span class="pz-tag up" data-live-tag>Kicks off</span>'
         live = bool(t1["team"] and t2["team"])
@@ -524,7 +554,7 @@ def pulse_band(ctx):
             f'<div class="pz {"is-done" if kind=="done" else "is-upcoming"}" '
             f'data-ts="{_epoch(m)}"{live_attr}>'
             f'<div class="pz-head"><span class="pz-grp">{E(grp)}</span>{tag}'
-            f'<span class="pz-date muted">{E(date)}</span></div>'
+            f'<span class="pz-date muted"{date_attr}>{E(date)}</span></div>'
             f'<div class="pz-row"><div class="pz-team" data-team="{E(t1["team"] or "")}">'
             f'<span class="fl">{flag(t1["team"]) if t1["team"] else "·"}</span>'
             f'<span class="nm">{E(t1["team"] or t1["label"])}</span></div>'
@@ -717,6 +747,16 @@ def shell(title, active, body, ctx, desc=None, page="index.html"):
       <span class="foot-k">UPDATED</span>
       <span class="foot-v"><span class="upd-dot wire" aria-hidden="true"><span class="wire-pulse"></span></span>{E(updated) or "—"}</span>
     </div>
+  </div>
+  <div class="foot-tz">
+    <label class="foot-tz-k" for="tz-select">Times shown in</label>
+    <select id="tz-select" class="tz-select" aria-label="Display time zone">
+      <option value="America/New_York">Eastern · ET</option>
+      <option value="America/Chicago">Central · CT</option>
+      <option value="America/Denver">Mountain · MT</option>
+      <option value="America/Los_Angeles" selected>Pacific · PT</option>
+      <option value="America/Sao_Paulo">Brazil · BRT</option>
+    </select>
   </div>
 </footer>
 <script src="assets/app.js?v={ASSET_VER}"></script>
@@ -1051,14 +1091,16 @@ def _cal_match(ctx, m, by_num):
     tag = m.get("group", "") if str(rd).startswith("Matchday") else _round_short(rd)
     done = data.has_result(m)
     _, time = _pt_parts(m)
-    time_html = (f'<span class="cal-time">{E(time)}<span class="cal-tz">PT</span></span>'
+    utc = _utc_iso(m)
+    t_attr = f' data-utc="{utc}" data-tfmt="time"' if (time and utc) else ""
+    time_html = (f'<span class="cal-time"{t_attr}>{E(time)}<span class="cal-tz tz">PT</span></span>'
                  if time else '')
     if done:
         g1, g2 = data.final_score(m)
         # a calendar is about WHEN — keep the kickoff time, add the final score
         mid = f'{time_html}<span class="cal-score">{g1}–{g2}</span>'
     else:
-        mid = (f'<span class="cal-time" data-live-mid>{E(time)}<span class="cal-tz">PT</span></span>'
+        mid = (f'<span class="cal-time" data-live-mid{t_attr}>{E(time)}<span class="cal-tz tz">PT</span></span>'
                if time else '<span class="cal-time" data-live-mid>TBD</span>')
     live = bool(t1["team"] and t2["team"]) and not done
     live_attr = f' data-live data-date="{E(m.get("date",""))}"' if live else ""
@@ -1481,6 +1523,43 @@ APP_JS = r"""
       var lab=btn.querySelector('.wl-txt');if(lab)lab.textContent=on?'Watching':'Watch';
     });
     if(document.querySelector('.kbracket'))scheduleDraw();  // recolor watched strokes
+    applyTZ();  // re-render times (incl. the freshly cloned Your-teams cards)
+  }
+  // ---- time zone: re-render every [data-utc] time in the viewer's chosen zone ----
+  var TZS={'America/New_York':'ET','America/Chicago':'CT','America/Denver':'MT',
+           'America/Los_Angeles':'PT','America/Sao_Paulo':'BRT'};
+  var TZ_KEY='wc26.tz', TZ_DEFAULT='America/Los_Angeles';
+  function getTZ(){try{var v=localStorage.getItem(TZ_KEY);if(v&&TZS[v])return v;}catch(e){}return TZ_DEFAULT;}
+  function setTZ(v){try{localStorage.setItem(TZ_KEY,v);}catch(e){}}
+  function tzParts(utc,tz){
+    var d=new Date(utc);
+    if(isNaN(d))return null;
+    var day=new Intl.DateTimeFormat('en-US',{timeZone:tz,weekday:'short',month:'short',day:'numeric'}).format(d).replace(/,/g,'');
+    var time=new Intl.DateTimeFormat('en-US',{timeZone:tz,hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(d);
+    return {day:day,time:time};
+  }
+  function applyTZ(){
+    var tz=getTZ(), label=TZS[tz]||'';
+    document.querySelectorAll('[data-utc]').forEach(function(el){
+      if(el.classList.contains('live-mid'))return;          // currently showing a live score
+      var p=tzParts(el.getAttribute('data-utc'),tz); if(!p)return;
+      var fmt=el.getAttribute('data-tfmt');
+      if(fmt==='day'){el.textContent=p.day;return;}
+      if(fmt==='daytime'){
+        var dy=el.querySelector('.ko-day'); if(dy)dy.textContent=p.day;
+        var tm=el.querySelector('.ko-time');
+        if(tm){var c=(tm.querySelector('.tz')||{}).className||'ko-tz tz';
+          tm.innerHTML=p.time+'<span class="'+c+'">'+label+'</span>';}
+        return;
+      }
+      var cc=(el.querySelector('.tz')||{}).className||'tz';   // 'time'
+      el.innerHTML=p.time+'<span class="'+cc+'">'+label+'</span>';
+    });
+  }
+  function wireTZ(){
+    var sel=document.getElementById('tz-select'); if(!sel)return;
+    sel.value=getTZ();
+    sel.addEventListener('change',function(){setTZ(sel.value);applyTZ();});
   }
   document.addEventListener('click',function(e){
     var b=e.target.closest&&e.target.closest('[data-watch]');
@@ -1727,7 +1806,7 @@ APP_JS = r"""
   }
 
   document.addEventListener('DOMContentLoaded',function(){
-    apply();wireReveal();wireLive();wireBracketScroll();wireBracketObserver();drawBracket();
+    wireTZ();apply();wireReveal();wireLive();wireBracketScroll();wireBracketObserver();drawBracket();
     landOnActiveColumn();
   });
   window.addEventListener('load',drawBracket);
@@ -2379,6 +2458,15 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .foot-v{font-family:var(--mono);font-weight:800;font-size:.92rem;color:var(--ink);display:inline-flex;align-items:center;gap:8px}
 .upd-dot{display:inline-flex}.upd-dot .wire-pulse{width:8px;height:8px}
 .foot-fine{font-family:var(--mono);font-size:.64rem;line-height:1.7;color:var(--muted);max-width:780px;margin-top:16px;letter-spacing:.02em}
+.foot-tz{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:9px;margin-top:14px;font-family:var(--mono)}
+.foot-tz-k{font-size:.58rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.tz-select{font-family:var(--mono);font-size:.7rem;font-weight:700;color:var(--ink);background-color:var(--paper);
+  border:1.5px solid var(--ink);padding:5px 26px 5px 9px;cursor:pointer;letter-spacing:.02em;border-radius:0;
+  -webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%2313110d' stroke-width='1.6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 9px center}
+.tz-select:hover{background-color:var(--paper2)}
+.tz-select:focus-visible{outline:2px solid var(--vermilion);outline-offset:2px}
 
 /* cols (team page fixtures) ----------------------------------------- */
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:var(--s5)}
