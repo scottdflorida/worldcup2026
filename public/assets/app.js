@@ -324,9 +324,88 @@
     updateEdges();
   }
 
+  // ---- Fantasy bracket: a flags-only pick-the-winner knockout tree ----
+  function initFantasy(){
+    var root=document.querySelector('.fb'); if(!root||!window.FB_DATA)return;
+    var M=window.FB_DATA.matches, FLAGS=window.FB_DATA.flags, FKEY='wc26.fantasy';
+    var picks={}; try{var v=JSON.parse(localStorage.getItem(FKEY));if(v&&typeof v==='object')picks=v;}catch(e){}
+    function savePicks(){try{localStorage.setItem(FKEY,JSON.stringify(picks));}catch(e){}}
+    function occupant(num){var m=M[num];if(!m)return null;return m.winner||picks[num]||null;}
+    function feasible(num,depth){
+      depth=depth||0;var m=M[num];if(!m||depth>10)return [];
+      if(m.winner)return [m.winner];
+      if(m.round==='R32'){
+        var o=[];(m.entrants||[]).forEach(function(e){if(e.team)o.push(e.team);else (e.pool||[]).forEach(function(t){o.push(t);});});return o;
+      }
+      var seen={},res=[];
+      (m.feeders||[]).forEach(function(f){
+        var p=occupant(f),arr=p?[p]:feasible(f,depth+1);
+        arr.forEach(function(t){if(!seen[t]){seen[t]=1;res.push(t);}});
+      });
+      return res;
+    }
+    function prune(){  // drop any pick that's no longer reachable, parents first
+      ['R32','R16','QF','SF','F'].forEach(function(rd){
+        Object.keys(picks).forEach(function(num){
+          if(M[num]&&M[num].round===rd&&feasible(num).indexOf(picks[num])<0)delete picks[num];
+        });
+      });
+    }
+    function render(){
+      prune();
+      root.querySelectorAll('.fb-node').forEach(function(node){
+        var num=node.getAttribute('data-m'),m=M[num];
+        if(m.round==='R32'){
+          var w=occupant(num);
+          node.querySelectorAll('.fb-team').forEach(function(b){
+            var t=b.getAttribute('data-pick');
+            b.classList.toggle('fb-win',!!w&&t===w);
+            b.classList.toggle('fb-lose',!!w&&t!==w);
+          });
+        }else{
+          var occ=occupant(num),fl=node.querySelector('.fb-fl');
+          if(fl)fl.textContent=occ?(FLAGS[occ]||''):'';
+          node.classList.toggle('fb-filled',!!occ);
+          node.classList.toggle('fb-empty',!occ);
+        }
+      });
+      savePicks();
+    }
+    // R32: tap an entrant flag to set that match's winner
+    root.addEventListener('click',function(e){
+      var tb=e.target.closest('.fb-team[data-pick]');
+      if(tb){var n=tb.closest('.fb-node');if(n.classList.contains('fb-locked'))return;
+        picks[n.getAttribute('data-m')]=tb.getAttribute('data-pick');render();return;}
+      var pk=e.target.closest('.fb-pick');
+      if(pk)openModal(pk.getAttribute('data-m'));
+    });
+    // modal picker for later rounds
+    var modal=document.getElementById('fb-modal'),
+        grid=document.getElementById('fb-modal-grid'),cur=null;
+    function openModal(num){
+      cur=num;var opts=feasible(num);
+      if(!opts.length)return;
+      grid.innerHTML=opts.map(function(t){
+        return '<button class="fb-opt" type="button" data-team="'+t.replace(/"/g,'&quot;')+'">'+(FLAGS[t]||'')+'</button>';
+      }).join('');
+      modal.hidden=false;
+    }
+    function closeModal(){modal.hidden=true;cur=null;}
+    modal.addEventListener('click',function(e){
+      if(e.target.closest('[data-fb-close]')){closeModal();return;}
+      if(e.target.closest('[data-fb-clear]')){if(cur)delete picks[cur];closeModal();render();return;}
+      var o=e.target.closest('.fb-opt');
+      if(o&&cur){picks[cur]=o.getAttribute('data-team');closeModal();render();}
+    });
+    document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!modal.hidden)closeModal();});
+    var reset=document.getElementById('fb-reset');
+    if(reset)reset.addEventListener('click',function(){picks={};render();});
+    render();
+  }
+
   document.addEventListener('DOMContentLoaded',function(){
     wireTZ();apply();wireReveal();wireLive();wireBracketScroll();wireBracketObserver();drawBracket();
-    landOnActiveColumn();
+    landOnActiveColumn();initFantasy();
   });
   window.addEventListener('load',drawBracket);
   window.addEventListener('resize',scheduleDraw);
