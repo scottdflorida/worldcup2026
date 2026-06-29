@@ -516,8 +516,8 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
    JS then centres each one between its two feeders. min-height keeps the early,
    short boxes from looking cramped. */
 .km{position:relative;min-height:var(--km-h);box-sizing:border-box;background:var(--paper);
-  border:1.5px solid var(--ink);padding:7px 10px;margin:0 0 10px;display:flex;flex-direction:column;
-  justify-content:center;gap:3px;transition:background .14s}
+  border:1.5px solid var(--ink);padding:8px 10px;margin:0 0 10px;display:flex;flex-direction:column;
+  justify-content:flex-start;gap:4px;transition:background .14s}
 .km:hover{background:var(--paper2)}
 .km.has-watched{box-shadow:inset 5px 0 0 var(--sig)}
 .km-live{border-color:var(--vermilion);border-width:2px}
@@ -527,19 +527,24 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .km-wire{position:absolute;right:-1px;top:50%;transform:translateY(-50%);opacity:0}
 .km-live .km-wire{opacity:1}
 .km-live .km-wire .wire-pulse{width:7px;height:7px}
-.km-team{display:flex;align-items:center;gap:5px;min-width:0;min-height:20px;font-size:.84rem}
-.km-team.is-candidate{align-items:flex-start}
+.km-team{display:flex;align-items:center;gap:5px;min-width:0;min-height:24px;font-size:.84rem;line-height:1.4}
+.km-team.is-candidate{align-items:center}
 .km-team .bteam{min-width:0;font-weight:700}
 .km-team .bteam .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .km-team.is-candidate{color:var(--muted)}
 .km-team .bteam.prov{color:var(--ink2);font-weight:600}
 .bcode{font-family:var(--mono);font-size:.56rem;color:var(--muted);background:var(--paper2);border:1px solid var(--line);padding:0 5px;margin-left:3px;white-space:nowrap}
-.bcands{display:flex;flex-wrap:wrap;align-items:center;gap:4px 9px;min-width:0}
-.bcands .bcand{display:inline-flex;align-items:center;gap:4px;font-size:.78rem;min-width:0}
+/* Candidate flags. Colour-emoji glyphs (notably Apple Color Emoji on macOS)
+   render TALLER than their line box, so each row gets an explicit, roomy height
+   and the flag is flex-centred inside it — the row fully contains the glyph, the
+   box measures and grows correctly, and nothing spills over the date above. */
+.bcands{display:flex;flex-wrap:wrap;align-items:center;gap:5px 8px;min-width:0;line-height:1.4}
+.bcands .bcand{display:inline-flex;align-items:center;gap:4px;font-size:.78rem;min-width:0;min-height:24px;line-height:1.4}
 .bcands .bcand .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:78px}
-.bcands.many{gap:5px 9px}
+.bcands.many{gap:5px 8px}
+.bcands.many .bcand{height:26px;justify-content:center;line-height:1;font-size:1rem}
 .bcands.many .bcand .nm{display:none}          /* >2 possible: a row of flags */
-.bcands.many .bcand .fl{font-size:1.15rem}
+.bcands.many .bcand .fl{font-size:1.05em;line-height:1;display:block}
 .bslot{font-family:var(--mono);color:var(--muted);font-size:.74rem;font-weight:600}
 .km-g{margin-left:auto;font-family:var(--mono);font-weight:800;font-variant-numeric:tabular-nums;min-width:16px;text-align:right}
 .km-g.kloss{color:var(--muted)}.km-g.kwin{color:var(--ink)}
