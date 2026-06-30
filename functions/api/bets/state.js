@@ -57,19 +57,12 @@ export async function onRequestGet({ request, env }) {
       id: b.id, match_num: b.match_num, pick: b.pick, stake: round2(b.stake),
       odds: b.odds, status: b.status, payout: round2(b.payout),
     }));
-    // everyone's bets — but only on matches the viewer is allowed to see: any
-    // decided match, or an open match they've already bet on themselves. Open
-    // matches they haven't bet on just expose a hidden-bet COUNT (no picks).
-    const decided = new Set(matches.filter((m) => m.decided).map((m) => m.num));
-    const mine = new Set(mb.map((b) => b.match_num));
-    const revealed = new Set([...decided, ...mine]);
-    resp.poolBets = all.filter((r) => revealed.has(r.match_num)).map((r) => ({
+    // everyone's bets, open or decided — it's a friendly pool, more fun to see
+    // (the client's "show everyone's bets" toggle is the only gate)
+    resp.poolBets = all.map((r) => ({
       player: r.name, you: r.player_id === me.id, match_num: r.match_num,
       pick: r.pick, stake: round2(r.stake), status: r.status, payout: round2(r.payout),
     }));
-    const locked = {};
-    for (const r of all) if (!revealed.has(r.match_num)) locked[r.match_num] = (locked[r.match_num] || 0) + 1;
-    resp.lockedCounts = locked;
   }
   return json(resp);
 }
