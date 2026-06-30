@@ -242,3 +242,82 @@ def refresh_stale(ctx, *, force=False, path=BLURBS_PATH, client=None, log=print)
         log(f"[blurbs] regenerated {team}")
     save_cache(cache, path)
     return changed
+
+
+# --------------------------------------------------------------------------
+# Brazilian Portuguese (pt-BR) translation of the blurbs.
+#
+# The site ships a client-side EN/pt-BR toggle (see wc/i18n.py).  The blurbs are
+# the only long-form prose, so they get a parallel pt-BR cache, keyed by team and
+# stamped with the *English* blurb's fingerprint plus this prompt version.  The
+# post-match pipeline calls refresh_pt() right after refresh_stale(), so exactly
+# the blurbs that just changed get re-translated — and i18n.py only serves a pt
+# blurb when its fingerprint still matches the live English one (else it falls
+# back to English), so a translation can never go stale on the page.
+# --------------------------------------------------------------------------
+BLURBS_PT_PATH = "data/blurbs.pt.json"
+TRANSLATE_MODEL = "claude-sonnet-4-6"
+# Bump to force every blurb to re-translate even when the English text is unchanged.
+TRANSLATE_PROMPT_VERSION = "1"
+
+TRANSLATE_SYSTEM = (
+    "You are a professional Brazilian Portuguese (pt-BR) football translator for a "
+    "World Cup 2026 tracker. Translate the given English team write-up into natural, "
+    "broadcast-quality Brazilian Portuguese — the register of ge.globo / Globo Esporte. "
+    "Idiomatic, not word-for-word.\n\n"
+    "Rules:\n"
+    "- Use Brazilian football vocabulary: fase de grupos, mata-mata, oitavas de final, "
+    "quartas, semifinal, classificação, empate, goleada, virada, disputa de pênaltis, "
+    "saldo de gols, zagueiro, meio-campo, atacante, técnico, seleção.\n"
+    "- Translate national-team / country names to their standard pt-BR forms (Algeria→"
+    "Argélia, England→Inglaterra, Netherlands→Holanda, Ivory Coast→Costa do Marfim, "
+    "Czech Republic→República Tcheca, DR Congo→RD Congo, South Korea→Coreia do Sul, "
+    "USA→Estados Unidos, and so on). Group letters: 'Group J' → 'Grupo J'.\n"
+    "- Do NOT translate player names, coach names, stadium names, or city names — keep "
+    "them exactly as written.\n"
+    "- Keep all scorelines, numbers, percentages, and dates exactly as written.\n"
+    "- Preserve paragraph breaks and the em-dash (—) punctuation style.\n"
+    "- Output ONLY the translated prose — no preamble, no quotation marks, no notes."
+)
+
+
+def translate_blurb(client, text_en):
+    resp = client.messages.create(
+        model=TRANSLATE_MODEL,
+        max_tokens=500,
+        system=TRANSLATE_SYSTEM,
+        messages=[{"role": "user",
+                   "content": "Translate this to Brazilian Portuguese:\n\n" + text_en}],
+    )
+    return "".join(b.text for b in resp.content if b.type == "text").strip()
+
+
+def refresh_pt(*, force=False, en_path=BLURBS_PATH, pt_path=BLURBS_PT_PATH,
+               client=None, log=print):
+    """Translate into pt-BR every blurb whose English fingerprint moved (or whose
+    translation is missing / from an older translation prompt), leaving the rest
+    untouched. Returns the number translated. Run after refresh_stale()."""
+    en = load_cache(en_path)
+    pt = load_cache(pt_path)
+    if client is None:
+        import anthropic
+        client = anthropic.Anthropic()
+    changed = 0
+    for team, entry in en.items():
+        text_en = (entry.get("text") or "").strip()
+        if not text_en:
+            continue
+        fp = entry.get("fingerprint")
+        cur = pt.get(team)
+        if (not force and cur and cur.get("fingerprint") == fp
+                and cur.get("tv") == TRANSLATE_PROMPT_VERSION):
+            continue
+        pt[team] = {"text": translate_blurb(client, text_en),
+                    "fingerprint": fp, "tv": TRANSLATE_PROMPT_VERSION}
+        changed += 1
+        log(f"[blurbs.pt] translated {team}")
+    for team in list(pt):          # drop teams no longer present in the English cache
+        if team not in en:
+            del pt[team]
+    save_cache(pt, pt_path)
+    return changed

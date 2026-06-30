@@ -28,6 +28,19 @@ def _refresh_blurbs(payload):
         print(f"[update] blurb refresh failed ({e!r}); building with existing blurbs")
 
 
+def _refresh_blurbs_pt():
+    """Translate into pt-BR the blurbs that just changed (keyed by the English
+    fingerprint), for the site's EN/pt-BR toggle. Best-effort, same as the English
+    pass: needs an API key, and never blocks the build. Runs after _refresh_blurbs."""
+    if not (os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN")):
+        return
+    try:
+        n = blurbs.refresh_pt()
+        print(f"[update] {n} blurbs translated to pt-BR")
+    except Exception as e:  # noqa: BLE001 — never let translation break the deploy
+        print(f"[update] pt-BR blurb translation failed ({e!r}); keeping existing pt blurbs")
+
+
 def _refresh_odds():
     """Pull public match odds into data/odds.json — only on the daily 6am-PT run
     (REFRESH_ODDS=1), so the line moves once a day. Best-effort: no key or any
@@ -58,6 +71,7 @@ def _refresh_squads(payload):
 def main():
     payload = data.refresh()
     _refresh_blurbs(payload)        # update data/blurbs.json before rendering
+    _refresh_blurbs_pt()            # translate changed blurbs into data/blurbs.pt.json
     _refresh_odds()                 # update data/odds.json before rendering
     _refresh_squads(payload)        # update data/squads.json before rendering
     n = render.write_site(PUBLIC, payload)

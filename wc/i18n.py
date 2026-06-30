@@ -299,13 +299,33 @@ UI = {
 }
 
 
-def _blurbs_pt():
-    """pt-BR blurb translations keyed by the exact English blurb text."""
-    path = os.path.join(DATA_DIR, "blurbs.pt.json")
-    if not os.path.exists(path):
+def _load_json(name):
+    path = os.path.join(DATA_DIR, name)
+    try:
+        with open(path, encoding="utf-8") as fh:
+            return json.load(fh)
+    except (OSError, ValueError):
         return {}
-    with open(path, encoding="utf-8") as fh:
-        return json.load(fh)
+
+
+def _blurbs_pt():
+    """pt-BR blurb translations keyed by the exact English blurb text.
+
+    Joins the English cache (blurbs.json) with the pt cache (blurbs.pt.json) by
+    team, and only emits a translation whose fingerprint still matches the live
+    English blurb — so a blurb regenerated since its last translation falls back
+    to English instead of showing a stale pt version."""
+    en = _load_json("blurbs.json")
+    pt = _load_json("blurbs.pt.json")
+    out = {}
+    for team, e in en.items():
+        p = pt.get(team)
+        if not p or p.get("fingerprint") != e.get("fingerprint"):
+            continue
+        en_text, pt_text = e.get("text"), p.get("text")
+        if en_text and pt_text:
+            out[en_text] = pt_text
+    return out
 
 
 def _full_dict():
