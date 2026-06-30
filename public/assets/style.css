@@ -105,8 +105,9 @@ section:first-of-type{margin-top:var(--s4)}
 .wm-l1{font-size:.78rem;letter-spacing:.18em;color:var(--ink)}
 .wm-l2{font-size:.78rem;letter-spacing:.18em;color:var(--muted)}
 .wm-yr{color:var(--vermilion)}
-.site-nav{display:flex}
-.site-nav a{display:inline-flex;align-items:center;padding:0 clamp(12px,2.2vw,22px);
+.site-nav{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.site-nav::-webkit-scrollbar{display:none}
+.site-nav a{display:inline-flex;align-items:center;flex:0 0 auto;white-space:nowrap;padding:0 clamp(12px,2.2vw,22px);
   font-family:var(--mono);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:.78rem;
   color:var(--muted);border-left:1px solid var(--line);transition:color .12s,background .12s}
 .site-nav a:hover{color:var(--ink);background:var(--paper2)}
@@ -677,6 +678,47 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .fb-modal-clear{font-family:var(--mono);font-size:.58rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
   color:var(--muted);background:var(--paper);border:0;border-top:1.5px solid var(--line);padding:10px;cursor:pointer}
 .fb-modal-clear:hover{color:var(--ink);background:var(--paper2)}
+
+/* Betting pool ----------------------------------------------------- */
+.bet-intro{margin-bottom:6px}
+.bet-app{display:flex;flex-direction:column;gap:16px}
+.bet-bal{font-family:var(--mono);font-weight:800;font-size:2rem;color:var(--ink);display:flex;flex-direction:column;gap:2px}
+.bet-bal.out{color:var(--muted)}
+.bet-bal-k{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.bet-card{background:var(--paper2);border:1.5px solid var(--line2);padding:16px}
+.bet-card h2{margin:0 0 12px;font-size:1.05rem}
+.bet-join{max-width:430px}
+.bet-l{display:flex;flex-direction:column;gap:5px;font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.bet-l input{font-family:var(--mono);font-size:1rem;font-weight:700;color:var(--ink);background:var(--paper);border:1.5px solid var(--ink);padding:9px 11px;border-radius:0}
+.bet-btn{font-family:var(--mono);font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--on-accent);background:var(--vermilion);border:0;padding:11px 16px;cursor:pointer}
+.bet-btn:hover{filter:brightness(.94)}
+.bet-err{color:var(--vermilion);font-size:.82rem;margin:8px 0 0;font-weight:700}
+.bet-game{padding:10px 0;border-top:1px solid var(--line)}
+.bet-game:first-of-type{border-top:0}
+.bet-g-rd{font-family:var(--mono);font-size:.56rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.bet-g-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bet-pick{display:flex;align-items:center;gap:8px;padding:9px 11px;border:1.5px solid var(--line2);background:var(--paper);cursor:pointer;text-align:left}
+.bet-pick:hover{border-color:var(--ink)}
+.bet-fl{font-size:1.25rem;line-height:1}
+.bet-nm{font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bet-od{font-family:var(--mono);font-weight:800;color:var(--vermilion)}
+.bet-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:.92rem}
+.bet-row:first-of-type{border-top:0}
+.bet-r-pick{font-weight:700;flex:1;min-width:0}
+.bet-r-stk{font-family:var(--mono);color:var(--ink2);font-size:.82rem}
+.bet-st{font-family:var(--mono);font-size:.58rem;font-weight:800;letter-spacing:.06em;padding:2px 6px;white-space:nowrap}
+.bet-st.won{color:var(--on-accent);background:var(--vermilion)}
+.bet-st.lost{color:var(--muted);border:1px solid var(--line2)}
+.bet-st.open{color:var(--ink);border:1px solid var(--ink)}
+.bet-lb{list-style:none;margin:0;padding:0}
+.bet-lb li{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:.95rem}
+.bet-lb li:first-child{border-top:0}
+.bet-lb li.you .bet-lb-n{font-weight:800;color:var(--vermilion)}
+.bet-lb li.out{opacity:.5}
+.bet-lb-b{font-family:var(--mono);font-weight:800}
+.bet-form{padding:16px}
+.bet-form-team{font-size:1.05rem;margin-bottom:14px}
+.bet-payout{font-size:.82rem;margin:0 0 12px;min-height:1em}
 
 /* footer ----------------------------------------------------------- */
 .site-foot{max-width:var(--maxw);margin:0 auto;padding:0 clamp(14px,4vw,28px) var(--s8);position:relative;z-index:1}
