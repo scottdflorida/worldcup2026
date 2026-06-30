@@ -108,6 +108,7 @@ UI = {
     "Knocked out": "Eliminado",
     "Won": "Vitória",
     "Lost": "Derrota",
+    "Drew": "Empate",
     "Through": "Classificado",
     "Qualify": "Classifica",
     "qualify": "classifica",

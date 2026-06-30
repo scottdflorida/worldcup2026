@@ -463,11 +463,28 @@ def scorers(m):
     return f'<div class="m-scorers">{"".join(out)}</div>' if out else ""
 
 
-def wl_badge(is_win):
-    """Compact W/L result tag for a played match — solid vermilion W (advanced),
-    solid black L. The single, consistent winner/loser signal across the site."""
-    return (f'<span class="wl-tag {"w" if is_win else "l"}" '
-            f'title="{"Won" if is_win else "Lost"}">{"W" if is_win else "L"}</span>')
+_WL = {"w": ("W", "Won"), "l": ("L", "Lost"), "d": ("D", "Drew")}
+
+
+def wl_badge(code):
+    """Compact result tag for a played match — solid vermilion W (won), solid
+    black L (lost), black-outline D (drew). One consistent signal across the site.
+    `code` is 'w' | 'l' | 'd' (or '' / None for an unplayed side -> no badge)."""
+    if code not in _WL:
+        return ""
+    label, title = _WL[code]
+    return f'<span class="wl-tag {code}" title="{title}">{label}</span>'
+
+
+def side_result(done, team, winner):
+    """The result code for one side of a match: 'w'/'l'/'d', or '' if unplayed.
+    A played match with no winner is a draw (group stage); knockouts always
+    resolve to a winner via penalties."""
+    if not done:
+        return ""
+    if winner is None:
+        return "d"
+    return "w" if team == winner else "l"
 
 
 def match_line(m, ctx, compact=False):
@@ -476,8 +493,9 @@ def match_line(m, ctx, compact=False):
     t2 = bracket.resolve_slot(m["team2"], ctx.analyses, by_num)
     done = data.has_result(m)
     win = bracket.match_winner(m) if done else None
-    w1 = " won" if (done and t1["team"] and t1["team"] == win) else (" lost" if done else "")
-    w2 = " won" if (done and t2["team"] and t2["team"] == win) else (" lost" if done else "")
+    r1, r2 = side_result(done, t1["team"], win), side_result(done, t2["team"], win)
+    _wcls = {"w": " won", "l": " lost", "d": " drew"}
+    w1, w2 = _wcls.get(r1, ""), _wcls.get(r2, "")
     if done:
         g1, g2 = data.final_score(m)
         score = (f'<span class="score" data-live-mid><b class="sg{" win" if w1==" won" else ""}">{g1}</b>'
@@ -496,8 +514,7 @@ def match_line(m, ctx, compact=False):
     live = bool(t1["team"] and t2["team"])
     live_attr = f' data-live data-date="{E(m.get("date",""))}"' if live else ""
     live_tag = '<span class="live-tag" data-live-tag hidden></span>' if live else ""
-    b1 = wl_badge(w1 == " won") if done else ""
-    b2 = wl_badge(w2 == " won") if done else ""
+    b1, b2 = wl_badge(r1), wl_badge(r2)
     return (
         f'<div class="match{" is-done" if done else " is-upcoming"}"{live_attr}>'
         f'<div class="m-meta">{grp_lbl}{rd_lbl}{live_tag}<span class="muted">{meta}</span></div>'
@@ -550,8 +567,9 @@ def pulse_band(ctx):
         if kind == "done":
             g1, g2 = data.final_score(m)
             win = bracket.match_winner(m)
-            w1 = " won" if t1["team"] == win else " lost"
-            w2 = " won" if t2["team"] == win else " lost"
+            _wc = {"w": " won", "l": " lost", "d": " drew"}
+            w1 = _wc[side_result(True, t1["team"], win)]
+            w2 = _wc[side_result(True, t2["team"], win)]
             pens = (m.get("score") or {}).get("p")
             pen_html = f'<span class="pz-pens">{pens[0]}–{pens[1]} pens</span>' if pens else ""
             mid = (f'<div class="pz-mid"><div class="pz-score" data-live-mid>'
@@ -572,7 +590,7 @@ def pulse_band(ctx):
             t = res["team"]
             inner = (f'<span class="fl">{flag(t) if t else "·"}</span>'
                      f'<span class="nm">{E(t or res["label"])}</span>')
-            badge = wl_badge(wc == " won") if wc in (" won", " lost") else ""
+            badge = wl_badge({" won": "w", " lost": "l", " drew": "d"}.get(wc, ""))
             body = (badge + inner) if is_b else (inner + badge)
             if t:
                 return f'<a class="pz-team{wc}" data-team="{E(t)}" href="{util.page_for(t)}">{body}</a>'
@@ -1094,7 +1112,8 @@ def _km_cell(r, ci):
             any_candidate = True
         g = ""
         wl = ""
-        is_win = bool(r["played"] and r["winner"] and res["team"] == r["winner"])
+        code = side_result(r["played"], res["team"], r["winner"])
+        is_win = code == "w"
         if r["played"]:
             g1, g2 = data.final_score({"score": r["score"]})
             gv = g1 if key == "team1" else g2
@@ -1104,7 +1123,7 @@ def _km_cell(r, ci):
                 pv = pens[0] if key == "team1" else pens[1]
                 g += f'<span class="km-pen{" kwin" if is_win else ""}">({pv})</span>'
             # A plain W/L tag — the clearest at-a-glance read of who advanced.
-            wl = wl_badge(is_win)
+            wl = wl_badge(code)
         side_cls = "km-team" + ("" if resolved else " is-candidate") + \
                    ((" kw" if is_win else " kl") if r["played"] else "")
         sides.append(f'<div class="{side_cls}">{_bracket_side(res)}{g}{wl}</div>')
@@ -1176,8 +1195,9 @@ def _cal_match(ctx, m, by_num):
     time_html = (f'<span class="cal-time"{t_attr}>{E(time)}<span class="cal-tz tz">PT</span></span>'
                  if time else '')
     win = bracket.match_winner(m) if done else None
-    w1 = " won" if (done and t1["team"] == win) else (" lost" if done else "")
-    w2 = " won" if (done and t2["team"] == win) else (" lost" if done else "")
+    r1, r2 = side_result(done, t1["team"], win), side_result(done, t2["team"], win)
+    _wc = {"w": " won", "l": " lost", "d": " drew"}
+    w1, w2 = _wc.get(r1, ""), _wc.get(r2, "")
     if done:
         g1, g2 = data.final_score(m)
         pens = (m.get("score") or {}).get("p")
@@ -1192,10 +1212,8 @@ def _cal_match(ctx, m, by_num):
     return (
         f'<div class="cal-m{" is-done" if done else ""}"{live_attr}>'
         f'<div class="cal-m-head">{f"<span class=cal-tag>{E(tag)}</span>" if tag else ""}{mid}</div>'
-        f'<div class="cal-m-teams"><span class="cal-side{w1}">{side(t1)}'
-        f'{wl_badge(w1 == " won") if done else ""}</span>'
-        f'<span class="cal-v">v</span><span class="cal-side{w2}">{side(t2)}'
-        f'{wl_badge(w2 == " won") if done else ""}</span></div>'
+        f'<div class="cal-m-teams"><span class="cal-side{w1}">{side(t1)}{wl_badge(r1)}</span>'
+        f'<span class="cal-v">v</span><span class="cal-side{w2}">{side(t2)}{wl_badge(r2)}</span></div>'
         f'</div>'
     )
 
@@ -3075,6 +3093,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   font-family:var(--mono);font-weight:800;font-size:.58rem;line-height:1}
 .wl-tag.w{background:var(--vermilion);color:var(--on-accent)}
 .wl-tag.l{background:var(--ink);color:var(--paper)}
+.wl-tag.d{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
 /* badges that precede a name (right-hand side of a head-to-head row) gap right */
 .m-side.b .wl-tag:first-child,.pz-team .wl-tag:first-child{margin-left:0;margin-right:5px}
 .cal-side .wl-tag{width:13px;height:13px;font-size:.52rem;margin-left:4px}
