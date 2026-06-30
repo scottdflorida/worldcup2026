@@ -516,9 +516,10 @@
           var dis=myPick&&myPick!==team;
           return '<button class="bet-pick'+(dis?' disabled':'')+'" type="button"'+(dis?' disabled':'')+' data-bet="'+m.num+'" data-team="'+he(team)+'"><span class="bet-fl">'+(F[team]||'')+'</span><span class="bet-nm">'+he(team)+'</span><span class="bet-od">'+odds.toFixed(2)+'</span></button>';
         }
+        function detail(team){var u=(state.urls||{})[team];return u?'<a class="bet-detail" href="'+u+'">See team details</a>':'<span></span>';}
         return '<div class="bet-game"><div class="bet-g-rd">'+he(m.round)+when+'</div><div class="bet-g-row">'+
-          pickBtn(m.team1,m.odds1)+pickBtn(m.team2,m.odds2)+
-          '</div>'+block+'</div>';
+          pickBtn(m.team1,m.odds1)+pickBtn(m.team2,m.odds2)+'</div>'+
+          '<div class="bet-g-links">'+detail(m.team1)+detail(m.team2)+'</div>'+block+'</div>';
       }).join(''):'<p class="muted">No matches are open for betting right now — check back when the next ties are set.</p>';
       // closed + in-play matches this round — dimmed, not selectable, everyone's bets
       var RORD={R32:0,R16:1,QF:2,SF:3,F:4};
@@ -526,7 +527,10 @@
         var ko=(state.matches||[]).filter(function(m){return !m.open;});
         return ko.length?ko.reduce(function(a,b){return RORD[b.round]>=RORD[a.round]?b:a;}).round:null;})();
       function dside(team,odds,winner){
-        return '<div class="bet-dteam'+(winner?(team===winner?' win':' lose'):'')+'"><span class="bet-fl">'+(F[team]||'')+'</span><span class="bet-nm">'+he(team)+'</span><span class="bet-od">'+odds.toFixed(2)+'</span></div>';
+        var cls='bet-dteam'+(winner?(team===winner?' win':' lose'):'');
+        var inner='<span class="bet-fl">'+(F[team]||'')+'</span><span class="bet-nm">'+he(team)+'</span><span class="bet-od">'+odds.toFixed(2)+'</span>';
+        var u=(state.urls||{})[team];
+        return u?'<a class="'+cls+'" href="'+u+'">'+inner+'</a>':'<div class="'+cls+'">'+inner+'</div>';
       }
       function matchBlock(m){
         var bh=(state.poolBets||[]).filter(function(b){return b.match_num===m.num;});
@@ -550,10 +554,10 @@
       var leaveCtl=leaveArmed
         ? '<span class="bet-leave-c">Leave “'+he(mem.active)+'”? <button id="bet-leave-yes" class="bet-mini danger" type="button">Leave</button><button id="bet-leave-no" class="bet-mini" type="button">Cancel</button></span>'
         : '<button id="bet-leave" class="bet-mini" type="button">Leave</button>';
-      var balRow='<div class="bet-balrow"><div class="bet-bal'+(me.out?' out':'')+'">'+
-        '<div class="bet-bal-pair"><span class="bet-bal-fig"><b>'+money(me.total)+'</b><i>Portfolio</i></span>'+
-        '<span class="bet-bal-fig"><b>'+money(me.cash)+'</b><i>Cash</i></span></div>'+
-        '<span class="bet-bal-k">'+he(me.name)+' · '+he(state.pool.name)+(me.out?' · out':'')+'</span></div>'+leaveCtl+'</div>';
+      var balRow='<div class="bet-bal'+(me.out?' out':'')+'">'+
+        '<div class="bet-bal-top"><b class="bet-bal-big">'+money(me.total)+'</b><i class="bet-bal-lbl">Portfolio</i></div>'+
+        '<div class="bet-bal-break">Cash '+money(me.cash)+' · In play '+money(me.portfolio)+'</div>'+
+        '<div class="bet-bal-k">'+he(me.name)+' · '+he(state.pool.name)+(me.out?' · out':'')+' · '+leaveCtl+'</div></div>';
       app.innerHTML=poolsBar+balRow+toggle+lb+closedCard+inPlayCard+'<div class="bet-card"><h2>Open matches</h2>'+games+'</div>';
       [].forEach.call(app.querySelectorAll('.bet-pick'),function(btn){btn.onclick=function(){
         var num=+btn.getAttribute('data-bet');
