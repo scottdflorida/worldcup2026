@@ -18,7 +18,7 @@ export async function onRequestGet({ request, env }) {
     };
   });
 
-  const resp = { ok: true, configured: true, joined: false, flags: data.flags || {}, matches };
+  const resp = { ok: true, configured: true, joined: false, flags: data.flags || {}, urls: data.urls || {}, matches };
   const me = await getPlayer(env, request);
   if (me) {
     resp.joined = true;

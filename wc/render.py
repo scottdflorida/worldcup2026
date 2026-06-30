@@ -467,15 +467,16 @@ def match_line(m, ctx, compact=False):
     t1 = bracket.resolve_slot(m["team1"], ctx.analyses, by_num)
     t2 = bracket.resolve_slot(m["team2"], ctx.analyses, by_num)
     done = data.has_result(m)
+    win = bracket.match_winner(m) if done else None
+    w1 = " won" if (done and t1["team"] and t1["team"] == win) else (" lost" if done else "")
+    w2 = " won" if (done and t2["team"] and t2["team"] == win) else (" lost" if done else "")
     if done:
         g1, g2 = data.final_score(m)
-        cls1 = " win" if g1 > g2 else ""
-        cls2 = " win" if g2 > g1 else ""
-        score = (f'<span class="score" data-live-mid><b class="sg{cls1}">{g1}</b>'
-                 f'<span class="sdash">–</span><b class="sg{cls2}">{g2}</b></span>')
+        score = (f'<span class="score" data-live-mid><b class="sg{" win" if w1==" won" else ""}">{g1}</b>'
+                 f'<span class="sdash">–</span><b class="sg{" win" if w2==" won" else ""}">{g2}</b></span>')
         pens = (m.get("score") or {}).get("p")
         if pens:
-            score += f'<span class="pens">({pens[0]}–{pens[1]}p)</span>'
+            score += f'<span class="pens">({pens[0]}–{pens[1]} pens)</span>'
     else:
         score = '<span class="vs" data-live-mid>vs</span>'
     rd = m.get("round", "")
@@ -490,8 +491,8 @@ def match_line(m, ctx, compact=False):
     return (
         f'<div class="match{" is-done" if done else " is-upcoming"}"{live_attr}>'
         f'<div class="m-meta">{grp_lbl}{rd_lbl}{live_tag}<span class="muted">{meta}</span></div>'
-        f'<div class="m-row"><span class="m-side a">{slot_chip(t1)}</span>{score}'
-        f'<span class="m-side b">{slot_chip(t2)}</span></div>'
+        f'<div class="m-row"><span class="m-side a{w1}">{slot_chip(t1)}</span>{score}'
+        f'<span class="m-side b{w2}">{slot_chip(t2)}</span></div>'
         f'{scorers(m) if done else ""}</div>'
     )
 
@@ -535,12 +536,17 @@ def pulse_band(ctx):
         date = pt_day or ""
         utc = _utc_iso(m)
         date_attr = f' data-utc="{utc}" data-tfmt="day"' if (date and utc) else ""
+        w1 = w2 = ""
         if kind == "done":
             g1, g2 = data.final_score(m)
-            cls1 = " win" if g1 > g2 else ""
-            cls2 = " win" if g2 > g1 else ""
-            mid = (f'<div class="pz-score" data-live-mid><b class="sg{cls1}">{g1}</b>'
-                   f'<span class="sdash">–</span><b class="sg{cls2}">{g2}</b></div>')
+            win = bracket.match_winner(m)
+            w1 = " won" if t1["team"] == win else " lost"
+            w2 = " won" if t2["team"] == win else " lost"
+            pens = (m.get("score") or {}).get("p")
+            pen_html = f'<span class="pz-pens">{pens[0]}–{pens[1]} pens</span>' if pens else ""
+            mid = (f'<div class="pz-mid"><div class="pz-score" data-live-mid>'
+                   f'<b class="sg{" win" if w1==" won" else ""}">{g1}</b><span class="sdash">–</span>'
+                   f'<b class="sg{" win" if w2==" won" else ""}">{g2}</b></div>{pen_html}</div>')
             foot = scorers(m) or f'<div class="pz-foot muted">{E(venue_stadium)}</div>'
             tag = '<span class="pz-tag done" data-live-tag>FT</span>'
         else:
@@ -551,18 +557,20 @@ def pulse_band(ctx):
             tag = '<span class="pz-tag up" data-live-tag>Kicks off</span>'
         live = bool(t1["team"] and t2["team"])
         live_attr = f' data-live data-date="{E(m.get("date",""))}"' if live else ""
+
+        def pzteam(res, wc):
+            t = res["team"]
+            inner = (f'<span class="fl">{flag(t) if t else "·"}</span>'
+                     f'<span class="nm">{E(t or res["label"])}</span>')
+            if t:
+                return f'<a class="pz-team{wc}" data-team="{E(t)}" href="{util.page_for(t)}">{inner}</a>'
+            return f'<div class="pz-team{wc}" data-team="">{inner}</div>'
         return (
             f'<div class="pz {"is-done" if kind=="done" else "is-upcoming"}" '
             f'data-ts="{_epoch(m)}"{live_attr}>'
             f'<div class="pz-head"><span class="pz-grp">{E(grp)}</span>{tag}'
             f'<span class="pz-date muted"{date_attr}>{E(date)}</span></div>'
-            f'<div class="pz-row"><div class="pz-team" data-team="{E(t1["team"] or "")}">'
-            f'<span class="fl">{flag(t1["team"]) if t1["team"] else "·"}</span>'
-            f'<span class="nm">{E(t1["team"] or t1["label"])}</span></div>'
-            f'{mid}'
-            f'<div class="pz-team" data-team="{E(t2["team"] or "")}">'
-            f'<span class="fl">{flag(t2["team"]) if t2["team"] else "·"}</span>'
-            f'<span class="nm">{E(t2["team"] or t2["label"])}</span></div></div>'
+            f'<div class="pz-row">{pzteam(t1, w1)}{mid}{pzteam(t2, w2)}</div>'
             f'{foot}</div>'
         )
 
@@ -1029,6 +1037,10 @@ def _km_cell(r, ci):
             winner = r["winner"]
             is_win = bool(winner and res["team"] == winner)
             g = f'<span class="km-g{" kwin" if is_win else " kloss"}">{gv}</span>'
+            pens = (r["score"] or {}).get("p")
+            if pens:
+                pv = pens[0] if key == "team1" else pens[1]
+                g += f'<span class="km-pen{" kwin" if is_win else ""}">({pv})</span>'
         side_cls = "km-team" + ("" if resolved else " is-candidate")
         sides.append(f'<div class="{side_cls}">{_bracket_side(res)}{g}</div>')
     km_cls = "km" + (" km-live" if any_candidate and ci == 0 else "") + \
@@ -1098,10 +1110,15 @@ def _cal_match(ctx, m, by_num):
     t_attr = f' data-utc="{utc}" data-tfmt="time"' if (time and utc) else ""
     time_html = (f'<span class="cal-time"{t_attr}>{E(time)}<span class="cal-tz tz">PT</span></span>'
                  if time else '')
+    win = bracket.match_winner(m) if done else None
+    w1 = " won" if (done and t1["team"] == win) else (" lost" if done else "")
+    w2 = " won" if (done and t2["team"] == win) else (" lost" if done else "")
     if done:
         g1, g2 = data.final_score(m)
+        pens = (m.get("score") or {}).get("p")
+        pen_html = f'<span class="cal-pens">({pens[0]}–{pens[1]}p)</span>' if pens else ""
         # a calendar is about WHEN — keep the kickoff time, add the final score
-        mid = f'{time_html}<span class="cal-score">{g1}–{g2}</span>'
+        mid = f'{time_html}<span class="cal-score">{g1}–{g2}</span>{pen_html}'
     else:
         mid = (f'<span class="cal-time" data-live-mid{t_attr}>{E(time)}<span class="cal-tz tz">PT</span></span>'
                if time else '<span class="cal-time" data-live-mid>TBD</span>')
@@ -1110,8 +1127,8 @@ def _cal_match(ctx, m, by_num):
     return (
         f'<div class="cal-m{" is-done" if done else ""}"{live_attr}>'
         f'<div class="cal-m-head">{f"<span class=cal-tag>{E(tag)}</span>" if tag else ""}{mid}</div>'
-        f'<div class="cal-m-teams"><span class="cal-side">{side(t1)}</span>'
-        f'<span class="cal-v">v</span><span class="cal-side">{side(t2)}</span></div>'
+        f'<div class="cal-m-teams"><span class="cal-side{w1}">{side(t1)}</span>'
+        f'<span class="cal-v">v</span><span class="cal-side{w2}">{side(t2)}</span></div>'
         f'</div>'
     )
 
@@ -1350,7 +1367,7 @@ def betting_data(ctx):
         })
     teams = sorted({x for m in out for x in (m["team1"], m["team2"])})
     return {"matches": out, "flags": {t: flag(t) for t in teams},
-            "stage": ctx.stage()}
+            "urls": {t: util.page_for(t) for t in teams}, "stage": ctx.stage()}
 
 
 def page_betting(ctx):
@@ -2231,9 +2248,10 @@ APP_JS = r"""
           var dis=myPick&&myPick!==team;
           return '<button class="bet-pick'+(dis?' disabled':'')+'" type="button"'+(dis?' disabled':'')+' data-bet="'+m.num+'" data-team="'+he(team)+'"><span class="bet-fl">'+(F[team]||'')+'</span><span class="bet-nm">'+he(team)+'</span><span class="bet-od">'+odds.toFixed(2)+'</span></button>';
         }
+        function detail(team){var u=(state.urls||{})[team];return u?'<a class="bet-detail" href="'+u+'">See team details</a>':'<span></span>';}
         return '<div class="bet-game"><div class="bet-g-rd">'+he(m.round)+when+'</div><div class="bet-g-row">'+
-          pickBtn(m.team1,m.odds1)+pickBtn(m.team2,m.odds2)+
-          '</div>'+block+'</div>';
+          pickBtn(m.team1,m.odds1)+pickBtn(m.team2,m.odds2)+'</div>'+
+          '<div class="bet-g-links">'+detail(m.team1)+detail(m.team2)+'</div>'+block+'</div>';
       }).join(''):'<p class="muted">No matches are open for betting right now — check back when the next ties are set.</p>';
       // closed + in-play matches this round — dimmed, not selectable, everyone's bets
       var RORD={R32:0,R16:1,QF:2,SF:3,F:4};
@@ -2241,7 +2259,10 @@ APP_JS = r"""
         var ko=(state.matches||[]).filter(function(m){return !m.open;});
         return ko.length?ko.reduce(function(a,b){return RORD[b.round]>=RORD[a.round]?b:a;}).round:null;})();
       function dside(team,odds,winner){
-        return '<div class="bet-dteam'+(winner?(team===winner?' win':' lose'):'')+'"><span class="bet-fl">'+(F[team]||'')+'</span><span class="bet-nm">'+he(team)+'</span><span class="bet-od">'+odds.toFixed(2)+'</span></div>';
+        var cls='bet-dteam'+(winner?(team===winner?' win':' lose'):'');
+        var inner='<span class="bet-fl">'+(F[team]||'')+'</span><span class="bet-nm">'+he(team)+'</span><span class="bet-od">'+odds.toFixed(2)+'</span>';
+        var u=(state.urls||{})[team];
+        return u?'<a class="'+cls+'" href="'+u+'">'+inner+'</a>':'<div class="'+cls+'">'+inner+'</div>';
       }
       function matchBlock(m){
         var bh=(state.poolBets||[]).filter(function(b){return b.match_num===m.num;});
@@ -2265,10 +2286,10 @@ APP_JS = r"""
       var leaveCtl=leaveArmed
         ? '<span class="bet-leave-c">Leave “'+he(mem.active)+'”? <button id="bet-leave-yes" class="bet-mini danger" type="button">Leave</button><button id="bet-leave-no" class="bet-mini" type="button">Cancel</button></span>'
         : '<button id="bet-leave" class="bet-mini" type="button">Leave</button>';
-      var balRow='<div class="bet-balrow"><div class="bet-bal'+(me.out?' out':'')+'">'+
-        '<div class="bet-bal-pair"><span class="bet-bal-fig"><b>'+money(me.total)+'</b><i>Portfolio</i></span>'+
-        '<span class="bet-bal-fig"><b>'+money(me.cash)+'</b><i>Cash</i></span></div>'+
-        '<span class="bet-bal-k">'+he(me.name)+' · '+he(state.pool.name)+(me.out?' · out':'')+'</span></div>'+leaveCtl+'</div>';
+      var balRow='<div class="bet-bal'+(me.out?' out':'')+'">'+
+        '<div class="bet-bal-top"><b class="bet-bal-big">'+money(me.total)+'</b><i class="bet-bal-lbl">Portfolio</i></div>'+
+        '<div class="bet-bal-break">Cash '+money(me.cash)+' · In play '+money(me.portfolio)+'</div>'+
+        '<div class="bet-bal-k">'+he(me.name)+' · '+he(state.pool.name)+(me.out?' · out':'')+' · '+leaveCtl+'</div></div>';
       app.innerHTML=poolsBar+balRow+toggle+lb+closedCard+inPlayCard+'<div class="bet-card"><h2>Open matches</h2>'+games+'</div>';
       [].forEach.call(app.querySelectorAll('.bet-pick'),function(btn){btn.onclick=function(){
         var num=+btn.getAttribute('data-bet');
@@ -2613,6 +2634,19 @@ section:first-of-type{margin-top:var(--s4)}
 .score{display:inline-flex;align-items:center;gap:3px;font-family:var(--mono);font-weight:800;font-size:1.2rem;white-space:nowrap;font-variant-numeric:tabular-nums}
 .score .sg{color:var(--muted)}.score .sg.win{color:var(--ink)}.score .sdash{color:var(--muted);margin:0 2px}
 .pens{font-family:var(--mono);font-size:.66rem;color:var(--muted);margin-left:4px}
+/* completed-match winner emphasis + shootout tallies */
+.m-side.won .nm{font-weight:800;color:var(--ink)}
+.m-side.lost{opacity:.5}
+.pz-team.won .nm{font-weight:800;color:var(--ink)}
+.pz-team.lost{opacity:.5}
+.pz-mid{display:flex;flex-direction:column;align-items:center;gap:1px}
+.pz-pens{font-family:var(--mono);font-size:.56rem;color:var(--muted);white-space:nowrap}
+.cal-pens{font-family:var(--mono);font-size:.56rem;color:var(--muted);margin-left:3px}
+.cal-m.is-done .cal-side.won{opacity:1}
+.cal-m.is-done .cal-side.lost{opacity:.45}
+.cal-side.won .cal-tm .nm{font-weight:800}
+.km-pen{font-family:var(--mono);font-size:.66em;color:var(--muted);margin-left:1px}
+.km-pen.kwin{color:var(--ink);font-weight:800}
 .vs{font-family:var(--mono);color:var(--muted);font-weight:700;font-size:.84rem;white-space:nowrap;font-variant-numeric:tabular-nums}
 .rd{font-family:var(--mono);background:var(--ink);color:var(--paper);padding:1px 7px;font-size:.6rem;font-weight:700;letter-spacing:.08em}
 /* Kickoff stamp — the day reads muted, the time in ink, the zone in the one
@@ -3067,14 +3101,13 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 /* Betting pool ----------------------------------------------------- */
 .bet-intro{margin-bottom:6px}
 .bet-app{display:flex;flex-direction:column;gap:16px}
-.bet-bal{display:flex;flex-direction:column;gap:5px}
-.bet-bal-pair{display:flex;gap:24px;align-items:flex-end}
-.bet-bal-fig{display:flex;flex-direction:column;gap:1px}
-.bet-bal-fig b{font-family:var(--mono);font-weight:800;font-size:1.95rem;line-height:1;color:var(--ink)}
-.bet-bal-fig+.bet-bal-fig b{font-size:1.45rem;color:var(--ink2)}   /* cash = secondary figure */
-.bet-bal-fig i{font-family:var(--mono);font-size:.55rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-style:normal}
-.bet-bal.out .bet-bal-fig b{color:var(--muted)}
-.bet-bal-k{font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.bet-bal{display:flex;flex-direction:column;gap:3px}
+.bet-bal-top{display:flex;align-items:baseline;gap:8px}
+.bet-bal-big{font-family:var(--mono);font-weight:800;font-size:1.95rem;line-height:1;color:var(--ink)}
+.bet-bal-lbl{font-family:var(--mono);font-size:.55rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-style:normal}
+.bet-bal-break{font-family:var(--mono);font-size:.78rem;color:var(--ink2)}
+.bet-bal.out .bet-bal-big{color:var(--muted)}
+.bet-bal-k{font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;flex-wrap:wrap;gap:6px}
 .bet-toggle{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.64rem;font-weight:700;
   letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);cursor:pointer;user-select:none}
 .bet-toggle input{width:15px;height:15px;accent-color:var(--vermilion);cursor:pointer}
@@ -3112,6 +3145,9 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-pick.disabled{opacity:.38;cursor:not-allowed;pointer-events:none}
 .bet-pick.on{border-color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
 .bet-edit-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.bet-g-links{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:5px}
+.bet-detail{font-family:var(--mono);font-size:.56rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);text-align:center}
+.bet-detail:hover{color:var(--vermilion)}
 .bet-fl{font-size:1.25rem;line-height:1}
 .bet-nm{font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bet-od{font-family:var(--mono);font-weight:800;color:var(--vermilion)}

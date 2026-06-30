@@ -10,3 +10,6 @@ __pycache__/
 .playwright-mcp/
 .forge/
 wc-*.png
+
+# wrangler local dev
+.wrangler/
