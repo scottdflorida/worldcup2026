@@ -667,10 +667,13 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .fb-modal-head{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:2px solid var(--ink)}
 .fb-modal-k{font-family:var(--mono);font-size:.64rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
 .fb-modal-x{border:0;background:none;font-size:1rem;cursor:pointer;color:var(--ink);line-height:1;padding:2px 4px}
-.fb-modal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:6px;padding:14px;overflow-y:auto;justify-items:center}
-.fb-opt{display:flex;align-items:center;justify-content:center;font-size:32px;line-height:0;padding:6px;
-  border:0;background:none;cursor:pointer;transition:transform .1s}
-.fb-opt:hover{transform:scale(1.14)}
+.fb-modal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px 6px;padding:14px;overflow-y:auto;justify-items:center}
+.fb-opt{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 4px;
+  border:0;background:none;cursor:pointer;transition:transform .1s;width:100%}
+.fb-opt:hover{transform:scale(1.06)}
+.fb-opt-fl{font-size:30px;line-height:1}
+.fb-opt-nm{font-size:.58rem;font-weight:700;color:var(--ink);text-align:center;line-height:1.15;
+  letter-spacing:.01em;hyphens:auto}
 .fb-modal-clear{font-family:var(--mono);font-size:.58rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
   color:var(--muted);background:var(--paper);border:0;border-top:1.5px solid var(--line);padding:10px;cursor:pointer}
 .fb-modal-clear:hover{color:var(--ink);background:var(--paper2)}

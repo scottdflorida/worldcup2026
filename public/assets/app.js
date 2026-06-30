@@ -374,11 +374,14 @@
     // modal picker for later rounds
     var modal=document.getElementById('fb-modal'),
         grid=document.getElementById('fb-modal-grid'),cur=null;
+    function he(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
     function openModal(num){
       cur=num;var opts=feasible(num);
       if(!opts.length)return;
       grid.innerHTML=opts.map(function(t){
-        return '<button class="fb-opt" type="button" data-team="'+t.replace(/"/g,'&quot;')+'">'+(FLAGS[t]||'')+'</button>';
+        return '<button class="fb-opt" type="button" data-team="'+he(t).replace(/"/g,'&quot;')+'">'+
+          '<span class="fb-opt-fl">'+(FLAGS[t]||'')+'</span>'+
+          '<span class="fb-opt-nm">'+he(t)+'</span></button>';
       }).join('');
       modal.hidden=false;
     }
