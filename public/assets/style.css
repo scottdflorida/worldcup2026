@@ -113,6 +113,16 @@ section:first-of-type{margin-top:var(--s4)}
 .site-nav a:hover{color:var(--ink);background:var(--paper2)}
 .site-nav a.on{color:var(--paper);background:var(--ink)}
 .site-nav a.on:hover{background:var(--ink)}
+/* Right-side header cluster: nav (scrolls) + language toggle (fixed) ---- */
+.head-right{display:flex;align-items:stretch;min-width:0}
+.lang-toggle{display:inline-flex;align-items:stretch;flex:0 0 auto;border-left:2px solid var(--ink)}
+.lt-btn{appearance:none;-webkit-appearance:none;border:0;background:var(--paper);color:var(--muted);
+  font-family:var(--mono);font-weight:800;font-size:.74rem;letter-spacing:.08em;
+  padding:0 clamp(9px,1.6vw,13px);cursor:pointer;line-height:1;transition:color .12s,background .12s}
+.lt-btn+.lt-btn{border-left:1px solid var(--line)}
+.lt-btn:hover{color:var(--ink);background:var(--paper2)}
+.lt-btn.on{color:var(--paper);background:var(--ink)}
+.lt-btn.on:hover{background:var(--ink)}
 
 /* Live Wire signal (now-divider dot, bracket edge, footer dot) ------ */
 .wire{position:relative}

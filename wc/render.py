@@ -17,7 +17,7 @@ import json
 import os
 from datetime import datetime, timedelta, timezone
 
-from . import blurbs, bracket, config, data, squads, standings, util, venues
+from . import blurbs, bracket, config, data, i18n, squads, standings, util, venues
 from . import odds as odds_api
 from .flags import flag
 from .util import fmt_date, fmt_date_short  # noqa: F401
@@ -739,8 +739,11 @@ def shell(title, active, body, ctx, desc=None, page="index.html"):
 <header class="site-head">
   <div class="brand"><a href="index.html" aria-label="World Cup 2026 tracker — home">
     <span class="wm-mark" aria-hidden="true"><svg viewBox="0 0 36 36" width="30" height="30"><rect width="36" height="36" rx="3" fill="var(--ink)"/><text x="18" y="25" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-weight="800" font-size="17" letter-spacing="-1" fill="var(--accent)">26</text></svg></span>
-    <span class="wm-text"><span class="wm-l1">WORLD&nbsp;CUP</span><span class="wm-l2">TRACKER&nbsp;<span class="wm-yr">/26</span></span></span></a></div>
-  <nav class="site-nav" aria-label="Primary">{nav}</nav>
+    <span class="wm-text" data-no-i18n><span class="wm-l1">WORLD&nbsp;CUP</span><span class="wm-l2">TRACKER&nbsp;<span class="wm-yr">/26</span></span></span></a></div>
+  <div class="head-right">
+    <nav class="site-nav" aria-label="Primary">{nav}</nav>
+    {i18n.TOGGLE_HTML}
+  </div>
 </header>
 <main id="main">
 {body}
@@ -749,7 +752,7 @@ def shell(title, active, body, ctx, desc=None, page="index.html"):
   <div class="foot-rule" aria-hidden="true"></div>
   <div class="foot-grid">
     <div class="foot-cell foot-brand">
-      <span class="foot-wm">WORLD&nbsp;CUP&nbsp;<span class="foot-yr">/26</span></span>
+      <span class="foot-wm" data-no-i18n>WORLD&nbsp;CUP&nbsp;<span class="foot-yr">/26</span></span>
       <span class="foot-sub">Live match-center · {E(config.TOURNAMENT["hosts"])}</span>
     </div>
     <div class="foot-cell foot-stat">
@@ -772,6 +775,7 @@ def shell(title, active, body, ctx, desc=None, page="index.html"):
   </div>
 </footer>
 <script src="assets/app.js?v={ASSET_VER}"></script>
+<script src="assets/i18n.js?v={ASSET_VER}"></script>
 </body>
 </html>"""
 
@@ -1677,6 +1681,7 @@ def render_site(payload):
         "calendar.html": page_calendar(ctx),
         "assets/style.css": STYLE,
         "assets/app.js": APP_JS,
+        "assets/i18n.js": i18n.build_js(),
         "assets/ball.svg": BALL_SVG,
         "assets/trophy.svg": TROPHY_SVG,
         "assets/favicon.svg": FAVICON_SVG,
@@ -2540,6 +2545,16 @@ section:first-of-type{margin-top:var(--s4)}
 .site-nav a:hover{color:var(--ink);background:var(--paper2)}
 .site-nav a.on{color:var(--paper);background:var(--ink)}
 .site-nav a.on:hover{background:var(--ink)}
+/* Right-side header cluster: nav (scrolls) + language toggle (fixed) ---- */
+.head-right{display:flex;align-items:stretch;min-width:0}
+.lang-toggle{display:inline-flex;align-items:stretch;flex:0 0 auto;border-left:2px solid var(--ink)}
+.lt-btn{appearance:none;-webkit-appearance:none;border:0;background:var(--paper);color:var(--muted);
+  font-family:var(--mono);font-weight:800;font-size:.74rem;letter-spacing:.08em;
+  padding:0 clamp(9px,1.6vw,13px);cursor:pointer;line-height:1;transition:color .12s,background .12s}
+.lt-btn+.lt-btn{border-left:1px solid var(--line)}
+.lt-btn:hover{color:var(--ink);background:var(--paper2)}
+.lt-btn.on{color:var(--paper);background:var(--ink)}
+.lt-btn.on:hover{background:var(--ink)}
 
 /* Live Wire signal (now-divider dot, bracket edge, footer dot) ------ */
 .wire{position:relative}
@@ -3342,4 +3357,4 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 # style.css?v=<ASSET_VER> / app.js?v=<ASSET_VER>; when either asset changes the
 # version changes, so returning visitors fetch the new file instead of a stale
 # cached one. Referenced by shell().
-ASSET_VER = hashlib.sha256((STYLE + APP_JS).encode("utf-8")).hexdigest()[:10]
+ASSET_VER = hashlib.sha256((STYLE + APP_JS + i18n.build_js()).encode("utf-8")).hexdigest()[:10]
