@@ -634,10 +634,20 @@
     load();
   }
 
+  // Calendar: jump to today on load (offset for the sticky header).
+  function landOnToday(){
+    var t=document.querySelector('.cal-day.today'); if(!t)return;
+    var head=document.querySelector('.site-head');
+    var off=(head?head.getBoundingClientRect().height:0)+12;
+    var y=t.getBoundingClientRect().top+window.pageYOffset-off;
+    window.scrollTo(0,Math.max(0,y));
+  }
+
   document.addEventListener('DOMContentLoaded',function(){
     wireTZ();apply();wireReveal();wireLive();wireBracketScroll();wireBracketObserver();drawBracket();
-    landOnActiveColumn();initFantasy();initBetting();
+    landOnActiveColumn();initFantasy();initBetting();landOnToday();
   });
+  window.addEventListener('load',landOnToday);
   window.addEventListener('load',drawBracket);
   window.addEventListener('resize',scheduleDraw);
 })();
