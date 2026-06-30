@@ -463,6 +463,13 @@ def scorers(m):
     return f'<div class="m-scorers">{"".join(out)}</div>' if out else ""
 
 
+def wl_badge(is_win):
+    """Compact W/L result tag for a played match — solid vermilion W (advanced),
+    solid black L. The single, consistent winner/loser signal across the site."""
+    return (f'<span class="wl-tag {"w" if is_win else "l"}" '
+            f'title="{"Won" if is_win else "Lost"}">{"W" if is_win else "L"}</span>')
+
+
 def match_line(m, ctx, compact=False):
     by_num = bracket.index_matches(ctx.matches)
     t1 = bracket.resolve_slot(m["team1"], ctx.analyses, by_num)
@@ -489,11 +496,13 @@ def match_line(m, ctx, compact=False):
     live = bool(t1["team"] and t2["team"])
     live_attr = f' data-live data-date="{E(m.get("date",""))}"' if live else ""
     live_tag = '<span class="live-tag" data-live-tag hidden></span>' if live else ""
+    b1 = wl_badge(w1 == " won") if done else ""
+    b2 = wl_badge(w2 == " won") if done else ""
     return (
         f'<div class="match{" is-done" if done else " is-upcoming"}"{live_attr}>'
         f'<div class="m-meta">{grp_lbl}{rd_lbl}{live_tag}<span class="muted">{meta}</span></div>'
-        f'<div class="m-row"><span class="m-side a{w1}">{slot_chip(t1)}</span>{score}'
-        f'<span class="m-side b{w2}">{slot_chip(t2)}</span></div>'
+        f'<div class="m-row"><span class="m-side a{w1}">{slot_chip(t1)}{b1}</span>{score}'
+        f'<span class="m-side b{w2}">{b2}{slot_chip(t2)}</span></div>'
         f'{scorers(m) if done else ""}</div>'
     )
 
@@ -559,19 +568,21 @@ def pulse_band(ctx):
         live = bool(t1["team"] and t2["team"])
         live_attr = f' data-live data-date="{E(m.get("date",""))}"' if live else ""
 
-        def pzteam(res, wc):
+        def pzteam(res, wc, is_b=False):
             t = res["team"]
             inner = (f'<span class="fl">{flag(t) if t else "·"}</span>'
                      f'<span class="nm">{E(t or res["label"])}</span>')
+            badge = wl_badge(wc == " won") if wc in (" won", " lost") else ""
+            body = (badge + inner) if is_b else (inner + badge)
             if t:
-                return f'<a class="pz-team{wc}" data-team="{E(t)}" href="{util.page_for(t)}">{inner}</a>'
-            return f'<div class="pz-team{wc}" data-team="">{inner}</div>'
+                return f'<a class="pz-team{wc}" data-team="{E(t)}" href="{util.page_for(t)}">{body}</a>'
+            return f'<div class="pz-team{wc}" data-team="">{body}</div>'
         return (
             f'<div class="pz {"is-done" if kind=="done" else "is-upcoming"}" '
             f'data-ts="{_epoch(m)}"{live_attr}>'
             f'<div class="pz-head"><span class="pz-grp">{E(grp)}</span>{tag}'
             f'<span class="pz-date muted"{date_attr}>{E(date)}</span></div>'
-            f'<div class="pz-row">{pzteam(t1, w1)}{mid}{pzteam(t2, w2)}</div>'
+            f'<div class="pz-row">{pzteam(t1, w1)}{mid}{pzteam(t2, w2, is_b=True)}</div>'
             f'{foot}</div>'
         )
 
@@ -1093,8 +1104,7 @@ def _km_cell(r, ci):
                 pv = pens[0] if key == "team1" else pens[1]
                 g += f'<span class="km-pen{" kwin" if is_win else ""}">({pv})</span>'
             # A plain W/L tag — the clearest at-a-glance read of who advanced.
-            wl = (f'<span class="km-wl {"w" if is_win else "l"}" '
-                  f'title="{"Won" if is_win else "Lost"}">{"W" if is_win else "L"}</span>')
+            wl = wl_badge(is_win)
         side_cls = "km-team" + ("" if resolved else " is-candidate") + \
                    ((" kw" if is_win else " kl") if r["played"] else "")
         sides.append(f'<div class="{side_cls}">{_bracket_side(res)}{g}{wl}</div>')
@@ -1182,8 +1192,10 @@ def _cal_match(ctx, m, by_num):
     return (
         f'<div class="cal-m{" is-done" if done else ""}"{live_attr}>'
         f'<div class="cal-m-head">{f"<span class=cal-tag>{E(tag)}</span>" if tag else ""}{mid}</div>'
-        f'<div class="cal-m-teams"><span class="cal-side{w1}">{side(t1)}</span>'
-        f'<span class="cal-v">v</span><span class="cal-side{w2}">{side(t2)}</span></div>'
+        f'<div class="cal-m-teams"><span class="cal-side{w1}">{side(t1)}'
+        f'{wl_badge(w1 == " won") if done else ""}</span>'
+        f'<span class="cal-v">v</span><span class="cal-side{w2}">{side(t2)}'
+        f'{wl_badge(w2 == " won") if done else ""}</span></div>'
         f'</div>'
     )
 
@@ -1599,7 +1611,13 @@ def road_branch(team, group_letter, ctx, entry_slot, heading, entered=False):
             f'<div class="road-opp"><span class="road-vs">vs</span>{fan}</div>'
             f'</li>'
         )
-    tag = '<span class="road-track">current track</span>' if entered else ''
+    ended_loss = bool(path and path[-1].get("played") and not path[-1].get("won"))
+    if ended_loss:
+        tag = '<span class="road-track out">Knocked out</span>'
+    elif entered:
+        tag = '<span class="road-track">current track</span>'
+    else:
+        tag = ''
     return (f'<div class="road-line">'
             f'<div class="road-line-head"><h4>{E(heading)}</h4>{tag}</div>'
             f'<ol class="road-graph">{"".join(steps)}</ol></div>')
@@ -2721,16 +2739,12 @@ section:first-of-type{margin-top:var(--s4)}
 .score{display:inline-flex;align-items:center;gap:3px;font-family:var(--mono);font-weight:800;font-size:1.2rem;white-space:nowrap;font-variant-numeric:tabular-nums}
 .score .sg{color:var(--muted)}.score .sg.win{color:var(--ink)}.score .sdash{color:var(--muted);margin:0 2px}
 .pens{font-family:var(--mono);font-size:.66rem;color:var(--muted);margin-left:4px}
-/* completed-match winner emphasis + shootout tallies */
+/* completed-match winner emphasis (the W/L tag carries the loser signal — no dim) */
 .m-side.won .nm{font-weight:800;color:var(--ink)}
-.m-side.lost{opacity:.5}
 .pz-team.won .nm{font-weight:800;color:var(--ink)}
-.pz-team.lost{opacity:.5}
 .pz-mid{display:flex;flex-direction:column;align-items:center;gap:1px}
 .pz-pens{font-family:var(--mono);font-size:.56rem;color:var(--muted);white-space:nowrap}
 .cal-pens{font-family:var(--mono);font-size:.56rem;color:var(--muted);margin-left:3px}
-.cal-m.is-done .cal-side.won{opacity:1}
-.cal-m.is-done .cal-side.lost{opacity:.45}
 .cal-side.won .cal-tm .nm{font-weight:800}
 .km-pen{font-family:var(--mono);font-size:.66em;color:var(--muted);margin-left:1px}
 .km-pen.kwin{color:var(--ink);font-weight:800}
@@ -2741,9 +2755,9 @@ section:first-of-type{margin-top:var(--s4)}
 .ko{display:inline-flex;align-items:baseline;gap:.6ch;white-space:nowrap}
 .ko-day{font-weight:600;color:var(--muted);letter-spacing:.02em}
 .ko-time{font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
-.ko-tz{font-weight:700;color:var(--vermilion);margin-left:.4ch;font-size:.9em;letter-spacing:.03em}
+.ko-tz{font-weight:700;color:var(--ink2);margin-left:.4ch;font-size:.9em;letter-spacing:.03em}
 .m-meta .ko-day,.m-meta .ko-time{text-transform:none}
-.pz-tz{font-weight:700;color:var(--vermilion);margin-left:.3ch;font-size:.62em;letter-spacing:.03em}
+.pz-tz{font-weight:700;color:var(--ink2);margin-left:.3ch;font-size:.62em;letter-spacing:.03em}
 /* "Knocked out" marker in standings (compact tables) */
 .ko-out{display:inline-block;margin-left:7px;font-family:var(--mono);font-size:.5rem;font-weight:800;
   letter-spacing:.1em;color:var(--muted);border:1px solid var(--line2);padding:0 4px;vertical-align:middle}
@@ -2953,6 +2967,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .road-line-head h4{margin:0;font-size:1rem}
 .road-track{font-size:.58rem;letter-spacing:.1em;padding:3px 9px;background:var(--vermilion);color:var(--on-accent)}
 .road-track.alt{background:var(--ink);color:var(--paper)}
+.road-track.out{background:transparent;color:var(--muted);box-shadow:inset 0 0 0 1px var(--line2)}
 .road-sub{margin:-8px 0 14px;font-size:.82rem;color:var(--ink2)}
 .road-graph{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0}
 .road-step{position:relative;display:grid;grid-template-columns:92px 22px 1fr;align-items:center;gap:10px;padding:11px 0;min-height:48px}
@@ -3055,12 +3070,14 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .km-g{margin-left:auto;font-family:var(--mono);font-weight:800;font-variant-numeric:tabular-nums;min-width:16px;text-align:right}
 .km-g.kloss{color:var(--muted)}.km-g.kwin{color:var(--ink)}
 .km-team .bteam.win,.km-team:has(.kwin) .bteam,.km-team.kw .bteam{color:var(--ink);font-weight:800}
-/* W/L result tag — the clear winner/loser signal, beyond the bolder score */
-.km-wl{flex:none;display:inline-grid;place-items:center;width:15px;height:15px;margin-left:5px;
-  font-family:var(--mono);font-weight:800;font-size:.58rem;line-height:1;border-radius:3px}
-.km-wl.w{background:var(--ink);color:var(--paper)}
-.km-wl.l{background:transparent;color:var(--muted);box-shadow:inset 0 0 0 1.3px var(--line2)}
-.km-team.kl{opacity:.62}
+/* W/L result tag — one consistent winner/loser signal across the whole site */
+.wl-tag{flex:none;display:inline-grid;place-items:center;width:15px;height:15px;margin-left:5px;border-radius:3px;
+  font-family:var(--mono);font-weight:800;font-size:.58rem;line-height:1}
+.wl-tag.w{background:var(--vermilion);color:var(--on-accent)}
+.wl-tag.l{background:var(--ink);color:var(--paper)}
+/* badges that precede a name (right-hand side of a head-to-head row) gap right */
+.m-side.b .wl-tag:first-child,.pz-team .wl-tag:first-child{margin-left:0;margin-right:5px}
+.cal-side .wl-tag{width:13px;height:13px;font-size:.52rem;margin-left:4px}
 /* The plinth is positioned by JS directly beneath the final match box. */
 .champion-plinth{position:relative;text-align:center;padding:18px 14px 16px;border:2px solid var(--ink);background:var(--ink);color:var(--paper)}
 .champion-plinth::before{content:"";position:absolute;left:0;right:0;top:0;height:8px;background:var(--vermilion)}
@@ -3109,7 +3126,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .cal-tag{font-family:var(--mono);font-size:.5rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
   color:var(--paper);background:var(--ink2);padding:0 4px}
 .cal-time{font-family:var(--mono);font-size:.62rem;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
-.cal-tz{color:var(--vermilion);margin-left:1px;font-size:.85em}
+.cal-tz{color:var(--ink2);margin-left:1px;font-size:.85em}
 .cal-score{font-family:var(--mono);font-size:.66rem;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
 .cal-m.is-live .cal-time,.cal-m.is-live .cal-score{color:var(--vermilion)}
 .cal-m.is-done .cal-time{font-weight:600;color:var(--muted)}  /* time = context; score leads on a played match */
@@ -3121,7 +3138,6 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .cal-cands .cand .nm{font-weight:600;color:var(--ink2)}
 .cal-tbd{font-family:var(--mono);font-size:.62rem;color:var(--muted)}
 .cal-v{font-size:.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:0 0 0 1px}
-.cal-m.is-done .cal-side{opacity:.82}
 /* Phones: drop the 7-up grid for a single-column agenda (skip empty days). */
 @media(max-width:760px){
   .cal-dow-row{display:none}

@@ -106,6 +106,8 @@ UI = {
     "Group stage": "Fase de grupos",
     "group stage": "fase de grupos",
     "Knocked out": "Eliminado",
+    "Won": "Vitória",
+    "Lost": "Derrota",
     "Through": "Classificado",
     "Qualify": "Classifica",
     "qualify": "classifica",

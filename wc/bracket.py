@@ -340,6 +340,11 @@ def project_path(team, matches, analyses, group_letter, entry_slot):
                 step["pens"] = f"{pt_}–{po_}"
                 step["won"] = pt_ > po_
         steps.append(step)
+        # Stop at a loss: the team is out, so don't follow the winner-edge into
+        # later rounds (that path belongs to whoever beat them). The road ends on
+        # the game they lost.
+        if step["played"] and not step.get("won"):
+            break
         nxt = fmap.get(cur["num"])
         if not nxt:
             break
