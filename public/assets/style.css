@@ -830,6 +830,18 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:var(--s5)}
 .col-h{font-size:var(--t-lg)}
 
+/* squad — roster grouped by line, most recent starting XI in bold ---- */
+.squad{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:var(--s4) var(--s5);margin-top:var(--s2)}
+.sq-line{min-width:0}
+.sq-pos{font-family:var(--mono);font-size:var(--t-xs);font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:0 0 6px;padding-bottom:5px;border-bottom:2px solid var(--ink)}
+.sq-list{list-style:none;margin:0;padding:0}
+.sq-p{display:flex;align-items:baseline;gap:9px;padding:5px 1px;border-bottom:1px solid var(--hair);font-size:var(--t-sm)}
+.sq-num{font-family:var(--mono);font-size:var(--t-xs);color:var(--muted);min-width:1.7em;text-align:right;flex:none}
+.sq-nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sq-age{margin-left:auto;font-family:var(--mono);font-size:var(--t-2xs);color:var(--muted);flex:none}
+.sq-p.is-start .sq-nm{font-weight:800}
+.sq-p.is-start .sq-num{color:var(--vermilion);font-weight:700}
+
 /* ============ RESPONSIVE ========================================= */
 @media(max-width:880px){
   .roads{grid-template-columns:1fr}
