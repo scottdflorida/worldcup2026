@@ -1,4 +1,17 @@
 
+/* Country-flag webfont. Windows' system emoji font has no flag glyphs, so flag
+   emoji fall back to two-letter codes (FR, GB…). This self-hosted font (Twemoji
+   flags, CC-BY 4.0 — https://twemoji.twitter.com) supplies them; the unicode-range
+   scopes it to flag codepoints (regional-indicator pairs + the England/Scotland
+   tag sequences) so it never touches any other text. It's listed first in the
+   font stacks below because Windows' emoji font otherwise "claims" these
+   codepoints and the browser never falls through to the webfont. */
+@font-face{
+  font-family:"Twemoji Country Flags";
+  unicode-range:U+1F1E6-1F1FF,U+1F3F4,U+E0062-E007F;
+  src:url("TwemojiCountryFlags.woff2") format("woff2");  /* relative to this stylesheet in /assets/ */
+  font-display:swap;
+}
 /* ===================================================================
    "BROADCAST INK"  —  World Cup 2026 tracker visual system
    Newsprint paper ground, near-black ink, ONE electric vermilion that
@@ -31,8 +44,8 @@
   --c-out:#D8D4C7;                /* out = pale grey */
   --c-gone:var(--muted-c);
   /* type — neo-grotesque display + tracked mono labels */
-  --sans:"Helvetica Neue",Helvetica,"Inter",Arial,system-ui,-apple-system,sans-serif;
-  --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Roboto Mono",monospace;
+  --sans:"Twemoji Country Flags","Helvetica Neue",Helvetica,"Inter",Arial,system-ui,-apple-system,sans-serif;
+  --mono:"Twemoji Country Flags",ui-monospace,"SF Mono",Menlo,Consolas,"Roboto Mono",monospace;
   /* fluid display scale (tight, confident) */
   --t-hero:clamp(3rem,1.2rem + 9.2vw,8.4rem);
   --t-3xl:clamp(2.3rem,1.3rem + 4.6vw,4.4rem);
