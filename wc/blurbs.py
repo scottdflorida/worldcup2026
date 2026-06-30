@@ -12,6 +12,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 
 from . import bracket, data
 
@@ -20,7 +21,7 @@ MODEL = "claude-sonnet-4-6"
 BLURBS_PATH = "data/blurbs.json"
 # Bump when the prompt changes so cached blurbs regenerate even if the facts
 # (and therefore the brief) are unchanged.
-PROMPT_VERSION = "2"
+PROMPT_VERSION = "3"
 
 _ORDINAL = {1: "1st", 2: "2nd", 3: "3rd", 4: "4th"}
 _ROUND = {"Round of 32": "Round of 32", "Round of 16": "Round of 16",
@@ -112,6 +113,16 @@ def team_brief(ctx, team):
 
     entry = f'{proj["rank"]}{g}' if proj["rank"] in (1, 2) else None
     path = bracket.project_path(team, ctx.matches, ctx.analyses, g, entry) or []
+
+    # A knockout loss eliminates the team even though it cleared the group stage.
+    # ctx.knocked_out() only catches group-stage exits, so without this the brief
+    # would say "lost in the Round of 32" with eliminated=false and no road — a
+    # contradiction the model balks at. Mark it out and drop the (non-existent)
+    # road so the prompt's retrospective branch fires.
+    if path and path[-1].get("played") and not path[-1].get("won"):
+        brief["eliminated"] = True
+        return brief
+
     by_num = bracket.index_matches(ctx.matches)
     rounds = []
     for step in path:
@@ -169,6 +180,15 @@ SYSTEM = (
     "2-3 sentence retrospective — the last match and how it went, then a closing "
     "line on how and where their tournament ended.\n\n"
     "Rules:\n"
+    "- You are writing copy for publication, NOT chatting. NEVER address the reader, "
+    "ask questions, request clarification, mention \"the brief\" or its JSON fields, "
+    "or remark on whether the data looks odd, contradictory, or incomplete. There is "
+    "no one to answer you — your entire output is published verbatim as the blurb.\n"
+    "- Treat the brief as ground truth and ALWAYS produce a finished blurb. If a field "
+    "seems inconsistent, resolve it the obvious way and write through it: a `loss` in "
+    "any knockout round (Round of 32, Round of 16, quarterfinal, semifinal, final) "
+    "means the team is OUT — write the retrospective, regardless of the `eliminated` "
+    "flag.\n"
     "- The factual spine — opponent, round, kickoff, score, who could be waiting — "
     "comes ONLY from the brief.\n"
     "- You MAY characterize favoritism and expectation from well-known football "
@@ -176,8 +196,8 @@ SYSTEM = (
     "positions, betting odds, win percentages), and invent NO scores, players, or "
     "results beyond the brief.\n"
     "- For an undecided round, treat the listed teams as the live candidate pool.\n"
-    "- Output the blurb prose only — no headings, no preamble, no quotation marks, "
-    "no emoji."
+    "- Output ONLY the finished blurb prose — no headings, no preamble, no notes, no "
+    "questions, no backticks, no field names, no markdown, no quotation marks, no emoji."
 )
 
 
@@ -188,15 +208,43 @@ def build_messages(brief):
     return SYSTEM, user
 
 
+# Hallmarks of the model talking to itself instead of writing the blurb: leaking
+# the JSON field names (backticks), naming "the brief", or asking for clarification.
+# A real blurb never contains any of these, so they're safe to reject outright.
+# Keep to signals that never occur in real football prose (a backtick, naming the
+# brief/JSON, addressing the reader). Avoid words like "inconsistent" or
+# "contradictory" that legitimately describe form.
+_META_RE = re.compile(
+    r"`|\bthe brief\b|\bcould you\b|\blet me know\b|i'?ll (write|treat|assume|need)|"
+    r"should .{0,30}\bbe (true|false)\b|\bJSON\b|\bas an? (ai|assistant)\b|"
+    r"clarif(y|ication)\b", re.I)
+
+
+def _looks_like_meta(text):
+    return (not text) or bool(_META_RE.search(text))
+
+
 def generate_blurb(client, brief):
+    """Generate a blurb, rejecting and retrying any output that reads as the model
+    talking to itself rather than writing copy. Returns '' if it can't get clean
+    prose — the renderer omits an empty blurb, which is far better than publishing
+    meta-commentary."""
     system, user = build_messages(brief)
-    resp = client.messages.create(
-        model=MODEL,
-        max_tokens=400,
-        system=system,
-        messages=[{"role": "user", "content": user}],
-    )
-    return "".join(b.text for b in resp.content if b.type == "text").strip()
+    for _ in range(3):
+        resp = client.messages.create(
+            model=MODEL,
+            max_tokens=400,
+            system=system,
+            messages=[{"role": "user", "content": user}],
+        )
+        text = "".join(b.text for b in resp.content if b.type == "text").strip()
+        if not _looks_like_meta(text):
+            return text
+        user += ("\n\nThat response was not a publishable blurb. Output ONLY the "
+                 "finished blurb prose — no questions, no commentary, no backticks, no "
+                 "field names. A knockout loss means the team is out; write the "
+                 "retrospective.")
+    return ""
 
 
 # ---- cache I/O ----------------------------------------------------------
