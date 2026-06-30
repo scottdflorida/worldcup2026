@@ -704,6 +704,25 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-fl{font-size:1.25rem;line-height:1}
 .bet-nm{font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bet-od{font-family:var(--mono);font-weight:800;color:var(--vermilion)}
+/* decided matches: dimmed matchup (not selectable) + everyone's bets */
+.bet-decided{padding:10px 0;border-top:1px solid var(--line)}
+.bet-decided:first-of-type{border-top:0}
+.bet-dteam{display:flex;align-items:center;gap:8px;padding:9px 11px;border:1.5px solid var(--line);background:var(--paper2)}
+.bet-dteam .bet-nm{font-weight:700}
+.bet-dteam .bet-od{color:var(--muted)}
+.bet-dteam.lose{opacity:.45}
+.bet-dteam.win{border-color:var(--ink)}
+.bet-dteam.win .bet-nm{font-weight:800}
+.bet-dteam.win .bet-od{color:var(--ink)}
+.bet-dbets{margin-top:9px;display:flex;flex-direction:column;gap:5px}
+.bet-dbet{display:flex;align-items:center;gap:8px;font-size:.84rem;flex-wrap:wrap}
+.bet-dbet.you .bet-db-who{font-weight:800;color:var(--vermilion)}
+.bet-db-who{font-weight:700}
+.bet-db-pick{color:var(--ink2)}
+.bet-db-amt{margin-left:auto;font-family:var(--mono);font-weight:800;white-space:nowrap}
+.bet-db-amt.won{color:var(--vermilion)}
+.bet-db-amt.lost{color:var(--muted)}
+.bet-dbets-none{margin-top:8px;font-size:.82rem}
 .bet-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:.92rem}
 .bet-row:first-of-type{border-top:0}
 .bet-r-pick{font-weight:700;flex:1;min-width:0}
