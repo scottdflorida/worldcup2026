@@ -689,6 +689,20 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);cursor:pointer;user-select:none}
 .bet-toggle input{width:15px;height:15px;accent-color:var(--vermilion);cursor:pointer}
 .bet-locked{margin-top:9px;font-size:.78rem}
+.bet-pools{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.bet-pool{font-family:var(--mono);font-size:.64rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--ink2);background:var(--paper2);border:1.5px solid var(--line2);padding:6px 11px;cursor:pointer}
+.bet-pool:hover{border-color:var(--ink)}
+.bet-pool.on{color:var(--paper);background:var(--ink);border-color:var(--ink)}
+.bet-pool.add{color:var(--vermilion);border-style:dashed}
+.bet-balrow{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.bet-mini{font-family:var(--mono);font-size:.6rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);background:none;border:1px solid var(--line2);padding:5px 9px;cursor:pointer}
+.bet-mini:hover{color:var(--ink);border-color:var(--ink)}
+.bet-mini.danger{color:var(--on-accent);background:var(--vermilion);border-color:var(--vermilion)}
+.bet-leave-c{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;font-family:var(--mono);font-size:.64rem;color:var(--ink2)}
+.bet-join-actions{display:flex;gap:8px;align-items:center}
+.bet-btn.ghost{color:var(--ink);background:var(--paper);border:1.5px solid var(--ink)}
 .bet-card{background:var(--paper2);border:1.5px solid var(--line2);padding:16px}
 .bet-card h2{margin:0 0 12px;font-size:1.05rem}
 .bet-join{max-width:430px}
