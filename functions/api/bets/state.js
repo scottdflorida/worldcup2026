@@ -36,19 +36,23 @@ export async function onRequestGet({ request, env }) {
       match_num: b.match_num, pick: b.pick, stake: round2(b.stake),
       odds: b.odds, status: b.status, payout: round2(b.payout),
     }));
-    // everyone's bets on already-decided matches (the results view); open-match
-    // bets are intentionally NOT exposed
+    // everyone's bets — but only on matches the viewer is allowed to see: any
+    // decided match, or an open match they've already bet on themselves. Open
+    // matches they haven't bet on just expose a hidden-bet COUNT (no picks).
+    const all = (await env.DB.prepare(
+      "SELECT b.match_num,b.pick,b.stake,b.status,b.payout,b.player_id,p.name FROM bets b " +
+      "JOIN players p ON p.id=b.player_id WHERE p.pool_id=? ORDER BY b.id ASC")
+      .bind(me.pool_id).all()).results || [];
     const decided = new Set(matches.filter((m) => m.decided).map((m) => m.num));
-    if (decided.size) {
-      const all = (await env.DB.prepare(
-        "SELECT b.match_num,b.pick,b.stake,b.status,b.payout,b.player_id,p.name FROM bets b " +
-        "JOIN players p ON p.id=b.player_id WHERE p.pool_id=? ORDER BY b.id ASC")
-        .bind(me.pool_id).all()).results || [];
-      resp.poolBets = all.filter((r) => decided.has(r.match_num)).map((r) => ({
-        player: r.name, you: r.player_id === me.id, match_num: r.match_num,
-        pick: r.pick, stake: round2(r.stake), status: r.status, payout: round2(r.payout),
-      }));
-    }
+    const mine = new Set(mb.map((b) => b.match_num));
+    const revealed = new Set([...decided, ...mine]);
+    resp.poolBets = all.filter((r) => revealed.has(r.match_num)).map((r) => ({
+      player: r.name, you: r.player_id === me.id, match_num: r.match_num,
+      pick: r.pick, stake: round2(r.stake), status: r.status, payout: round2(r.payout),
+    }));
+    const locked = {};
+    for (const r of all) if (!revealed.has(r.match_num)) locked[r.match_num] = (locked[r.match_num] || 0) + 1;
+    resp.lockedCounts = locked;
   }
   return json(resp);
 }
