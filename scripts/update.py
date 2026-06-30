@@ -9,7 +9,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from wc import blurbs, data, odds, render  # noqa: E402
+from wc import blurbs, data, odds, render, squads, standings  # noqa: E402
 
 PUBLIC = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "public")
 
@@ -40,10 +40,26 @@ def _refresh_odds():
         print(f"[update] odds refresh failed ({e!r}); using existing odds")
 
 
+def _refresh_squads(payload):
+    """Pull team squads from ESPN into data/squads.json — only on the daily run
+    (REFRESH_ODDS=1), since rosters barely change. Best-effort: any failure keeps
+    the existing cache."""
+    if os.environ.get("REFRESH_ODDS") != "1":
+        return
+    try:
+        teams = sorted({row["team"]
+                        for i in standings.all_groups(payload["matches"]).values()
+                        for row in i["table"]})
+        squads.refresh(teams, force=True)
+    except Exception as e:  # noqa: BLE001 — never let squads break the deploy
+        print(f"[update] squad refresh failed ({e!r}); using existing squads")
+
+
 def main():
     payload = data.refresh()
     _refresh_blurbs(payload)        # update data/blurbs.json before rendering
     _refresh_odds()                 # update data/odds.json before rendering
+    _refresh_squads(payload)        # update data/squads.json before rendering
     n = render.write_site(PUBLIC, payload)
     print(f"[update] refreshed data and wrote {n} files to {PUBLIC}")
 

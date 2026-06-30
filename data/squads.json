@@ -1,0 +1,8967 @@
+{
+ "fetched_at": "2026-06-30T16:16:02.300263+00:00",
+ "teams": {
+  "Algeria": {
+   "as_of": "Austria at Algeria",
+   "players": [
+    {
+     "age": 31,
+     "name": "Oussama Benbot",
+     "num": "16",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Melvin Mastil",
+     "num": "1",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Luca Zidane",
+     "num": "23",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Aïssa Mandi",
+     "num": "2",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Jaouen Hadjam",
+     "num": "13",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Rafik Belghali",
+     "num": "17",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Ramy Bensebaini",
+     "num": "21",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Achraf Abada",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Mohamed Amine Tougai",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Zineddine Belaïd",
+     "num": "5",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Rayan Aït-Nouri",
+     "num": "15",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Samir Chergui",
+     "num": "26",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Houssem Aouar",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Farès Chaïbi",
+     "num": "10",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Nabil Bentaleb",
+     "num": "19",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 20,
+     "name": "Ibrahim Maza",
+     "num": "22",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Ramiz Zerrouki",
+     "num": "6",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Hicham Boudaoui",
+     "num": "14",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Adil Boulbina",
+     "num": "20",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Yassine Titraoui",
+     "num": "24",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 35,
+     "name": "Riyad Mahrez",
+     "num": "7",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Amine Gouiri",
+     "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Anis Hadj Moussa",
+     "num": "11",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Nadhir Benbouali",
+     "num": "12",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Mohamed Amoura",
+     "num": "18",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Farès Ghedjemis",
+     "num": "25",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Argentina": {
+   "as_of": "Argentina at Jordan",
+   "players": [
+    {
+     "age": 33,
+     "name": "Emiliano Martínez",
+     "num": "23",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Juan Musso",
+     "num": "1",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Gerónimo Rulli",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Nicolás Tagliafico",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 38,
+     "name": "Nicolás Otamendi",
+     "num": "19",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Gonzalo Montiel",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Lisandro Martínez",
+     "num": "6",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Cristian Romero",
+     "num": "13",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Facundo Medina",
+     "num": "25",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Nahuel Molina",
+     "num": "26",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Leandro Paredes",
+     "num": "5",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Giovani Lo Celso",
+     "num": "11",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Exequiel Palacios",
+     "num": "14",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 21,
+     "name": "Nico Paz",
+     "num": "18",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Rodrigo De Paul",
+     "num": "7",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Valentín Barco",
+     "num": "8",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Thiago Almada",
+     "num": "16",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Alexis Mac Allister",
+     "num": "20",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Enzo Fernández",
+     "num": "24",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Julián Álvarez",
+     "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Giuliano Simeone",
+     "num": "17",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Lautaro Martínez",
+     "num": "22",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 39,
+     "name": "Lionel Messi",
+     "num": "10",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Nico González",
+     "num": "15",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "José Manuel López",
+     "num": "21",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Australia": {
+   "as_of": "Australia at Paraguay",
+   "players": [
+    {
+     "age": 22,
+     "name": "Patrick Beach",
+     "num": "18",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 34,
+     "name": "Mathew Ryan",
+     "num": "1",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Paul Izzo",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Alessandro Circati",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Jordan Bos",
+     "num": "5",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 35,
+     "name": "Aziz Behich",
+     "num": "16",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Harry Souttar",
+     "num": "19",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 18,
+     "name": "Lucas Herrington",
+     "num": "25",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Milos Degenek",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Jacob Italiano",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Jason Geria",
+     "num": "6",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Kai Trewin",
+     "num": "15",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Cameron Burgess",
+     "num": "21",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Connor Metcalfe",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Aiden O'Neill",
+     "num": "13",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Cristian Volpato",
+     "num": "20",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Jackson Irvine",
+     "num": "22",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Ajdin Hrustic",
+     "num": "10",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Awer Mabil",
+     "num": "11",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Cameron Devlin",
+     "num": "14",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Nishan Velupillay",
+     "num": "23",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Paul Okon-Engstler",
+     "num": "24",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Nestory Irankunda",
+     "num": "17",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 35,
+     "name": "Mathew Leckie",
+     "num": "7",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Mohamed Toure",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Tete Yengi",
+     "num": "26",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Austria": {
+   "as_of": "Austria at Algeria",
+   "players": [
+    {
+     "age": 30,
+     "name": "Alexander Schlager",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Florian Wiegele",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Patrick Pentz",
+     "num": "13",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Stefan Posch",
+     "num": "5",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 34,
+     "name": "David Alaba",
+     "num": "8",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Philipp Lienhart",
+     "num": "15",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Phillipp Mwene",
+     "num": "16",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "David Affengruber",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Kevin Danso",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Alexander Prass",
+     "num": "22",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Marco Friedl",
+     "num": "23",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Michael Svoboda",
+     "num": "25",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Xaver Schlager",
+     "num": "4",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Nicolas Seiwald",
+     "num": "6",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Marcel Sabitzer",
+     "num": "9",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Romano Schmid",
+     "num": "18",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Konrad Laimer",
+     "num": "20",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Florian Grillitsch",
+     "num": "10",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Carney Chukwuemeka",
+     "num": "17",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Patrick Wimmer",
+     "num": "21",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Paul Wanner",
+     "num": "24",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Alessandro Schöpf",
+     "num": "26",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 37,
+     "name": "Marko Arnautovic",
+     "num": "7",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Michael Gregoritsch",
+     "num": "11",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Sasa Kalajdzic",
+     "num": "14",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Belgium": {
+   "as_of": "Belgium at New Zealand",
+   "players": [
+    {
+     "age": 34,
+     "name": "Thibaut Courtois",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Senne Lammens",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Mike Penders",
+     "num": "13",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Arthur Theate",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Brandon Mechele",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Maxim De Cuyper",
+     "num": "5",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Timothy Castagne",
+     "num": "21",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Zeno Debast",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Thomas Meunier",
+     "num": "15",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Koni De Winter",
+     "num": "16",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Joaquin Seys",
+     "num": "18",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Nathan Ngoy",
+     "num": "25",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 35,
+     "name": "Kevin De Bruyne",
+     "num": "7",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Youri Tielemans",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Hans Vanaken",
+     "num": "20",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 37,
+     "name": "Axel Witsel",
+     "num": "6",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Nicolas Raskin",
+     "num": "23",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Amadou Onana",
+     "num": "24",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Leandro Trossard",
+     "num": "10",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Jérémy Doku",
+     "num": "11",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Charles De Ketelaere",
+     "num": "17",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Romelu Lukaku",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Dodi Lukébakio",
+     "num": "14",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Diego Moreira",
+     "num": "19",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Alexis Saelemaekers",
+     "num": "22",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Matias Fernandez-Pardo",
+     "num": "26",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Bosnia & Herzegovina": {
+   "as_of": "Qatar at Bosnia-Herzegovina",
+   "players": [
+    {
+     "age": 30,
+     "name": "Nikola Vasilj",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 18,
+     "name": "Mladen Jurkas",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Martin Zlomislic",
+     "num": "22",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Sead Kolasinac",
+     "num": "5",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Nikola Katic",
+     "num": "18",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Stjepan Radeljic",
+     "num": "21",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 19,
+     "name": "Nidal Celik",
+     "num": "24",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Nihad Mujakic",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Dennis Hadzikadunic",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Tarik Muharemovic",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Amar Dedic",
+     "num": "7",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Ivan Basic",
+     "num": "13",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Ivan Sunjic",
+     "num": "14",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Benjamin Tahirovic",
+     "num": "6",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Armin Gigovic",
+     "num": "8",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Amar Memic",
+     "num": "15",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Amir Hadziahmetovic",
+     "num": "16",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Dzenis Burnic",
+     "num": "17",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Ermin Mahmic",
+     "num": "26",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Ermedin Demirovic",
+     "num": "10",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 40,
+     "name": "Edin Dzeko",
+     "num": "11",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 18,
+     "name": "Kerim Alajbegovic",
+     "num": "19",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 21,
+     "name": "Esmir Bajraktarevic",
+     "num": "20",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Samed Bazdar",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Haris Tabakovic",
+     "num": "23",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Jovo Lukic",
+     "num": "25",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Brazil": {
+   "as_of": "Japan at Brazil",
+   "players": [
+    {
+     "age": 33,
+     "name": "Alisson Becker",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 38,
+     "name": "Weverton",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Ederson",
+     "num": "23",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Gabriel Magalhães",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Marquinhos",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 34,
+     "name": "Danilo",
+     "num": "13",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Douglas Santos",
+     "num": "16",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 35,
+     "name": "Alex Sandro",
+     "num": "6",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Bremer",
+     "num": "14",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Léo Pereira",
+     "num": "15",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Roger Ibañez",
+     "num": "24",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Casemiro",
+     "num": "5",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Bruno Guimarães",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Lucas Paquetá",
+     "num": "20",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Éderson",
+     "num": "2",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Fabinho",
+     "num": "17",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Danilo Santos",
+     "num": "18",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Vinícius Júnior",
+     "num": "7",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Matheus Cunha",
+     "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 19,
+     "name": "Rayan",
+     "num": "26",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 34,
+     "name": "Neymar",
+     "num": "10",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Raphinha",
+     "num": "11",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 19,
+     "name": "Endrick",
+     "num": "19",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Luiz Henrique",
+     "num": "21",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Gabriel Martinelli",
+     "num": "22",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Igor Thiago",
+     "num": "25",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Canada": {
+   "as_of": "Canada at South Africa",
+   "players": [
+    {
+     "age": 32,
+     "name": "Maxime Crépeau",
+     "num": "16",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Dayne St. Clair",
+     "num": "1",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Owen Goodman",
+     "num": "18",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Alistair Johnston",
+     "num": "2",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Derek Cornelius",
+     "num": "13",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Moïse Bombito",
+     "num": "15",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Richie Laryea",
+     "num": "22",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Alfie Jones",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Luc de Fougerolles",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Joel Waterman",
+     "num": "5",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Alphonso Davies",
+     "num": "19",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Stephen Eustáquio",
+     "num": "7",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Nathan Saliba",
+     "num": "25",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Mathieu Choinière",
+     "num": "6",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Ismaël Koné",
+     "num": "8",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Ali Ahmed",
+     "num": "20",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Jonathan Osorio",
+     "num": "21",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Niko Sigur",
+     "num": "23",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Jonathan David",
+     "num": "10",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Liam Millar",
+     "num": "11",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Tani Oluwaseyi",
+     "num": "12",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Tajon Buchanan",
+     "num": "17",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Cyle Larin",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Jacob Shaffelburg",
+     "num": "14",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Promise David",
+     "num": "24",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Jayden Nelson",
+     "num": "26",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Cape Verde": {
+   "as_of": "Saudi Arabia at Cape Verde",
+   "players": [
+    {
+     "age": 40,
+     "name": "Vozinha",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Márcio Rosa",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "CJ dos Santos",
+     "num": "23",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Diney Borges",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 34,
+     "name": "Pico Lopes",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Wagner Pina",
+     "num": "24",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 38,
+     "name": "Stopira",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Logan Costa",
+     "num": "5",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Sidny Lopes Cabral",
+     "num": "13",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Steven Moreira",
+     "num": "22",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Kelvin Pires",
+     "num": "25",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Kevin Pina",
+     "num": "6",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "João Paulo",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Jamiro Monteiro",
+     "num": "10",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Deroy Duarte",
+     "num": "14",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Laros Duarte",
+     "num": "15",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Yannick Semedo",
+     "num": "16",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Telmo Arcanjo",
+     "num": "18",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Willy Semedo",
+     "num": "17",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Dailon Livramento",
+     "num": "19",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 36,
+     "name": "Ryan Mendes",
+     "num": "20",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Jovane Cabral",
+     "num": "7",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Gilson Benchimol",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 35,
+     "name": "Garry Rodrigues",
+     "num": "11",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 35,
+     "name": "Nuno da Costa",
+     "num": "21",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Hélio Varela",
+     "num": "26",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Colombia": {
+   "as_of": "Portugal at Colombia",
+   "players": [
+    {
+     "age": 37,
+     "name": "Camilo Vargas",
+     "num": "12",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 37,
+     "name": "David Ospina",
+     "num": "1",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Álvaro Montero",
+     "num": "24",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Jhon Lucumí",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 34,
+     "name": "Santiago Arias",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Deiver Machado",
+     "num": "22",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Davinson Sánchez",
+     "num": "23",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Daniel Muñoz",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Yerry Mina",
+     "num": "13",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Johan Mojica",
+     "num": "17",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Willer Ditta",
+     "num": "18",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Jhon Córdoba",
+     "num": "9",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 34,
+     "name": "James Rodríguez",
+     "num": "10",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Jhon Arias",
+     "num": "11",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Gustavo Puerta",
+     "num": "14",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Jefferson Lerma",
+     "num": "16",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Kevin Castaño",
+     "num": "5",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Richard Ríos",
+     "num": "6",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Jorge Carrascal",
+     "num": "8",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Juan Portilla",
+     "num": "15",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Juan Fernando Quintero",
+     "num": "20",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Jáminton Campaz",
+     "num": "21",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Luis Díaz",
+     "num": "7",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Cucho Hernández",
+     "num": "19",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Luis Suárez",
+     "num": "25",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Andrés Gómez",
+     "num": "26",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Croatia": {
+   "as_of": "Ghana at Croatia",
+   "players": [
+    {
+     "age": 31,
+     "name": "Dominik Livakovic",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Ivor Pandur",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Dominik Kotarski",
+     "num": "23",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Josip Stanisic",
+     "num": "2",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Marin Pongracic",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Josip Sutalo",
+     "num": "6",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Josko Gvardiol",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Duje Caleta-Car",
+     "num": "5",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 19,
+     "name": "Luka Vuskovic",
+     "num": "22",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Martin Erlic",
+     "num": "25",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Mateo Kovacic",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 40,
+     "name": "Luka Modric",
+     "num": "10",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Nikola Vlasic",
+     "num": "13",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Martin Baturina",
+     "num": "16",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Petar Sucic",
+     "num": "17",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Nikola Moro",
+     "num": "7",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Mario Pasalic",
+     "num": "15",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Kristijan Jakic",
+     "num": "18",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Toni Fruk",
+     "num": "19",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Luka Sucic",
+     "num": "21",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Ante Budimir",
+     "num": "11",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 37,
+     "name": "Ivan Perisic",
+     "num": "14",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 35,
+     "name": "Andrej Kramaric",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Igor Matanovic",
+     "num": "20",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Marco Pasalic",
+     "num": "24",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Petar Musa",
+     "num": "26",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Curaçao": {
+   "as_of": "Ivory Coast at Curaçao",
+   "players": [
+    {
+     "age": 37,
+     "name": "Eloy Room",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Tyrick Bodak",
+     "num": "25",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Trevor Doornbusch",
+     "num": "26",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Juriën Gaari",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Sherel Floranus",
+     "num": "5",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Livano Comenencia",
+     "num": "8",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Armando Obispo",
+     "num": "18",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Joshua Brenet",
+     "num": "20",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Deveron Fonville",
+     "num": "24",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Shurandy Sambo",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Roshon van Eijma",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Riechedly Bazoer",
+     "num": "23",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Juninho Bacuna",
+     "num": "7",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 34,
+     "name": "Leandro Bacuna",
+     "num": "10",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Tahith Chong",
+     "num": "21",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Godfried Roemeratoe",
+     "num": "6",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Tyrese Noslin",
+     "num": "13",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Ar'jany Martha",
+     "num": "15",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Kevin Felida",
+     "num": "22",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Jürgen Locadia",
+     "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Jeremy Antonisse",
+     "num": "11",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Sontje Hansen",
+     "num": "12",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Kenji Gorré",
+     "num": "14",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Jearl Margaritha",
+     "num": "16",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Brandley Kuwas",
+     "num": "17",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Gervane Kastaneer",
+     "num": "19",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Czech Republic": {
+   "as_of": "Mexico at Czechia",
+   "players": [
+    {
+     "age": 26,
+     "name": "Matej Kovár",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Jindrich Stanek",
+     "num": "16",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Lukás Hornícek",
+     "num": "23",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Tomás Holes",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Robin Hranác",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Vladimír Coufal",
+     "num": "5",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Ladislav Krejcí",
+     "num": "7",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "David Zima",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Stepán Chaloupek",
+     "num": "6",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "David Jurásek",
+     "num": "14",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Jaroslav Zelený",
+     "num": "20",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Lukás Cerv",
+     "num": "12",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Pavel Sulc",
+     "num": "15",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Michal Sadílek",
+     "num": "18",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "David Doudera",
+     "num": "21",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Denis Visinský",
+     "num": "26",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 35,
+     "name": "Vladimír Darida",
+     "num": "8",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Lukás Provod",
+     "num": "17",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Tomás Soucek",
+     "num": "22",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Alexandr Sojka",
+     "num": "24",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 18,
+     "name": "Hugo Sochurek",
+     "num": "25",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Adam Hlozek",
+     "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Patrik Schick",
+     "num": "10",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Jan Kuchta",
+     "num": "11",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Mojmír Chytil",
+     "num": "13",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Tomás Chorý",
+     "num": "19",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "DR Congo": {
+   "as_of": "Uzbekistan at Congo DR",
+   "players": [
+    {
+     "age": 31,
+     "name": "Lionel Mpasi",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Timothy Fayulu",
+     "num": "16",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Matthieu Epolo",
+     "num": "21",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Aaron Wan-Bissaka",
+     "num": "2",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Axel Tuanzebe",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Chancel Mbemba",
+     "num": "22",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Arthur Masuaku",
+     "num": "26",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Steve Kapuadi",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Dylan Batubinsika",
+     "num": "5",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Joris Kayembe",
+     "num": "12",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Gédéon Kalulu",
+     "num": "24",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Samuel Moutoussamy",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 21,
+     "name": "Noah Sadiki",
+     "num": "14",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 21,
+     "name": "Ngal'ayel Mukau",
+     "num": "6",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Théo Bongonda",
+     "num": "10",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 35,
+     "name": "Gaël Kakuta",
+     "num": "11",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Aaron Tshibola",
+     "num": "15",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Charles Pickel",
+     "num": "18",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Edo Kayembe",
+     "num": "25",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Nathanaël Mbuku",
+     "num": "7",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Brian Cipenga",
+     "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 35,
+     "name": "Cédric Bakambu",
+     "num": "17",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Yoane Wissa",
+     "num": "20",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Meschack Elia",
+     "num": "13",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Fiston Mayele",
+     "num": "19",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Simon Banza",
+     "num": "23",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Ecuador": {
+   "as_of": "Germany at Ecuador",
+   "players": [
+    {
+     "age": 39,
+     "name": "Hernán Galíndez",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Moisés Ramírez",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Gonzalo Valle",
+     "num": "22",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Piero Hincapié",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Joel Ordóñez",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Willian Pacho",
+     "num": "6",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Félix Torres",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Pervis Estupiñán",
+     "num": "7",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Kevin Rodríguez",
+     "num": "11",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Ángelo Preciado",
+     "num": "17",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Jackson Porozo",
+     "num": "25",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Yaimar Medina",
+     "num": "26",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Pedro Vite",
+     "num": "15",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Nilson Angulo",
+     "num": "20",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Alan Franco",
+     "num": "21",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Moisés Caicedo",
+     "num": "23",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Jordy Alcívar",
+     "num": "5",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 19,
+     "name": "Kendry Páez",
+     "num": "10",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Denil Castillo",
+     "num": "18",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "John Yeboah",
+     "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 36,
+     "name": "Enner Valencia",
+     "num": "13",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Gonzalo Plata",
+     "num": "19",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Anthony Valencia",
+     "num": "8",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Alan Minda",
+     "num": "14",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Jordy Caicedo",
+     "num": "16",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Jeremy Arévalo",
+     "num": "24",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Egypt": {
+   "as_of": "Iran at Egypt",
+   "players": [
+    {
+     "age": 26,
+     "name": "Mostafa Shoubir",
+     "num": "23",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 37,
+     "name": "Mohamed El Shenawy",
+     "num": "1",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 39,
+     "name": "Mahdy Soliman",
+     "num": "16",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Mohamed Alaa",
+     "num": "26",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Mohamed Hany",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Ramy Rabia",
+     "num": "5",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Mohamed Abdelmoneim",
+     "num": "6",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Ahmed Fatouh",
+     "num": "13",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Yasser Ibrahim",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Hossam Abdelmaguid",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Karim Hafez",
+     "num": "15",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Tarek Alaa",
+     "num": "24",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Emam Ashour",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Mostafa Zico",
+     "num": "11",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Mohanad Lashin",
+     "num": "17",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Mahmoud Saber",
+     "num": "21",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Hamdy Fathy",
+     "num": "14",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Nabil Donga",
+     "num": "18",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Marawan Attia",
+     "num": "19",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Trézéguet",
+     "num": "7",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 34,
+     "name": "Mohamed Salah",
+     "num": "10",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 18,
+     "name": "Hamza Abdelkarim",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Haissem Hassan",
+     "num": "12",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Ibrahim Adel",
+     "num": "20",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Omar Marmoush",
+     "num": "22",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Zizo",
+     "num": "25",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "England": {
+   "as_of": "England at Panama",
+   "players": [
+    {
+     "age": 32,
+     "name": "Jordan Pickford",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Dean Henderson",
+     "num": "13",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "James Trafford",
+     "num": "23",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Ezri Konsa",
+     "num": "2",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 21,
+     "name": "Nico O'Reilly",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Marc Guéhi",
+     "num": "6",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Jarell Quansah",
+     "num": "26",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "John Stones",
+     "num": "5",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Trevoh Chalobah",
+     "num": "12",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Dan Burn",
+     "num": "15",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Reece James",
+     "num": "24",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Djed Spence",
+     "num": "25",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Elliot Anderson",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Jude Bellingham",
+     "num": "10",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Declan Rice",
+     "num": "4",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 36,
+     "name": "Jordan Henderson",
+     "num": "14",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Kobbie Mainoo",
+     "num": "16",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Eberechi Eze",
+     "num": "21",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Bukayo Saka",
+     "num": "7",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Harry Kane",
+     "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Marcus Rashford",
+     "num": "11",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Morgan Rogers",
+     "num": "17",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Anthony Gordon",
+     "num": "18",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Ollie Watkins",
+     "num": "19",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Noni Madueke",
+     "num": "20",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Ivan Toney",
+     "num": "22",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "France": {
+   "as_of": "France at Norway",
+   "players": [
+    {
+     "age": 30,
+     "name": "Mike Maignan",
+     "num": "16",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Brice Samba",
+     "num": "1",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Robin Risser",
+     "num": "23",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Dayot Upamecano",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Jules Koundé",
+     "num": "5",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Theo Hernández",
+     "num": "19",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Maxence Lacroix",
+     "num": "26",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Malo Gusto",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Lucas Digne",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Ibrahima Konaté",
+     "num": "15",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "William Saliba",
+     "num": "17",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Lucas Hernández",
+     "num": "21",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Manu Koné",
+     "num": "6",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Aurélien Tchouaméni",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Michael Olise",
+     "num": "11",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 35,
+     "name": "N'Golo Kanté",
+     "num": "13",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Adrien Rabiot",
+     "num": "14",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Warren Zaïre-Emery",
+     "num": "18",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Rayan Cherki",
+     "num": "24",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Maghnes Akliouche",
+     "num": "25",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Ousmane Dembélé",
+     "num": "7",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Kylian Mbappé",
+     "num": "10",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 21,
+     "name": "Désiré Doué",
+     "num": "20",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Marcus Thuram",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Bradley Barcola",
+     "num": "12",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Jean-Philippe Mateta",
+     "num": "22",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Germany": {
+   "as_of": "Paraguay at Germany",
+   "players": [
+    {
+     "age": 40,
+     "name": "Manuel Neuer",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 36,
+     "name": "Oliver Baumann",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Alexander Nübel",
+     "num": "21",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Antonio Rüdiger",
+     "num": "2",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Jonathan Tah",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Nathaniel Brown",
+     "num": "18",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Waldemar Anton",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Nico Schlotterbeck",
+     "num": "15",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "David Raum",
+     "num": "22",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Malick Thiaw",
+     "num": "24",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Aleksandar Pavlovic",
+     "num": "5",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Joshua Kimmich",
+     "num": "6",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Florian Wirtz",
+     "num": "17",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Felix Nmecha",
+     "num": "23",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Leon Goretzka",
+     "num": "8",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Jamie Leweling",
+     "num": "9",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Jamal Musiala",
+     "num": "10",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 35,
+     "name": "Pascal Gross",
+     "num": "13",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Angelo Stiller",
+     "num": "16",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Nadiem Amiri",
+     "num": "20",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Assan Ouédraogo",
+     "num": "25",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Kai Havertz",
+     "num": "7",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Leroy Sané",
+     "num": "19",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Deniz Undav",
+     "num": "26",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Nick Woltemade",
+     "num": "11",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Maximilian Beier",
+     "num": "14",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Ghana": {
+   "as_of": "Ghana at Croatia",
+   "players": [
+    {
+     "age": 33,
+     "name": "Benjamin Asare",
+     "num": "16",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Lawrence Ati Zigi",
+     "num": "1",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Joseph Anang",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Jonas Adjetey",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Gideon Mensah",
+     "num": "14",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Derrick Luckassen",
+     "num": "23",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Marvin Senaya",
+     "num": "26",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Alidu Seidu",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Abdul Mumin",
+     "num": "6",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Baba Rahman",
+     "num": "17",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Jerome Opoku",
+     "num": "18",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Kojo Peprah Oppong",
+     "num": "21",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Thomas Partey",
+     "num": "5",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Kwasi Sibo",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Elisha Owusu",
+     "num": "15",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 20,
+     "name": "Caleb Yirenkyi",
+     "num": "3",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Jordan Ayew",
+     "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Antoine Semenyo",
+     "num": "11",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Kamaldeen Sulemana",
+     "num": "22",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Fatawu Issahaku",
+     "num": "7",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Brandon Thomas-Asante",
+     "num": "10",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Christopher Bonsu Baah",
+     "num": "13",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Iñaki Williams",
+     "num": "19",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Augustine Boakye",
+     "num": "20",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Ernest Nuamah",
+     "num": "24",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Prince Adu",
+     "num": "25",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Haiti": {
+   "as_of": "Haiti at Morocco",
+   "players": [
+    {
+     "age": 38,
+     "name": "Johny Placide",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Alexandre Pierre",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Josué Duverger",
+     "num": "23",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 36,
+     "name": "Ricardo Adé",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Hannes Delcroix",
+     "num": "5",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Martin Expérience",
+     "num": "8",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Jean-Kévin Duverne",
+     "num": "22",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Carlens Arcus",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Keeto Thermoncy",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Markhus Lacroix",
+     "num": "13",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Garven Metusala",
+     "num": "14",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Wilguens Paugain",
+     "num": "24",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Jean-Ricner Bellegarde",
+     "num": "10",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Danley Jean Jacques",
+     "num": "17",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Carl Sainté",
+     "num": "6",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Dominique Simon",
+     "num": "25",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Woodensky Pierre",
+     "num": "26",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Ruben Providence",
+     "num": "15",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Lenny Joseph",
+     "num": "16",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Wilson Isidor",
+     "num": "18",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Josué Casimir",
+     "num": "21",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Derrick Etienne Jr.",
+     "num": "7",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Duckens Nazon",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Louicius Deedson",
+     "num": "11",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Yassin Fortuné",
+     "num": "19",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Frantzdy Pierrot",
+     "num": "20",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Iran": {
+   "as_of": "Iran at Egypt",
+   "players": [
+    {
+     "age": 33,
+     "name": "Alireza Beiranvand",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Payam Niazmand",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Hossein Hosseini",
+     "num": "22",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 37,
+     "name": "Shoja Khalilzadeh",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Milad Mohammadi",
+     "num": "5",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Hossein Kanani",
+     "num": "13",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Ali Nemati",
+     "num": "19",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 36,
+     "name": "Ramin Rezaeian",
+     "num": "23",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Saleh Hardani",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 36,
+     "name": "Ehsan Hajsafi",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Arya Yousefi",
+     "num": "17",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Danial Iri",
+     "num": "25",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Saeid Ezatolahi",
+     "num": "6",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Mohammad Mohebbi",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Saman Ghoddos",
+     "num": "14",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Mohammad Ghorbani",
+     "num": "21",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Alireza Jahanbakhsh",
+     "num": "7",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Roozbeh Cheshmi",
+     "num": "15",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Mehdi Torabi",
+     "num": "16",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Amirmohammad Razzaghinia",
+     "num": "26",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Mehdi Taremi",
+     "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Mehdi Ghayedi",
+     "num": "10",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Ali Alipour",
+     "num": "11",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Amirhossein Hosseinzadeh",
+     "num": "18",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Shahriyar Moghanloo",
+     "num": "20",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Dennis Dargahi",
+     "num": "24",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Iraq": {
+   "as_of": "Iraq at Senegal",
+   "players": [
+    {
+     "age": 29,
+     "name": "Ahmed Basil",
+     "num": "22",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Fahad Talib",
+     "num": "1",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 35,
+     "name": "Jalal Hassan",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Rebin Sulaka",
+     "num": "2",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Akam Hashim",
+     "num": "5",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Merchas Doski",
+     "num": "23",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Frans Putros",
+     "num": "26",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Hussein Ali",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Zaid Tahseen",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Munaf Younus",
+     "num": "6",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Ahmed Maknazi",
+     "num": "15",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Mustafa Saadoon",
+     "num": "25",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Ibrahim Bayesh",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Zidane Iqbal",
+     "num": "14",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Amir Al-Ammari",
+     "num": "16",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Kevin Yakob",
+     "num": "19",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Aimar Sher",
+     "num": "20",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Marko Farji",
+     "num": "21",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Zaid Ismael",
+     "num": "24",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Ali Al-Hamadi",
+     "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Ahmed Qasim",
+     "num": "11",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Ali Jasim",
+     "num": "17",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Youssef Amyn",
+     "num": "7",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Mohanad Ali",
+     "num": "10",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Ali Yousif",
+     "num": "13",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Aymen Hussein",
+     "num": "18",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Ivory Coast": {
+   "as_of": "Ivory Coast at Curaçao",
+   "players": [
+    {
+     "age": 25,
+     "name": "Yahia Fofana",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Mohamed Koné",
+     "num": "16",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Alban Lafont",
+     "num": "23",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Ousmane Diomande",
+     "num": "2",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Odilon Kossounou",
+     "num": "7",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Christopher Operi",
+     "num": "13",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Guela Doué",
+     "num": "17",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Ghislain Konan",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Wilfried Singo",
+     "num": "5",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Emmanuel Agbadou",
+     "num": "20",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Evan Ndicka",
+     "num": "21",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Franck Kessié",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Ibrahim Sangaré",
+     "num": "18",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 34,
+     "name": "Jean Michaël Seri",
+     "num": "4",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Seko Fofana",
+     "num": "6",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Parfait Guiagon",
+     "num": "25",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Christ Inao Oulaï",
+     "num": "26",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Ange-Yoan Bonny",
+     "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 19,
+     "name": "Yan Diomande",
+     "num": "11",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Amad Diallo",
+     "num": "15",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Nicolas Pépé",
+     "num": "19",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Simon Adingra",
+     "num": "10",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Elye Wahi",
+     "num": "12",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Oumar Diakité",
+     "num": "14",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Evann Guessand",
+     "num": "22",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Bazoumana Touré",
+     "num": "24",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Japan": {
+   "as_of": "Japan at Brazil",
+   "players": [
+    {
+     "age": 23,
+     "name": "Zion Suzuki",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Keisuke Osako",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Tomoki Hayakawa",
+     "num": "23",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Shogo Taniguchi",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Hiroki Ito",
+     "num": "21",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Takehiro Tomiyasu",
+     "num": "22",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Yukinari Sugawara",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Kou Itakura",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 39,
+     "name": "Yuto Nagatomo",
+     "num": "5",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Tsuyoshi Watanabe",
+     "num": "16",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Ayumu Seko",
+     "num": "20",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Junnosuke Suzuki",
+     "num": "25",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Ritsu Doan",
+     "num": "10",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Daichi Kamada",
+     "num": "15",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Kaishu Sano",
+     "num": "24",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Wataru Endo",
+     "num": "6",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Ao Tanaka",
+     "num": "7",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Yuito Suzuki",
+     "num": "17",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Daizen Maeda",
+     "num": "11",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Keito Nakamura",
+     "num": "13",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Junya Ito",
+     "num": "14",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Ayase Ueda",
+     "num": "18",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Takefusa Kubo",
+     "num": "8",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Keisuke Goto",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Koki Ogawa",
+     "num": "19",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Kento Shiogai",
+     "num": "26",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Jordan": {
+   "as_of": "Argentina at Jordan",
+   "players": [
+    {
+     "age": 33,
+     "name": "Yazeed Abulaila",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Nour Bani Ateyah",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Abdallah Al-Fakhouri",
+     "num": "22",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Abdallah Nasib",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Husam Abu Dahab",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Yazan Al-Arab",
+     "num": "5",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Mohannad Abu Taha",
+     "num": "20",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Ehsan Haddad",
+     "num": "23",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Mohammad Abu Hasheesh",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Mohammad Abualnadi",
+     "num": "16",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Saleem Obaid",
+     "num": "17",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Mohammad Abughoush",
+     "num": "18",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Saed Al-Rosan",
+     "num": "19",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Anas Badawi",
+     "num": "26",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Noor Al-Rawabdeh",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Nizar Al-Rashdan",
+     "num": "21",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Amer Jamous",
+     "num": "6",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Rajaei Ayed",
+     "num": "14",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Ibrahim Sadeh",
+     "num": "15",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Mohammad Al-Daoud",
+     "num": "25",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Ali Olwan",
+     "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 20,
+     "name": "Odeh Fakhoury",
+     "num": "11",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Ali Azaizeh",
+     "num": "24",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Mohammed Abu Zraiq",
+     "num": "7",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Mousa Al-Tamari",
+     "num": "10",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Mahmoud Al-Mardi",
+     "num": "13",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Mexico": {
+   "as_of": "Mexico at Czechia",
+   "players": [
+    {
+     "age": 26,
+     "name": "Raúl Rangel",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Carlos Acevedo",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 40,
+     "name": "Guillermo Ochoa",
+     "num": "13",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Jorge Sánchez",
+     "num": "2",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "César Montes",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Israel Reyes",
+     "num": "15",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Mateo Chávez",
+     "num": "20",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Johan Vásquez",
+     "num": "5",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Jesús Gallardo",
+     "num": "23",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Edson Álvarez",
+     "num": "4",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Luis Romo",
+     "num": "7",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 17,
+     "name": "Gilberto Mora",
+     "num": "19",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Érik Lira",
+     "num": "6",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Álvaro Fidalgo",
+     "num": "8",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Orbelín Pineda",
+     "num": "17",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Obed Vargas",
+     "num": "18",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "César Huerta",
+     "num": "21",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Luis Chávez",
+     "num": "24",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Brian Gutiérrez",
+     "num": "26",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Julián Quiñones",
+     "num": "16",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Guillermo Martínez",
+     "num": "22",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Roberto Alvarado",
+     "num": "25",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 35,
+     "name": "Raúl Jiménez",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Alexis Vega",
+     "num": "10",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Santiago Gimenez",
+     "num": "11",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Armando González",
+     "num": "14",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Morocco": {
+   "as_of": "Morocco at Netherlands",
+   "players": [
+    {
+     "age": 35,
+     "name": "Yassine Bounou",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 37,
+     "name": "Munir El Kajoui",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Ahmed Reda Tagnaouti",
+     "num": "22",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Achraf Hakimi",
+     "num": "2",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Noussair Mazraoui",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Issa Diop",
+     "num": "14",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Chadi Riad",
+     "num": "18",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Nayef Aguerd",
+     "num": "5",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Zakaria El Ouahdi",
+     "num": "13",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Youssef Belammari",
+     "num": "19",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Redouane Halhal",
+     "num": "25",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Anass Salah-Eddine",
+     "num": "26",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 18,
+     "name": "Ayyoub Bouaddi",
+     "num": "6",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Azzedine Ounahi",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Brahim Díaz",
+     "num": "10",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Ismael Saibari",
+     "num": "11",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Bilal El Khannouss",
+     "num": "23",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Neil El Aynaoui",
+     "num": "24",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Sofyan Amrabat",
+     "num": "4",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Samir El Mourabet",
+     "num": "15",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Chemsdine Talbi",
+     "num": "7",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Soufiane Rahimi",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Gessime Yassine",
+     "num": "16",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Abde Ezzalzouli",
+     "num": "17",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Ayoub El Kaabi",
+     "num": "20",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Ayoube Amaimouni",
+     "num": "21",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Netherlands": {
+   "as_of": "Morocco at Netherlands",
+   "players": [
+    {
+     "age": 23,
+     "name": "Bart Verbruggen",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Robin Roefs",
+     "num": "13",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Mark Flekken",
+     "num": "23",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Virgil van Dijk",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Nathan Aké",
+     "num": "5",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Jan Paul van Hecke",
+     "num": "6",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Micky van de Ven",
+     "num": "15",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Denzel Dumfries",
+     "num": "22",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Lutsharel Geertruida",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Jorrel Hato",
+     "num": "25",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Ryan Gravenberch",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Frenkie de Jong",
+     "num": "21",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Crysencio Summerville",
+     "num": "24",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 35,
+     "name": "Marten de Roon",
+     "num": "3",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Mats Wieffer",
+     "num": "12",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Tijjani Reijnders",
+     "num": "14",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Guus Til",
+     "num": "16",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Teun Koopmeiners",
+     "num": "20",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Quinten Timber",
+     "num": null,
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Cody Gakpo",
+     "num": "11",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Brian Brobbey",
+     "num": "19",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Justin Kluivert",
+     "num": "7",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Wout Weghorst",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Memphis Depay",
+     "num": "10",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Noa Lang",
+     "num": "17",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Donyell Malen",
+     "num": "18",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "New Zealand": {
+   "as_of": "Belgium at New Zealand",
+   "players": [
+    {
+     "age": 32,
+     "name": "Max Crocombe",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Alex Paulsen",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Michael Woud",
+     "num": "22",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Tim Payne",
+     "num": "2",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 21,
+     "name": "Tyler Bindon",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Liberato Cacace",
+     "num": "13",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Finn Surman",
+     "num": "16",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Francis de Vries",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 37,
+     "name": "Michael Boxall",
+     "num": "5",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Nando Pijnaker",
+     "num": "15",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Callan Elliot",
+     "num": "24",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 36,
+     "name": "Tommy Smith",
+     "num": "26",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Joe Bell",
+     "num": "6",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Marko Stamenic",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Sarpreet Singh",
+     "num": "10",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Ryan Thomas",
+     "num": "23",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Matthew Garbett",
+     "num": "7",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Alex Rufer",
+     "num": "14",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Callum McCowatt",
+     "num": "20",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Lachlan Bayliss",
+     "num": "25",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Chris Wood",
+     "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Elijah Just",
+     "num": "11",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 36,
+     "name": "Kosta Barbarouses",
+     "num": "17",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Ben Waine",
+     "num": "18",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Ben Old",
+     "num": "19",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Jesse Randall",
+     "num": "21",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Norway": {
+   "as_of": "France at Norway",
+   "players": [
+    {
+     "age": 28,
+     "name": "Egil Selvik",
+     "num": "13",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 35,
+     "name": "Ørjan Nyland",
+     "num": "1",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Sander Tangvik",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Leo Østigard",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Fredrik André Bjørkan",
+     "num": "15",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Henrik Falchener",
+     "num": "25",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Kristoffer Ajer",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "David Møller Wolfe",
+     "num": "5",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Marcus Holmgren Pedersen",
+     "num": "16",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Torbjørn Heggem",
+     "num": "17",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Sondre Langas",
+     "num": "24",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Julian Ryerson",
+     "num": "26",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Patrick Berg",
+     "num": "6",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Fredrik Aursnes",
+     "num": "14",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Kristian Thorstvedt",
+     "num": "18",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Thelo Aasgaard",
+     "num": "19",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Oscar Bobb",
+     "num": "22",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Morten Thorsby",
+     "num": "2",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Sander Berge",
+     "num": "8",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Martin Ødegaard",
+     "num": "10",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Antonio Nusa",
+     "num": "20",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Jens Petter Hauge",
+     "num": "23",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Jørgen Strand Larsen",
+     "num": "11",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Andreas Schjelderup",
+     "num": "21",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Alexander Sørloth",
+     "num": "7",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Erling Haaland",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Panama": {
+   "as_of": "England at Panama",
+   "players": [
+    {
+     "age": 31,
+     "name": "Orlando Mosquera",
+     "num": "22",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 35,
+     "name": "Luis Mejía",
+     "num": "1",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "César Samudio",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "José Córdoba",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Fidel Escobar",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Andrés Andrade",
+     "num": "16",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Amir Murillo",
+     "num": "23",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Jorge Gutiérrez",
+     "num": "26",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "César Blackman",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Edgardo Fariña",
+     "num": "5",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Jiovany Ramos",
+     "num": "13",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 35,
+     "name": "Éric Davis",
+     "num": "15",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Roderick Miller",
+     "num": "25",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Cristian Martínez",
+     "num": "6",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "José Luis Rodríguez",
+     "num": "7",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Édgar Yoel Bárcenas",
+     "num": "11",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Carlos Harvey",
+     "num": "14",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Adalberto Carrasquilla",
+     "num": "8",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 36,
+     "name": "Aníbal Godoy",
+     "num": "20",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Tomás Rodríguez",
+     "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Ismael Díaz",
+     "num": "10",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "José Fajardo",
+     "num": "17",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 35,
+     "name": "Cecilio Waterman",
+     "num": "18",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 38,
+     "name": "Alberto Quintero",
+     "num": "19",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "César Yanis",
+     "num": "21",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Azarias Londoño",
+     "num": "24",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Paraguay": {
+   "as_of": "Paraguay at Germany",
+   "players": [
+    {
+     "age": 26,
+     "name": "Orlando Gill",
+     "num": "12",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 38,
+     "name": "Gatito Fernández",
+     "num": "1",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Gastón Olveira",
+     "num": "22",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Juan Jose Cáceres",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Júnior Alonso",
+     "num": "6",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "José Canale",
+     "num": "13",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Gustavo Gómez",
+     "num": "15",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 35,
+     "name": "Gustavo Velázquez",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Omar Alderete",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Fabián Balbuena",
+     "num": "5",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Alexandro Maidana",
+     "num": "26",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Andrés Cubas",
+     "num": "14",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Damián Bobadilla",
+     "num": "16",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Julio Enciso",
+     "num": "19",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Matías Galarza",
+     "num": "23",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Diego Gómez",
+     "num": "8",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Maurício",
+     "num": "11",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Alejandro Romero Gamarra",
+     "num": "17",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Braian Ojeda",
+     "num": "20",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Miguel Almirón",
+     "num": "10",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 35,
+     "name": "Gabriel Ávalos",
+     "num": "21",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Ramón Sosa",
+     "num": "7",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Antonio Sanabria",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Alex Arce",
+     "num": "18",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Gustavo Caballero",
+     "num": "24",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Isidro Pitta",
+     "num": "25",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Portugal": {
+   "as_of": "Portugal at Colombia",
+   "players": [
+    {
+     "age": 26,
+     "name": "Diogo Costa",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "José Sá",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Rui Silva",
+     "num": "22",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Rúben Dias",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Renato Veiga",
+     "num": "13",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "João Cancelo",
+     "num": "20",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Nuno Mendes",
+     "num": "25",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Nélson Semedo",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Tomás Araújo",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Diogo Dalot",
+     "num": "5",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Gonçalo Inácio",
+     "num": "14",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Bruno Fernandes",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Rúben Neves",
+     "num": "21",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Vitinha",
+     "num": "23",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Matheus Nunes",
+     "num": "6",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Bernardo Silva",
+     "num": "10",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "João Neves",
+     "num": "15",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Samú Costa",
+     "num": "24",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 41,
+     "name": "Cristiano Ronaldo",
+     "num": "7",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "João Félix",
+     "num": "11",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Pedro Neto",
+     "num": "18",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Gonçalo Ramos",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Francisco Trincão",
+     "num": "16",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Rafael Leão",
+     "num": "17",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Gonçalo Guedes",
+     "num": "19",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Francisco Conceição",
+     "num": "26",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Qatar": {
+   "as_of": "Qatar at Bosnia-Herzegovina",
+   "players": [
+    {
+     "age": 26,
+     "name": "Mahmoud Abunada",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Salah Zakaria",
+     "num": "21",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Meshaal Barsham",
+     "num": "22",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 35,
+     "name": "Pedro Miguel",
+     "num": "2",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Issa Laye",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Jassem Gaber",
+     "num": "5",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 35,
+     "name": "Boualem Khoukhi",
+     "num": "16",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Sultan Al-Brake",
+     "num": "18",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 35,
+     "name": "Lucas Mendes",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Ayoub Al-Oui",
+     "num": "13",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Homam Ahmed",
+     "num": "14",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Al-Hashmi Al-Hussain",
+     "num": "25",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 35,
+     "name": "Karim Boudiaf",
+     "num": "12",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Ahmed Fathy",
+     "num": "20",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 35,
+     "name": "Abdulaziz Hatem",
+     "num": "6",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Assim Madibo",
+     "num": "23",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Mohamed Manai",
+     "num": "26",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Edmílson Junior",
+     "num": "8",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 35,
+     "name": "Hassan Al-Haydos",
+     "num": "10",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Akram Afif",
+     "num": "11",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Ahmed Alaaeldin",
+     "num": "7",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Mohammed Muntari",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Yusuf Abdurisag",
+     "num": "15",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Ahmed Al-Ganehi",
+     "num": "17",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Almoez Ali",
+     "num": "19",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Tahsin Jamshid",
+     "num": "24",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Saudi Arabia": {
+   "as_of": "Saudi Arabia at Cape Verde",
+   "players": [
+    {
+     "age": 34,
+     "name": "Mohammed Al-Owais",
+     "num": "21",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Nawaf Al-Aqidi",
+     "num": "1",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 35,
+     "name": "Ahmed Al-Kassar",
+     "num": "22",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Abdulelah Al-Amri",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Hassan Al-Tambakti",
+     "num": "5",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Saud Abdulhamid",
+     "num": "12",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Nawaf Boushal",
+     "num": "13",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Ali Majrashi",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Ali Lajami",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Hassan Kadish",
+     "num": "14",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Moteb Al-Harbi",
+     "num": "24",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Jehad Thakri",
+     "num": "25",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Nasser Al-Dawsari",
+     "num": "6",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 34,
+     "name": "Salem Al-Dawsari",
+     "num": "10",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Abdullah Al-Khaibari",
+     "num": "15",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Mohamed Kanno",
+     "num": "23",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Musab Al-Juwayr",
+     "num": "7",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Aiman Yahya",
+     "num": "8",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Ziyad Al-Johani",
+     "num": "16",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Ala Al-Hajji",
+     "num": "18",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Mohammed Abu Al-Shamat",
+     "num": "26",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Feras Al-Brikan",
+     "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Sultan Mandash",
+     "num": "20",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Saleh Al-Shehri",
+     "num": "11",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Khalid Al-Ghannam",
+     "num": "17",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Abdullah Al-Hamdan",
+     "num": "19",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Scotland": {
+   "as_of": "Brazil at Scotland",
+   "players": [
+    {
+     "age": 30,
+     "name": "Angus Gunn",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Liam Kelly",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 43,
+     "name": "Craig Gordon",
+     "num": "21",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Andy Robertson",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Jack Hendry",
+     "num": "13",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Nathan Patterson",
+     "num": "22",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Scott McKenna",
+     "num": "26",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Aaron Hickey",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Grant Hanley",
+     "num": "5",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Kieran Tierney",
+     "num": "6",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "John Souttar",
+     "num": "15",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Dominic Hyam",
+     "num": "16",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Anthony Ralston",
+     "num": "24",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Scott McTominay",
+     "num": "4",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "John McGinn",
+     "num": "7",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Lewis Ferguson",
+     "num": "19",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 34,
+     "name": "Kenny McLean",
+     "num": "23",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 19,
+     "name": "Tyler Fletcher",
+     "num": "8",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Ryan Christie",
+     "num": "11",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Ben Gannon-Doak",
+     "num": "17",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Lawrence Shankland",
+     "num": "20",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Lyndon Dykes",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Ché Adams",
+     "num": "10",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Ross Stewart",
+     "num": "14",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "George Hirst",
+     "num": "18",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 19,
+     "name": "Findlay Curtis",
+     "num": "25",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Senegal": {
+   "as_of": "Iraq at Senegal",
+   "players": [
+    {
+     "age": 33,
+     "name": "Mory Diaw",
+     "num": "23",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Yehvann Diouf",
+     "num": "1",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Édouard Mendy",
+     "num": "16",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Abdoulaye Seck",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Ismail Jakobs",
+     "num": "14",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Moussa Niakhaté",
+     "num": "19",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 20,
+     "name": "Mamadou Sarr",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 35,
+     "name": "Kalidou Koulibaly",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Antoine Mendy",
+     "num": "24",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "El Hadji Malick Diouf",
+     "num": "25",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 36,
+     "name": "Idrissa Gueye",
+     "num": "5",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Lamine Camara",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Krépin Diatta",
+     "num": "15",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Habib Diarra",
+     "num": "21",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Pathé Ciss",
+     "num": "6",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Iliman Ndiaye",
+     "num": "13",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Pape Matar Sarr",
+     "num": "17",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 18,
+     "name": "Bara Sapoko Ndiaye",
+     "num": "22",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Pape Gueye",
+     "num": "26",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Sadio Mané",
+     "num": "10",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Ismaïla Sarr",
+     "num": "18",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 18,
+     "name": "Ibrahim Mbaye",
+     "num": "20",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 20,
+     "name": "Assane Diao",
+     "num": "7",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Bamba Dieng",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Nicolas Jackson",
+     "num": "11",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Cherif Ndiaye",
+     "num": "12",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "South Africa": {
+   "as_of": "Canada at South Africa",
+   "players": [
+    {
+     "age": 34,
+     "name": "Ronwen Williams",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Sipho Chaine",
+     "num": "16",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Ricardo Goss",
+     "num": "22",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Aubrey Modiba",
+     "num": "6",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 20,
+     "name": "Mbekezeli Mbokazi",
+     "num": "14",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Khuliso Mudau",
+     "num": "20",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Ime Okon",
+     "num": "21",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Thabang Matuludi",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Khulumani Ndamane",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Samukele Kabini",
+     "num": "18",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Nkosinathi Sibisi",
+     "num": "19",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Olwethu Makhanya",
+     "num": "24",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Bradley Cross",
+     "num": "26",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Teboho Mokoena",
+     "num": "4",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Sphephelo Sithole",
+     "num": "13",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Thalente Mbatha",
+     "num": "5",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 36,
+     "name": "Themba Zwane",
+     "num": "11",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Jayden Adams",
+     "num": "23",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Kamogelo Sebelebele",
+     "num": "25",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Oswin Appollis",
+     "num": "7",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 21,
+     "name": "Relebohile Mofokeng",
+     "num": "10",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Thapelo Maseko",
+     "num": "12",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Evidence Makgopa",
+     "num": "17",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Tshepang Moremi",
+     "num": "8",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Lyle Foster",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Iqraam Rayners",
+     "num": "15",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "South Korea": {
+   "as_of": "South Korea at South Africa",
+   "players": [
+    {
+     "age": 35,
+     "name": "Kim Seung-Gyu",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Song Bum-Keun",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Jo Hyeon-Woo",
+     "num": "21",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Lee Han-Beom",
+     "num": "2",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Lee Gi-Hyuk",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Kim Min-Jae",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Lee Tae-Seok",
+     "num": "13",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Seol Young-Woo",
+     "num": "22",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Kim Tae-Hyeon",
+     "num": "5",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Cho Wi-Je",
+     "num": "14",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Kim Moon-Hwan",
+     "num": "15",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Hwang In-Beom",
+     "num": "6",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Paik Seung-Ho",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Lee Kang-In",
+     "num": "19",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Lee Jae-Sung",
+     "num": "10",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Park Jin-Seop",
+     "num": "16",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Bae Jun-Ho",
+     "num": "17",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Jens Castrop",
+     "num": "23",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Kim Jin-Gyu",
+     "num": "24",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Lee Dong-Gyeong",
+     "num": "26",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Hwang Hee-Chan",
+     "num": "11",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Oh Hyeon-Gyu",
+     "num": "18",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Son Heung-Min",
+     "num": "7",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Cho Gue-Sung",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Yang Hyun-Jun",
+     "num": "20",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Eom Ji-Sung",
+     "num": "25",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Spain": {
+   "as_of": "Spain at Uruguay",
+   "players": [
+    {
+     "age": 29,
+     "name": "Unai Simón",
+     "num": "23",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "David Raya",
+     "num": "1",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Joan García",
+     "num": "13",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Aymeric Laporte",
+     "num": "14",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 19,
+     "name": "Pau Cubarsí",
+     "num": "22",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Marc Cucurella",
+     "num": "24",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Marc Pubill",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Alejandro Grimaldo",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Eric García",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Pedro Porro",
+     "num": "12",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Marcos Llorente",
+     "num": "5",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Mikel Merino",
+     "num": "6",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Álex Baena",
+     "num": "15",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Rodri",
+     "num": "16",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Pedri",
+     "num": "20",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Fabián Ruiz",
+     "num": "8",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Gavi",
+     "num": "9",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Dani Olmo",
+     "num": "10",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Yéremy Pino",
+     "num": "11",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Martín Zubimendi",
+     "num": "18",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 18,
+     "name": "Lamine Yamal",
+     "num": "19",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Mikel Oyarzabal",
+     "num": "21",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Ferran Torres",
+     "num": "7",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Nico Williams",
+     "num": "17",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Víctor Muñoz",
+     "num": "25",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Borja Iglesias",
+     "num": "26",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Sweden": {
+   "as_of": "Sweden at Japan",
+   "players": [
+    {
+     "age": 27,
+     "name": "Jacob Widell Zetterström",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Viktor Johansson",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 37,
+     "name": "Kristoffer Nordfeldt",
+     "num": "23",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Gustaf Lagerbielke",
+     "num": "2",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Victor Lindelöf",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Isak Hien",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Gabriel Gudmundsson",
+     "num": "5",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Daniel Svensson",
+     "num": "8",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Hjalmar Ekdal",
+     "num": "14",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Carl Starfelt",
+     "num": "15",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Eric Smith",
+     "num": "20",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Yasin Ayari",
+     "num": "18",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Elliot Stroud",
+     "num": "24",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Herman Johansson",
+     "num": "6",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Lucas Bergvall",
+     "num": "7",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Ken Sema",
+     "num": "13",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Jesper Karlström",
+     "num": "16",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Mattias Svanberg",
+     "num": "19",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Besfort Zeneli",
+     "num": "22",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Taha Ali",
+     "num": "26",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Alexander Isak",
+     "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Anthony Elanga",
+     "num": "11",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Viktor Gyökeres",
+     "num": "17",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Alexander Bernhardsson",
+     "num": "21",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Benjamin Nygren",
+     "num": "10",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Gustaf Nilsson",
+     "num": "25",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Switzerland": {
+   "as_of": "Canada at Switzerland",
+   "players": [
+    {
+     "age": 28,
+     "name": "Gregor Kobel",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Yvon Mvogo",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Marvin Keller",
+     "num": "21",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Nico Elvedi",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Manuel Akanji",
+     "num": "5",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Ricardo Rodríguez",
+     "num": "13",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Luca Jaquez",
+     "num": "25",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Miro Muheim",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Silvan Widmer",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Eray Cömert",
+     "num": "18",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Aurèle Amenda",
+     "num": "24",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Remo Freuler",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 20,
+     "name": "Johan Manzambi",
+     "num": "9",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Granit Xhaka",
+     "num": "10",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Djibril Sow",
+     "num": "15",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Rubén Vargas",
+     "num": "17",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Denis Zakaria",
+     "num": "6",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Ardon Jashari",
+     "num": "14",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Christian Fassnacht",
+     "num": "16",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Michel Aebischer",
+     "num": "20",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Fabian Rieder",
+     "num": "22",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Breel Embolo",
+     "num": "7",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Dan Ndoye",
+     "num": "11",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Noah Okafor",
+     "num": "19",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Zeki Amdouni",
+     "num": "23",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Cedric Itten",
+     "num": "26",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Tunisia": {
+   "as_of": "Netherlands at Tunisia",
+   "players": [
+    {
+     "age": 29,
+     "name": "Aymen Dahmen",
+     "num": "16",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Mouhib Chamakh",
+     "num": "1",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Sabri Ben Hessen",
+     "num": "22",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Ali Abdi",
+     "num": "2",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Montassar Talbi",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Yan Valery",
+     "num": "20",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Mohamed Amine Ben Hamida",
+     "num": "21",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Omar Rekik",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Adem Arous",
+     "num": "5",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Dylan Bronn",
+     "num": "6",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Moutaz Neffati",
+     "num": "23",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Raed Chikhaoui",
+     "num": "24",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Hannibal Mejbri",
+     "num": "10",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Rani Khedira",
+     "num": "13",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Ellyes Skhiri",
+     "num": "17",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Anis Slimane",
+     "num": "25",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Elias Achouri",
+     "num": "7",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Mortadha Ben Ouanes",
+     "num": "12",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Mohamed Hadj Mahmoud",
+     "num": "15",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Hazem Mastouri",
+     "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Ismaël Gharbi",
+     "num": "11",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Elias Saad",
+     "num": "8",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Khalil Ayari",
+     "num": "14",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 18,
+     "name": "Rayan Elloumi",
+     "num": "18",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Firas Chaouat",
+     "num": "19",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Sebastian Tounekti",
+     "num": "26",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Turkey": {
+   "as_of": "United States at Türkiye",
+   "players": [
+    {
+     "age": 30,
+     "name": "Ugurcan Çakir",
+     "num": "23",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 37,
+     "name": "Mert Günok",
+     "num": "1",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Altay Bayindir",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Zeki Çelik",
+     "num": "2",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Eren Elmali",
+     "num": "13",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Abdülkerim Bardakçi",
+     "num": "14",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Ozan Kabak",
+     "num": "15",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Merih Demiral",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Çaglar Söyüncü",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Mert Müldür",
+     "num": "18",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Ferdi Kadioglu",
+     "num": "20",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Kaan Ayhan",
+     "num": "22",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Samet Akaydin",
+     "num": "25",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Salih Özcan",
+     "num": "5",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Orkun Kökçü",
+     "num": "6",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 21,
+     "name": "Arda Güler",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Hakan Çalhanoglu",
+     "num": "10",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Ismail Yüksek",
+     "num": "16",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Irfan Can Kahveci",
+     "num": "17",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Can Uzun",
+     "num": "26",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Kenan Yildiz",
+     "num": "11",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Baris Alper Yilmaz",
+     "num": "21",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Oguz Aydin",
+     "num": "24",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Kerem Aktürkoglu",
+     "num": "7",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Deniz Gül",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Yunus Akgün",
+     "num": "19",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "USA": {
+   "as_of": "United States at Türkiye",
+   "players": [
+    {
+     "age": 32,
+     "name": "Matt Turner",
+     "num": "1",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Matt Freese",
+     "num": "24",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Chris Brady",
+     "num": "25",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Auston Trusty",
+     "num": "6",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Miles Robinson",
+     "num": "12",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Mark McKenzie",
+     "num": "22",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Joe Scally",
+     "num": "23",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Sergiño Dest",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Chris Richards",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Antonee Robinson",
+     "num": "5",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 38,
+     "name": "Tim Ream",
+     "num": "13",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Alex Freeman",
+     "num": "16",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Giovanni Reyna",
+     "num": "7",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Weston McKennie",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Brenden Aaronson",
+     "num": "11",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Sebastian Berhalter",
+     "num": "14",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Tyler Adams",
+     "num": "4",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Christian Pulisic",
+     "num": "10",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Cristian Roldan",
+     "num": "15",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Malik Tillman",
+     "num": "17",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Max Arfsten",
+     "num": "18",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Ricardo Pepi",
+     "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Timothy Weah",
+     "num": "21",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Haji Wright",
+     "num": "19",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Folarin Balogun",
+     "num": "20",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Alejandro Zendejas",
+     "num": "26",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Uruguay": {
+   "as_of": "Spain at Uruguay",
+   "players": [
+    {
+     "age": 40,
+     "name": "Fernando Muslera",
+     "num": "23",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Sergio Rochet",
+     "num": "1",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Santiago Mele",
+     "num": "12",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Sebastián Cáceres",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Guillermo Varela",
+     "num": "13",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Mathías Olivera",
+     "num": "16",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "José María Giménez",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Ronald Araújo",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Matías Viña",
+     "num": "17",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Joaquín Piquerez",
+     "num": "22",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Santiago Bueno",
+     "num": "24",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Manuel Ugarte",
+     "num": "5",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Rodrigo Bentancur",
+     "num": "6",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Federico Valverde",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Maxi Araújo",
+     "num": "20",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Juan Manuel Sanabria",
+     "num": "25",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Nicolás de la Cruz",
+     "num": "7",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Giorgian de Arrascaeta",
+     "num": "10",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Facundo Pellistri",
+     "num": "11",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Emiliano Martínez",
+     "num": "15",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Rodrigo Zalazar",
+     "num": "26",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Darwin Núñez",
+     "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Agustín Canobbio",
+     "num": "14",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Brian Rodríguez",
+     "num": "18",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Rodrigo Aguirre",
+     "num": "19",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Federico Viñas",
+     "num": "21",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Uzbekistan": {
+   "as_of": "Uzbekistan at Congo DR",
+   "players": [
+    {
+     "age": 25,
+     "name": "Abduvohid Nematov",
+     "num": "12",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 35,
+     "name": "Utkir Yusupov",
+     "num": "1",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Botirali Ergashev",
+     "num": "16",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Abdukodir Khusanov",
+     "num": "2",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Khojiakbar Alijonov",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Rustam Ashurmatov",
+     "num": "5",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Sherzod Nasrullaev",
+     "num": "13",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Jakhongir Urozov",
+     "num": "26",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 35,
+     "name": "Farrukh Sayfiev",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Umar Eshmurodov",
+     "num": "15",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 18,
+     "name": "Behruzjon Karimov",
+     "num": "24",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Avazbek Ulmasaliyev",
+     "num": "25",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Akmal Mozgovoy",
+     "num": "6",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Otabek Shukurov",
+     "num": "7",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Dostonbek Khamdamov",
+     "num": "17",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Abbosbek Fayzullaev",
+     "num": "22",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Jamshid Iskanderov",
+     "num": "8",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Odiljon Xamrobekov",
+     "num": "9",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Jaloliddin Masharipov",
+     "num": "10",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Oston Urunov",
+     "num": "11",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Abdulla Abdullaev",
+     "num": "18",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Azizjon Ganiev",
+     "num": "19",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Sherzod Esanov",
+     "num": "23",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Eldor Shomurodov",
+     "num": "14",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Azizbek Amonov",
+     "num": "20",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Igor Sergeev",
+     "num": "21",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  }
+ }
+}

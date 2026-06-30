@@ -17,7 +17,7 @@ import json
 import os
 from datetime import datetime, timedelta, timezone
 
-from . import blurbs, bracket, config, data, standings, util, venues
+from . import blurbs, bracket, config, data, squads, standings, util, venues
 from . import odds as odds_api
 from .flags import flag
 from .util import fmt_date, fmt_date_short  # noqa: F401
@@ -43,6 +43,7 @@ class Context:
         self.advance = standings.advance_probabilities(self.matches, self.analyses)
         self.last_updated = data.last_updated()
         self.blurbs = blurbs.load_cache()   # LLM road-to-final write-ups (may be empty)
+        self.squads = squads.load_cache()   # ESPN rosters keyed by team (may be empty)
         self._wire_knockout()
 
     def _wire_knockout(self):
@@ -893,6 +894,40 @@ def page_group(ctx, letter):
                  page=f"group-{letter.lower()}.html")
 
 
+def squad_section(ctx, team):
+    """The squad, grouped by position line, with the most recent starting XI
+    highlighted. Empty string when we have no roster for this team."""
+    sq = squads.squad_for(ctx.squads, team)
+    if not sq or not sq.get("players"):
+        return ""
+    lines = []
+    for code in ("G", "D", "M", "F"):
+        ps = [p for p in sq["players"] if p.get("pos") == code]
+        if not ps:
+            continue
+        items = []
+        for p in ps:
+            num = "" if p.get("num") in (None, "") else E(str(p["num"]))
+            age = f'<span class="sq-age">{E(str(p["age"]))}</span>' if p.get("age") else ""
+            st = " is-start" if p.get("starter") else ""
+            items.append(
+                f'<li class="sq-p{st}"><span class="sq-num">{num}</span>'
+                f'<span class="sq-nm">{E(p.get("name") or "")}</span>{age}</li>')
+        lines.append(
+            f'<div class="sq-line"><h3 class="sq-pos">{E(squads.POS_NAME[code])}</h3>'
+            f'<ul class="sq-list">{"".join(items)}</ul></div>')
+    if not lines:
+        return ""
+    as_of = sq.get("as_of")
+    cap = (f'starting XI from {E(as_of)} in <b>bold</b>' if as_of
+           else "current squad by position")
+    return (
+        '<section aria-label="Squad">'
+        f'<div class="sec-head"><h2>Squad</h2><span class="muted">{cap}</span></div>'
+        f'<div class="squad">{"".join(lines)}</div>'
+        '</section>')
+
+
 def page_team(ctx, team):
     proj = ctx.projections[team]
     info = ctx.analyses[proj["group"]]
@@ -970,6 +1005,7 @@ def page_team(ctx, team):
   <div><h2 class="col-h">Results</h2><div class="match-list">{match_list(gr_played, ctx, "None yet")}</div></div>
   <div><h2 class="col-h">Remaining group games</h2><div class="match-list">{match_list(gr_upcoming, ctx, "Group complete")}</div></div>
 </section>
+{squad_section(ctx, team)}
 """
     return shell(f"{team} — Road to the Final · World Cup 2026", "", body, ctx,
                  desc=(f"{team} at the 2026 World Cup: where they stand, what they need "
@@ -3220,6 +3256,18 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 /* cols (team page fixtures) ----------------------------------------- */
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:var(--s5)}
 .col-h{font-size:var(--t-lg)}
+
+/* squad — roster grouped by line, most recent starting XI in bold ---- */
+.squad{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:var(--s4) var(--s5);margin-top:var(--s2)}
+.sq-line{min-width:0}
+.sq-pos{font-family:var(--mono);font-size:var(--t-xs);font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:0 0 6px;padding-bottom:5px;border-bottom:2px solid var(--ink)}
+.sq-list{list-style:none;margin:0;padding:0}
+.sq-p{display:flex;align-items:baseline;gap:9px;padding:5px 1px;border-bottom:1px solid var(--hair);font-size:var(--t-sm)}
+.sq-num{font-family:var(--mono);font-size:var(--t-xs);color:var(--muted);min-width:1.7em;text-align:right;flex:none}
+.sq-nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sq-age{margin-left:auto;font-family:var(--mono);font-size:var(--t-2xs);color:var(--muted);flex:none}
+.sq-p.is-start .sq-nm{font-weight:800}
+.sq-p.is-start .sq-num{color:var(--vermilion);font-weight:700}
 
 /* ============ RESPONSIVE ========================================= */
 @media(max-width:880px){
