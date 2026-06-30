@@ -2151,16 +2151,34 @@ APP_JS = r"""
           '<button class="bet-pick" type="button" data-bet="'+m.num+'" data-team="'+he(m.team2)+'"><span class="bet-fl">'+(F[m.team2]||'')+'</span><span class="bet-nm">'+he(m.team2)+'</span><span class="bet-od">'+m.odds2.toFixed(2)+'</span></button>'+
           '</div></div>';
       }).join(''):'<p class="muted">No matches are open for betting right now — check back when the next ties are set.</p>';
-      var betsArr=(state.myBets||[]);
-      var betsCard=betsArr.length?'<div class="bet-card"><h2>Your bets</h2>'+betsArr.map(function(b){
-        var st=b.status==='won'?'<span class="bet-st won">WON +'+money(b.payout)+'</span>':b.status==='lost'?'<span class="bet-st lost">LOST</span>':'<span class="bet-st open">OPEN</span>';
-        return '<div class="bet-row"><span class="bet-r-pick">'+(F[b.pick]||'')+' '+he(b.pick)+'</span><span class="bet-r-stk">'+money(b.stake)+' @ '+b.odds.toFixed(2)+'</span>'+st+'</div>';
+      // decided ties in the current round — dimmed, not selectable, with everyone's bets
+      var RORD={R32:0,R16:1,QF:2,SF:3,F:4};
+      var curRound=openM.length?openM[0].round:(function(){
+        var dec=(state.matches||[]).filter(function(m){return m.decided;});
+        return dec.length?dec.reduce(function(a,b){return RORD[b.round]>=RORD[a.round]?b:a;}).round:null;})();
+      var decidedM=(state.matches||[]).filter(function(m){return m.decided&&m.round===curRound;});
+      function dside(team,odds,winner){
+        return '<div class="bet-dteam'+(team===winner?' win':' lose')+'"><span class="bet-fl">'+(F[team]||'')+'</span><span class="bet-nm">'+he(team)+'</span><span class="bet-od">'+odds.toFixed(2)+'</span></div>';
+      }
+      var decidedCard=decidedM.length?'<div class="bet-card"><h2>Decided · '+he(curRound)+'</h2>'+decidedM.map(function(m){
+        var bh=(state.poolBets||[]).filter(function(b){return b.match_num===m.num;});
+        var betsList=bh.length?'<div class="bet-dbets">'+bh.map(function(b){
+          var won=b.status==='won';
+          return '<div class="bet-dbet'+(b.you?' you':'')+'"><span class="bet-db-who">'+he(b.player)+(b.you?' (you)':'')+'</span><span class="bet-db-pick">'+(F[b.pick]||'')+' '+he(b.pick)+'</span><span class="bet-db-amt'+(won?' won':' lost')+'">'+money(b.stake)+(won?' → won '+money(b.payout):' → lost')+'</span></div>';
+        }).join('')+'</div>':'<div class="bet-dbets-none muted">No bets were placed on this match.</div>';
+        return '<div class="bet-game bet-decided"><div class="bet-g-rd">'+he(m.round)+' · final · '+he(m.winner)+' won</div>'+
+          '<div class="bet-g-row">'+dside(m.team1,m.odds1,m.winner)+dside(m.team2,m.odds2,m.winner)+'</div>'+betsList+'</div>';
+      }).join('')+'</div>':'';
+      var openBets=(state.myBets||[]).filter(function(b){return b.status==='open';});
+      var betsCard=openBets.length?'<div class="bet-card"><h2>Your open bets</h2>'+openBets.map(function(b){
+        var mm=matchById(b.match_num)||{};var opp=mm.team1===b.pick?mm.team2:mm.team1;
+        return '<div class="bet-row"><span class="bet-r-pick">'+(F[b.pick]||'')+' '+he(b.pick)+(opp?' <span class="muted">v '+he(opp)+'</span>':'')+'</span><span class="bet-r-stk">'+money(b.stake)+' @ '+b.odds.toFixed(2)+'</span><span class="bet-st open">OPEN</span></div>';
       }).join('')+'</div>':'';
       var lb='<div class="bet-card"><h2>Leaderboard</h2><ol class="bet-lb">'+(state.leaderboard||[]).map(function(p){
         return '<li class="'+(p.you?'you':'')+(p.balance<=0?' out':'')+'"><span class="bet-lb-n">'+he(p.name)+(p.you?' (you)':'')+'</span><span class="bet-lb-b">'+money(p.balance)+'</span></li>';
       }).join('')+'</ol></div>';
       app.innerHTML='<div class="bet-bal'+(me.out?' out':'')+'">'+money(me.balance)+'<span class="bet-bal-k">'+he(state.pool.name)+(me.out?' · you are out':'')+'</span></div>'+
-        '<div class="bet-card"><h2>Open matches</h2>'+games+'</div>'+betsCard+lb;
+        decidedCard+'<div class="bet-card"><h2>Open matches</h2>'+games+'</div>'+betsCard+lb;
       [].forEach.call(app.querySelectorAll('.bet-pick'),function(btn){btn.onclick=function(){openBet(+btn.getAttribute('data-bet'),btn.getAttribute('data-team'));};});
       applyTZ();   // format the kickoff times in the viewer's chosen zone
     }
@@ -2908,6 +2926,25 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-fl{font-size:1.25rem;line-height:1}
 .bet-nm{font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bet-od{font-family:var(--mono);font-weight:800;color:var(--vermilion)}
+/* decided matches: dimmed matchup (not selectable) + everyone's bets */
+.bet-decided{padding:10px 0;border-top:1px solid var(--line)}
+.bet-decided:first-of-type{border-top:0}
+.bet-dteam{display:flex;align-items:center;gap:8px;padding:9px 11px;border:1.5px solid var(--line);background:var(--paper2)}
+.bet-dteam .bet-nm{font-weight:700}
+.bet-dteam .bet-od{color:var(--muted)}
+.bet-dteam.lose{opacity:.45}
+.bet-dteam.win{border-color:var(--ink)}
+.bet-dteam.win .bet-nm{font-weight:800}
+.bet-dteam.win .bet-od{color:var(--ink)}
+.bet-dbets{margin-top:9px;display:flex;flex-direction:column;gap:5px}
+.bet-dbet{display:flex;align-items:center;gap:8px;font-size:.84rem;flex-wrap:wrap}
+.bet-dbet.you .bet-db-who{font-weight:800;color:var(--vermilion)}
+.bet-db-who{font-weight:700}
+.bet-db-pick{color:var(--ink2)}
+.bet-db-amt{margin-left:auto;font-family:var(--mono);font-weight:800;white-space:nowrap}
+.bet-db-amt.won{color:var(--vermilion)}
+.bet-db-amt.lost{color:var(--muted)}
+.bet-dbets-none{margin-top:8px;font-size:.82rem}
 .bet-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:.92rem}
 .bet-row:first-of-type{border-top:0}
 .bet-r-pick{font-weight:700;flex:1;min-width:0}
