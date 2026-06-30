@@ -24,6 +24,10 @@ export async function onRequestPost({ request, env }) {
   if (pick !== m.team1 && pick !== m.team2) return json({ ok: false, error: "bad_pick" });
   if (!(stake > 0)) return json({ ok: false, error: "bad_stake" });
   if (stake > me.balance + 1e-9) return json({ ok: false, error: "insufficient" });
+  // no hedging: can't back both teams in the same tie (more on the same side is fine)
+  const prior = (await env.DB.prepare("SELECT pick FROM bets WHERE player_id=? AND match_num=?")
+    .bind(me.id, matchNum).all()).results || [];
+  if (prior.some((r) => r.pick !== pick)) return json({ ok: false, error: "both_sides" });
 
   const odds = pick === m.team1 ? m.odds1 : m.odds2;
   const now = new Date().toISOString();
