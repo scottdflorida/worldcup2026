@@ -725,6 +725,8 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-pick{display:flex;align-items:center;gap:8px;padding:9px 11px;border:1.5px solid var(--line2);background:var(--paper);cursor:pointer;text-align:left}
 .bet-pick:hover{border-color:var(--ink)}
 .bet-pick.disabled{opacity:.38;cursor:not-allowed;pointer-events:none}
+.bet-pick.on{border-color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.bet-edit-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .bet-fl{font-size:1.25rem;line-height:1}
 .bet-nm{font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bet-od{font-family:var(--mono);font-weight:800;color:var(--vermilion)}

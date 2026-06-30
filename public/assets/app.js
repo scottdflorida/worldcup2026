@@ -542,7 +542,8 @@
       var openBets=(state.myBets||[]).filter(function(b){return b.status==='open';});
       var betsCard=openBets.length?'<div class="bet-card"><h2>Your open bets</h2>'+openBets.map(function(b){
         var mm=matchById(b.match_num)||{};var opp=mm.team1===b.pick?mm.team2:mm.team1;
-        return '<div class="bet-row"><span class="bet-r-pick">'+(F[b.pick]||'')+' '+he(b.pick)+(opp?' <span class="muted">v '+he(opp)+'</span>':'')+'</span><span class="bet-r-stk">'+money(b.stake)+' @ '+b.odds.toFixed(2)+'</span><span class="bet-st open">OPEN</span></div>';
+        var tail=mm.open?'<button class="bet-mini bet-edit" type="button" data-edit="'+b.id+'">Edit</button>':'<span class="bet-st open">LOCKED</span>';
+        return '<div class="bet-row"><span class="bet-r-pick">'+(F[b.pick]||'')+' '+he(b.pick)+(opp?' <span class="muted">v '+he(opp)+'</span>':'')+'</span><span class="bet-r-stk">'+money(b.stake)+' @ '+b.odds.toFixed(2)+'</span>'+tail+'</div>';
       }).join('')+'</div>':'';
       var lb='<div class="bet-card"><h2>Leaderboard</h2><ol class="bet-lb">'+(state.leaderboard||[]).map(function(p){
         return '<li class="'+(p.you?'you':'')+(p.out?' out':'')+'"><span class="bet-lb-n">'+he(p.name)+(p.you?' (you)':'')+'</span><span class="bet-lb-b">'+money(p.total)+'<i class="bet-lb-sub">cash '+money(p.cash)+' · in play '+money(p.portfolio)+'</i></span></li>';
@@ -560,6 +561,7 @@
         '<span class="bet-bal-k">'+he(me.name)+' · '+he(state.pool.name)+(me.out?' · out':'')+'</span></div>'+leaveCtl+'</div>';
       app.innerHTML=poolsBar+balRow+toggle+decidedCard+'<div class="bet-card"><h2>Open matches</h2>'+games+'</div>'+betsCard+lb;
       [].forEach.call(app.querySelectorAll('.bet-pick'),function(btn){btn.onclick=function(){openBet(+btn.getAttribute('data-bet'),btn.getAttribute('data-team'));};});
+      [].forEach.call(app.querySelectorAll('.bet-edit'),function(btn){btn.onclick=function(){openEdit(+btn.getAttribute('data-edit'));};});
       [].forEach.call(app.querySelectorAll('.bet-pool[data-pool]'),function(b){b.onclick=function(){var c=b.getAttribute('data-pool');if(c!==mem.active){mem.active=c;saveMem();leaveArmed=false;load();}};});
       var addB=document.getElementById('bet-pool-add'); if(addB)addB.onclick=function(){joining=true;render();};
       var lv=document.getElementById('bet-leave'); if(lv)lv.onclick=function(){leaveArmed=true;render();};
@@ -589,6 +591,42 @@
         if(s>bal){showErr('bet-place-err','That is more than your balance.');return;}
         api('place',{method:'POST',body:JSON.stringify({match:num,pick:team,stake:s})}).then(function(r){
           if(r.ok){closeBet();load();}else showErr('bet-place-err',r.error==='closed'?'Betting on this match is closed.':r.error==='insufficient'?'Not enough balance.':r.error==='both_sides'?'You already backed the other side of this match.':'Could not place bet.');
+        });
+      };
+      if(modal)modal.hidden=false;
+    }
+    function openEdit(id){
+      var b=null; (state.myBets||[]).forEach(function(x){if(x.id===id)b=x;}); if(!b)return;
+      var m=matchById(b.match_num); if(!m||!m.open)return;
+      var F=state.flags||{},sel=b.pick,avail=state.me.cash+b.stake;
+      function curOdds(team){return team===m.team1?m.odds1:m.odds2;}
+      function teamBtn(team){return '<button class="bet-pick" type="button" data-eteam="'+he(team)+'"><span class="bet-fl">'+(F[team]||'')+'</span><span class="bet-nm">'+he(team)+'</span><span class="bet-od">'+curOdds(team).toFixed(2)+'</span></button>';}
+      document.getElementById('bet-modal-k').textContent='Edit bet';
+      form.innerHTML='<div class="bet-g-row" id="bet-edit-teams">'+teamBtn(m.team1)+teamBtn(m.team2)+'</div>'+
+        '<label class="bet-l">Stake (you have '+money(avail)+')<input id="bet-stake" type="number" min="0.01" step="0.01" value="'+b.stake+'"></label>'+
+        '<div class="bet-payout muted" id="bet-payout"></div>'+
+        '<div class="bet-edit-actions"><button class="bet-btn" id="bet-save" type="button">Save changes</button>'+
+        '<button class="bet-btn ghost" id="bet-remove" type="button">Remove bet</button></div>'+
+        '<p class="bet-err" id="bet-place-err" hidden></p>';
+      var inp=document.getElementById('bet-stake'),po=document.getElementById('bet-payout');
+      function refresh(){
+        [].forEach.call(form.querySelectorAll('#bet-edit-teams .bet-pick'),function(btn){btn.classList.toggle('on',btn.getAttribute('data-eteam')===sel);});
+        var s=parseFloat(inp.value)||0; po.textContent=s>0?('Returns '+money(s*curOdds(sel))+' if '+sel+' wins'):'';
+      }
+      inp.oninput=refresh;
+      [].forEach.call(form.querySelectorAll('#bet-edit-teams .bet-pick'),function(btn){btn.onclick=function(){sel=btn.getAttribute('data-eteam');refresh();};});
+      refresh();
+      document.getElementById('bet-save').onclick=function(){
+        var s=parseFloat(inp.value)||0;
+        if(s<=0){showErr('bet-place-err','Enter a stake.');return;}
+        if(s>avail){showErr('bet-place-err','That is more than you have.');return;}
+        api('update',{method:'POST',body:JSON.stringify({id:id,pick:sel,stake:s})}).then(function(r){
+          if(r.ok){closeBet();load();}else showErr('bet-place-err',r.error==='both_sides'?'You already backed the other side here.':r.error==='closed'?'This match has kicked off.':r.error==='insufficient'?'More than you have.':'Could not update.');
+        });
+      };
+      document.getElementById('bet-remove').onclick=function(){
+        api('cancel',{method:'POST',body:JSON.stringify({id:id})}).then(function(r){
+          if(r.ok){closeBet();load();}else showErr('bet-place-err',r.error==='closed'?'This match has kicked off.':'Could not remove.');
         });
       };
       if(modal)modal.hidden=false;
