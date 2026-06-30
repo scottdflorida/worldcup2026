@@ -695,13 +695,9 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-err{color:var(--vermilion);font-size:.82rem;margin:8px 0 0;font-weight:700}
 .bet-game{padding:10px 0;border-top:1px solid var(--line)}
 .bet-game:first-of-type{border-top:0}
-.bet-g-rd{font-family:var(--mono);font-size:.56rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:7px}
-.bet-srctag{font-family:var(--mono);font-size:.5rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding:1px 5px;line-height:1.4}
-.bet-srctag.live{color:var(--on-accent);background:var(--vermilion)}
-.bet-srctag.model{color:var(--muted);background:transparent;border:1px solid var(--line2)}
-.bet-oddsbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:var(--mono);font-size:.64rem;
-  color:var(--ink2);margin:-2px 0 14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
-.bet-game.is-model .bet-od{color:var(--muted)}   /* estimate: dim the number too */
+.bet-g-rd{font-family:var(--mono);font-size:.56rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.bet-g-rd .ko{display:inline-flex;gap:.5ch}
+.bet-g-rd .ko-day,.bet-g-rd .ko-time,.bet-g-rd .ko-tz{color:var(--muted);font-weight:800;font-size:inherit;letter-spacing:inherit}
 .bet-g-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .bet-pick{display:flex;align-items:center;gap:8px;padding:9px 11px;border:1.5px solid var(--line2);background:var(--paper);cursor:pointer;text-align:left}
 .bet-pick:hover{border-color:var(--ink)}
@@ -725,7 +721,6 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-form{padding:16px}
 .bet-form-team{font-size:1.05rem;margin-bottom:14px}
 .bet-payout{font-size:.82rem;margin:0 0 12px;min-height:1em}
-.bet-src{font-size:.7rem;margin:12px 0 0}
 
 /* footer ----------------------------------------------------------- */
 .site-foot{max-width:var(--maxw);margin:0 auto;padding:0 clamp(14px,4vw,28px) var(--s8);position:relative;z-index:1}

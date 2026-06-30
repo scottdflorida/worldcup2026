@@ -461,17 +461,12 @@
       var me=state.me,F=state.flags||{};
       var openM=(state.matches||[]).filter(function(m){return m.open;});
       var games=openM.length?openM.map(function(m){
-        return '<div class="bet-game'+(m.oddsSrc==='live'?'':' is-model')+'"><div class="bet-g-rd">'+he(m.round)+'<span class="bet-srctag '+(m.oddsSrc==='live'?'live':'model')+'" title="'+(m.oddsSrc==='live'?'Live betting-market odds':'Estimated from group form')+'">'+(m.oddsSrc==='live'?'live odds':'model odds')+'</span></div><div class="bet-g-row">'+
+        var when=m.kickoff?' · <span class="ko" data-utc="'+m.kickoff+'" data-tfmt="daytime"><span class="ko-day"></span> <span class="ko-time"><span class="ko-tz tz"></span></span></span>':'';
+        return '<div class="bet-game"><div class="bet-g-rd">'+he(m.round)+when+'</div><div class="bet-g-row">'+
           '<button class="bet-pick" type="button" data-bet="'+m.num+'" data-team="'+he(m.team1)+'"><span class="bet-fl">'+(F[m.team1]||'')+'</span><span class="bet-nm">'+he(m.team1)+'</span><span class="bet-od">'+m.odds1.toFixed(2)+'</span></button>'+
           '<button class="bet-pick" type="button" data-bet="'+m.num+'" data-team="'+he(m.team2)+'"><span class="bet-fl">'+(F[m.team2]||'')+'</span><span class="bet-nm">'+he(m.team2)+'</span><span class="bet-od">'+m.odds2.toFixed(2)+'</span></button>'+
           '</div></div>';
       }).join(''):'<p class="muted">No matches are open for betting right now — check back when the next ties are set.</p>';
-      var hasLive=openM.some(function(m){return m.oddsSrc==='live';});
-      var hasModel=openM.some(function(m){return m.oddsSrc!=='live';});
-      var oddsbar=!openM.length?''
-        :(hasLive&&hasModel)?'<div class="bet-oddsbar"><span class="bet-srctag live">live</span> betting market (The Odds API) &nbsp;·&nbsp; <span class="bet-srctag model">model</span> our group-form estimate</div>'
-        :hasLive?'<div class="bet-oddsbar"><span class="bet-srctag live">live odds</span> every price below is the current betting market (The Odds API)</div>'
-        :'<div class="bet-oddsbar"><span class="bet-srctag model">model odds</span> no market price yet — these are our group-form estimates</div>';
       var betsArr=(state.myBets||[]);
       var betsCard=betsArr.length?'<div class="bet-card"><h2>Your bets</h2>'+betsArr.map(function(b){
         var st=b.status==='won'?'<span class="bet-st won">WON +'+money(b.payout)+'</span>':b.status==='lost'?'<span class="bet-st lost">LOST</span>':'<span class="bet-st open">OPEN</span>';
@@ -481,8 +476,9 @@
         return '<li class="'+(p.you?'you':'')+(p.balance<=0?' out':'')+'"><span class="bet-lb-n">'+he(p.name)+(p.you?' (you)':'')+'</span><span class="bet-lb-b">'+money(p.balance)+'</span></li>';
       }).join('')+'</ol></div>';
       app.innerHTML='<div class="bet-bal'+(me.out?' out':'')+'">'+money(me.balance)+'<span class="bet-bal-k">'+he(state.pool.name)+(me.out?' · you are out':'')+'</span></div>'+
-        '<div class="bet-card"><h2>Open matches</h2>'+oddsbar+games+'</div>'+betsCard+lb;
+        '<div class="bet-card"><h2>Open matches</h2>'+games+'</div>'+betsCard+lb;
       [].forEach.call(app.querySelectorAll('.bet-pick'),function(btn){btn.onclick=function(){openBet(+btn.getAttribute('data-bet'),btn.getAttribute('data-team'));};});
+      applyTZ();   // format the kickoff times in the viewer's chosen zone
     }
     var modal=document.getElementById('bet-modal'),form=document.getElementById('bet-form');
     if(modal&&modal.parentNode!==document.body)document.body.appendChild(modal);
