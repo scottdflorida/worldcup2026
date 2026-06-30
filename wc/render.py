@@ -1082,18 +1082,22 @@ def _km_cell(r, ci):
         if not resolved:
             any_candidate = True
         g = ""
+        wl = ""
+        is_win = bool(r["played"] and r["winner"] and res["team"] == r["winner"])
         if r["played"]:
             g1, g2 = data.final_score({"score": r["score"]})
             gv = g1 if key == "team1" else g2
-            winner = r["winner"]
-            is_win = bool(winner and res["team"] == winner)
             g = f'<span class="km-g{" kwin" if is_win else " kloss"}">{gv}</span>'
             pens = (r["score"] or {}).get("p")
             if pens:
                 pv = pens[0] if key == "team1" else pens[1]
                 g += f'<span class="km-pen{" kwin" if is_win else ""}">({pv})</span>'
-        side_cls = "km-team" + ("" if resolved else " is-candidate")
-        sides.append(f'<div class="{side_cls}">{_bracket_side(res)}{g}</div>')
+            # A plain W/L tag — the clearest at-a-glance read of who advanced.
+            wl = (f'<span class="km-wl {"w" if is_win else "l"}" '
+                  f'title="{"Won" if is_win else "Lost"}">{"W" if is_win else "L"}</span>')
+        side_cls = "km-team" + ("" if resolved else " is-candidate") + \
+                   ((" kw" if is_win else " kl") if r["played"] else "")
+        sides.append(f'<div class="{side_cls}">{_bracket_side(res)}{g}{wl}</div>')
     km_cls = "km" + (" km-live" if any_candidate and ci == 0 else "") + \
              (" km-done" if r["played"] else "")
     when = kickoff_label(r) or '<span class="ko"><span class="ko-day">TBD</span></span>'
@@ -3050,7 +3054,13 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bslot{font-family:var(--mono);color:var(--muted);font-size:.74rem;font-weight:600}
 .km-g{margin-left:auto;font-family:var(--mono);font-weight:800;font-variant-numeric:tabular-nums;min-width:16px;text-align:right}
 .km-g.kloss{color:var(--muted)}.km-g.kwin{color:var(--ink)}
-.km-team .bteam.win,.km-team:has(.kwin) .bteam{color:var(--ink);font-weight:800}
+.km-team .bteam.win,.km-team:has(.kwin) .bteam,.km-team.kw .bteam{color:var(--ink);font-weight:800}
+/* W/L result tag — the clear winner/loser signal, beyond the bolder score */
+.km-wl{flex:none;display:inline-grid;place-items:center;width:15px;height:15px;margin-left:5px;
+  font-family:var(--mono);font-weight:800;font-size:.58rem;line-height:1;border-radius:3px}
+.km-wl.w{background:var(--ink);color:var(--paper)}
+.km-wl.l{background:transparent;color:var(--muted);box-shadow:inset 0 0 0 1.3px var(--line2)}
+.km-team.kl{opacity:.62}
 /* The plinth is positioned by JS directly beneath the final match box. */
 .champion-plinth{position:relative;text-align:center;padding:18px 14px 16px;border:2px solid var(--ink);background:var(--ink);color:var(--paper)}
 .champion-plinth::before{content:"";position:absolute;left:0;right:0;top:0;height:8px;background:var(--vermilion)}
