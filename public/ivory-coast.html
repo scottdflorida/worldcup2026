@@ -60,7 +60,14 @@
 
 <section aria-label="Road to the final">
   <div class="sec-head"><h2>Road to the final</h2><span class="muted">potential futures — who Ivory Coast could meet each round</span></div>
-  <p class="road-blurb">Nicolas Pépé settled Ivory Coast&#x27;s group business early and late — a seventh-minute opener and a composed finish just past the hour gave them a clean, unhurried 2-0 win over Curaçao that belied any anxiety about their second-place standing. They meet Norway in the Round of 32 on Tue Jun 30 10:00 PT in what shapes as a genuine contest: Ivory Coast carry real attacking threat but Norway&#x27;s physicality and set-piece menace make this far from a formality. Survive that, and Brazil await in the Round of 16 — a test of an altogether different order. Should they somehow navigate that, England, Mexico, or Ecuador could loom in the quarterfinal, with Argentina among the possible dangers further still.</p>
+  <p class="road-blurb">Wait — the brief shows `last_match` as a Round of 32 loss to Norway, and `eliminated` is false, yet there is no `road` array. This is contradictory: a team that lost in the Round of 32 would be eliminated and have no onward path.
+
+Before I write the blurb, could you clarify? It looks like either:
+
+- **`eliminated` should be `true`** (they lost to Norway and are out), or
+- **the `road` array is missing** by accident and Ivory Coast actually progressed.
+
+Which is correct? That determines whether I write a retrospective or a road-forward piece.</p>
   <div class="roads"><div class="road-line"><div class="road-line-head"><h4>Group E runners-up</h4><span class="road-track out">Knocked out</span></div><ol class="road-graph"><li class="road-step done lost" data-cands="1"><div class="road-node"><span class="road-rd">R32</span><span class="road-date muted"><span class="ko" data-utc="2026-06-30T17:00:00Z" data-tfmt="daytime"><span class="ko-day">Tue Jun 30</span> <span class="ko-time">10:00<span class="ko-tz tz">PT</span></span></span></span></div><span class="road-branch single" aria-hidden="true"></span><div class="road-opp"><span class="road-rmark lost" aria-hidden="true">✕</span><a class="cand" data-team="Norway" href="norway.html"><span class="fl">🇳🇴</span><span class="nm">Norway</span></a><span class="road-score">1–2</span></div></li></ol></div></div>
 </section>
 
