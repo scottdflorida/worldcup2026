@@ -14,7 +14,13 @@ on:
     - cron: "*/15 14-23 * * *"   # 14:00–23:59 UTC
     - cron: "*/15 0-5 * * *"     # 00:00–05:59 UTC (late Americas kickoffs)
     - cron: "0 11 * * *"         # daily safety net
-  workflow_dispatch: {}
+    - cron: "0 13 * * *"         # 06:00 PT — daily betting-odds refresh
+  workflow_dispatch:
+    inputs:
+      refresh_odds:
+        description: "Also refresh betting odds"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -45,6 +51,8 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          # refresh odds once a day at 06:00 PT (or on a manual run that asks for it)
+          REFRESH_ODDS: ${{ (github.event.schedule == '0 13 * * *' || inputs.refresh_odds) && '1' || '' }}
         run: python3 scripts/update.py
 
       - name: Commit & push only if results changed

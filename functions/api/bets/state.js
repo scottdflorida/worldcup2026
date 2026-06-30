@@ -30,9 +30,16 @@ export async function onRequestGet({ request, env }) {
       "SELECT b.match_num,b.pick,b.stake,b.odds,b.status,b.payout,b.player_id,p.name FROM bets b " +
       "JOIN players p ON p.id=b.player_id WHERE p.pool_id=? ORDER BY b.id ASC")
       .bind(me.pool_id).all()).results || [];
-    // portfolio = potential return (stake*odds) on each player's still-open bets
+    // portfolio = mark-to-market value of each open bet = stake * (odds at
+    // placement / current odds). A fresh bet is worth its stake and only drifts
+    // as the line moves; once a match starts we freeze it at stake until settled.
+    const curOdds = {};
+    matches.forEach((m) => { if (m.open) { if (m.team1) curOdds[m.num + "|" + m.team1] = m.odds1; if (m.team2) curOdds[m.num + "|" + m.team2] = m.odds2; } });
     const openVal = {};
-    for (const r of all) if (r.status === "open") openVal[r.player_id] = (openVal[r.player_id] || 0) + r.stake * r.odds;
+    for (const r of all) if (r.status === "open") {
+      const co = curOdds[r.match_num + "|" + r.pick] || r.odds;
+      openVal[r.player_id] = (openVal[r.player_id] || 0) + r.stake * (r.odds / co);
+    }
     const port = (id) => openVal[id] || 0;
     resp.me = { name: me.name, cash: round2(me.balance), portfolio: round2(port(me.id)),
                 total: round2(me.balance + port(me.id)), out: me.balance + port(me.id) <= 0 };
@@ -44,10 +51,10 @@ export async function onRequestGet({ request, env }) {
       total: round2(p.balance + port(p.id)), out: p.balance + port(p.id) <= 0, you: p.id === me.id,
     })).sort((a, b) => b.total - a.total || a.name.localeCompare(b.name));
     const mb = (await env.DB.prepare(
-      "SELECT match_num,pick,stake,odds,status,payout FROM bets WHERE player_id=? ORDER BY id DESC")
+      "SELECT id,match_num,pick,stake,odds,status,payout FROM bets WHERE player_id=? ORDER BY id DESC")
       .bind(me.id).all()).results || [];
     resp.myBets = mb.map((b) => ({
-      match_num: b.match_num, pick: b.pick, stake: round2(b.stake),
+      id: b.id, match_num: b.match_num, pick: b.pick, stake: round2(b.stake),
       odds: b.odds, status: b.status, payout: round2(b.payout),
     }));
     // everyone's bets — but only on matches the viewer is allowed to see: any

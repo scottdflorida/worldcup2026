@@ -29,10 +29,13 @@ def _refresh_blurbs(payload):
 
 
 def _refresh_odds():
-    """Pull public match odds into data/odds.json (TTL-guarded, ~3x/day max).
-    Best-effort: no key or any failure just keeps the existing/model odds."""
+    """Pull public match odds into data/odds.json — only on the daily 6am-PT run
+    (REFRESH_ODDS=1), so the line moves once a day. Best-effort: no key or any
+    failure just keeps the existing/model odds."""
+    if os.environ.get("REFRESH_ODDS") != "1":
+        return
     try:
-        odds.refresh()
+        odds.refresh(force=True)
     except Exception as e:  # noqa: BLE001 — never let odds break the deploy
         print(f"[update] odds refresh failed ({e!r}); using existing odds")
 
