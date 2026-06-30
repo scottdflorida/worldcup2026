@@ -571,7 +571,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
    far-right column lands flush right). JS opens on the current round. */
 @media(max-width:720px){
   .kbracket{min-width:0;gap:16px;padding:14px 14px 22px}
-  .kr-col{flex:0 0 82vw;min-width:0;scroll-snap-align:start}
+  .kr-col{flex:0 0 49vw;min-width:0;scroll-snap-align:start}
   .kr-col:last-child{scroll-snap-align:end}
   .bracket-wrap{scroll-snap-type:x mandatory;scroll-padding-left:14px;
     overscroll-behavior-x:contain}
@@ -660,18 +660,21 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .fb-pick.fb-locked .fb-slot{cursor:default;border-color:transparent;background:transparent;box-shadow:none}
 .fb-champ .fb-slot{border-width:2px;border-color:var(--vermilion);width:calc(var(--fb-fl)*1.62);height:calc(var(--fb-fl)*1.34)}
 .fb-champ.fb-filled .fb-slot{box-shadow:0 0 0 2px var(--vermilion)}
-/* upcoming-matches list beneath the bracket */
-.fbu{margin-top:26px}
+/* upcoming-matches list beneath the bracket — a card so its row rules don't blend
+   with the page's ruled background */
+.fbu{margin-top:26px;background:var(--paper2);border:1.5px solid var(--line2);padding:14px 16px}
+.fbu .sec-head{margin-bottom:8px}
 .fbu-list{list-style:none;margin:0;padding:0}
-.fbu-row{display:flex;align-items:center;gap:8px 14px;padding:10px 0;border-top:1px solid var(--line);flex-wrap:wrap}
+.fbu-row{padding:9px 0;border-top:1px solid var(--line)}
 .fbu-row:first-child{border-top:0}
-.fbu-rd{font-family:var(--mono);font-size:.56rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);min-width:30px}
-.fbu-teams{display:flex;align-items:center;gap:8px;flex:1;min-width:0;font-weight:700;font-size:.95rem}
-.fbu-team{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;min-width:0}
+.fbu-teams{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-weight:700;font-size:.95rem}
+.fbu-team{display:inline-flex;align-items:center;gap:5px}
 .fbu-fl{font-size:1.2em;line-height:1}
 .fbu-team.tbd{font-weight:600}
 .fbu-v{font-family:var(--mono);color:var(--muted);font-size:.72rem;font-weight:700}
-.fbu-when{font-family:var(--mono);font-size:.72rem;white-space:nowrap;margin-left:auto}
+.fbu-meta{display:flex;align-items:center;gap:8px;margin-top:3px}
+.fbu-rd{font-family:var(--mono);font-size:.56rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.fbu-when{font-family:var(--mono);font-size:.72rem;color:var(--ink2);white-space:nowrap}
 .fb-modal[hidden]{display:none}
 .fb-modal{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:18px}
 .fb-modal-back{position:absolute;inset:0;background:rgba(19,17,13,.55)}
