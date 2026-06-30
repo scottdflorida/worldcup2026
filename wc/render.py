@@ -1973,6 +1973,9 @@ APP_JS = r"""
     // modal picker for later rounds
     var modal=document.getElementById('fb-modal'),
         grid=document.getElementById('fb-modal-grid'),cur=null;
+    // lift the modal out of <main> (its own stacking context) so it paints above
+    // the footer instead of behind it
+    if(modal&&modal.parentNode!==document.body)document.body.appendChild(modal);
     function he(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
     function openModal(num){
       cur=num;var opts=feasible(num);
@@ -2693,7 +2696,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .fb-champ .fb-slot{border-width:2px;border-color:var(--vermilion);width:calc(var(--fb-fl)*1.62);height:calc(var(--fb-fl)*1.34)}
 .fb-champ.fb-filled .fb-slot{box-shadow:0 0 0 2px var(--vermilion)}
 .fb-modal[hidden]{display:none}
-.fb-modal{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:18px}
+.fb-modal{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:18px}
 .fb-modal-back{position:absolute;inset:0;background:rgba(19,17,13,.55)}
 .fb-modal-panel{position:relative;background:var(--paper);border:2px solid var(--ink);width:100%;max-width:340px;
   max-height:80vh;display:flex;flex-direction:column;box-shadow:6px 6px 0 var(--ink)}
