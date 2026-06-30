@@ -705,6 +705,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-g-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .bet-pick{display:flex;align-items:center;gap:8px;padding:9px 11px;border:1.5px solid var(--line2);background:var(--paper);cursor:pointer;text-align:left}
 .bet-pick:hover{border-color:var(--ink)}
+.bet-pick.disabled{opacity:.38;cursor:not-allowed;pointer-events:none}
 .bet-fl{font-size:1.25rem;line-height:1}
 .bet-nm{font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bet-od{font-family:var(--mono);font-weight:800;color:var(--vermilion)}
@@ -719,11 +720,13 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-dteam.win .bet-nm{font-weight:800}
 .bet-dteam.win .bet-od{color:var(--ink)}
 .bet-dbets{margin-top:9px;display:flex;flex-direction:column;gap:5px}
-.bet-dbet{display:flex;align-items:center;gap:8px;font-size:.84rem;flex-wrap:wrap}
+/* split at the centre: name+pick right-aligned to it, amount left-aligned from it */
+.bet-dbet{display:grid;grid-template-columns:1fr 1fr;gap:3px 12px;align-items:baseline;font-size:.84rem}
 .bet-dbet.you .bet-db-who{font-weight:800;color:var(--vermilion)}
+.bet-db-l{text-align:right;min-width:0}
 .bet-db-who{font-weight:700}
 .bet-db-pick{color:var(--ink2)}
-.bet-db-amt{margin-left:auto;font-family:var(--mono);font-weight:800;white-space:nowrap}
+.bet-db-amt{text-align:left;font-family:var(--mono);font-weight:800;white-space:nowrap}
 .bet-db-amt.won{color:var(--vermilion)}
 .bet-db-amt.lost{color:var(--muted)}
 .bet-dbets-none{margin-top:8px;font-size:.82rem}

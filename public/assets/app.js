@@ -465,25 +465,37 @@
         var amt=b.status==='won'?'<span class="bet-db-amt won">'+money(b.stake)+' → won '+money(b.payout)+'</span>'
           :b.status==='lost'?'<span class="bet-db-amt lost">'+money(b.stake)+' → lost</span>'
           :'<span class="bet-db-amt">'+money(b.stake)+'</span>';
-        return '<div class="bet-dbet'+(b.you?' you':'')+'"><span class="bet-db-who">'+he(b.player)+(b.you?' (you)':'')+'</span><span class="bet-db-pick">'+(F[b.pick]||'')+' '+he(b.pick)+'</span>'+amt+'</div>';
+        return '<div class="bet-dbet'+(b.you?' you':'')+'"><span class="bet-db-l"><span class="bet-db-who">'+he(b.player)+(b.you?' (you)':'')+'</span> <span class="bet-db-pick">'+(F[b.pick]||'')+' '+he(b.pick)+'</span></span>'+amt+'</div>';
       }).join('')+'</div>';
+    }
+    // group by who they backed (winner's group first once decided), biggest stake first
+    function sortBets(rows,m){
+      var order=m.decided?[m.winner,(m.winner===m.team1?m.team2:m.team1)]:[m.team1,m.team2];
+      var rank={}; order.forEach(function(t,i){rank[t]=i;});
+      return rows.slice().sort(function(a,b){
+        var ga=rank[a.pick]==null?9:rank[a.pick], gb=rank[b.pick]==null?9:rank[b.pick];
+        return ga!==gb?ga-gb:b.stake-a.stake;
+      });
     }
     function renderPool(){
       var me=state.me,F=state.flags||{};
-      var myNums={}; (state.myBets||[]).forEach(function(b){myNums[b.match_num]=1;});
       var openM=(state.matches||[]).filter(function(m){return m.open;});
       var games=openM.length?openM.map(function(m){
         var when=m.kickoff?' · <span class="ko" data-utc="'+m.kickoff+'" data-tfmt="daytime"><span class="ko-day"></span> <span class="ko-time"><span class="ko-tz tz"></span></span></span>':'';
-        // others' bets show only once YOU have bet on this match; else just a count
+        // your own bets always show under the match; others only when the toggle
+        // is on AND you've bet here (else just a hidden-count teaser)
         var bh=(state.poolBets||[]).filter(function(b){return b.match_num===m.num;});
-        var block='';
-        if(showBets){
-          if(myNums[m.num]&&bh.length)block=betsList(bh);
-          else if(!myNums[m.num]){var c=(state.lockedCounts||{})[m.num]||0;if(c)block='<div class="bet-locked muted">'+c+' bet'+(c>1?'s':'')+' hidden — place a bet to reveal</div>';}
+        var mine=bh.filter(function(b){return b.you;});
+        var rows=showBets?mine.concat(bh.filter(function(b){return !b.you;})):mine;
+        var block=rows.length?betsList(sortBets(rows,m)):'';
+        if(!mine.length&&showBets){var c=(state.lockedCounts||{})[m.num]||0;if(c)block='<div class="bet-locked muted">'+c+' bet'+(c>1?'s':'')+' hidden — place a bet to reveal</div>';}
+        var myPick=mine.length?mine[0].pick:null;   // can't bet both sides — lock the other one
+        function pickBtn(team,odds){
+          var dis=myPick&&myPick!==team;
+          return '<button class="bet-pick'+(dis?' disabled':'')+'" type="button"'+(dis?' disabled':'')+' data-bet="'+m.num+'" data-team="'+he(team)+'"><span class="bet-fl">'+(F[team]||'')+'</span><span class="bet-nm">'+he(team)+'</span><span class="bet-od">'+odds.toFixed(2)+'</span></button>';
         }
         return '<div class="bet-game"><div class="bet-g-rd">'+he(m.round)+when+'</div><div class="bet-g-row">'+
-          '<button class="bet-pick" type="button" data-bet="'+m.num+'" data-team="'+he(m.team1)+'"><span class="bet-fl">'+(F[m.team1]||'')+'</span><span class="bet-nm">'+he(m.team1)+'</span><span class="bet-od">'+m.odds1.toFixed(2)+'</span></button>'+
-          '<button class="bet-pick" type="button" data-bet="'+m.num+'" data-team="'+he(m.team2)+'"><span class="bet-fl">'+(F[m.team2]||'')+'</span><span class="bet-nm">'+he(m.team2)+'</span><span class="bet-od">'+m.odds2.toFixed(2)+'</span></button>'+
+          pickBtn(m.team1,m.odds1)+pickBtn(m.team2,m.odds2)+
           '</div>'+block+'</div>';
       }).join(''):'<p class="muted">No matches are open for betting right now — check back when the next ties are set.</p>';
       // decided ties in the current round — dimmed, not selectable, with everyone's bets
@@ -497,7 +509,9 @@
       }
       var decidedCard=decidedM.length?'<div class="bet-card"><h2>Decided · '+he(curRound)+'</h2>'+decidedM.map(function(m){
         var bh=(state.poolBets||[]).filter(function(b){return b.match_num===m.num;});
-        var bl=!showBets?'':(bh.length?betsList(bh):'<div class="bet-dbets-none muted">No bets were placed on this match.</div>');
+        var mine=bh.filter(function(b){return b.you;});
+        var rows=showBets?mine.concat(bh.filter(function(b){return !b.you;})):mine;
+        var bl=rows.length?betsList(sortBets(rows,m)):(showBets?'<div class="bet-dbets-none muted">No bets were placed on this match.</div>':'');
         return '<div class="bet-game bet-decided"><div class="bet-g-rd">'+he(m.round)+' · final · '+he(m.winner)+' won</div>'+
           '<div class="bet-g-row">'+dside(m.team1,m.odds1,m.winner)+dside(m.team2,m.odds2,m.winner)+'</div>'+bl+'</div>';
       }).join('')+'</div>':'';
@@ -536,7 +550,7 @@
         if(s<=0){showErr('bet-place-err','Enter a stake.');return;}
         if(s>bal){showErr('bet-place-err','That is more than your balance.');return;}
         api('place',{method:'POST',body:JSON.stringify({match:num,pick:team,stake:s})}).then(function(r){
-          if(r.ok){closeBet();load();}else showErr('bet-place-err',r.error==='closed'?'Betting on this match is closed.':r.error==='insufficient'?'Not enough balance.':'Could not place bet.');
+          if(r.ok){closeBet();load();}else showErr('bet-place-err',r.error==='closed'?'Betting on this match is closed.':r.error==='insufficient'?'Not enough balance.':r.error==='both_sides'?'You already backed the other side of this match.':'Could not place bet.');
         });
       };
       if(modal)modal.hidden=false;
