@@ -545,7 +545,7 @@
         return '<div class="bet-row"><span class="bet-r-pick">'+(F[b.pick]||'')+' '+he(b.pick)+(opp?' <span class="muted">v '+he(opp)+'</span>':'')+'</span><span class="bet-r-stk">'+money(b.stake)+' @ '+b.odds.toFixed(2)+'</span><span class="bet-st open">OPEN</span></div>';
       }).join('')+'</div>':'';
       var lb='<div class="bet-card"><h2>Leaderboard</h2><ol class="bet-lb">'+(state.leaderboard||[]).map(function(p){
-        return '<li class="'+(p.you?'you':'')+(p.balance<=0?' out':'')+'"><span class="bet-lb-n">'+he(p.name)+(p.you?' (you)':'')+'</span><span class="bet-lb-b">'+money(p.balance)+'</span></li>';
+        return '<li class="'+(p.you?'you':'')+(p.out?' out':'')+'"><span class="bet-lb-n">'+he(p.name)+(p.you?' (you)':'')+'</span><span class="bet-lb-b">'+money(p.total)+'<i class="bet-lb-sub">cash '+money(p.cash)+' · in play '+money(p.portfolio)+'</i></span></li>';
       }).join('')+'</ol></div>';
       var toggle='<label class="bet-toggle"><input type="checkbox" id="bet-show"'+(showBets?' checked':'')+'><span>Show everyone’s bets</span></label>';
       var poolsBar='<div class="bet-pools">'+mem.pools.map(function(p){
@@ -554,7 +554,10 @@
       var leaveCtl=leaveArmed
         ? '<span class="bet-leave-c">Leave “'+he(mem.active)+'”? <button id="bet-leave-yes" class="bet-mini danger" type="button">Leave</button><button id="bet-leave-no" class="bet-mini" type="button">Cancel</button></span>'
         : '<button id="bet-leave" class="bet-mini" type="button">Leave</button>';
-      var balRow='<div class="bet-balrow"><div class="bet-bal'+(me.out?' out':'')+'">'+money(me.balance)+'<span class="bet-bal-k">'+he(me.name)+' · '+he(state.pool.name)+(me.out?' · out':'')+'</span></div>'+leaveCtl+'</div>';
+      var balRow='<div class="bet-balrow"><div class="bet-bal'+(me.out?' out':'')+'">'+
+        '<div class="bet-bal-pair"><span class="bet-bal-fig"><b>'+money(me.total)+'</b><i>Portfolio</i></span>'+
+        '<span class="bet-bal-fig"><b>'+money(me.cash)+'</b><i>Cash</i></span></div>'+
+        '<span class="bet-bal-k">'+he(me.name)+' · '+he(state.pool.name)+(me.out?' · out':'')+'</span></div>'+leaveCtl+'</div>';
       app.innerHTML=poolsBar+balRow+toggle+decidedCard+'<div class="bet-card"><h2>Open matches</h2>'+games+'</div>'+betsCard+lb;
       [].forEach.call(app.querySelectorAll('.bet-pick'),function(btn){btn.onclick=function(){openBet(+btn.getAttribute('data-bet'),btn.getAttribute('data-team'));};});
       [].forEach.call(app.querySelectorAll('.bet-pool[data-pool]'),function(b){b.onclick=function(){var c=b.getAttribute('data-pool');if(c!==mem.active){mem.active=c;saveMem();leaveArmed=false;load();}};});
@@ -572,7 +575,7 @@
     document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal&&!modal.hidden)closeBet();});
     function openBet(num,team){
       var m=matchById(num); if(!m)return;
-      var F=state.flags||{},odds=team===m.team1?m.odds1:m.odds2,bal=state.me.balance;
+      var F=state.flags||{},odds=team===m.team1?m.odds1:m.odds2,bal=state.me.cash;
       document.getElementById('bet-modal-k').textContent='Bet on '+team;
       form.innerHTML='<div class="bet-form-team">'+(F[team]||'')+' <b>'+he(team)+'</b> @ '+odds.toFixed(2)+'</div>'+
         '<label class="bet-l">Stake (you have '+money(bal)+')<input id="bet-stake" type="number" min="0.01" step="0.01"></label>'+

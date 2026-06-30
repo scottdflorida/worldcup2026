@@ -682,9 +682,14 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 /* Betting pool ----------------------------------------------------- */
 .bet-intro{margin-bottom:6px}
 .bet-app{display:flex;flex-direction:column;gap:16px}
-.bet-bal{font-family:var(--mono);font-weight:800;font-size:2rem;color:var(--ink);display:flex;flex-direction:column;gap:2px}
-.bet-bal.out{color:var(--muted)}
-.bet-bal-k{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.bet-bal{display:flex;flex-direction:column;gap:5px}
+.bet-bal-pair{display:flex;gap:24px;align-items:flex-end}
+.bet-bal-fig{display:flex;flex-direction:column;gap:1px}
+.bet-bal-fig b{font-family:var(--mono);font-weight:800;font-size:1.95rem;line-height:1;color:var(--ink)}
+.bet-bal-fig+.bet-bal-fig b{font-size:1.45rem;color:var(--ink2)}   /* cash = secondary figure */
+.bet-bal-fig i{font-family:var(--mono);font-size:.55rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-style:normal}
+.bet-bal.out .bet-bal-fig b{color:var(--muted)}
+.bet-bal-k{font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .bet-toggle{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.64rem;font-weight:700;
   letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);cursor:pointer;user-select:none}
 .bet-toggle input{width:15px;height:15px;accent-color:var(--vermilion);cursor:pointer}
@@ -757,7 +762,9 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-lb li:first-child{border-top:0}
 .bet-lb li.you .bet-lb-n{font-weight:800;color:var(--vermilion)}
 .bet-lb li.out{opacity:.5}
-.bet-lb-b{font-family:var(--mono);font-weight:800}
+.bet-lb-b{font-family:var(--mono);font-weight:800;display:flex;flex-direction:column;align-items:flex-end;gap:1px}
+.bet-lb-sub{font-size:.56rem;font-weight:600;color:var(--muted);font-style:normal;letter-spacing:.02em}
+.bet-lb li{align-items:center}
 .bet-form{padding:16px}
 .bet-form-team{font-size:1.05rem;margin-bottom:14px}
 .bet-payout{font-size:.82rem;margin:0 0 12px;min-height:1em}
