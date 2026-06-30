@@ -928,7 +928,7 @@ def squad_section(ctx, team):
     return (
         '<section aria-label="Squad">'
         f'<div class="sec-head"><h2>Squad</h2><span class="muted">{cap}</span></div>'
-        f'<div class="squad">{"".join(lines)}</div>'
+        f'<div class="card squad-card"><div class="squad">{"".join(lines)}</div></div>'
         '</section>')
 
 
@@ -944,11 +944,22 @@ def page_team(ctx, team):
     knocked = ctx.knocked_out(team)
     roads = []
     third_html = ""
+    next_ko_m = None
     if ko_match is not None:
         # The draw is set: trace the one real road forward from the confirmed slot.
         entry = f"{cur}{g}" if cur in (1, 2) else None
         roads.append(road_branch(team, g, ctx, entry, _ko_entry_heading(proj, cur),
                                  entered=True))
+        # The next match to play along that road — the first round not yet
+        # contested. For a team that already won a round (e.g. through to the
+        # Round of 16) this is the upcoming game, even if its opponent is still
+        # being decided.
+        by_num = bracket.index_matches(ctx.matches)
+        for step in (bracket.project_path(team, ctx.matches, ctx.analyses, g, entry) or []):
+            mm = by_num.get(step["num"])
+            if mm is not None and not data.has_result(mm):
+                next_ko_m = mm
+                break
     elif not knocked:
         # Group still in progress: show each finish's hypothetical branch.
         if 1 in ranks:
@@ -965,12 +976,12 @@ def page_team(ctx, team):
     gr_upcoming = [m for m in group_results if not data.has_result(m)]
 
     next_ko = ""
-    if ko_match is not None and not data.has_result(ko_match):
+    if next_ko_m is not None:
         next_ko = (
             '<div class="next-ko" data-reveal>'
             '<div class="nk-head"><span class="nk-k">Next knockout match</span>'
-            f'<span class="nk-rd">{E(_round_short(ko_match.get("round","")))}</span></div>'
-            f'{match_line(ko_match, ctx)}</div>'
+            f'<span class="nk-rd">{E(_round_short(next_ko_m.get("round","")))}</span></div>'
+            f'{match_line(next_ko_m, ctx)}</div>'
         )
 
     if roads or third_html:
@@ -1536,6 +1547,26 @@ def road_branch(team, group_letter, ctx, entry_slot, heading, entered=False):
         opp = s["opponent"]
         rd_short = _round_short(s["round"])
         date = kickoff_label({"date": s.get("date"), "time": s.get("time")})
+        if s.get("played"):
+            # A round already contested: show the result + score, not a fan of
+            # hypothetical opponents.
+            won = s.get("won")
+            opp_chip = (team_link(opp["team"], "cand") if opp["team"]
+                        else f'<span class="road-cand tbd muted">{E(opp["label"])}</span>')
+            pens = (f'<span class="road-score pens">({E(s["pens"])} pens)</span>'
+                    if s.get("pens") else "")
+            mark = "✓" if won else "✕"
+            res = "won" if won else "lost"
+            steps.append(
+                f'<li class="road-step done {res}" data-cands="1">'
+                f'<div class="road-node"><span class="road-rd">{E(rd_short)}</span>'
+                f'<span class="road-date muted">{date}</span></div>'
+                f'<span class="road-branch single" aria-hidden="true"></span>'
+                f'<div class="road-opp"><span class="road-rmark {res}" aria-hidden="true">{mark}</span>'
+                f'{opp_chip}<span class="road-score">{E(s.get("score",""))}</span>{pens}</div>'
+                f'</li>'
+            )
+            continue
         if opp["team"]:
             fan = (f'<div class="road-fan single">'
                    f'<span class="road-cand resolved">{team_link(opp["team"], "cand")}</span></div>')
@@ -2317,8 +2348,9 @@ APP_JS = r"""
       var inPlayM=(state.matches||[]).filter(function(m){return !m.open&&!m.decided&&m.round===curRound;});
       var closedCard=closedM.length?'<div class="bet-card"><h2>Closed matches</h2>'+closedM.map(matchBlock).join('')+'</div>':'';
       var inPlayCard=inPlayM.length?'<div class="bet-card"><h2>In-play matches</h2>'+inPlayM.map(matchBlock).join('')+'</div>':'';
-      var lb='<div class="bet-card"><h2>Leaderboard</h2><ol class="bet-lb">'+(state.leaderboard||[]).map(function(p){
-        return '<li class="'+(p.you?'you':'')+(p.out?' out':'')+'"><span class="bet-lb-n">'+he(p.name)+(p.you?' (you)':'')+'</span><span class="bet-lb-b">'+money(p.total)+'<i class="bet-lb-sub">cash '+money(p.cash)+' · in play '+money(p.portfolio)+'</i></span></li>';
+      var lb='<div class="bet-card"><h2>Leaderboard</h2><ol class="bet-lb">'+(state.leaderboard||[]).map(function(p,i){
+        var rk=i+1, medal=rk<=3?(' medal r'+rk):'';
+        return '<li class="'+(p.you?'you':'')+(p.out?' out':'')+'"><span class="bet-lb-r'+medal+'">'+rk+'</span><span class="bet-lb-n">'+he(p.name)+(p.you?' (you)':'')+'</span><span class="bet-lb-b">'+money(p.total)+'<i class="bet-lb-sub">cash '+money(p.cash)+' · in play '+money(p.portfolio)+'</i></span></li>';
       }).join('')+'</ol></div>';
       var toggle='<label class="bet-toggle"><input type="checkbox" id="bet-show"'+(showBets?' checked':'')+'><span>Show everyone’s bets</span></label>';
       var poolsBar='<div class="bet-pools">'+mem.pools.map(function(p){
@@ -2938,6 +2970,15 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .road-fan.multi{padding:4px 0}
 .road-cand .cand{font-size:.72rem}
 .road-cand.resolved .cand{background:var(--paper);border-color:var(--ink);font-weight:800}
+/* A round already played: result + score, the traveled branch inked solid */
+.road-rmark{font-weight:800;font-size:.85rem;line-height:1;flex:none}
+.road-rmark.won{color:var(--ink)}
+.road-rmark.lost{color:var(--vermilion)}
+.road-score{font-family:var(--mono);font-weight:800;font-size:.78rem;color:var(--ink)}
+.road-score.pens{font-weight:600;color:var(--muted);font-size:.64rem}
+.road-step.done .road-cand .cand{font-weight:800}
+.road-step.done.lost{opacity:.55}
+.road-step.done .road-branch::before{background:var(--ink);opacity:.5}
 .road-more{display:inline-grid;place-items:center;font-family:var(--mono);font-size:.64rem;font-weight:800;color:var(--muted);border:1px dashed var(--line2);padding:2px 7px}
 .road-step.has-watched .road-rd{background:var(--vermilion);color:var(--on-accent)}
 
@@ -3239,6 +3280,13 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-lb-b{font-family:var(--mono);font-weight:800;display:flex;flex-direction:column;align-items:flex-end;gap:1px}
 .bet-lb-sub{font-size:.56rem;font-weight:600;color:var(--muted);font-style:normal;letter-spacing:.02em}
 .bet-lb li{align-items:center}
+.bet-lb-n{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bet-lb-r{flex:none;display:inline-flex;align-items:center;justify-content:center;min-width:1.6em;height:1.6em;
+  font-family:var(--mono);font-weight:800;font-size:.78rem;color:var(--muted)}
+.bet-lb-r.medal{border-radius:50%;color:#2a2206;font-size:.74rem}
+.bet-lb-r.r1{background:linear-gradient(150deg,#FCEBA4 4%,#E6B422 55%,#C9971A);box-shadow:inset 0 0 0 1.5px #B8860B,0 1px 2px rgba(0,0,0,.18)}
+.bet-lb-r.r2{background:linear-gradient(150deg,#F4F5F6 4%,#C8CDD2 55%,#AEB4BA);box-shadow:inset 0 0 0 1.5px #9AA0A6,0 1px 2px rgba(0,0,0,.15);color:#2B2F33}
+.bet-lb-r.r3{background:linear-gradient(150deg,#F1C896 4%,#CD8138 55%,#A9692C);box-shadow:inset 0 0 0 1.5px #9C5A23,0 1px 2px rgba(0,0,0,.18);color:#3A1D00}
 .bet-form{padding:16px}
 .bet-form-team{font-size:1.05rem;margin-bottom:14px}
 .bet-payout{font-size:.82rem;margin:0 0 12px;min-height:1em}
@@ -3273,7 +3321,10 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .col-h{font-size:var(--t-lg)}
 
 /* squad — roster grouped by line, most recent starting XI in bold ---- */
-.squad{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:var(--s4) var(--s5);margin-top:var(--s2)}
+/* Solid card so the per-player hairlines don't collide with the page's ruled bg */
+.squad-card{padding:var(--s5);margin-top:var(--s2)}
+.squad{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:var(--s4) var(--s5)}
+.squad-card .sq-list .sq-p:last-child{border-bottom:0}
 .sq-line{min-width:0}
 .sq-pos{font-family:var(--mono);font-size:var(--t-xs);font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:0 0 6px;padding-bottom:5px;border-bottom:2px solid var(--ink)}
 .sq-list{list-style:none;margin:0;padding:0}

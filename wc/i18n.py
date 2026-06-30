@@ -242,6 +242,8 @@ UI = {
     "Join another pool": "Entrar em outro bolão",
     "Open matches": "Jogos em aberto",
     "Closed matches": "Jogos encerrados",
+    "In-play matches": "Jogos em andamento",
+    "Leaderboard": "Ranking",
     "Remove bet": "Remover aposta",
     "Save changes": "Salvar alterações",
     "Edit bet": "Editar aposta",
@@ -443,6 +445,15 @@ _RUNTIME = r"""/* World Cup 2026 — pt-BR localisation (generated from wc/i18n.
     // "Returns $250.00 if Brazil wins" -> "Retorna $250.00 se Brasil vencer"
     function (s) { var m = s.match(/^Returns (.+) if (.+) wins$/);
       return m ? "Retorna " + m[1] + " se " + pc(m[2]) + " vencer" : null; },
+    // leaderboard subline "cash $100 · in play $50" -> "saldo $100 · em jogo $50"
+    function (s) { var m = s.match(/^cash (.+) · in play (.+)$/);
+      return m ? "saldo " + m[1] + " · em jogo " + m[2] : null; },
+    // bracket slot labels
+    function (s) { var m = s.match(/^Winner M(\d+)$/); return m ? "Vencedor M" + m[1] : null; },
+    function (s) { var m = s.match(/^Loser M(\d+)$/);  return m ? "Perdedor M" + m[1] : null; },
+    function (s) { var m = s.match(/^Winner ([A-L])$/);   return m ? "1º " + m[1] : null; },
+    function (s) { var m = s.match(/^Runner-up ([A-L])$/); return m ? "2º " + m[1] : null; },
+    function (s) { var m = s.match(/^3rd ([A-L](?:\/[A-L])*)$/); return m ? "3º " + m[1] : null; },
     // flag-prefixed chip: "🇫🇷 France" -> "🇫🇷 França"
     function (s) { var m = s.match(/^(\S+?[  \s])([A-Za-zÀ-ÿ'’ .&-]+)$/);
       return (m && C[m[2]]) ? m[1] + C[m[2]] : null; }

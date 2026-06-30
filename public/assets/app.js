@@ -544,8 +544,9 @@
       var inPlayM=(state.matches||[]).filter(function(m){return !m.open&&!m.decided&&m.round===curRound;});
       var closedCard=closedM.length?'<div class="bet-card"><h2>Closed matches</h2>'+closedM.map(matchBlock).join('')+'</div>':'';
       var inPlayCard=inPlayM.length?'<div class="bet-card"><h2>In-play matches</h2>'+inPlayM.map(matchBlock).join('')+'</div>':'';
-      var lb='<div class="bet-card"><h2>Leaderboard</h2><ol class="bet-lb">'+(state.leaderboard||[]).map(function(p){
-        return '<li class="'+(p.you?'you':'')+(p.out?' out':'')+'"><span class="bet-lb-n">'+he(p.name)+(p.you?' (you)':'')+'</span><span class="bet-lb-b">'+money(p.total)+'<i class="bet-lb-sub">cash '+money(p.cash)+' · in play '+money(p.portfolio)+'</i></span></li>';
+      var lb='<div class="bet-card"><h2>Leaderboard</h2><ol class="bet-lb">'+(state.leaderboard||[]).map(function(p,i){
+        var rk=i+1, medal=rk<=3?(' medal r'+rk):'';
+        return '<li class="'+(p.you?'you':'')+(p.out?' out':'')+'"><span class="bet-lb-r'+medal+'">'+rk+'</span><span class="bet-lb-n">'+he(p.name)+(p.you?' (you)':'')+'</span><span class="bet-lb-b">'+money(p.total)+'<i class="bet-lb-sub">cash '+money(p.cash)+' · in play '+money(p.portfolio)+'</i></span></li>';
       }).join('')+'</ol></div>';
       var toggle='<label class="bet-toggle"><input type="checkbox" id="bet-show"'+(showBets?' checked':'')+'><span>Show everyone’s bets</span></label>';
       var poolsBar='<div class="bet-pools">'+mem.pools.map(function(p){

@@ -322,10 +322,24 @@ def project_path(team, matches, analyses, group_letter, entry_slot):
         if opp_token is None:
             break
         opp = resolve_slot(opp_token, analyses, by_num)
-        steps.append({
+        step = {
             "round": cur["round"], "num": cur["num"], "date": cur.get("date"),
             "time": cur.get("time"), "ground": cur.get("ground"), "opponent": opp,
-        })
+            "played": data.has_result(cur),
+        }
+        if step["played"]:
+            # Orient the score to our team (feed carries concrete names once played).
+            g1, g2 = data.final_score(cur)
+            home = cur.get("team1") == team
+            our, their = (g1, g2) if home else (g2, g1)
+            step["score"] = f"{our}–{their}"
+            step["won"] = match_winner(cur) == team
+            pens = (cur.get("score") or {}).get("p")
+            if pens:
+                pt_, po_ = (pens[0], pens[1]) if home else (pens[1], pens[0])
+                step["pens"] = f"{pt_}–{po_}"
+                step["won"] = pt_ > po_
+        steps.append(step)
         nxt = fmap.get(cur["num"])
         if not nxt:
             break

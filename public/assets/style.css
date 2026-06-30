@@ -506,6 +506,15 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .road-fan.multi{padding:4px 0}
 .road-cand .cand{font-size:.72rem}
 .road-cand.resolved .cand{background:var(--paper);border-color:var(--ink);font-weight:800}
+/* A round already played: result + score, the traveled branch inked solid */
+.road-rmark{font-weight:800;font-size:.85rem;line-height:1;flex:none}
+.road-rmark.won{color:var(--ink)}
+.road-rmark.lost{color:var(--vermilion)}
+.road-score{font-family:var(--mono);font-weight:800;font-size:.78rem;color:var(--ink)}
+.road-score.pens{font-weight:600;color:var(--muted);font-size:.64rem}
+.road-step.done .road-cand .cand{font-weight:800}
+.road-step.done.lost{opacity:.55}
+.road-step.done .road-branch::before{background:var(--ink);opacity:.5}
 .road-more{display:inline-grid;place-items:center;font-family:var(--mono);font-size:.64rem;font-weight:800;color:var(--muted);border:1px dashed var(--line2);padding:2px 7px}
 .road-step.has-watched .road-rd{background:var(--vermilion);color:var(--on-accent)}
 
@@ -807,6 +816,13 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-lb-b{font-family:var(--mono);font-weight:800;display:flex;flex-direction:column;align-items:flex-end;gap:1px}
 .bet-lb-sub{font-size:.56rem;font-weight:600;color:var(--muted);font-style:normal;letter-spacing:.02em}
 .bet-lb li{align-items:center}
+.bet-lb-n{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bet-lb-r{flex:none;display:inline-flex;align-items:center;justify-content:center;min-width:1.6em;height:1.6em;
+  font-family:var(--mono);font-weight:800;font-size:.78rem;color:var(--muted)}
+.bet-lb-r.medal{border-radius:50%;color:#2a2206;font-size:.74rem}
+.bet-lb-r.r1{background:linear-gradient(150deg,#FCEBA4 4%,#E6B422 55%,#C9971A);box-shadow:inset 0 0 0 1.5px #B8860B,0 1px 2px rgba(0,0,0,.18)}
+.bet-lb-r.r2{background:linear-gradient(150deg,#F4F5F6 4%,#C8CDD2 55%,#AEB4BA);box-shadow:inset 0 0 0 1.5px #9AA0A6,0 1px 2px rgba(0,0,0,.15);color:#2B2F33}
+.bet-lb-r.r3{background:linear-gradient(150deg,#F1C896 4%,#CD8138 55%,#A9692C);box-shadow:inset 0 0 0 1.5px #9C5A23,0 1px 2px rgba(0,0,0,.18);color:#3A1D00}
 .bet-form{padding:16px}
 .bet-form-team{font-size:1.05rem;margin-bottom:14px}
 .bet-payout{font-size:.82rem;margin:0 0 12px;min-height:1em}
@@ -841,7 +857,10 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .col-h{font-size:var(--t-lg)}
 
 /* squad — roster grouped by line, most recent starting XI in bold ---- */
-.squad{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:var(--s4) var(--s5);margin-top:var(--s2)}
+/* Solid card so the per-player hairlines don't collide with the page's ruled bg */
+.squad-card{padding:var(--s5);margin-top:var(--s2)}
+.squad{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:var(--s4) var(--s5)}
+.squad-card .sq-list .sq-p:last-child{border-bottom:0}
 .sq-line{min-width:0}
 .sq-pos{font-family:var(--mono);font-size:var(--t-xs);font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:0 0 6px;padding-bottom:5px;border-bottom:2px solid var(--ink)}
 .sq-list{list-style:none;margin:0;padding:0}
