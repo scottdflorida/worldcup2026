@@ -2145,17 +2145,12 @@ APP_JS = r"""
       var me=state.me,F=state.flags||{};
       var openM=(state.matches||[]).filter(function(m){return m.open;});
       var games=openM.length?openM.map(function(m){
-        return '<div class="bet-game'+(m.oddsSrc==='live'?'':' is-model')+'"><div class="bet-g-rd">'+he(m.round)+'<span class="bet-srctag '+(m.oddsSrc==='live'?'live':'model')+'" title="'+(m.oddsSrc==='live'?'Live betting-market odds':'Estimated from group form')+'">'+(m.oddsSrc==='live'?'live odds':'model odds')+'</span></div><div class="bet-g-row">'+
+        var when=m.kickoff?' · <span class="ko" data-utc="'+m.kickoff+'" data-tfmt="daytime"><span class="ko-day"></span> <span class="ko-time"><span class="ko-tz tz"></span></span></span>':'';
+        return '<div class="bet-game"><div class="bet-g-rd">'+he(m.round)+when+'</div><div class="bet-g-row">'+
           '<button class="bet-pick" type="button" data-bet="'+m.num+'" data-team="'+he(m.team1)+'"><span class="bet-fl">'+(F[m.team1]||'')+'</span><span class="bet-nm">'+he(m.team1)+'</span><span class="bet-od">'+m.odds1.toFixed(2)+'</span></button>'+
           '<button class="bet-pick" type="button" data-bet="'+m.num+'" data-team="'+he(m.team2)+'"><span class="bet-fl">'+(F[m.team2]||'')+'</span><span class="bet-nm">'+he(m.team2)+'</span><span class="bet-od">'+m.odds2.toFixed(2)+'</span></button>'+
           '</div></div>';
       }).join(''):'<p class="muted">No matches are open for betting right now — check back when the next ties are set.</p>';
-      var hasLive=openM.some(function(m){return m.oddsSrc==='live';});
-      var hasModel=openM.some(function(m){return m.oddsSrc!=='live';});
-      var oddsbar=!openM.length?''
-        :(hasLive&&hasModel)?'<div class="bet-oddsbar"><span class="bet-srctag live">live</span> betting market (The Odds API) &nbsp;·&nbsp; <span class="bet-srctag model">model</span> our group-form estimate</div>'
-        :hasLive?'<div class="bet-oddsbar"><span class="bet-srctag live">live odds</span> every price below is the current betting market (The Odds API)</div>'
-        :'<div class="bet-oddsbar"><span class="bet-srctag model">model odds</span> no market price yet — these are our group-form estimates</div>';
       var betsArr=(state.myBets||[]);
       var betsCard=betsArr.length?'<div class="bet-card"><h2>Your bets</h2>'+betsArr.map(function(b){
         var st=b.status==='won'?'<span class="bet-st won">WON +'+money(b.payout)+'</span>':b.status==='lost'?'<span class="bet-st lost">LOST</span>':'<span class="bet-st open">OPEN</span>';
@@ -2165,8 +2160,9 @@ APP_JS = r"""
         return '<li class="'+(p.you?'you':'')+(p.balance<=0?' out':'')+'"><span class="bet-lb-n">'+he(p.name)+(p.you?' (you)':'')+'</span><span class="bet-lb-b">'+money(p.balance)+'</span></li>';
       }).join('')+'</ol></div>';
       app.innerHTML='<div class="bet-bal'+(me.out?' out':'')+'">'+money(me.balance)+'<span class="bet-bal-k">'+he(state.pool.name)+(me.out?' · you are out':'')+'</span></div>'+
-        '<div class="bet-card"><h2>Open matches</h2>'+oddsbar+games+'</div>'+betsCard+lb;
+        '<div class="bet-card"><h2>Open matches</h2>'+games+'</div>'+betsCard+lb;
       [].forEach.call(app.querySelectorAll('.bet-pick'),function(btn){btn.onclick=function(){openBet(+btn.getAttribute('data-bet'),btn.getAttribute('data-team'));};});
+      applyTZ();   // format the kickoff times in the viewer's chosen zone
     }
     var modal=document.getElementById('bet-modal'),form=document.getElementById('bet-form');
     if(modal&&modal.parentNode!==document.body)document.body.appendChild(modal);
@@ -2903,13 +2899,9 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-err{color:var(--vermilion);font-size:.82rem;margin:8px 0 0;font-weight:700}
 .bet-game{padding:10px 0;border-top:1px solid var(--line)}
 .bet-game:first-of-type{border-top:0}
-.bet-g-rd{font-family:var(--mono);font-size:.56rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:7px}
-.bet-srctag{font-family:var(--mono);font-size:.5rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding:1px 5px;line-height:1.4}
-.bet-srctag.live{color:var(--on-accent);background:var(--vermilion)}
-.bet-srctag.model{color:var(--muted);background:transparent;border:1px solid var(--line2)}
-.bet-oddsbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:var(--mono);font-size:.64rem;
-  color:var(--ink2);margin:-2px 0 14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
-.bet-game.is-model .bet-od{color:var(--muted)}   /* estimate: dim the number too */
+.bet-g-rd{font-family:var(--mono);font-size:.56rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.bet-g-rd .ko{display:inline-flex;gap:.5ch}
+.bet-g-rd .ko-day,.bet-g-rd .ko-time,.bet-g-rd .ko-tz{color:var(--muted);font-weight:800;font-size:inherit;letter-spacing:inherit}
 .bet-g-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .bet-pick{display:flex;align-items:center;gap:8px;padding:9px 11px;border:1.5px solid var(--line2);background:var(--paper);cursor:pointer;text-align:left}
 .bet-pick:hover{border-color:var(--ink)}
@@ -2933,7 +2925,6 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-form{padding:16px}
 .bet-form-team{font-size:1.05rem;margin-bottom:14px}
 .bet-payout{font-size:.82rem;margin:0 0 12px;min-height:1em}
-.bet-src{font-size:.7rem;margin:12px 0 0}
 
 /* footer ----------------------------------------------------------- */
 .site-foot{max-width:var(--maxw);margin:0 auto;padding:0 clamp(14px,4vw,28px) var(--s8);position:relative;z-index:1}
