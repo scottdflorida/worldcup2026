@@ -430,6 +430,8 @@
   function initBetting(){
     var app=document.getElementById('bet-app'); if(!app)return;
     var state=null;
+    var showBets=true; try{showBets=localStorage.getItem('wc26.betshow')!=='0';}catch(e){}
+    function setShowBets(v){showBets=v;try{localStorage.setItem('wc26.betshow',v?'1':'0');}catch(e){}render();}
     function api(path,opts){return fetch('/api/bets/'+path,Object.assign({headers:{'content-type':'application/json'}},opts||{})).then(function(r){return r.json();});}
     function he(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
     function money(n){return '$'+(Math.round(n*100)/100).toFixed(2);}
@@ -457,15 +459,32 @@
         });
       };
     }
+    function betsList(bh){
+      var F=state.flags||{};
+      return '<div class="bet-dbets">'+bh.map(function(b){
+        var amt=b.status==='won'?'<span class="bet-db-amt won">'+money(b.stake)+' → won '+money(b.payout)+'</span>'
+          :b.status==='lost'?'<span class="bet-db-amt lost">'+money(b.stake)+' → lost</span>'
+          :'<span class="bet-db-amt">'+money(b.stake)+'</span>';
+        return '<div class="bet-dbet'+(b.you?' you':'')+'"><span class="bet-db-who">'+he(b.player)+(b.you?' (you)':'')+'</span><span class="bet-db-pick">'+(F[b.pick]||'')+' '+he(b.pick)+'</span>'+amt+'</div>';
+      }).join('')+'</div>';
+    }
     function renderPool(){
       var me=state.me,F=state.flags||{};
+      var myNums={}; (state.myBets||[]).forEach(function(b){myNums[b.match_num]=1;});
       var openM=(state.matches||[]).filter(function(m){return m.open;});
       var games=openM.length?openM.map(function(m){
         var when=m.kickoff?' · <span class="ko" data-utc="'+m.kickoff+'" data-tfmt="daytime"><span class="ko-day"></span> <span class="ko-time"><span class="ko-tz tz"></span></span></span>':'';
+        // others' bets show only once YOU have bet on this match; else just a count
+        var bh=(state.poolBets||[]).filter(function(b){return b.match_num===m.num;});
+        var block='';
+        if(showBets){
+          if(myNums[m.num]&&bh.length)block=betsList(bh);
+          else if(!myNums[m.num]){var c=(state.lockedCounts||{})[m.num]||0;if(c)block='<div class="bet-locked muted">'+c+' bet'+(c>1?'s':'')+' hidden — place a bet to reveal</div>';}
+        }
         return '<div class="bet-game"><div class="bet-g-rd">'+he(m.round)+when+'</div><div class="bet-g-row">'+
           '<button class="bet-pick" type="button" data-bet="'+m.num+'" data-team="'+he(m.team1)+'"><span class="bet-fl">'+(F[m.team1]||'')+'</span><span class="bet-nm">'+he(m.team1)+'</span><span class="bet-od">'+m.odds1.toFixed(2)+'</span></button>'+
           '<button class="bet-pick" type="button" data-bet="'+m.num+'" data-team="'+he(m.team2)+'"><span class="bet-fl">'+(F[m.team2]||'')+'</span><span class="bet-nm">'+he(m.team2)+'</span><span class="bet-od">'+m.odds2.toFixed(2)+'</span></button>'+
-          '</div></div>';
+          '</div>'+block+'</div>';
       }).join(''):'<p class="muted">No matches are open for betting right now — check back when the next ties are set.</p>';
       // decided ties in the current round — dimmed, not selectable, with everyone's bets
       var RORD={R32:0,R16:1,QF:2,SF:3,F:4};
@@ -478,12 +497,9 @@
       }
       var decidedCard=decidedM.length?'<div class="bet-card"><h2>Decided · '+he(curRound)+'</h2>'+decidedM.map(function(m){
         var bh=(state.poolBets||[]).filter(function(b){return b.match_num===m.num;});
-        var betsList=bh.length?'<div class="bet-dbets">'+bh.map(function(b){
-          var won=b.status==='won';
-          return '<div class="bet-dbet'+(b.you?' you':'')+'"><span class="bet-db-who">'+he(b.player)+(b.you?' (you)':'')+'</span><span class="bet-db-pick">'+(F[b.pick]||'')+' '+he(b.pick)+'</span><span class="bet-db-amt'+(won?' won':' lost')+'">'+money(b.stake)+(won?' → won '+money(b.payout):' → lost')+'</span></div>';
-        }).join('')+'</div>':'<div class="bet-dbets-none muted">No bets were placed on this match.</div>';
+        var bl=!showBets?'':(bh.length?betsList(bh):'<div class="bet-dbets-none muted">No bets were placed on this match.</div>');
         return '<div class="bet-game bet-decided"><div class="bet-g-rd">'+he(m.round)+' · final · '+he(m.winner)+' won</div>'+
-          '<div class="bet-g-row">'+dside(m.team1,m.odds1,m.winner)+dside(m.team2,m.odds2,m.winner)+'</div>'+betsList+'</div>';
+          '<div class="bet-g-row">'+dside(m.team1,m.odds1,m.winner)+dside(m.team2,m.odds2,m.winner)+'</div>'+bl+'</div>';
       }).join('')+'</div>':'';
       var openBets=(state.myBets||[]).filter(function(b){return b.status==='open';});
       var betsCard=openBets.length?'<div class="bet-card"><h2>Your open bets</h2>'+openBets.map(function(b){
@@ -493,9 +509,11 @@
       var lb='<div class="bet-card"><h2>Leaderboard</h2><ol class="bet-lb">'+(state.leaderboard||[]).map(function(p){
         return '<li class="'+(p.you?'you':'')+(p.balance<=0?' out':'')+'"><span class="bet-lb-n">'+he(p.name)+(p.you?' (you)':'')+'</span><span class="bet-lb-b">'+money(p.balance)+'</span></li>';
       }).join('')+'</ol></div>';
+      var toggle='<label class="bet-toggle"><input type="checkbox" id="bet-show"'+(showBets?' checked':'')+'><span>Show everyone’s bets</span></label>';
       app.innerHTML='<div class="bet-bal'+(me.out?' out':'')+'">'+money(me.balance)+'<span class="bet-bal-k">'+he(state.pool.name)+(me.out?' · you are out':'')+'</span></div>'+
-        decidedCard+'<div class="bet-card"><h2>Open matches</h2>'+games+'</div>'+betsCard+lb;
+        toggle+decidedCard+'<div class="bet-card"><h2>Open matches</h2>'+games+'</div>'+betsCard+lb;
       [].forEach.call(app.querySelectorAll('.bet-pick'),function(btn){btn.onclick=function(){openBet(+btn.getAttribute('data-bet'),btn.getAttribute('data-team'));};});
+      var cb=document.getElementById('bet-show'); if(cb)cb.onchange=function(){setShowBets(cb.checked);};
       applyTZ();   // format the kickoff times in the viewer's chosen zone
     }
     var modal=document.getElementById('bet-modal'),form=document.getElementById('bet-form');
