@@ -35,7 +35,8 @@ export async function loadData(request) {
 }
 
 export async function getPlayer(env, request) {
-  const t = getCookie(request, "wc_bet");
+  // active membership token from the client; legacy cookie is a one-time fallback
+  const t = request.headers.get("X-Bet-Token") || getCookie(request, "wc_bet");
   if (!t) return null;
   return await env.DB.prepare("SELECT * FROM players WHERE token=?").bind(t).first();
 }

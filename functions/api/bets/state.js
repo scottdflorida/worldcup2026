@@ -22,9 +22,10 @@ export async function onRequestGet({ request, env }) {
   const me = await getPlayer(env, request);
   if (me) {
     resp.joined = true;
+    resp.token = me.token;            // so the client can store/migrate this membership
     resp.me = { name: me.name, balance: round2(me.balance), out: me.balance <= 0 };
     const pool = await env.DB.prepare("SELECT * FROM pools WHERE id=?").bind(me.pool_id).first();
-    resp.pool = { name: pool ? pool.name : "" };
+    resp.pool = { name: pool ? pool.name : "", code: pool ? pool.code : "" };
     const lb = (await env.DB.prepare(
       "SELECT id,name,balance FROM players WHERE pool_id=? ORDER BY balance DESC, name ASC")
       .bind(me.pool_id).all()).results || [];

@@ -2113,35 +2113,59 @@ APP_JS = r"""
   // ---- Betting pool: play-money wagers on knockout matches (backed by a Function) ----
   function initBetting(){
     var app=document.getElementById('bet-app'); if(!app)return;
-    var state=null;
+    var state=null, joining=false, leaveArmed=false;
     var showBets=true; try{showBets=localStorage.getItem('wc26.betshow')!=='0';}catch(e){}
     function setShowBets(v){showBets=v;try{localStorage.setItem('wc26.betshow',v?'1':'0');}catch(e){}render();}
-    function api(path,opts){return fetch('/api/bets/'+path,Object.assign({headers:{'content-type':'application/json'}},opts||{})).then(function(r){return r.json();});}
+    // memberships of multiple pools live on this device; the active pool's token
+    // identifies you to the server (the legacy cookie is a one-time import fallback)
+    var mem={active:null,pools:[]}; try{var mv=JSON.parse(localStorage.getItem('wc26.bets'));if(mv&&mv.pools)mem=mv;}catch(e){}
+    function saveMem(){try{localStorage.setItem('wc26.bets',JSON.stringify(mem));}catch(e){}}
+    function activeTok(){for(var i=0;i<mem.pools.length;i++)if(mem.pools[i].code===mem.active)return mem.pools[i].token;return null;}
+    function upsertPool(p){for(var i=0;i<mem.pools.length;i++)if(mem.pools[i].code===p.code){mem.pools[i]=p;mem.active=p.code;saveMem();return;}mem.pools.push(p);mem.active=p.code;saveMem();}
+    function dropPool(code){mem.pools=mem.pools.filter(function(p){return p.code!==code;});if(mem.active===code)mem.active=mem.pools.length?mem.pools[0].code:null;saveMem();}
+    function api(path,opts){
+      opts=opts||{};var h=Object.assign({'content-type':'application/json'},opts.headers||{});
+      var t=activeTok();if(t)h['X-Bet-Token']=t;
+      return fetch('/api/bets/'+path,Object.assign({},opts,{headers:h})).then(function(r){return r.json();});
+    }
     function he(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
     function money(n){return '$'+(Math.round(n*100)/100).toFixed(2);}
     function matchById(num){var a=(state.matches||[]);for(var i=0;i<a.length;i++)if(a[i].num===num)return a[i];return null;}
     function showErr(id,msg){var e=document.getElementById(id);if(e){e.textContent=msg;e.hidden=false;}}
-    function load(){api('state').then(function(s){state=s;render();}).catch(function(){app.innerHTML='<div class="bet-card"><p class="muted">Could not reach the betting service.</p></div>';});}
+    function load(){
+      leaveArmed=false;
+      api('state').then(function(s){
+        state=s;
+        if(s.joined&&s.token&&s.pool){upsertPool({code:s.pool.code,name:s.me.name,token:s.token});}
+        else if(!s.joined&&mem.active){dropPool(mem.active);if(mem.active){load();return;}}  // stale token
+        render();
+      }).catch(function(){app.innerHTML='<div class="bet-card"><p class="muted">Could not reach the betting service.</p></div>';});
+    }
     function render(){
       if(!state||state.configured===false){app.innerHTML='<div class="bet-card"><p class="muted">The betting pool is not set up on the server yet.</p></div>';return;}
-      if(!state.joined){renderJoin();return;}
+      if(joining||!state.joined){renderJoin();return;}
       renderPool();
     }
     function renderJoin(){
-      app.innerHTML='<div class="bet-card bet-join"><h2>Join a pool</h2>'+
+      var canCancel=mem.pools.length>0;
+      app.innerHTML='<div class="bet-card bet-join"><h2>'+(canCancel?'Join another pool':'Join a pool')+'</h2>'+
         '<p class="muted">Pick a display name and a pool code. Share the code so everyone is in the same pool. A new code starts a new pool.</p>'+
         '<label class="bet-l">Display name<input id="bet-name" maxlength="24" autocomplete="off"></label>'+
         '<label class="bet-l">Pool code<input id="bet-code" maxlength="24" autocomplete="off" placeholder="friends26"></label>'+
-        '<button id="bet-join-go" class="bet-btn" type="button">Join with $100</button>'+
+        '<div class="bet-join-actions"><button id="bet-join-go" class="bet-btn" type="button">Join with $100</button>'+
+        (canCancel?'<button id="bet-join-cancel" class="bet-btn ghost" type="button">Cancel</button>':'')+'</div>'+
         '<p class="bet-err" id="bet-join-err" hidden></p></div>';
       document.getElementById('bet-join-go').onclick=function(){
         var name=(document.getElementById('bet-name').value||'').trim();
         var code=(document.getElementById('bet-code').value||'').trim();
         if(!name||!code){showErr('bet-join-err','Enter a name and a code.');return;}
         api('join',{method:'POST',body:JSON.stringify({name:name,code:code})}).then(function(r){
-          if(r.ok)load(); else showErr('bet-join-err',r.error==='name_taken'?'That name is taken in this pool.':'Could not join.');
+          if(r.ok){joining=false;upsertPool({code:r.code,name:r.name,token:r.token});load();}
+          else showErr('bet-join-err',r.error==='name_taken'?'That name is taken in this pool.':'Could not join.');
         });
       };
+      var cc=document.getElementById('bet-join-cancel');
+      if(cc)cc.onclick=function(){joining=false;render();};
     }
     function betsList(bh){
       var F=state.flags||{};
@@ -2208,9 +2232,20 @@ APP_JS = r"""
         return '<li class="'+(p.you?'you':'')+(p.balance<=0?' out':'')+'"><span class="bet-lb-n">'+he(p.name)+(p.you?' (you)':'')+'</span><span class="bet-lb-b">'+money(p.balance)+'</span></li>';
       }).join('')+'</ol></div>';
       var toggle='<label class="bet-toggle"><input type="checkbox" id="bet-show"'+(showBets?' checked':'')+'><span>Show everyone’s bets</span></label>';
-      app.innerHTML='<div class="bet-bal'+(me.out?' out':'')+'">'+money(me.balance)+'<span class="bet-bal-k">'+he(state.pool.name)+(me.out?' · you are out':'')+'</span></div>'+
-        toggle+decidedCard+'<div class="bet-card"><h2>Open matches</h2>'+games+'</div>'+betsCard+lb;
+      var poolsBar='<div class="bet-pools">'+mem.pools.map(function(p){
+        return '<button class="bet-pool'+(p.code===mem.active?' on':'')+'" type="button" data-pool="'+he(p.code)+'">'+he(p.code)+'</button>';
+      }).join('')+'<button class="bet-pool add" type="button" id="bet-pool-add">+ Join</button></div>';
+      var leaveCtl=leaveArmed
+        ? '<span class="bet-leave-c">Leave “'+he(mem.active)+'”? <button id="bet-leave-yes" class="bet-mini danger" type="button">Leave</button><button id="bet-leave-no" class="bet-mini" type="button">Cancel</button></span>'
+        : '<button id="bet-leave" class="bet-mini" type="button">Leave</button>';
+      var balRow='<div class="bet-balrow"><div class="bet-bal'+(me.out?' out':'')+'">'+money(me.balance)+'<span class="bet-bal-k">'+he(me.name)+' · '+he(state.pool.name)+(me.out?' · out':'')+'</span></div>'+leaveCtl+'</div>';
+      app.innerHTML=poolsBar+balRow+toggle+decidedCard+'<div class="bet-card"><h2>Open matches</h2>'+games+'</div>'+betsCard+lb;
       [].forEach.call(app.querySelectorAll('.bet-pick'),function(btn){btn.onclick=function(){openBet(+btn.getAttribute('data-bet'),btn.getAttribute('data-team'));};});
+      [].forEach.call(app.querySelectorAll('.bet-pool[data-pool]'),function(b){b.onclick=function(){var c=b.getAttribute('data-pool');if(c!==mem.active){mem.active=c;saveMem();leaveArmed=false;load();}};});
+      var addB=document.getElementById('bet-pool-add'); if(addB)addB.onclick=function(){joining=true;render();};
+      var lv=document.getElementById('bet-leave'); if(lv)lv.onclick=function(){leaveArmed=true;render();};
+      var ly=document.getElementById('bet-leave-yes'); if(ly)ly.onclick=function(){api('leave',{method:'POST'}).then(function(){dropPool(mem.active);leaveArmed=false;if(mem.active)load();else{state={configured:true,joined:false};render();}});};
+      var ln=document.getElementById('bet-leave-no'); if(ln)ln.onclick=function(){leaveArmed=false;render();};
       var cb=document.getElementById('bet-show'); if(cb)cb.onchange=function(){setShowBets(cb.checked);};
       applyTZ();   // format the kickoff times in the viewer's chosen zone
     }
@@ -2240,6 +2275,7 @@ APP_JS = r"""
       if(modal)modal.hidden=false;
     }
     window.__betRender=function(s){state=s;render();};   // test seam
+    window.__betReload=function(){mem={active:null,pools:[]};try{var v=JSON.parse(localStorage.getItem('wc26.bets'));if(v&&v.pools)mem=v;}catch(e){}joining=false;leaveArmed=false;load();};
     load();
   }
 
@@ -2943,6 +2979,20 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);cursor:pointer;user-select:none}
 .bet-toggle input{width:15px;height:15px;accent-color:var(--vermilion);cursor:pointer}
 .bet-locked{margin-top:9px;font-size:.78rem}
+.bet-pools{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.bet-pool{font-family:var(--mono);font-size:.64rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--ink2);background:var(--paper2);border:1.5px solid var(--line2);padding:6px 11px;cursor:pointer}
+.bet-pool:hover{border-color:var(--ink)}
+.bet-pool.on{color:var(--paper);background:var(--ink);border-color:var(--ink)}
+.bet-pool.add{color:var(--vermilion);border-style:dashed}
+.bet-balrow{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.bet-mini{font-family:var(--mono);font-size:.6rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);background:none;border:1px solid var(--line2);padding:5px 9px;cursor:pointer}
+.bet-mini:hover{color:var(--ink);border-color:var(--ink)}
+.bet-mini.danger{color:var(--on-accent);background:var(--vermilion);border-color:var(--vermilion)}
+.bet-leave-c{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;font-family:var(--mono);font-size:.64rem;color:var(--ink2)}
+.bet-join-actions{display:flex;gap:8px;align-items:center}
+.bet-btn.ghost{color:var(--ink);background:var(--paper);border:1.5px solid var(--ink)}
 .bet-card{background:var(--paper2);border:1.5px solid var(--line2);padding:16px}
 .bet-card h2{margin:0 0 12px;font-size:1.05rem}
 .bet-join{max-width:430px}

@@ -25,7 +25,6 @@ export async function onRequestPost({ request, env }) {
   await env.DB.prepare("INSERT INTO players(pool_id,name,token,balance,created_at) VALUES(?,?,?,100,?)")
     .bind(pool.id, name, token, now).run();
 
-  return json({ ok: true }, 200, {
-    "Set-Cookie": "wc_bet=" + token + "; Path=/; Max-Age=31536000; SameSite=Lax; HttpOnly",
-  });
+  // the client stores this token as a membership and sends it as X-Bet-Token
+  return json({ ok: true, token, code, name });
 }
