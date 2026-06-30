@@ -666,6 +666,7 @@ NAV = [
     ("teams.html", "Teams"),
     ("bracket.html", "Bracket"),
     ("fantasy.html", "Fantasy"),
+    ("betting.html", "Bets"),
     ("calendar.html", "Calendar"),
 ]
 
@@ -1264,6 +1265,81 @@ def page_fantasy(ctx):
                  page="fantasy.html")
 
 
+# --------------------------------------------------------------------------
+# Betting pool — knockout match odds (model-derived) served to the backend
+# --------------------------------------------------------------------------
+def _team_ratings(ctx):
+    """A rough strength number per team from its group-stage form — the spine of
+    the model odds. (Swap in a public odds feed later; the backend just reads
+    odds1/odds2 from bets-data.json.)"""
+    r = {}
+    for info in ctx.analyses.values():
+        for row in info["table"]:
+            r[row["team"]] = row["Pts"] + 0.35 * row["GD"] + 0.08 * row["GF"]
+    return r
+
+
+def _odds_pair(ra, rb):
+    """Two decimal prices from a rating gap, with a small bookmaker margin."""
+    import math
+    pa = 1.0 / (1.0 + math.exp(-(ra - rb) / 3.0))
+    pa = min(max(pa, 0.08), 0.92)
+    return (round(max(1.05, (1.0 / pa) * 0.93), 2),
+            round(max(1.05, (1.0 / (1.0 - pa)) * 0.93), 2))
+
+
+def betting_data(ctx):
+    """Every knockout match whose two sides are known: the matchup, model odds,
+    kickoff, and result. The Pages Functions read this to list bettable games,
+    snapshot odds onto a wager, and settle once a match is decided."""
+    by_num = bracket.index_matches(ctx.matches)
+    ratings = _team_ratings(ctx)
+    out = []
+    for m in ctx.matches:
+        if m.get("round") not in ("Round of 32", "Round of 16", "Quarter-final",
+                                  "Semi-final", "Final"):
+            continue
+        t1 = bracket.resolve_slot(m["team1"], ctx.analyses, by_num)
+        t2 = bracket.resolve_slot(m["team2"], ctx.analyses, by_num)
+        if not (t1["team"] and t2["team"]):
+            continue  # not bettable until both sides are set
+        o1, o2 = _odds_pair(ratings.get(t1["team"], 3), ratings.get(t2["team"], 3))
+        out.append({
+            "num": m["num"], "round": _FB_RND.get(m.get("round"), m.get("round")),
+            "team1": t1["team"], "team2": t2["team"], "odds1": o1, "odds2": o2,
+            "kickoff": _utc_iso(m), "decided": data.has_result(m),
+            "winner": bracket.match_winner(m) if data.has_result(m) else None,
+        })
+    teams = sorted({x for m in out for x in (m["team1"], m["team2"])})
+    return {"matches": out, "flags": {t: flag(t) for t in teams},
+            "stage": ctx.stage()}
+
+
+def page_betting(ctx):
+    body = """
+<section class="bet-intro" aria-label="Betting pool">
+  <div class="fb-head"><h1>Betting pool</h1></div>
+  <p class="muted">Play money. Everyone starts with $100, bet any amount on who wins each
+  knockout match, payouts at the listed odds. Hit $0 and you're out.</p>
+</section>
+<div id="bet-app" class="bet-app" aria-live="polite">
+  <p class="muted bet-loading">Loading…</p>
+</div>
+<div class="fb-modal" id="bet-modal" hidden>
+  <div class="fb-modal-back" data-bet-close></div>
+  <div class="fb-modal-panel" role="dialog" aria-modal="true" aria-label="Place a bet">
+    <div class="fb-modal-head"><span class="fb-modal-k" id="bet-modal-k">Place a bet</span>
+      <button class="fb-modal-x" type="button" data-bet-close aria-label="Close">✕</button></div>
+    <div class="bet-form" id="bet-form"></div>
+  </div>
+</div>
+"""
+    return shell("Betting Pool — World Cup 2026", "betting.html", body, ctx,
+                 desc="A play-money World Cup knockout betting pool with friends — $100 to "
+                      "start, bet on match winners at model odds, and climb the leaderboard.",
+                 page="betting.html")
+
+
 def page_bracket(ctx):
     rounds = [(rd, rows) for rd, rows in ctx.bracket if rd != "Match for third place"]
     n_round = len(rounds)
@@ -1505,6 +1581,8 @@ def render_site(payload):
         "teams.html": page_teams(ctx),
         "bracket.html": page_bracket(ctx),
         "fantasy.html": page_fantasy(ctx),
+        "betting.html": page_betting(ctx),
+        "bets-data.json": json.dumps(betting_data(ctx), ensure_ascii=False, separators=(",", ":")),
         "calendar.html": page_calendar(ctx),
         "assets/style.css": STYLE,
         "assets/app.js": APP_JS,
@@ -2025,9 +2103,90 @@ APP_JS = r"""
     requestAnimationFrame(drawLines);
   }
 
+  // ---- Betting pool: play-money wagers on knockout matches (backed by a Function) ----
+  function initBetting(){
+    var app=document.getElementById('bet-app'); if(!app)return;
+    var state=null;
+    function api(path,opts){return fetch('/api/bets/'+path,Object.assign({headers:{'content-type':'application/json'}},opts||{})).then(function(r){return r.json();});}
+    function he(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+    function money(n){return '$'+(Math.round(n*100)/100).toFixed(2);}
+    function matchById(num){var a=(state.matches||[]);for(var i=0;i<a.length;i++)if(a[i].num===num)return a[i];return null;}
+    function showErr(id,msg){var e=document.getElementById(id);if(e){e.textContent=msg;e.hidden=false;}}
+    function load(){api('state').then(function(s){state=s;render();}).catch(function(){app.innerHTML='<div class="bet-card"><p class="muted">Could not reach the betting service.</p></div>';});}
+    function render(){
+      if(!state||state.configured===false){app.innerHTML='<div class="bet-card"><p class="muted">The betting pool is not set up on the server yet.</p></div>';return;}
+      if(!state.joined){renderJoin();return;}
+      renderPool();
+    }
+    function renderJoin(){
+      app.innerHTML='<div class="bet-card bet-join"><h2>Join a pool</h2>'+
+        '<p class="muted">Pick a display name and a pool code. Share the code so everyone is in the same pool. A new code starts a new pool.</p>'+
+        '<label class="bet-l">Display name<input id="bet-name" maxlength="24" autocomplete="off"></label>'+
+        '<label class="bet-l">Pool code<input id="bet-code" maxlength="24" autocomplete="off" placeholder="friends26"></label>'+
+        '<button id="bet-join-go" class="bet-btn" type="button">Join with $100</button>'+
+        '<p class="bet-err" id="bet-join-err" hidden></p></div>';
+      document.getElementById('bet-join-go').onclick=function(){
+        var name=(document.getElementById('bet-name').value||'').trim();
+        var code=(document.getElementById('bet-code').value||'').trim();
+        if(!name||!code){showErr('bet-join-err','Enter a name and a code.');return;}
+        api('join',{method:'POST',body:JSON.stringify({name:name,code:code})}).then(function(r){
+          if(r.ok)load(); else showErr('bet-join-err',r.error==='name_taken'?'That name is taken in this pool.':'Could not join.');
+        });
+      };
+    }
+    function renderPool(){
+      var me=state.me,F=state.flags||{};
+      var openM=(state.matches||[]).filter(function(m){return m.open;});
+      var games=openM.length?openM.map(function(m){
+        return '<div class="bet-game"><div class="bet-g-rd">'+he(m.round)+'</div><div class="bet-g-row">'+
+          '<button class="bet-pick" type="button" data-bet="'+m.num+'" data-team="'+he(m.team1)+'"><span class="bet-fl">'+(F[m.team1]||'')+'</span><span class="bet-nm">'+he(m.team1)+'</span><span class="bet-od">'+m.odds1.toFixed(2)+'</span></button>'+
+          '<button class="bet-pick" type="button" data-bet="'+m.num+'" data-team="'+he(m.team2)+'"><span class="bet-fl">'+(F[m.team2]||'')+'</span><span class="bet-nm">'+he(m.team2)+'</span><span class="bet-od">'+m.odds2.toFixed(2)+'</span></button>'+
+          '</div></div>';
+      }).join(''):'<p class="muted">No matches are open for betting right now — check back when the next ties are set.</p>';
+      var betsArr=(state.myBets||[]);
+      var betsCard=betsArr.length?'<div class="bet-card"><h2>Your bets</h2>'+betsArr.map(function(b){
+        var st=b.status==='won'?'<span class="bet-st won">WON +'+money(b.payout)+'</span>':b.status==='lost'?'<span class="bet-st lost">LOST</span>':'<span class="bet-st open">OPEN</span>';
+        return '<div class="bet-row"><span class="bet-r-pick">'+(F[b.pick]||'')+' '+he(b.pick)+'</span><span class="bet-r-stk">'+money(b.stake)+' @ '+b.odds.toFixed(2)+'</span>'+st+'</div>';
+      }).join('')+'</div>':'';
+      var lb='<div class="bet-card"><h2>Leaderboard</h2><ol class="bet-lb">'+(state.leaderboard||[]).map(function(p){
+        return '<li class="'+(p.you?'you':'')+(p.balance<=0?' out':'')+'"><span class="bet-lb-n">'+he(p.name)+(p.you?' (you)':'')+'</span><span class="bet-lb-b">'+money(p.balance)+'</span></li>';
+      }).join('')+'</ol></div>';
+      app.innerHTML='<div class="bet-bal'+(me.out?' out':'')+'">'+money(me.balance)+'<span class="bet-bal-k">'+he(state.pool.name)+(me.out?' · you are out':'')+'</span></div>'+
+        '<div class="bet-card"><h2>Open matches</h2>'+games+'</div>'+betsCard+lb;
+      [].forEach.call(app.querySelectorAll('.bet-pick'),function(btn){btn.onclick=function(){openBet(+btn.getAttribute('data-bet'),btn.getAttribute('data-team'));};});
+    }
+    var modal=document.getElementById('bet-modal'),form=document.getElementById('bet-form');
+    if(modal&&modal.parentNode!==document.body)document.body.appendChild(modal);
+    function closeBet(){if(modal)modal.hidden=true;}
+    if(modal)modal.addEventListener('click',function(e){if(e.target.closest('[data-bet-close]'))closeBet();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal&&!modal.hidden)closeBet();});
+    function openBet(num,team){
+      var m=matchById(num); if(!m)return;
+      var F=state.flags||{},odds=team===m.team1?m.odds1:m.odds2,bal=state.me.balance;
+      document.getElementById('bet-modal-k').textContent='Bet on '+team;
+      form.innerHTML='<div class="bet-form-team">'+(F[team]||'')+' <b>'+he(team)+'</b> @ '+odds.toFixed(2)+'</div>'+
+        '<label class="bet-l">Stake (you have '+money(bal)+')<input id="bet-stake" type="number" min="0.01" step="0.01"></label>'+
+        '<div class="bet-payout muted" id="bet-payout"></div>'+
+        '<button class="bet-btn" id="bet-place" type="button">Place bet</button><p class="bet-err" id="bet-place-err" hidden></p>';
+      var inp=document.getElementById('bet-stake'),po=document.getElementById('bet-payout');
+      inp.oninput=function(){var s=parseFloat(inp.value)||0;po.textContent=s>0?('Returns '+money(s*odds)+' if '+team+' wins'):'';};
+      document.getElementById('bet-place').onclick=function(){
+        var s=parseFloat(inp.value)||0;
+        if(s<=0){showErr('bet-place-err','Enter a stake.');return;}
+        if(s>bal){showErr('bet-place-err','That is more than your balance.');return;}
+        api('place',{method:'POST',body:JSON.stringify({match:num,pick:team,stake:s})}).then(function(r){
+          if(r.ok){closeBet();load();}else showErr('bet-place-err',r.error==='closed'?'Betting on this match is closed.':r.error==='insufficient'?'Not enough balance.':'Could not place bet.');
+        });
+      };
+      if(modal)modal.hidden=false;
+    }
+    window.__betRender=function(s){state=s;render();};   // test seam
+    load();
+  }
+
   document.addEventListener('DOMContentLoaded',function(){
     wireTZ();apply();wireReveal();wireLive();wireBracketScroll();wireBracketObserver();drawBracket();
-    landOnActiveColumn();initFantasy();
+    landOnActiveColumn();initFantasy();initBetting();
   });
   window.addEventListener('load',drawBracket);
   window.addEventListener('resize',scheduleDraw);
@@ -2141,8 +2300,9 @@ section:first-of-type{margin-top:var(--s4)}
 .wm-l1{font-size:.78rem;letter-spacing:.18em;color:var(--ink)}
 .wm-l2{font-size:.78rem;letter-spacing:.18em;color:var(--muted)}
 .wm-yr{color:var(--vermilion)}
-.site-nav{display:flex}
-.site-nav a{display:inline-flex;align-items:center;padding:0 clamp(12px,2.2vw,22px);
+.site-nav{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.site-nav::-webkit-scrollbar{display:none}
+.site-nav a{display:inline-flex;align-items:center;flex:0 0 auto;white-space:nowrap;padding:0 clamp(12px,2.2vw,22px);
   font-family:var(--mono);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:.78rem;
   color:var(--muted);border-left:1px solid var(--line);transition:color .12s,background .12s}
 .site-nav a:hover{color:var(--ink);background:var(--paper2)}
@@ -2713,6 +2873,47 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .fb-modal-clear{font-family:var(--mono);font-size:.58rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
   color:var(--muted);background:var(--paper);border:0;border-top:1.5px solid var(--line);padding:10px;cursor:pointer}
 .fb-modal-clear:hover{color:var(--ink);background:var(--paper2)}
+
+/* Betting pool ----------------------------------------------------- */
+.bet-intro{margin-bottom:6px}
+.bet-app{display:flex;flex-direction:column;gap:16px}
+.bet-bal{font-family:var(--mono);font-weight:800;font-size:2rem;color:var(--ink);display:flex;flex-direction:column;gap:2px}
+.bet-bal.out{color:var(--muted)}
+.bet-bal-k{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.bet-card{background:var(--paper2);border:1.5px solid var(--line2);padding:16px}
+.bet-card h2{margin:0 0 12px;font-size:1.05rem}
+.bet-join{max-width:430px}
+.bet-l{display:flex;flex-direction:column;gap:5px;font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.bet-l input{font-family:var(--mono);font-size:1rem;font-weight:700;color:var(--ink);background:var(--paper);border:1.5px solid var(--ink);padding:9px 11px;border-radius:0}
+.bet-btn{font-family:var(--mono);font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--on-accent);background:var(--vermilion);border:0;padding:11px 16px;cursor:pointer}
+.bet-btn:hover{filter:brightness(.94)}
+.bet-err{color:var(--vermilion);font-size:.82rem;margin:8px 0 0;font-weight:700}
+.bet-game{padding:10px 0;border-top:1px solid var(--line)}
+.bet-game:first-of-type{border-top:0}
+.bet-g-rd{font-family:var(--mono);font-size:.56rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.bet-g-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bet-pick{display:flex;align-items:center;gap:8px;padding:9px 11px;border:1.5px solid var(--line2);background:var(--paper);cursor:pointer;text-align:left}
+.bet-pick:hover{border-color:var(--ink)}
+.bet-fl{font-size:1.25rem;line-height:1}
+.bet-nm{font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bet-od{font-family:var(--mono);font-weight:800;color:var(--vermilion)}
+.bet-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:.92rem}
+.bet-row:first-of-type{border-top:0}
+.bet-r-pick{font-weight:700;flex:1;min-width:0}
+.bet-r-stk{font-family:var(--mono);color:var(--ink2);font-size:.82rem}
+.bet-st{font-family:var(--mono);font-size:.58rem;font-weight:800;letter-spacing:.06em;padding:2px 6px;white-space:nowrap}
+.bet-st.won{color:var(--on-accent);background:var(--vermilion)}
+.bet-st.lost{color:var(--muted);border:1px solid var(--line2)}
+.bet-st.open{color:var(--ink);border:1px solid var(--ink)}
+.bet-lb{list-style:none;margin:0;padding:0}
+.bet-lb li{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:.95rem}
+.bet-lb li:first-child{border-top:0}
+.bet-lb li.you .bet-lb-n{font-weight:800;color:var(--vermilion)}
+.bet-lb li.out{opacity:.5}
+.bet-lb-b{font-family:var(--mono);font-weight:800}
+.bet-form{padding:16px}
+.bet-form-team{font-size:1.05rem;margin-bottom:14px}
+.bet-payout{font-size:.82rem;margin:0 0 12px;min-height:1em}
 
 /* footer ----------------------------------------------------------- */
 .site-foot{max-width:var(--maxw);margin:0 auto;padding:0 clamp(14px,4vw,28px) var(--s8);position:relative;z-index:1}
