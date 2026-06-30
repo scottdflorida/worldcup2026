@@ -506,13 +506,11 @@
       var openM=(state.matches||[]).filter(function(m){return m.open;});
       var games=openM.length?openM.map(function(m){
         var when=m.kickoff?' · <span class="ko" data-utc="'+m.kickoff+'" data-tfmt="daytime"><span class="ko-day"></span> <span class="ko-time"><span class="ko-tz tz"></span></span></span>':'';
-        // your own bets always show under the match; others only when the toggle
-        // is on AND you've bet here (else just a hidden-count teaser)
+        // your own bets always show; everyone else's show when the toggle is on
         var bh=(state.poolBets||[]).filter(function(b){return b.match_num===m.num;});
         var mine=bh.filter(function(b){return b.you;});
         var rows=showBets?mine.concat(bh.filter(function(b){return !b.you;})):mine;
         var block=rows.length?betsList(sortBets(rows,m)):'';
-        if(!mine.length&&showBets){var c=(state.lockedCounts||{})[m.num]||0;if(c)block='<div class="bet-locked muted">'+c+' bet'+(c>1?'s':'')+' hidden — place a bet to reveal</div>';}
         var myPick=mine.length?mine[0].pick:null;   // can't bet both sides — lock the other one
         function pickBtn(team,odds){
           var dis=myPick&&myPick!==team;
@@ -522,28 +520,26 @@
           pickBtn(m.team1,m.odds1)+pickBtn(m.team2,m.odds2)+
           '</div>'+block+'</div>';
       }).join(''):'<p class="muted">No matches are open for betting right now — check back when the next ties are set.</p>';
-      // decided ties in the current round — dimmed, not selectable, with everyone's bets
+      // matches this round that have kicked off (in-play or decided) — dimmed, not
+      // selectable, with everyone's bets. (Replaces the separate 'your bets' box;
+      // you see and edit your bets in the Open matches above.)
       var RORD={R32:0,R16:1,QF:2,SF:3,F:4};
+      var RNAME={R32:'Round of 32',R16:'Round of 16',QF:'Quarterfinals',SF:'Semifinals',F:'Final'};
       var curRound=openM.length?openM[0].round:(function(){
-        var dec=(state.matches||[]).filter(function(m){return m.decided;});
-        return dec.length?dec.reduce(function(a,b){return RORD[b.round]>=RORD[a.round]?b:a;}).round:null;})();
-      var decidedM=(state.matches||[]).filter(function(m){return m.decided&&m.round===curRound;});
+        var ko=(state.matches||[]).filter(function(m){return !m.open;});
+        return ko.length?ko.reduce(function(a,b){return RORD[b.round]>=RORD[a.round]?b:a;}).round:null;})();
+      var pastM=(state.matches||[]).filter(function(m){return !m.open&&m.round===curRound;});
       function dside(team,odds,winner){
-        return '<div class="bet-dteam'+(team===winner?' win':' lose')+'"><span class="bet-fl">'+(F[team]||'')+'</span><span class="bet-nm">'+he(team)+'</span><span class="bet-od">'+odds.toFixed(2)+'</span></div>';
+        return '<div class="bet-dteam'+(winner?(team===winner?' win':' lose'):'')+'"><span class="bet-fl">'+(F[team]||'')+'</span><span class="bet-nm">'+he(team)+'</span><span class="bet-od">'+odds.toFixed(2)+'</span></div>';
       }
-      var decidedCard=decidedM.length?'<div class="bet-card"><h2>Decided · '+he(curRound)+'</h2>'+decidedM.map(function(m){
+      var decidedCard=pastM.length?'<div class="bet-card"><h2>'+he(RNAME[curRound]||curRound)+'</h2>'+pastM.map(function(m){
         var bh=(state.poolBets||[]).filter(function(b){return b.match_num===m.num;});
         var mine=bh.filter(function(b){return b.you;});
         var rows=showBets?mine.concat(bh.filter(function(b){return !b.you;})):mine;
-        var bl=rows.length?betsList(sortBets(rows,m)):(showBets?'<div class="bet-dbets-none muted">No bets were placed on this match.</div>':'');
-        return '<div class="bet-game bet-decided"><div class="bet-g-rd">'+he(m.round)+' · final · '+he(m.winner)+' won</div>'+
+        var bl=rows.length?betsList(sortBets(rows,m)):(showBets?'<div class="bet-dbets-none muted">No bets on this match.</div>':'');
+        var head=m.decided?'final · '+he(m.winner)+' won':'in play';
+        return '<div class="bet-game bet-decided"><div class="bet-g-rd">'+he(m.round)+' · '+head+'</div>'+
           '<div class="bet-g-row">'+dside(m.team1,m.odds1,m.winner)+dside(m.team2,m.odds2,m.winner)+'</div>'+bl+'</div>';
-      }).join('')+'</div>':'';
-      var openBets=(state.myBets||[]).filter(function(b){return b.status==='open';});
-      var betsCard=openBets.length?'<div class="bet-card"><h2>Your open bets</h2>'+openBets.map(function(b){
-        var mm=matchById(b.match_num)||{};var opp=mm.team1===b.pick?mm.team2:mm.team1;
-        var tail=mm.open?'<button class="bet-mini bet-edit" type="button" data-edit="'+b.id+'">Edit</button>':'<span class="bet-st open">LOCKED</span>';
-        return '<div class="bet-row"><span class="bet-r-pick">'+(F[b.pick]||'')+' '+he(b.pick)+(opp?' <span class="muted">v '+he(opp)+'</span>':'')+'</span><span class="bet-r-stk">'+money(b.stake)+' @ '+b.odds.toFixed(2)+'</span>'+tail+'</div>';
       }).join('')+'</div>':'';
       var lb='<div class="bet-card"><h2>Leaderboard</h2><ol class="bet-lb">'+(state.leaderboard||[]).map(function(p){
         return '<li class="'+(p.you?'you':'')+(p.out?' out':'')+'"><span class="bet-lb-n">'+he(p.name)+(p.you?' (you)':'')+'</span><span class="bet-lb-b">'+money(p.total)+'<i class="bet-lb-sub">cash '+money(p.cash)+' · in play '+money(p.portfolio)+'</i></span></li>';
@@ -559,9 +555,12 @@
         '<div class="bet-bal-pair"><span class="bet-bal-fig"><b>'+money(me.total)+'</b><i>Portfolio</i></span>'+
         '<span class="bet-bal-fig"><b>'+money(me.cash)+'</b><i>Cash</i></span></div>'+
         '<span class="bet-bal-k">'+he(me.name)+' · '+he(state.pool.name)+(me.out?' · out':'')+'</span></div>'+leaveCtl+'</div>';
-      app.innerHTML=poolsBar+balRow+toggle+decidedCard+'<div class="bet-card"><h2>Open matches</h2>'+games+'</div>'+betsCard+lb;
-      [].forEach.call(app.querySelectorAll('.bet-pick'),function(btn){btn.onclick=function(){openBet(+btn.getAttribute('data-bet'),btn.getAttribute('data-team'));};});
-      [].forEach.call(app.querySelectorAll('.bet-edit'),function(btn){btn.onclick=function(){openEdit(+btn.getAttribute('data-edit'));};});
+      app.innerHTML=poolsBar+balRow+toggle+decidedCard+'<div class="bet-card"><h2>Open matches</h2>'+games+'</div>'+lb;
+      [].forEach.call(app.querySelectorAll('.bet-pick'),function(btn){btn.onclick=function(){
+        var num=+btn.getAttribute('data-bet');
+        var existing=(state.myBets||[]).filter(function(b){return b.match_num===num&&b.status==='open';})[0];
+        if(existing)openEdit(existing.id); else openBet(num,btn.getAttribute('data-team'));
+      };});
       [].forEach.call(app.querySelectorAll('.bet-pool[data-pool]'),function(b){b.onclick=function(){var c=b.getAttribute('data-pool');if(c!==mem.active){mem.active=c;saveMem();leaveArmed=false;load();}};});
       var addB=document.getElementById('bet-pool-add'); if(addB)addB.onclick=function(){joining=true;render();};
       var lv=document.getElementById('bet-leave'); if(lv)lv.onclick=function(){leaveArmed=true;render();};
