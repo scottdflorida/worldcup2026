@@ -719,6 +719,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-form{padding:16px}
 .bet-form-team{font-size:1.05rem;margin-bottom:14px}
 .bet-payout{font-size:.82rem;margin:0 0 12px;min-height:1em}
+.bet-src{font-size:.7rem;margin:12px 0 0}
 
 /* footer ----------------------------------------------------------- */
 .site-foot{max-width:var(--maxw);margin:0 auto;padding:0 clamp(14px,4vw,28px) var(--s8);position:relative;z-index:1}

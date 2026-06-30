@@ -466,6 +466,7 @@
           '<button class="bet-pick" type="button" data-bet="'+m.num+'" data-team="'+he(m.team2)+'"><span class="bet-fl">'+(F[m.team2]||'')+'</span><span class="bet-nm">'+he(m.team2)+'</span><span class="bet-od">'+m.odds2.toFixed(2)+'</span></button>'+
           '</div></div>';
       }).join(''):'<p class="muted">No matches are open for betting right now — check back when the next ties are set.</p>';
+      var liveOdds=openM.some(function(m){return m.oddsSrc==='live';});
       var betsArr=(state.myBets||[]);
       var betsCard=betsArr.length?'<div class="bet-card"><h2>Your bets</h2>'+betsArr.map(function(b){
         var st=b.status==='won'?'<span class="bet-st won">WON +'+money(b.payout)+'</span>':b.status==='lost'?'<span class="bet-st lost">LOST</span>':'<span class="bet-st open">OPEN</span>';
@@ -475,7 +476,7 @@
         return '<li class="'+(p.you?'you':'')+(p.balance<=0?' out':'')+'"><span class="bet-lb-n">'+he(p.name)+(p.you?' (you)':'')+'</span><span class="bet-lb-b">'+money(p.balance)+'</span></li>';
       }).join('')+'</ol></div>';
       app.innerHTML='<div class="bet-bal'+(me.out?' out':'')+'">'+money(me.balance)+'<span class="bet-bal-k">'+he(state.pool.name)+(me.out?' · you are out':'')+'</span></div>'+
-        '<div class="bet-card"><h2>Open matches</h2>'+games+'</div>'+betsCard+lb;
+        '<div class="bet-card"><h2>Open matches</h2>'+games+(liveOdds?'<p class="bet-src muted">Live market odds via The Odds API.</p>':'')+'</div>'+betsCard+lb;
       [].forEach.call(app.querySelectorAll('.bet-pick'),function(btn){btn.onclick=function(){openBet(+btn.getAttribute('data-bet'),btn.getAttribute('data-team'));};});
     }
     var modal=document.getElementById('bet-modal'),form=document.getElementById('bet-form');
