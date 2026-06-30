@@ -709,7 +709,12 @@ NAV = [
     ("calendar.html", "Calendar"),
 ]
 
-OG_IMG = "assets/og.svg"
+# Social-share card. Must be a raster format — Discord/X/iMessage/Slack/Facebook
+# do not render SVG previews (they fall back to a blank placeholder). og.png is a
+# 1200x630 rasterization of OG_SVG, committed as a static asset (the build never
+# rewrites it; only *.html is cleared). Regenerate it from OG_SVG if the card art
+# changes (see scripts/og_png.md).
+OG_IMG = "assets/og.png"
 FAVICON = "assets/favicon.svg"
 
 
@@ -729,12 +734,16 @@ def head_meta(title, desc, page):
 <meta property="og:description" content="{E(desc)}">
 <meta property="og:url" content="{url}">
 <meta property="og:image" content="{img}">
+<meta property="og:image:secure_url" content="{img}">
+<meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="World Cup 2026 Tracker — the World Cup is live">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{E(title)}">
 <meta name="twitter:description" content="{E(desc)}">
-<meta name="twitter:image" content="{img}">"""
+<meta name="twitter:image" content="{img}">
+<meta name="twitter:image:alt" content="World Cup 2026 Tracker — the World Cup is live">"""
 
 
 def shell(title, active, body, ctx, desc=None, page="index.html"):
