@@ -3,16 +3,18 @@ name: Update site
 # Polls the live World Cup feed often during match hours and rebuilds the site,
 # but only COMMITS when results actually changed — so each real result is one
 # Cloudflare Pages deploy (well under the free 500/month cap), and the site
-# refreshes within ~15 min of a match result landing in the feed.
+# refreshes within ~5 min of a match result landing in the feed.
 #
 # Triggers:
-#   - schedule: every 15 min across the daily match window (UTC), + a daily safety run
+#   - schedule: every 5 min across the daily match window (UTC, ~14:00–08:00 to
+#     cover late knockouts that run to extra time/penalties), + a daily safety run
 #   - workflow_dispatch: the on-site "Update now" button calls this via the
 #     Cloudflare Pages Function at functions/api/refresh.js
 on:
   schedule:
-    - cron: "*/15 14-23 * * *"   # 14:00–23:59 UTC
-    - cron: "*/15 0-5 * * *"     # 00:00–05:59 UTC (late Americas kickoffs)
+    - cron: "*/5 14-23 * * *"    # 14:00–23:59 UTC — every 5 min during matches
+    - cron: "*/5 0-7 * * *"      # 00:00–07:59 UTC — late kickoffs + extra time & penalties
+                                 #   (a ~03:00 UTC knockout can run past 06:00)
     - cron: "0 11 * * *"         # daily safety net
     - cron: "0 13 * * *"         # 06:00 PT — daily betting-odds refresh
   workflow_dispatch:
