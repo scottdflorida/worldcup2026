@@ -2229,7 +2229,7 @@ APP_JS = r"""
         return '<div class="bet-row"><span class="bet-r-pick">'+(F[b.pick]||'')+' '+he(b.pick)+(opp?' <span class="muted">v '+he(opp)+'</span>':'')+'</span><span class="bet-r-stk">'+money(b.stake)+' @ '+b.odds.toFixed(2)+'</span><span class="bet-st open">OPEN</span></div>';
       }).join('')+'</div>':'';
       var lb='<div class="bet-card"><h2>Leaderboard</h2><ol class="bet-lb">'+(state.leaderboard||[]).map(function(p){
-        return '<li class="'+(p.you?'you':'')+(p.balance<=0?' out':'')+'"><span class="bet-lb-n">'+he(p.name)+(p.you?' (you)':'')+'</span><span class="bet-lb-b">'+money(p.balance)+'</span></li>';
+        return '<li class="'+(p.you?'you':'')+(p.out?' out':'')+'"><span class="bet-lb-n">'+he(p.name)+(p.you?' (you)':'')+'</span><span class="bet-lb-b">'+money(p.total)+'<i class="bet-lb-sub">cash '+money(p.cash)+' · in play '+money(p.portfolio)+'</i></span></li>';
       }).join('')+'</ol></div>';
       var toggle='<label class="bet-toggle"><input type="checkbox" id="bet-show"'+(showBets?' checked':'')+'><span>Show everyone’s bets</span></label>';
       var poolsBar='<div class="bet-pools">'+mem.pools.map(function(p){
@@ -2238,7 +2238,10 @@ APP_JS = r"""
       var leaveCtl=leaveArmed
         ? '<span class="bet-leave-c">Leave “'+he(mem.active)+'”? <button id="bet-leave-yes" class="bet-mini danger" type="button">Leave</button><button id="bet-leave-no" class="bet-mini" type="button">Cancel</button></span>'
         : '<button id="bet-leave" class="bet-mini" type="button">Leave</button>';
-      var balRow='<div class="bet-balrow"><div class="bet-bal'+(me.out?' out':'')+'">'+money(me.balance)+'<span class="bet-bal-k">'+he(me.name)+' · '+he(state.pool.name)+(me.out?' · out':'')+'</span></div>'+leaveCtl+'</div>';
+      var balRow='<div class="bet-balrow"><div class="bet-bal'+(me.out?' out':'')+'">'+
+        '<div class="bet-bal-pair"><span class="bet-bal-fig"><b>'+money(me.total)+'</b><i>Portfolio</i></span>'+
+        '<span class="bet-bal-fig"><b>'+money(me.cash)+'</b><i>Cash</i></span></div>'+
+        '<span class="bet-bal-k">'+he(me.name)+' · '+he(state.pool.name)+(me.out?' · out':'')+'</span></div>'+leaveCtl+'</div>';
       app.innerHTML=poolsBar+balRow+toggle+decidedCard+'<div class="bet-card"><h2>Open matches</h2>'+games+'</div>'+betsCard+lb;
       [].forEach.call(app.querySelectorAll('.bet-pick'),function(btn){btn.onclick=function(){openBet(+btn.getAttribute('data-bet'),btn.getAttribute('data-team'));};});
       [].forEach.call(app.querySelectorAll('.bet-pool[data-pool]'),function(b){b.onclick=function(){var c=b.getAttribute('data-pool');if(c!==mem.active){mem.active=c;saveMem();leaveArmed=false;load();}};});
@@ -2256,7 +2259,7 @@ APP_JS = r"""
     document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal&&!modal.hidden)closeBet();});
     function openBet(num,team){
       var m=matchById(num); if(!m)return;
-      var F=state.flags||{},odds=team===m.team1?m.odds1:m.odds2,bal=state.me.balance;
+      var F=state.flags||{},odds=team===m.team1?m.odds1:m.odds2,bal=state.me.cash;
       document.getElementById('bet-modal-k').textContent='Bet on '+team;
       form.innerHTML='<div class="bet-form-team">'+(F[team]||'')+' <b>'+he(team)+'</b> @ '+odds.toFixed(2)+'</div>'+
         '<label class="bet-l">Stake (you have '+money(bal)+')<input id="bet-stake" type="number" min="0.01" step="0.01"></label>'+
@@ -2972,9 +2975,14 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 /* Betting pool ----------------------------------------------------- */
 .bet-intro{margin-bottom:6px}
 .bet-app{display:flex;flex-direction:column;gap:16px}
-.bet-bal{font-family:var(--mono);font-weight:800;font-size:2rem;color:var(--ink);display:flex;flex-direction:column;gap:2px}
-.bet-bal.out{color:var(--muted)}
-.bet-bal-k{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.bet-bal{display:flex;flex-direction:column;gap:5px}
+.bet-bal-pair{display:flex;gap:24px;align-items:flex-end}
+.bet-bal-fig{display:flex;flex-direction:column;gap:1px}
+.bet-bal-fig b{font-family:var(--mono);font-weight:800;font-size:1.95rem;line-height:1;color:var(--ink)}
+.bet-bal-fig+.bet-bal-fig b{font-size:1.45rem;color:var(--ink2)}   /* cash = secondary figure */
+.bet-bal-fig i{font-family:var(--mono);font-size:.55rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-style:normal}
+.bet-bal.out .bet-bal-fig b{color:var(--muted)}
+.bet-bal-k{font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .bet-toggle{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.64rem;font-weight:700;
   letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);cursor:pointer;user-select:none}
 .bet-toggle input{width:15px;height:15px;accent-color:var(--vermilion);cursor:pointer}
@@ -3047,7 +3055,9 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-lb li:first-child{border-top:0}
 .bet-lb li.you .bet-lb-n{font-weight:800;color:var(--vermilion)}
 .bet-lb li.out{opacity:.5}
-.bet-lb-b{font-family:var(--mono);font-weight:800}
+.bet-lb-b{font-family:var(--mono);font-weight:800;display:flex;flex-direction:column;align-items:flex-end;gap:1px}
+.bet-lb-sub{font-size:.56rem;font-weight:600;color:var(--muted);font-style:normal;letter-spacing:.02em}
+.bet-lb li{align-items:center}
 .bet-form{padding:16px}
 .bet-form-team{font-size:1.05rem;margin-bottom:14px}
 .bet-payout{font-size:.82rem;margin:0 0 12px;min-height:1em}
