@@ -374,6 +374,9 @@
     // modal picker for later rounds
     var modal=document.getElementById('fb-modal'),
         grid=document.getElementById('fb-modal-grid'),cur=null;
+    // lift the modal out of <main> (its own stacking context) so it paints above
+    // the footer instead of behind it
+    if(modal&&modal.parentNode!==document.body)document.body.appendChild(modal);
     function he(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
     function openModal(num){
       cur=num;var opts=feasible(num);
