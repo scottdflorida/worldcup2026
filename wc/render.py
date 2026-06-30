@@ -716,6 +716,9 @@ NAV = [
 # changes (see scripts/og_png.md).
 OG_IMG = "assets/og.png"
 FAVICON = "assets/favicon.svg"
+# iOS home-screen icon must be a PNG (it ignores SVG). 180x180 rasterization of
+# FAVICON_SVG, committed as a static asset; see scripts/og_png.md for regen.
+APPLE_ICON = "assets/apple-touch-icon.png"
 
 
 def head_meta(title, desc, page):
@@ -727,7 +730,7 @@ def head_meta(title, desc, page):
 <meta name="description" content="{E(desc)}">
 <meta name="theme-color" content="#F4F2EC">
 <link rel="icon" type="image/svg+xml" href="{FAVICON}">
-<link rel="apple-touch-icon" href="{FAVICON}">
+<link rel="apple-touch-icon" sizes="180x180" href="{APPLE_ICON}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="World Cup 2026 Tracker">
 <meta property="og:title" content="{E(title)}">
