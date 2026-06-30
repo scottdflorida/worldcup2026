@@ -699,6 +699,9 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-srctag{font-family:var(--mono);font-size:.5rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding:1px 5px;line-height:1.4}
 .bet-srctag.live{color:var(--on-accent);background:var(--vermilion)}
 .bet-srctag.model{color:var(--muted);background:transparent;border:1px solid var(--line2)}
+.bet-oddsbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:var(--mono);font-size:.64rem;
+  color:var(--ink2);margin:-2px 0 14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.bet-game.is-model .bet-od{color:var(--muted)}   /* estimate: dim the number too */
 .bet-g-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .bet-pick{display:flex;align-items:center;gap:8px;padding:9px 11px;border:1.5px solid var(--line2);background:var(--paper);cursor:pointer;text-align:left}
 .bet-pick:hover{border-color:var(--ink)}
