@@ -1245,9 +1245,10 @@ def _fb_upcoming(ctx, n=4):
     rows = []
     for mm in ko[:n]:
         rows.append(
-            f'<li class="fbu-row"><span class="fbu-rd">{_FB_RND.get(mm.get("round"), "")}</span>'
-            f'<span class="fbu-teams">{side(mm["team1"])}<span class="fbu-v">v</span>{side(mm["team2"])}</span>'
-            f'<span class="fbu-when">{kickoff_label(mm)}</span></li>')
+            f'<li class="fbu-row">'
+            f'<div class="fbu-teams">{side(mm["team1"])}<span class="fbu-v">v</span>{side(mm["team2"])}</div>'
+            f'<div class="fbu-meta"><span class="fbu-rd">{_FB_RND.get(mm.get("round"), "")}</span>'
+            f'<span class="fbu-when">{kickoff_label(mm)}</span></div></li>')
     if not rows:
         return ""
     return ('<section class="fbu" aria-label="Upcoming matches">'
@@ -2234,27 +2235,26 @@ APP_JS = r"""
           pickBtn(m.team1,m.odds1)+pickBtn(m.team2,m.odds2)+
           '</div>'+block+'</div>';
       }).join(''):'<p class="muted">No matches are open for betting right now — check back when the next ties are set.</p>';
-      // matches this round that have kicked off (in-play or decided) — dimmed, not
-      // selectable, with everyone's bets. (Replaces the separate 'your bets' box;
-      // you see and edit your bets in the Open matches above.)
+      // closed + in-play matches this round — dimmed, not selectable, everyone's bets
       var RORD={R32:0,R16:1,QF:2,SF:3,F:4};
-      var RNAME={R32:'Round of 32',R16:'Round of 16',QF:'Quarterfinals',SF:'Semifinals',F:'Final'};
       var curRound=openM.length?openM[0].round:(function(){
         var ko=(state.matches||[]).filter(function(m){return !m.open;});
         return ko.length?ko.reduce(function(a,b){return RORD[b.round]>=RORD[a.round]?b:a;}).round:null;})();
-      var pastM=(state.matches||[]).filter(function(m){return !m.open&&m.round===curRound;});
       function dside(team,odds,winner){
         return '<div class="bet-dteam'+(winner?(team===winner?' win':' lose'):'')+'"><span class="bet-fl">'+(F[team]||'')+'</span><span class="bet-nm">'+he(team)+'</span><span class="bet-od">'+odds.toFixed(2)+'</span></div>';
       }
-      var decidedCard=pastM.length?'<div class="bet-card"><h2>'+he(RNAME[curRound]||curRound)+'</h2>'+pastM.map(function(m){
+      function matchBlock(m){
         var bh=(state.poolBets||[]).filter(function(b){return b.match_num===m.num;});
         var mine=bh.filter(function(b){return b.you;});
         var rows=showBets?mine.concat(bh.filter(function(b){return !b.you;})):mine;
         var bl=rows.length?betsList(sortBets(rows,m)):(showBets?'<div class="bet-dbets-none muted">No bets on this match.</div>':'');
-        var head=m.decided?'final · '+he(m.winner)+' won':'in play';
-        return '<div class="bet-game bet-decided"><div class="bet-g-rd">'+he(m.round)+' · '+head+'</div>'+
+        return '<div class="bet-game bet-decided"><div class="bet-g-rd">'+he(m.round)+(m.decided?' · '+he(m.winner)+' won':'')+'</div>'+
           '<div class="bet-g-row">'+dside(m.team1,m.odds1,m.winner)+dside(m.team2,m.odds2,m.winner)+'</div>'+bl+'</div>';
-      }).join('')+'</div>':'';
+      }
+      var closedM=(state.matches||[]).filter(function(m){return m.decided&&m.round===curRound;});
+      var inPlayM=(state.matches||[]).filter(function(m){return !m.open&&!m.decided&&m.round===curRound;});
+      var closedCard=closedM.length?'<div class="bet-card"><h2>Closed matches</h2>'+closedM.map(matchBlock).join('')+'</div>':'';
+      var inPlayCard=inPlayM.length?'<div class="bet-card"><h2>In-play matches</h2>'+inPlayM.map(matchBlock).join('')+'</div>':'';
       var lb='<div class="bet-card"><h2>Leaderboard</h2><ol class="bet-lb">'+(state.leaderboard||[]).map(function(p){
         return '<li class="'+(p.you?'you':'')+(p.out?' out':'')+'"><span class="bet-lb-n">'+he(p.name)+(p.you?' (you)':'')+'</span><span class="bet-lb-b">'+money(p.total)+'<i class="bet-lb-sub">cash '+money(p.cash)+' · in play '+money(p.portfolio)+'</i></span></li>';
       }).join('')+'</ol></div>';
@@ -2269,7 +2269,7 @@ APP_JS = r"""
         '<div class="bet-bal-pair"><span class="bet-bal-fig"><b>'+money(me.total)+'</b><i>Portfolio</i></span>'+
         '<span class="bet-bal-fig"><b>'+money(me.cash)+'</b><i>Cash</i></span></div>'+
         '<span class="bet-bal-k">'+he(me.name)+' · '+he(state.pool.name)+(me.out?' · out':'')+'</span></div>'+leaveCtl+'</div>';
-      app.innerHTML=poolsBar+balRow+toggle+decidedCard+'<div class="bet-card"><h2>Open matches</h2>'+games+'</div>'+lb;
+      app.innerHTML=poolsBar+balRow+toggle+lb+closedCard+inPlayCard+'<div class="bet-card"><h2>Open matches</h2>'+games+'</div>';
       [].forEach.call(app.querySelectorAll('.bet-pick'),function(btn){btn.onclick=function(){
         var num=+btn.getAttribute('data-bet');
         var existing=(state.myBets||[]).filter(function(b){return b.match_num===num&&b.status==='open';})[0];
@@ -2931,7 +2931,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
    far-right column lands flush right). JS opens on the current round. */
 @media(max-width:720px){
   .kbracket{min-width:0;gap:16px;padding:14px 14px 22px}
-  .kr-col{flex:0 0 82vw;min-width:0;scroll-snap-align:start}
+  .kr-col{flex:0 0 49vw;min-width:0;scroll-snap-align:start}
   .kr-col:last-child{scroll-snap-align:end}
   .bracket-wrap{scroll-snap-type:x mandatory;scroll-padding-left:14px;
     overscroll-behavior-x:contain}
@@ -3020,18 +3020,21 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .fb-pick.fb-locked .fb-slot{cursor:default;border-color:transparent;background:transparent;box-shadow:none}
 .fb-champ .fb-slot{border-width:2px;border-color:var(--vermilion);width:calc(var(--fb-fl)*1.62);height:calc(var(--fb-fl)*1.34)}
 .fb-champ.fb-filled .fb-slot{box-shadow:0 0 0 2px var(--vermilion)}
-/* upcoming-matches list beneath the bracket */
-.fbu{margin-top:26px}
+/* upcoming-matches list beneath the bracket — a card so its row rules don't blend
+   with the page's ruled background */
+.fbu{margin-top:26px;background:var(--paper2);border:1.5px solid var(--line2);padding:14px 16px}
+.fbu .sec-head{margin-bottom:8px}
 .fbu-list{list-style:none;margin:0;padding:0}
-.fbu-row{display:flex;align-items:center;gap:8px 14px;padding:10px 0;border-top:1px solid var(--line);flex-wrap:wrap}
+.fbu-row{padding:9px 0;border-top:1px solid var(--line)}
 .fbu-row:first-child{border-top:0}
-.fbu-rd{font-family:var(--mono);font-size:.56rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);min-width:30px}
-.fbu-teams{display:flex;align-items:center;gap:8px;flex:1;min-width:0;font-weight:700;font-size:.95rem}
-.fbu-team{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;min-width:0}
+.fbu-teams{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-weight:700;font-size:.95rem}
+.fbu-team{display:inline-flex;align-items:center;gap:5px}
 .fbu-fl{font-size:1.2em;line-height:1}
 .fbu-team.tbd{font-weight:600}
 .fbu-v{font-family:var(--mono);color:var(--muted);font-size:.72rem;font-weight:700}
-.fbu-when{font-family:var(--mono);font-size:.72rem;white-space:nowrap;margin-left:auto}
+.fbu-meta{display:flex;align-items:center;gap:8px;margin-top:3px}
+.fbu-rd{font-family:var(--mono);font-size:.56rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.fbu-when{font-family:var(--mono);font-size:.72rem;color:var(--ink2);white-space:nowrap}
 .fb-modal[hidden]{display:none}
 .fb-modal{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:18px}
 .fb-modal-back{position:absolute;inset:0;background:rgba(19,17,13,.55)}
