@@ -37,11 +37,14 @@ jobs:
         run: pip install anthropic
 
       - name: Refresh data and rebuild the site
-        # ANTHROPIC_API_KEY is optional: set it as a repo secret to regenerate the
-        # road-to-final blurbs after each match. Without it, the site still builds
-        # with whatever blurbs are already committed in data/blurbs.json.
+        # Both keys are optional repo secrets:
+        #   ANTHROPIC_API_KEY — regenerate road-to-final blurbs after each match.
+        #   ODDS_API_KEY      — pull public match odds for the betting pool
+        #                       (TTL-guarded, ~3x/day; falls back to model odds).
+        # Without them the site still builds from whatever is committed.
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: python3 scripts/update.py
 
       - name: Commit & push only if results changed

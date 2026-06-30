@@ -18,6 +18,7 @@ import os
 from datetime import datetime, timedelta, timezone
 
 from . import blurbs, bracket, config, data, standings, util, venues
+from . import odds as odds_api
 from .flags import flag
 from .util import fmt_date, fmt_date_short  # noqa: F401
 
@@ -1294,6 +1295,7 @@ def betting_data(ctx):
     snapshot odds onto a wager, and settle once a match is decided."""
     by_num = bracket.index_matches(ctx.matches)
     ratings = _team_ratings(ctx)
+    cache = odds_api.load_cache()      # public market odds, when available
     out = []
     for m in ctx.matches:
         if m.get("round") not in ("Round of 32", "Round of 16", "Quarter-final",
@@ -1303,11 +1305,16 @@ def betting_data(ctx):
         t2 = bracket.resolve_slot(m["team2"], ctx.analyses, by_num)
         if not (t1["team"] and t2["team"]):
             continue  # not bettable until both sides are set
-        o1, o2 = _odds_pair(ratings.get(t1["team"], 3), ratings.get(t2["team"], 3))
+        pub = odds_api.pair_odds(cache, t1["team"], t2["team"])
+        if pub:
+            (o1, o2), src = pub, "live"
+        else:
+            o1, o2 = _odds_pair(ratings.get(t1["team"], 3), ratings.get(t2["team"], 3))
+            src = "model"
         out.append({
             "num": m["num"], "round": _FB_RND.get(m.get("round"), m.get("round")),
             "team1": t1["team"], "team2": t2["team"], "odds1": o1, "odds2": o2,
-            "kickoff": _utc_iso(m), "decided": data.has_result(m),
+            "oddsSrc": src, "kickoff": _utc_iso(m), "decided": data.has_result(m),
             "winner": bracket.match_winner(m) if data.has_result(m) else None,
         })
     teams = sorted({x for m in out for x in (m["team1"], m["team2"])})
@@ -2143,6 +2150,7 @@ APP_JS = r"""
           '<button class="bet-pick" type="button" data-bet="'+m.num+'" data-team="'+he(m.team2)+'"><span class="bet-fl">'+(F[m.team2]||'')+'</span><span class="bet-nm">'+he(m.team2)+'</span><span class="bet-od">'+m.odds2.toFixed(2)+'</span></button>'+
           '</div></div>';
       }).join(''):'<p class="muted">No matches are open for betting right now — check back when the next ties are set.</p>';
+      var liveOdds=openM.some(function(m){return m.oddsSrc==='live';});
       var betsArr=(state.myBets||[]);
       var betsCard=betsArr.length?'<div class="bet-card"><h2>Your bets</h2>'+betsArr.map(function(b){
         var st=b.status==='won'?'<span class="bet-st won">WON +'+money(b.payout)+'</span>':b.status==='lost'?'<span class="bet-st lost">LOST</span>':'<span class="bet-st open">OPEN</span>';
@@ -2152,7 +2160,7 @@ APP_JS = r"""
         return '<li class="'+(p.you?'you':'')+(p.balance<=0?' out':'')+'"><span class="bet-lb-n">'+he(p.name)+(p.you?' (you)':'')+'</span><span class="bet-lb-b">'+money(p.balance)+'</span></li>';
       }).join('')+'</ol></div>';
       app.innerHTML='<div class="bet-bal'+(me.out?' out':'')+'">'+money(me.balance)+'<span class="bet-bal-k">'+he(state.pool.name)+(me.out?' · you are out':'')+'</span></div>'+
-        '<div class="bet-card"><h2>Open matches</h2>'+games+'</div>'+betsCard+lb;
+        '<div class="bet-card"><h2>Open matches</h2>'+games+(liveOdds?'<p class="bet-src muted">Live market odds via The Odds API.</p>':'')+'</div>'+betsCard+lb;
       [].forEach.call(app.querySelectorAll('.bet-pick'),function(btn){btn.onclick=function(){openBet(+btn.getAttribute('data-bet'),btn.getAttribute('data-team'));};});
     }
     var modal=document.getElementById('bet-modal'),form=document.getElementById('bet-form');
@@ -2914,6 +2922,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-form{padding:16px}
 .bet-form-team{font-size:1.05rem;margin-bottom:14px}
 .bet-payout{font-size:.82rem;margin:0 0 12px;min-height:1em}
+.bet-src{font-size:.7rem;margin:12px 0 0}
 
 /* footer ----------------------------------------------------------- */
 .site-foot{max-width:var(--maxw);margin:0 auto;padding:0 clamp(14px,4vw,28px) var(--s8);position:relative;z-index:1}

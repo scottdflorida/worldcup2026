@@ -9,7 +9,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from wc import blurbs, data, render  # noqa: E402
+from wc import blurbs, data, odds, render  # noqa: E402
 
 PUBLIC = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "public")
 
@@ -28,9 +28,19 @@ def _refresh_blurbs(payload):
         print(f"[update] blurb refresh failed ({e!r}); building with existing blurbs")
 
 
+def _refresh_odds():
+    """Pull public match odds into data/odds.json (TTL-guarded, ~3x/day max).
+    Best-effort: no key or any failure just keeps the existing/model odds."""
+    try:
+        odds.refresh()
+    except Exception as e:  # noqa: BLE001 — never let odds break the deploy
+        print(f"[update] odds refresh failed ({e!r}); using existing odds")
+
+
 def main():
     payload = data.refresh()
     _refresh_blurbs(payload)        # update data/blurbs.json before rendering
+    _refresh_odds()                 # update data/odds.json before rendering
     n = render.write_site(PUBLIC, payload)
     print(f"[update] refreshed data and wrote {n} files to {PUBLIC}")
 

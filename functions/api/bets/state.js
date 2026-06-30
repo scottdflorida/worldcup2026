@@ -13,8 +13,8 @@ export async function onRequestGet({ request, env }) {
     const ko = m.kickoff ? Date.parse(m.kickoff) : null;
     return {
       num: m.num, round: m.round, team1: m.team1, team2: m.team2,
-      odds1: m.odds1, odds2: m.odds2, decided: m.decided, winner: m.winner,
-      open: !m.decided && (ko === null || ko > now),
+      odds1: m.odds1, odds2: m.odds2, oddsSrc: m.oddsSrc, decided: m.decided,
+      winner: m.winner, open: !m.decided && (ko === null || ko > now),
     };
   });
 
