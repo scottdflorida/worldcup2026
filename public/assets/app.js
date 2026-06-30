@@ -63,6 +63,11 @@
       if(el.classList.contains('live-mid'))return;          // currently showing a live score
       var p=tzParts(el.getAttribute('data-utc'),tz); if(!p)return;
       var fmt=el.getAttribute('data-tfmt');
+      if(fmt==='stamp'){   // footer "updated" stamp: month day, year · time + zone
+        var sd=new Date(el.getAttribute('data-utc'));
+        var ds=new Intl.DateTimeFormat('en-US',{timeZone:tz,month:'short',day:'numeric',year:'numeric'}).format(sd);
+        el.textContent=ds+' · '+p.time+' '+label;return;
+      }
       if(fmt==='day'){el.textContent=p.day;return;}
       if(fmt==='daytime'){
         var dy=el.querySelector('.ko-day'); if(dy)dy.textContent=p.day;

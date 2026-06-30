@@ -750,10 +750,15 @@ def shell(title, active, body, ctx, desc=None, page="index.html"):
         )
     nav = "".join(nav_items)
     updated = ""
+    upd_attr = ""
     if ctx.last_updated:
         try:
             dt = datetime.fromisoformat(ctx.last_updated).astimezone(timezone.utc)
-            updated = dt.strftime("%b %d, %Y · %H:%M UTC")
+            # Server fallback is Pacific (the default zone); data-utc lets the
+            # client re-render it in the viewer's chosen zone, like every kickoff.
+            pt = dt + timedelta(hours=PT_OFFSET_HOURS)
+            updated = pt.strftime("%b %d, %Y · %H:%M ") + PT_LABEL
+            upd_attr = f' data-utc="{dt.strftime("%Y-%m-%dT%H:%M:%SZ")}" data-tfmt="stamp"'
         except ValueError:
             updated = ctx.last_updated
     return f"""<!DOCTYPE html>
@@ -789,7 +794,7 @@ def shell(title, active, body, ctx, desc=None, page="index.html"):
     </div>
     <div class="foot-cell foot-stat">
       <span class="foot-k">UPDATED</span>
-      <span class="foot-v"><span class="upd-dot wire" aria-hidden="true"><span class="wire-pulse"></span></span>{E(updated) or "—"}</span>
+      <span class="foot-v"><span class="upd-dot wire" aria-hidden="true"><span class="wire-pulse"></span></span><span class="upd-stamp"{upd_attr}>{E(updated) or "—"}</span></span>
     </div>
   </div>
   <div class="foot-tz">
@@ -1907,6 +1912,11 @@ APP_JS = r"""
       if(el.classList.contains('live-mid'))return;          // currently showing a live score
       var p=tzParts(el.getAttribute('data-utc'),tz); if(!p)return;
       var fmt=el.getAttribute('data-tfmt');
+      if(fmt==='stamp'){   // footer "updated" stamp: month day, year · time + zone
+        var sd=new Date(el.getAttribute('data-utc'));
+        var ds=new Intl.DateTimeFormat('en-US',{timeZone:tz,month:'short',day:'numeric',year:'numeric'}).format(sd);
+        el.textContent=ds+' · '+p.time+' '+label;return;
+      }
       if(fmt==='day'){el.textContent=p.day;return;}
       if(fmt==='daytime'){
         var dy=el.querySelector('.ko-day'); if(dy)dy.textContent=p.day;
