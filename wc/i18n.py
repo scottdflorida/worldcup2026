@@ -243,6 +243,12 @@ UI = {
     "Display name": "Nome de exibição",
     "Join a pool": "Entrar em um bolão",
     "Join another pool": "Entrar em outro bolão",
+    "Pick a display name and a pool code. Share the code so everyone is in the same "
+    "pool. A new code starts a new pool. Already joined? Enter the same name and code "
+    "to pick up where you left off — even on a new device.":
+        "Escolha um nome de exibição e um código de bolão. Compartilhe o código para "
+        "todos ficarem no mesmo bolão. Um código novo cria um bolão novo. Já entrou? "
+        "Digite o mesmo nome e código para retomar de onde parou — até em outro dispositivo.",
     "Open matches": "Jogos em aberto",
     "Closed matches": "Jogos encerrados",
     "In-play matches": "Jogos em andamento",

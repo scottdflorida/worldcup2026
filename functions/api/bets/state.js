@@ -1,6 +1,6 @@
 // GET /api/bets/state — pool snapshot: bettable matches, the caller's balance &
 // bets, and the leaderboard. Settles any decided bets first so balances are live.
-import { json, loadData, getPlayer, settleAll, round2 } from "./_common.js";
+import { json, loadData, getPlayer, settleAll, round2, tokenCookie } from "./_common.js";
 
 export async function onRequestGet({ request, env }) {
   if (!env || !env.DB) return json({ ok: true, configured: false });
@@ -64,5 +64,7 @@ export async function onRequestGet({ request, env }) {
       pick: r.pick, stake: round2(r.stake), status: r.status, payout: round2(r.payout),
     }));
   }
-  return json(resp);
+  // Refresh the identity cookie (sliding expiry) so a returning device stays
+  // recognised even if localStorage was cleared.
+  return json(resp, 200, me ? { "Set-Cookie": tokenCookie(me.token) } : undefined);
 }

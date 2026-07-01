@@ -24,6 +24,14 @@ export function newToken() {
   return Array.from(a).map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
+// A long-lived first-party cookie mirroring the active membership token, so
+// identity survives a localStorage wipe on the SAME device: getPlayer reads it
+// as a fallback, and the client restores the membership from the state reply.
+// HttpOnly (server-only) + Secure; SameSite=Lax is fine for same-site fetches.
+export function tokenCookie(token) {
+  return `wc_bet=${token}; Path=/; Max-Age=34560000; HttpOnly; Secure; SameSite=Lax`;
+}
+
 // The knockout matches + model odds + results, published by the static build.
 export async function loadData(request) {
   try {

@@ -470,7 +470,7 @@
     function renderJoin(){
       var canCancel=mem.pools.length>0;
       app.innerHTML='<div class="bet-card bet-join"><h2>'+(canCancel?'Join another pool':'Join a pool')+'</h2>'+
-        '<p class="muted">Pick a display name and a pool code. Share the code so everyone is in the same pool. A new code starts a new pool.</p>'+
+        '<p class="muted">Pick a display name and a pool code. Share the code so everyone is in the same pool. A new code starts a new pool. Already joined? Enter the same name and code to pick up where you left off — even on a new device.</p>'+
         '<label class="bet-l">Display name<input id="bet-name" maxlength="24" autocomplete="off"></label>'+
         '<label class="bet-l">Pool code<input id="bet-code" maxlength="24" autocomplete="off" placeholder="friends26"></label>'+
         '<div class="bet-join-actions"><button id="bet-join-go" class="bet-btn" type="button">Join with $100</button>'+
