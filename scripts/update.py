@@ -9,7 +9,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from wc import blurbs, data, odds, render, squads, standings  # noqa: E402
+from wc import blurbs, data, kalshi, odds, render, squads, standings  # noqa: E402
 
 PUBLIC = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "public")
 
@@ -41,7 +41,7 @@ def _refresh_blurbs_pt():
         print(f"[update] pt-BR blurb translation failed ({e!r}); keeping existing pt blurbs")
 
 
-def _refresh_odds():
+def _refresh_odds(payload):
     """Pull public match odds into data/odds.json — only on the daily 6am-PT run
     (REFRESH_ODDS=1), so the line moves once a day. Best-effort: no key or any
     failure just keeps the existing/model odds."""
@@ -51,6 +51,14 @@ def _refresh_odds():
         odds.refresh(force=True)
     except Exception as e:  # noqa: BLE001 — never let odds break the deploy
         print(f"[update] odds refresh failed ({e!r}); using existing odds")
+    try:
+        from wc import standings as _standings
+        teams = sorted({row["team"]
+                        for i in _standings.all_groups(payload["matches"]).values()
+                        for row in i["table"]})
+        kalshi.refresh(force=True, known_teams=teams)
+    except Exception as e:  # noqa: BLE001 — never let Kalshi break the deploy
+        print(f"[update] Kalshi odds refresh failed ({e!r}); using existing odds")
 
 
 def _refresh_squads(payload):
@@ -72,7 +80,7 @@ def main():
     payload = data.refresh()
     _refresh_blurbs(payload)        # update data/blurbs.json before rendering
     _refresh_blurbs_pt()            # translate changed blurbs into data/blurbs.pt.json
-    _refresh_odds()                 # update data/odds.json before rendering
+    _refresh_odds(payload)          # update data/odds.json before rendering (Odds API + Kalshi)
     _refresh_squads(payload)        # update data/squads.json before rendering
     n = render.write_site(PUBLIC, payload)
     print(f"[update] refreshed data and wrote {n} files to {PUBLIC}")
