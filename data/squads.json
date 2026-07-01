@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-06-30T16:16:02.300263+00:00",
+ "fetched_at": "2026-07-01T13:46:22.736391+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Austria at Algeria",
@@ -795,6 +795,13 @@
      "starter": false
     },
     {
+     "age": 37,
+     "name": "Axel Witsel",
+     "num": "6",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 34,
      "name": "Thomas Meunier",
      "num": "15",
@@ -842,13 +849,6 @@
      "num": "20",
      "pos": "M",
      "starter": true
-    },
-    {
-     "age": 37,
-     "name": "Axel Witsel",
-     "num": "6",
-     "pos": "M",
-     "starter": false
     },
     {
      "age": 25,
@@ -2606,7 +2606,7 @@
    ]
   },
   "Ecuador": {
-   "as_of": "Germany at Ecuador",
+   "as_of": "Ecuador at Mexico",
    "players": [
     {
      "age": 39,
@@ -2661,13 +2661,6 @@
      "age": 28,
      "name": "Pervis Estupiñán",
      "num": "7",
-     "pos": "D",
-     "starter": false
-    },
-    {
-     "age": 20,
-     "name": "Kevin Rodríguez",
-     "num": "11",
      "pos": "D",
      "starter": false
     },
@@ -2766,6 +2759,13 @@
      "age": 22,
      "name": "Anthony Valencia",
      "num": "8",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Kevin Rodríguez",
+     "num": "11",
      "pos": "F",
      "starter": false
     },
@@ -3167,7 +3167,7 @@
    ]
   },
   "France": {
-   "as_of": "France at Norway",
+   "as_of": "Sweden at France",
    "players": [
     {
      "age": 30,
@@ -3191,6 +3191,13 @@
      "starter": false
     },
     {
+     "age": 32,
+     "name": "Lucas Digne",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 27,
      "name": "Dayot Upamecano",
      "num": "4",
@@ -3205,16 +3212,9 @@
      "starter": true
     },
     {
-     "age": 28,
-     "name": "Theo Hernández",
-     "num": "19",
-     "pos": "D",
-     "starter": true
-    },
-    {
-     "age": 26,
-     "name": "Maxence Lacroix",
-     "num": "26",
+     "age": 25,
+     "name": "William Saliba",
+     "num": "17",
      "pos": "D",
      "starter": true
     },
@@ -3226,13 +3226,6 @@
      "starter": false
     },
     {
-     "age": 32,
-     "name": "Lucas Digne",
-     "num": "3",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 27,
      "name": "Ibrahima Konaté",
      "num": "15",
@@ -3240,9 +3233,9 @@
      "starter": false
     },
     {
-     "age": 25,
-     "name": "William Saliba",
-     "num": "17",
+     "age": 28,
+     "name": "Theo Hernández",
+     "num": "19",
      "pos": "D",
      "starter": false
     },
@@ -3254,11 +3247,11 @@
      "starter": false
     },
     {
-     "age": 25,
-     "name": "Manu Koné",
-     "num": "6",
-     "pos": "M",
-     "starter": true
+     "age": 26,
+     "name": "Maxence Lacroix",
+     "num": "26",
+     "pos": "D",
+     "starter": false
     },
     {
      "age": 26,
@@ -3275,16 +3268,23 @@
      "starter": true
     },
     {
-     "age": 35,
-     "name": "N'Golo Kanté",
-     "num": "13",
+     "age": 31,
+     "name": "Adrien Rabiot",
+     "num": "14",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Manu Koné",
+     "num": "6",
      "pos": "M",
      "starter": false
     },
     {
-     "age": 31,
-     "name": "Adrien Rabiot",
-     "num": "14",
+     "age": 35,
+     "name": "N'Golo Kanté",
+     "num": "13",
      "pos": "M",
      "starter": false
     },
@@ -3324,9 +3324,9 @@
      "starter": true
     },
     {
-     "age": 21,
-     "name": "Désiré Doué",
-     "num": "20",
+     "age": 23,
+     "name": "Bradley Barcola",
+     "num": "12",
      "pos": "F",
      "starter": true
     },
@@ -3338,9 +3338,9 @@
      "starter": false
     },
     {
-     "age": 23,
-     "name": "Bradley Barcola",
-     "num": "12",
+     "age": 21,
+     "name": "Désiré Doué",
+     "num": "20",
      "pos": "F",
      "starter": false
     },
@@ -4289,7 +4289,7 @@
    ]
   },
   "Ivory Coast": {
-   "as_of": "Ivory Coast at Curaçao",
+   "as_of": "Norway at Ivory Coast",
    "players": [
     {
      "age": 25,
@@ -4313,9 +4313,9 @@
      "starter": false
     },
     {
-     "age": 22,
-     "name": "Ousmane Diomande",
-     "num": "2",
+     "age": 30,
+     "name": "Ghislain Konan",
+     "num": "3",
      "pos": "D",
      "starter": true
     },
@@ -4327,13 +4327,6 @@
      "starter": true
     },
     {
-     "age": 29,
-     "name": "Christopher Operi",
-     "num": "13",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 23,
      "name": "Guela Doué",
      "num": "17",
@@ -4341,9 +4334,16 @@
      "starter": true
     },
     {
-     "age": 30,
-     "name": "Ghislain Konan",
-     "num": "3",
+     "age": 29,
+     "name": "Emmanuel Agbadou",
+     "num": "20",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Ousmane Diomande",
+     "num": "2",
      "pos": "D",
      "starter": false
     },
@@ -4356,8 +4356,8 @@
     },
     {
      "age": 29,
-     "name": "Emmanuel Agbadou",
-     "num": "20",
+     "name": "Christopher Operi",
+     "num": "13",
      "pos": "D",
      "starter": false
     },
@@ -4383,6 +4383,13 @@
      "starter": true
     },
     {
+     "age": 20,
+     "name": "Christ Inao Oulaï",
+     "num": "26",
+     "pos": "M",
+     "starter": true
+    },
+    {
      "age": 34,
      "name": "Jean Michaël Seri",
      "num": "4",
@@ -4397,16 +4404,16 @@
      "starter": false
     },
     {
-     "age": 25,
-     "name": "Parfait Guiagon",
-     "num": "25",
+     "age": 23,
+     "name": "Amad Diallo",
+     "num": "15",
      "pos": "M",
      "starter": false
     },
     {
-     "age": 20,
-     "name": "Christ Inao Oulaï",
-     "num": "26",
+     "age": 25,
+     "name": "Parfait Guiagon",
+     "num": "25",
      "pos": "M",
      "starter": false
     },
@@ -4421,13 +4428,6 @@
      "age": 19,
      "name": "Yan Diomande",
      "num": "11",
-     "pos": "F",
-     "starter": true
-    },
-    {
-     "age": 23,
-     "name": "Amad Diallo",
-     "num": "15",
      "pos": "F",
      "starter": true
     },
@@ -4460,7 +4460,7 @@
      "starter": false
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Evann Guessand",
      "num": "22",
      "pos": "F",
@@ -4850,7 +4850,7 @@
    ]
   },
   "Mexico": {
-   "as_of": "Mexico at Czechia",
+   "as_of": "Ecuador at Mexico",
    "players": [
     {
      "age": 26,
@@ -4888,37 +4888,44 @@
      "starter": true
     },
     {
-     "age": 26,
-     "name": "Israel Reyes",
-     "num": "15",
-     "pos": "D",
-     "starter": true
-    },
-    {
-     "age": 22,
-     "name": "Mateo Chávez",
-     "num": "20",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 27,
      "name": "Johan Vásquez",
      "num": "5",
      "pos": "D",
-     "starter": false
+     "starter": true
     },
     {
      "age": 31,
      "name": "Jesús Gallardo",
      "num": "23",
      "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Israel Reyes",
+     "num": "15",
+     "pos": "D",
      "starter": false
     },
     {
-     "age": 28,
-     "name": "Edson Álvarez",
-     "num": "4",
+     "age": 22,
+     "name": "Mateo Chávez",
+     "num": "20",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 19,
+     "name": "Brian Gutiérrez",
+     "num": "26",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Érik Lira",
+     "num": "6",
      "pos": "M",
      "starter": true
     },
@@ -4937,9 +4944,9 @@
      "starter": true
     },
     {
-     "age": 26,
-     "name": "Érik Lira",
-     "num": "6",
+     "age": 28,
+     "name": "Edson Álvarez",
+     "num": "4",
      "pos": "M",
      "starter": false
     },
@@ -4979,11 +4986,11 @@
      "starter": false
     },
     {
-     "age": 23,
-     "name": "Brian Gutiérrez",
-     "num": "26",
-     "pos": "M",
-     "starter": false
+     "age": 35,
+     "name": "Raúl Jiménez",
+     "num": "9",
+     "pos": "F",
+     "starter": true
     },
     {
      "age": 29,
@@ -4993,25 +5000,11 @@
      "starter": true
     },
     {
-     "age": 31,
-     "name": "Guillermo Martínez",
-     "num": "22",
-     "pos": "F",
-     "starter": true
-    },
-    {
      "age": 27,
      "name": "Roberto Alvarado",
      "num": "25",
      "pos": "F",
      "starter": true
-    },
-    {
-     "age": 35,
-     "name": "Raúl Jiménez",
-     "num": "9",
-     "pos": "F",
-     "starter": false
     },
     {
      "age": 28,
@@ -5031,6 +5024,13 @@
      "age": 23,
      "name": "Armando González",
      "num": "14",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Guillermo Martínez",
+     "num": "22",
      "pos": "F",
      "starter": false
     }
@@ -5311,13 +5311,6 @@
      "starter": true
     },
     {
-     "age": 24,
-     "name": "Crysencio Summerville",
-     "num": "24",
-     "pos": "M",
-     "starter": true
-    },
-    {
      "age": 35,
      "name": "Marten de Roon",
      "num": "3",
@@ -5355,7 +5348,7 @@
     {
      "age": 25,
      "name": "Quinten Timber",
-     "num": null,
+     "num": "26",
      "pos": "M",
      "starter": false
     },
@@ -5370,6 +5363,13 @@
      "age": 24,
      "name": "Brian Brobbey",
      "num": "19",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Crysencio Summerville",
+     "num": "24",
      "pos": "F",
      "starter": true
     },
@@ -5598,21 +5598,14 @@
    ]
   },
   "Norway": {
-   "as_of": "France at Norway",
+   "as_of": "Norway at Ivory Coast",
    "players": [
-    {
-     "age": 28,
-     "name": "Egil Selvik",
-     "num": "13",
-     "pos": "G",
-     "starter": true
-    },
     {
      "age": 35,
      "name": "Ørjan Nyland",
      "num": "1",
      "pos": "G",
-     "starter": false
+     "starter": true
     },
     {
      "age": 23,
@@ -5622,51 +5615,51 @@
      "starter": false
     },
     {
-     "age": 26,
-     "name": "Leo Østigard",
-     "num": "4",
-     "pos": "D",
-     "starter": true
-    },
-    {
-     "age": 27,
-     "name": "Fredrik André Bjørkan",
-     "num": "15",
-     "pos": "D",
-     "starter": true
-    },
-    {
-     "age": 23,
-     "name": "Henrik Falchener",
-     "num": "25",
-     "pos": "D",
-     "starter": true
+     "age": 28,
+     "name": "Egil Selvik",
+     "num": "13",
+     "pos": "G",
+     "starter": false
     },
     {
      "age": 28,
      "name": "Kristoffer Ajer",
      "num": "3",
      "pos": "D",
-     "starter": false
+     "starter": true
     },
     {
      "age": 24,
      "name": "David Møller Wolfe",
      "num": "5",
      "pos": "D",
-     "starter": false
+     "starter": true
     },
     {
      "age": 25,
      "name": "Marcus Holmgren Pedersen",
      "num": "16",
      "pos": "D",
-     "starter": false
+     "starter": true
     },
     {
      "age": 27,
      "name": "Torbjørn Heggem",
      "num": "17",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Leo Østigard",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Fredrik André Bjørkan",
+     "num": "15",
      "pos": "D",
      "starter": false
     },
@@ -5674,6 +5667,13 @@
      "age": 25,
      "name": "Sondre Langas",
      "num": "24",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Henrik Falchener",
+     "num": "25",
      "pos": "D",
      "starter": false
     },
@@ -5692,30 +5692,23 @@
      "starter": true
     },
     {
-     "age": 30,
-     "name": "Fredrik Aursnes",
-     "num": "14",
+     "age": 28,
+     "name": "Sander Berge",
+     "num": "8",
      "pos": "M",
      "starter": true
     },
     {
      "age": 27,
-     "name": "Kristian Thorstvedt",
-     "num": "18",
+     "name": "Martin Ødegaard",
+     "num": "10",
      "pos": "M",
      "starter": true
     },
     {
-     "age": 24,
-     "name": "Thelo Aasgaard",
-     "num": "19",
-     "pos": "M",
-     "starter": true
-    },
-    {
-     "age": 22,
-     "name": "Oscar Bobb",
-     "num": "22",
+     "age": 21,
+     "name": "Antonio Nusa",
+     "num": "20",
      "pos": "M",
      "starter": true
     },
@@ -5727,23 +5720,30 @@
      "starter": false
     },
     {
-     "age": 28,
-     "name": "Sander Berge",
-     "num": "8",
+     "age": 30,
+     "name": "Fredrik Aursnes",
+     "num": "14",
      "pos": "M",
      "starter": false
     },
     {
      "age": 27,
-     "name": "Martin Ødegaard",
-     "num": "10",
+     "name": "Kristian Thorstvedt",
+     "num": "18",
      "pos": "M",
      "starter": false
     },
     {
-     "age": 21,
-     "name": "Antonio Nusa",
-     "num": "20",
+     "age": 24,
+     "name": "Thelo Aasgaard",
+     "num": "19",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Oscar Bobb",
+     "num": "22",
      "pos": "M",
      "starter": false
     },
@@ -5755,30 +5755,30 @@
      "starter": false
     },
     {
-     "age": 26,
-     "name": "Jørgen Strand Larsen",
-     "num": "11",
-     "pos": "F",
-     "starter": true
-    },
-    {
-     "age": 22,
-     "name": "Andreas Schjelderup",
-     "num": "21",
-     "pos": "F",
-     "starter": true
-    },
-    {
      "age": 30,
      "name": "Alexander Sørloth",
      "num": "7",
      "pos": "F",
-     "starter": false
+     "starter": true
     },
     {
      "age": 25,
      "name": "Erling Haaland",
      "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Jørgen Strand Larsen",
+     "num": "11",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Andreas Schjelderup",
+     "num": "21",
      "pos": "F",
      "starter": false
     }
@@ -5809,7 +5809,7 @@
      "starter": false
     },
     {
-     "age": 25,
+     "age": 27,
      "name": "José Córdoba",
      "num": "3",
      "pos": "D",
@@ -7655,7 +7655,7 @@
    ]
   },
   "Sweden": {
-   "as_of": "Sweden at Japan",
+   "as_of": "Sweden at France",
    "players": [
     {
      "age": 27,
@@ -7694,13 +7694,6 @@
     },
     {
      "age": 27,
-     "name": "Isak Hien",
-     "num": "4",
-     "pos": "D",
-     "starter": true
-    },
-    {
-     "age": 27,
      "name": "Gabriel Gudmundsson",
      "num": "5",
      "pos": "D",
@@ -7710,6 +7703,13 @@
      "age": 24,
      "name": "Daniel Svensson",
      "num": "8",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Isak Hien",
+     "num": "4",
      "pos": "D",
      "starter": false
     },
@@ -7735,6 +7735,13 @@
      "starter": false
     },
     {
+     "age": 20,
+     "name": "Lucas Bergvall",
+     "num": "7",
+     "pos": "M",
+     "starter": true
+    },
+    {
      "age": 22,
      "name": "Yasin Ayari",
      "num": "18",
@@ -7752,13 +7759,6 @@
      "age": 28,
      "name": "Herman Johansson",
      "num": "6",
-     "pos": "M",
-     "starter": false
-    },
-    {
-     "age": 20,
-     "name": "Lucas Bergvall",
-     "num": "7",
      "pos": "M",
      "starter": false
     },
@@ -7791,7 +7791,7 @@
      "starter": false
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Taha Ali",
      "num": "26",
      "pos": "M",
@@ -7819,16 +7819,16 @@
      "starter": true
     },
     {
-     "age": 27,
-     "name": "Alexander Bernhardsson",
-     "num": "21",
-     "pos": "F",
-     "starter": true
-    },
-    {
      "age": 24,
      "name": "Benjamin Nygren",
      "num": "10",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Alexander Bernhardsson",
+     "num": "21",
      "pos": "F",
      "starter": false
     },
