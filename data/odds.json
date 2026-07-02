@@ -1,53 +1,49 @@
 {
- "fetched_at": "2026-07-01T13:45:48.395068+00:00",
+ "fetched_at": "2026-07-02T13:31:55.613643+00:00",
  "pairs": {
   "Algeria|Switzerland": {
-   "Algeria": 2.51,
-   "Switzerland": 1.56
+   "Algeria": 2.53,
+   "Switzerland": 1.55
   },
   "Argentina|Cape Verde": {
    "Argentina": 1.08,
    "Cape Verde": 8.49
   },
   "Australia|Egypt": {
-   "Australia": 2.13,
+   "Australia": 2.14,
    "Egypt": 1.74
   },
   "Austria|Spain": {
-   "Austria": 5.15,
-   "Spain": 1.18
+   "Austria": 5.53,
+   "Spain": 1.16
   },
-  "Belgium|Senegal": {
-   "Belgium": 1.63,
-   "Senegal": 2.34
-  },
-  "Bosnia & Herzegovina|USA": {
-   "Bosnia & Herzegovina": 4.49,
-   "USA": 1.22
+  "Belgium|USA": {
+   "Belgium": 1.97,
+   "USA": 1.87
   },
   "Brazil|Norway": {
-   "Brazil": 1.52,
-   "Norway": 2.61
+   "Brazil": 1.51,
+   "Norway": 2.65
   },
   "Canada|Morocco": {
-   "Canada": 2.87,
-   "Morocco": 1.44
+   "Canada": 2.92,
+   "Morocco": 1.43
   },
   "Colombia|Ghana": {
    "Colombia": 1.29,
-   "Ghana": 3.79
+   "Ghana": 3.77
   },
   "Croatia|Portugal": {
-   "Croatia": 2.92,
-   "Portugal": 1.43
+   "Croatia": 3.04,
+   "Portugal": 1.4
   },
-  "DR Congo|England": {
-   "DR Congo": 5.72,
-   "England": 1.15
+  "England|Mexico": {
+   "England": 1.76,
+   "Mexico": 2.11
   },
   "France|Paraguay": {
-   "France": 1.1,
-   "Paraguay": 7.49
+   "France": 1.09,
+   "Paraguay": 7.85
   }
  }
 }
