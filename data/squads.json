@@ -1,13 +1,13 @@
 {
- "fetched_at": "2026-07-02T13:32:04.820216+00:00",
+ "fetched_at": "2026-07-03T13:32:08.409830+00:00",
  "teams": {
   "Algeria": {
-   "as_of": "Austria at Algeria",
+   "as_of": "Algeria at Switzerland",
    "players": [
     {
-     "age": 31,
-     "name": "Oussama Benbot",
-     "num": "16",
+     "age": 28,
+     "name": "Luca Zidane",
+     "num": "23",
      "pos": "G",
      "starter": true
     },
@@ -19,9 +19,9 @@
      "starter": false
     },
     {
-     "age": 28,
-     "name": "Luca Zidane",
-     "num": "23",
+     "age": 31,
+     "name": "Oussama Benbot",
+     "num": "16",
      "pos": "G",
      "starter": false
     },
@@ -33,9 +33,9 @@
      "starter": true
     },
     {
-     "age": 23,
-     "name": "Jaouen Hadjam",
-     "num": "13",
+     "age": 25,
+     "name": "Rayan Aït-Nouri",
+     "num": "15",
      "pos": "D",
      "starter": true
     },
@@ -75,9 +75,9 @@
      "starter": false
     },
     {
-     "age": 25,
-     "name": "Rayan Aït-Nouri",
-     "num": "15",
+     "age": 23,
+     "name": "Jaouen Hadjam",
+     "num": "13",
      "pos": "D",
      "starter": false
     },
@@ -87,6 +87,13 @@
      "num": "26",
      "pos": "D",
      "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Ramiz Zerrouki",
+     "num": "6",
+     "pos": "M",
+     "starter": true
     },
     {
      "age": 28,
@@ -115,13 +122,6 @@
      "num": "22",
      "pos": "M",
      "starter": true
-    },
-    {
-     "age": 28,
-     "name": "Ramiz Zerrouki",
-     "num": "6",
-     "pos": "M",
-     "starter": false
     },
     {
      "age": 26,
@@ -156,7 +156,7 @@
      "name": "Amine Gouiri",
      "num": "9",
      "pos": "F",
-     "starter": true
+     "starter": false
     },
     {
      "age": 24,
@@ -556,7 +556,7 @@
    ]
   },
   "Austria": {
-   "as_of": "Austria at Algeria",
+   "as_of": "Austria at Spain",
    "players": [
     {
      "age": 30,
@@ -580,6 +580,13 @@
      "starter": false
     },
     {
+     "age": 27,
+     "name": "Kevin Danso",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 29,
      "name": "Stefan Posch",
      "num": "5",
@@ -594,20 +601,6 @@
      "starter": true
     },
     {
-     "age": 29,
-     "name": "Philipp Lienhart",
-     "num": "15",
-     "pos": "D",
-     "starter": true
-    },
-    {
-     "age": 32,
-     "name": "Phillipp Mwene",
-     "num": "16",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 25,
      "name": "David Affengruber",
      "num": "2",
@@ -615,9 +608,16 @@
      "starter": false
     },
     {
-     "age": 27,
-     "name": "Kevin Danso",
-     "num": "3",
+     "age": 29,
+     "name": "Philipp Lienhart",
+     "num": "15",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Phillipp Mwene",
+     "num": "16",
      "pos": "D",
      "starter": false
     },
@@ -678,6 +678,13 @@
      "starter": true
     },
     {
+     "age": 20,
+     "name": "Paul Wanner",
+     "num": "24",
+     "pos": "M",
+     "starter": true
+    },
+    {
      "age": 30,
      "name": "Florian Grillitsch",
      "num": "10",
@@ -699,13 +706,6 @@
      "starter": false
     },
     {
-     "age": 20,
-     "name": "Paul Wanner",
-     "num": "24",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 32,
      "name": "Alessandro Schöpf",
      "num": "26",
@@ -713,16 +713,16 @@
      "starter": false
     },
     {
-     "age": 37,
-     "name": "Marko Arnautovic",
-     "num": "7",
+     "age": 32,
+     "name": "Michael Gregoritsch",
+     "num": "11",
      "pos": "F",
      "starter": true
     },
     {
-     "age": 32,
-     "name": "Michael Gregoritsch",
-     "num": "11",
+     "age": 37,
+     "name": "Marko Arnautovic",
+     "num": "7",
      "pos": "F",
      "starter": false
     },
@@ -1468,7 +1468,7 @@
      "starter": false
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Promise David",
      "num": "24",
      "pos": "F",
@@ -1858,7 +1858,7 @@
    ]
   },
   "Croatia": {
-   "as_of": "Ghana at Croatia",
+   "as_of": "Croatia at Portugal",
    "players": [
     {
      "age": 31,
@@ -2665,6 +2665,13 @@
      "starter": false
     },
     {
+     "age": 20,
+     "name": "Kevin Rodríguez",
+     "num": "11",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 28,
      "name": "Ángelo Preciado",
      "num": "17",
@@ -2759,13 +2766,6 @@
      "age": 22,
      "name": "Anthony Valencia",
      "num": "8",
-     "pos": "F",
-     "starter": false
-    },
-    {
-     "age": 26,
-     "name": "Kevin Rodríguez",
-     "num": "11",
      "pos": "F",
      "starter": false
     },
@@ -3170,7 +3170,7 @@
    "as_of": "Sweden at France",
    "players": [
     {
-     "age": 30,
+     "age": 31,
      "name": "Mike Maignan",
      "num": "16",
      "pos": "G",
@@ -3579,7 +3579,7 @@
      "starter": true
     },
     {
-     "age": 30,
+     "age": 31,
      "name": "Derrick Luckassen",
      "num": "23",
      "pos": "D",
@@ -4778,7 +4778,7 @@
      "starter": true
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Amer Jamous",
      "num": "6",
      "pos": "M",
@@ -5311,6 +5311,13 @@
      "starter": true
     },
     {
+     "age": 24,
+     "name": "Crysencio Summerville",
+     "num": "24",
+     "pos": "M",
+     "starter": true
+    },
+    {
      "age": 35,
      "name": "Marten de Roon",
      "num": "3",
@@ -5363,13 +5370,6 @@
      "age": 24,
      "name": "Brian Brobbey",
      "num": "19",
-     "pos": "F",
-     "starter": true
-    },
-    {
-     "age": 24,
-     "name": "Crysencio Summerville",
-     "num": "24",
      "pos": "F",
      "starter": true
     },
@@ -6159,7 +6159,7 @@
    ]
   },
   "Portugal": {
-   "as_of": "Portugal at Colombia",
+   "as_of": "Croatia at Portugal",
    "players": [
     {
      "age": 26,
@@ -6246,9 +6246,9 @@
      "starter": true
     },
     {
-     "age": 29,
-     "name": "Rúben Neves",
-     "num": "21",
+     "age": 21,
+     "name": "João Neves",
+     "num": "15",
      "pos": "M",
      "starter": true
     },
@@ -6274,9 +6274,9 @@
      "starter": false
     },
     {
-     "age": 21,
-     "name": "João Neves",
-     "num": "15",
+     "age": 29,
+     "name": "Rúben Neves",
+     "num": "21",
      "pos": "M",
      "starter": false
     },
@@ -6295,9 +6295,9 @@
      "starter": true
     },
     {
-     "age": 26,
-     "name": "João Félix",
-     "num": "11",
+     "age": 27,
+     "name": "Rafael Leão",
+     "num": "17",
      "pos": "F",
      "starter": true
     },
@@ -6317,15 +6317,15 @@
     },
     {
      "age": 26,
-     "name": "Francisco Trincão",
-     "num": "16",
+     "name": "João Félix",
+     "num": "11",
      "pos": "F",
      "starter": false
     },
     {
-     "age": 27,
-     "name": "Rafael Leão",
-     "num": "17",
+     "age": 26,
+     "name": "Francisco Trincão",
+     "num": "16",
      "pos": "F",
      "starter": false
     },
@@ -6405,7 +6405,7 @@
      "starter": true
     },
     {
-     "age": 35,
+     "age": 36,
      "name": "Lucas Mendes",
      "num": "3",
      "pos": "D",
@@ -7468,7 +7468,7 @@
    ]
   },
   "Spain": {
-   "as_of": "Spain at Uruguay",
+   "as_of": "Austria at Spain",
    "players": [
     {
      "age": 29,
@@ -7490,6 +7490,13 @@
      "num": "13",
      "pos": "G",
      "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Pedro Porro",
+     "num": "12",
+     "pos": "D",
+     "starter": true
     },
     {
      "age": 32,
@@ -7534,23 +7541,9 @@
      "starter": false
     },
     {
-     "age": 26,
-     "name": "Pedro Porro",
-     "num": "12",
-     "pos": "D",
-     "starter": false
-    },
-    {
-     "age": 31,
-     "name": "Marcos Llorente",
-     "num": "5",
-     "pos": "M",
-     "starter": true
-    },
-    {
-     "age": 30,
-     "name": "Mikel Merino",
-     "num": "6",
+     "age": 28,
+     "name": "Dani Olmo",
+     "num": "10",
      "pos": "M",
      "starter": true
     },
@@ -7576,6 +7569,20 @@
      "starter": true
     },
     {
+     "age": 31,
+     "name": "Marcos Llorente",
+     "num": "5",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Mikel Merino",
+     "num": "6",
+     "pos": "M",
+     "starter": false
+    },
+    {
      "age": 30,
      "name": "Fabián Ruiz",
      "num": "8",
@@ -7586,13 +7593,6 @@
      "age": 21,
      "name": "Gavi",
      "num": "9",
-     "pos": "M",
-     "starter": false
-    },
-    {
-     "age": 28,
-     "name": "Dani Olmo",
-     "num": "10",
      "pos": "M",
      "starter": false
     },
@@ -7842,7 +7842,7 @@
    ]
   },
   "Switzerland": {
-   "as_of": "Canada at Switzerland",
+   "as_of": "Algeria at Switzerland",
    "players": [
     {
      "age": 28,
@@ -7859,7 +7859,7 @@
      "starter": false
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Marvin Keller",
      "num": "21",
      "pos": "G",
@@ -7883,13 +7883,6 @@
      "age": 33,
      "name": "Ricardo Rodríguez",
      "num": "13",
-     "pos": "D",
-     "starter": true
-    },
-    {
-     "age": 23,
-     "name": "Luca Jaquez",
-     "num": "25",
      "pos": "D",
      "starter": true
     },
@@ -7922,6 +7915,20 @@
      "starter": false
     },
     {
+     "age": 23,
+     "name": "Luca Jaquez",
+     "num": "25",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
+     "name": "Denis Zakaria",
+     "num": "6",
+     "pos": "M",
+     "starter": true
+    },
+    {
      "age": 34,
      "name": "Remo Freuler",
      "num": "8",
@@ -7943,13 +7950,6 @@
      "starter": true
     },
     {
-     "age": 29,
-     "name": "Djibril Sow",
-     "num": "15",
-     "pos": "M",
-     "starter": true
-    },
-    {
      "age": 27,
      "name": "Rubén Vargas",
      "num": "17",
@@ -7957,16 +7957,16 @@
      "starter": true
     },
     {
-     "age": 29,
-     "name": "Denis Zakaria",
-     "num": "6",
+     "age": 23,
+     "name": "Ardon Jashari",
+     "num": "14",
      "pos": "M",
      "starter": false
     },
     {
-     "age": 23,
-     "name": "Ardon Jashari",
-     "num": "14",
+     "age": 29,
+     "name": "Djibril Sow",
+     "num": "15",
      "pos": "M",
      "starter": false
     },
@@ -8003,7 +8003,7 @@
      "name": "Dan Ndoye",
      "num": "11",
      "pos": "F",
-     "starter": false
+     "starter": true
     },
     {
      "age": 26,
@@ -8553,7 +8553,7 @@
      "starter": false
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Folarin Balogun",
      "num": "20",
      "pos": "F",
