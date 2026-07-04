@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-03T13:32:08.409830+00:00",
+ "fetched_at": "2026-07-04T13:29:43.613714+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -189,7 +189,7 @@
    ]
   },
   "Argentina": {
-   "as_of": "Argentina at Jordan",
+   "as_of": "Cape Verde at Argentina",
    "players": [
     {
      "age": 33,
@@ -213,18 +213,39 @@
      "starter": false
     },
     {
-     "age": 33,
-     "name": "Nicolás Tagliafico",
-     "num": "3",
+     "age": 28,
+     "name": "Lisandro Martínez",
+     "num": "6",
      "pos": "D",
      "starter": true
     },
     {
-     "age": 38,
-     "name": "Nicolás Otamendi",
-     "num": "19",
+     "age": 28,
+     "name": "Cristian Romero",
+     "num": "13",
      "pos": "D",
      "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Facundo Medina",
+     "num": "25",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Nahuel Molina",
+     "num": "26",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Nicolás Tagliafico",
+     "num": "3",
+     "pos": "D",
+     "starter": false
     },
     {
      "age": 29,
@@ -234,65 +255,44 @@
      "starter": false
     },
     {
-     "age": 28,
-     "name": "Lisandro Martínez",
-     "num": "6",
+     "age": 38,
+     "name": "Nicolás Otamendi",
+     "num": "19",
      "pos": "D",
      "starter": false
-    },
-    {
-     "age": 28,
-     "name": "Cristian Romero",
-     "num": "13",
-     "pos": "D",
-     "starter": false
-    },
-    {
-     "age": 27,
-     "name": "Facundo Medina",
-     "num": "25",
-     "pos": "D",
-     "starter": false
-    },
-    {
-     "age": 28,
-     "name": "Nahuel Molina",
-     "num": "26",
-     "pos": "D",
-     "starter": false
-    },
-    {
-     "age": 32,
-     "name": "Leandro Paredes",
-     "num": "5",
-     "pos": "M",
-     "starter": true
-    },
-    {
-     "age": 30,
-     "name": "Giovani Lo Celso",
-     "num": "11",
-     "pos": "M",
-     "starter": true
-    },
-    {
-     "age": 27,
-     "name": "Exequiel Palacios",
-     "num": "14",
-     "pos": "M",
-     "starter": true
-    },
-    {
-     "age": 21,
-     "name": "Nico Paz",
-     "num": "18",
-     "pos": "M",
-     "starter": true
     },
     {
      "age": 32,
      "name": "Rodrigo De Paul",
      "num": "7",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Thiago Almada",
+     "num": "16",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Alexis Mac Allister",
+     "num": "20",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Enzo Fernández",
+     "num": "24",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Leandro Paredes",
+     "num": "5",
      "pos": "M",
      "starter": false
     },
@@ -304,37 +304,30 @@
      "starter": false
     },
     {
-     "age": 25,
-     "name": "Thiago Almada",
-     "num": "16",
+     "age": 30,
+     "name": "Giovani Lo Celso",
+     "num": "11",
      "pos": "M",
      "starter": false
     },
     {
      "age": 27,
-     "name": "Alexis Mac Allister",
-     "num": "20",
+     "name": "Exequiel Palacios",
+     "num": "14",
      "pos": "M",
      "starter": false
     },
     {
-     "age": 25,
-     "name": "Enzo Fernández",
-     "num": "24",
+     "age": 21,
+     "name": "Nico Paz",
+     "num": "18",
      "pos": "M",
      "starter": false
     },
     {
-     "age": 26,
-     "name": "Julián Álvarez",
-     "num": "9",
-     "pos": "F",
-     "starter": true
-    },
-    {
-     "age": 23,
-     "name": "Giuliano Simeone",
-     "num": "17",
+     "age": 39,
+     "name": "Lionel Messi",
+     "num": "10",
      "pos": "F",
      "starter": true
     },
@@ -346,9 +339,9 @@
      "starter": true
     },
     {
-     "age": 39,
-     "name": "Lionel Messi",
-     "num": "10",
+     "age": 26,
+     "name": "Julián Álvarez",
+     "num": "9",
      "pos": "F",
      "starter": false
     },
@@ -356,6 +349,13 @@
      "age": 28,
      "name": "Nico González",
      "num": "15",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Giuliano Simeone",
+     "num": "17",
      "pos": "F",
      "starter": false
     },
@@ -369,7 +369,7 @@
    ]
   },
   "Australia": {
-   "as_of": "Australia at Paraguay",
+   "as_of": "Egypt at Australia",
    "players": [
     {
      "age": 22,
@@ -470,7 +470,7 @@
      "starter": true
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Aiden O'Neill",
      "num": "13",
      "pos": "M",
@@ -1484,7 +1484,7 @@
    ]
   },
   "Cape Verde": {
-   "as_of": "Saudi Arabia at Cape Verde",
+   "as_of": "Cape Verde at Argentina",
    "players": [
     {
      "age": 40,
@@ -1523,8 +1523,15 @@
     },
     {
      "age": 23,
-     "name": "Wagner Pina",
-     "num": "24",
+     "name": "Sidny Lopes Cabral",
+     "num": "13",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Steven Moreira",
+     "num": "22",
      "pos": "D",
      "starter": true
     },
@@ -1544,15 +1551,8 @@
     },
     {
      "age": 23,
-     "name": "Sidny Lopes Cabral",
-     "num": "13",
-     "pos": "D",
-     "starter": false
-    },
-    {
-     "age": 31,
-     "name": "Steven Moreira",
-     "num": "22",
+     "name": "Wagner Pina",
+     "num": "24",
      "pos": "D",
      "starter": false
     },
@@ -1571,21 +1571,7 @@
      "starter": true
     },
     {
-     "age": 28,
-     "name": "João Paulo",
-     "num": "8",
-     "pos": "M",
-     "starter": true
-    },
-    {
-     "age": 32,
-     "name": "Jamiro Monteiro",
-     "num": "10",
-     "pos": "M",
-     "starter": true
-    },
-    {
-     "age": 26,
+     "age": 27,
      "name": "Deroy Duarte",
      "num": "14",
      "pos": "M",
@@ -1595,6 +1581,20 @@
      "age": 29,
      "name": "Laros Duarte",
      "num": "15",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "João Paulo",
+     "num": "8",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Jamiro Monteiro",
+     "num": "10",
      "pos": "M",
      "starter": false
     },
@@ -1613,16 +1613,9 @@
      "starter": false
     },
     {
-     "age": 32,
-     "name": "Willy Semedo",
-     "num": "17",
-     "pos": "F",
-     "starter": true
-    },
-    {
-     "age": 25,
-     "name": "Dailon Livramento",
-     "num": "19",
+     "age": 28,
+     "name": "Jovane Cabral",
+     "num": "7",
      "pos": "F",
      "starter": true
     },
@@ -1634,11 +1627,11 @@
      "starter": true
     },
     {
-     "age": 28,
-     "name": "Jovane Cabral",
-     "num": "7",
+     "age": 35,
+     "name": "Nuno da Costa",
+     "num": "21",
      "pos": "F",
-     "starter": false
+     "starter": true
     },
     {
      "age": 24,
@@ -1655,9 +1648,16 @@
      "starter": false
     },
     {
-     "age": 35,
-     "name": "Nuno da Costa",
-     "num": "21",
+     "age": 32,
+     "name": "Willy Semedo",
+     "num": "17",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Dailon Livramento",
+     "num": "19",
      "pos": "F",
      "starter": false
     },
@@ -1671,7 +1671,7 @@
    ]
   },
   "Colombia": {
-   "as_of": "Portugal at Colombia",
+   "as_of": "Ghana at Colombia",
    "players": [
     {
      "age": 37,
@@ -1695,6 +1695,13 @@
      "starter": false
     },
     {
+     "age": 30,
+     "name": "Daniel Muñoz",
+     "num": "2",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 28,
      "name": "Jhon Lucumí",
      "num": "3",
@@ -1702,16 +1709,9 @@
      "starter": true
     },
     {
-     "age": 34,
-     "name": "Santiago Arias",
-     "num": "4",
-     "pos": "D",
-     "starter": true
-    },
-    {
-     "age": 32,
-     "name": "Deiver Machado",
-     "num": "22",
+     "age": 33,
+     "name": "Johan Mojica",
+     "num": "17",
      "pos": "D",
      "starter": true
     },
@@ -1723,9 +1723,9 @@
      "starter": true
     },
     {
-     "age": 30,
-     "name": "Daniel Muñoz",
-     "num": "2",
+     "age": 34,
+     "name": "Santiago Arias",
+     "num": "4",
      "pos": "D",
      "starter": false
     },
@@ -1737,16 +1737,16 @@
      "starter": false
     },
     {
-     "age": 33,
-     "name": "Johan Mojica",
-     "num": "17",
+     "age": 28,
+     "name": "Willer Ditta",
+     "num": "18",
      "pos": "D",
      "starter": false
     },
     {
-     "age": 28,
-     "name": "Willer Ditta",
-     "num": "18",
+     "age": 32,
+     "name": "Deiver Machado",
+     "num": "22",
      "pos": "D",
      "starter": false
     },
@@ -2665,13 +2665,6 @@
      "starter": false
     },
     {
-     "age": 20,
-     "name": "Kevin Rodríguez",
-     "num": "11",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 28,
      "name": "Ángelo Preciado",
      "num": "17",
@@ -2770,6 +2763,13 @@
      "starter": false
     },
     {
+     "age": 26,
+     "name": "Kevin Rodríguez",
+     "num": "11",
+     "pos": "F",
+     "starter": false
+    },
+    {
      "age": 23,
      "name": "Alan Minda",
      "num": "14",
@@ -2793,7 +2793,7 @@
    ]
   },
   "Egypt": {
-   "as_of": "Iran at Egypt",
+   "as_of": "Egypt at Australia",
    "players": [
     {
      "age": 26,
@@ -2824,6 +2824,13 @@
      "starter": false
     },
     {
+     "age": 33,
+     "name": "Yasser Ibrahim",
+     "num": "2",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 30,
      "name": "Mohamed Hany",
      "num": "3",
@@ -2838,25 +2845,11 @@
      "starter": true
     },
     {
-     "age": 27,
-     "name": "Mohamed Abdelmoneim",
-     "num": "6",
+     "age": 30,
+     "name": "Karim Hafez",
+     "num": "15",
      "pos": "D",
      "starter": true
-    },
-    {
-     "age": 28,
-     "name": "Ahmed Fatouh",
-     "num": "13",
-     "pos": "D",
-     "starter": true
-    },
-    {
-     "age": 33,
-     "name": "Yasser Ibrahim",
-     "num": "2",
-     "pos": "D",
-     "starter": false
     },
     {
      "age": 25,
@@ -2866,9 +2859,16 @@
      "starter": false
     },
     {
-     "age": 30,
-     "name": "Karim Hafez",
-     "num": "15",
+     "age": 27,
+     "name": "Mohamed Abdelmoneim",
+     "num": "6",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Ahmed Fatouh",
+     "num": "13",
      "pos": "D",
      "starter": false
     },
@@ -2894,23 +2894,23 @@
      "starter": true
     },
     {
-     "age": 30,
-     "name": "Mohanad Lashin",
-     "num": "17",
-     "pos": "M",
-     "starter": true
-    },
-    {
-     "age": 24,
-     "name": "Mahmoud Saber",
-     "num": "21",
-     "pos": "M",
-     "starter": true
-    },
-    {
      "age": 31,
      "name": "Hamdy Fathy",
      "num": "14",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Marawan Attia",
+     "num": "19",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Mohanad Lashin",
+     "num": "17",
      "pos": "M",
      "starter": false
     },
@@ -2922,18 +2922,11 @@
      "starter": false
     },
     {
-     "age": 27,
-     "name": "Marawan Attia",
-     "num": "19",
+     "age": 24,
+     "name": "Mahmoud Saber",
+     "num": "21",
      "pos": "M",
      "starter": false
-    },
-    {
-     "age": 31,
-     "name": "Trézéguet",
-     "num": "7",
-     "pos": "F",
-     "starter": true
     },
     {
      "age": 34,
@@ -2941,6 +2934,20 @@
      "num": "10",
      "pos": "F",
      "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Omar Marmoush",
+     "num": "22",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Trézéguet",
+     "num": "7",
+     "pos": "F",
+     "starter": false
     },
     {
      "age": 18,
@@ -2960,13 +2967,6 @@
      "age": 25,
      "name": "Ibrahim Adel",
      "num": "20",
-     "pos": "F",
-     "starter": false
-    },
-    {
-     "age": 27,
-     "name": "Omar Marmoush",
-     "num": "22",
      "pos": "F",
      "starter": false
     },
@@ -3462,13 +3462,6 @@
      "starter": false
     },
     {
-     "age": 25,
-     "name": "Jamie Leweling",
-     "num": "9",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 23,
      "name": "Jamal Musiala",
      "num": "10",
@@ -3525,6 +3518,13 @@
      "starter": true
     },
     {
+     "age": 25,
+     "name": "Jamie Leweling",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
      "age": 24,
      "name": "Nick Woltemade",
      "num": "11",
@@ -3541,21 +3541,14 @@
    ]
   },
   "Ghana": {
-   "as_of": "Ghana at Croatia",
+   "as_of": "Ghana at Colombia",
    "players": [
-    {
-     "age": 33,
-     "name": "Benjamin Asare",
-     "num": "16",
-     "pos": "G",
-     "starter": true
-    },
     {
      "age": 29,
      "name": "Lawrence Ati Zigi",
      "num": "1",
      "pos": "G",
-     "starter": false
+     "starter": true
     },
     {
      "age": 26,
@@ -3565,16 +3558,23 @@
      "starter": false
     },
     {
-     "age": 22,
-     "name": "Jonas Adjetey",
-     "num": "4",
-     "pos": "D",
-     "starter": true
+     "age": 33,
+     "name": "Benjamin Asare",
+     "num": "16",
+     "pos": "G",
+     "starter": false
     },
     {
      "age": 27,
      "name": "Gideon Mensah",
      "num": "14",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Jerome Opoku",
+     "num": "18",
      "pos": "D",
      "starter": true
     },
@@ -3600,6 +3600,13 @@
      "starter": false
     },
     {
+     "age": 22,
+     "name": "Jonas Adjetey",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 28,
      "name": "Abdul Mumin",
      "num": "6",
@@ -3614,18 +3621,18 @@
      "starter": false
     },
     {
-     "age": 27,
-     "name": "Jerome Opoku",
-     "num": "18",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 22,
      "name": "Kojo Peprah Oppong",
      "num": "21",
      "pos": "D",
      "starter": false
+    },
+    {
+     "age": 20,
+     "name": "Caleb Yirenkyi",
+     "num": "3",
+     "pos": "M",
+     "starter": true
     },
     {
      "age": 33,
@@ -3646,13 +3653,6 @@
      "name": "Elisha Owusu",
      "num": "15",
      "pos": "M",
-     "starter": true
-    },
-    {
-     "age": 20,
-     "name": "Caleb Yirenkyi",
-     "num": "3",
-     "pos": "M",
      "starter": false
     },
     {
@@ -3670,9 +3670,9 @@
      "starter": true
     },
     {
-     "age": 24,
-     "name": "Kamaldeen Sulemana",
-     "num": "22",
+     "age": 32,
+     "name": "Iñaki Williams",
+     "num": "19",
      "pos": "F",
      "starter": true
     },
@@ -3698,16 +3698,16 @@
      "starter": false
     },
     {
-     "age": 32,
-     "name": "Iñaki Williams",
-     "num": "19",
+     "age": 25,
+     "name": "Augustine Boakye",
+     "num": "20",
      "pos": "F",
      "starter": false
     },
     {
-     "age": 25,
-     "name": "Augustine Boakye",
-     "num": "20",
+     "age": 24,
+     "name": "Kamaldeen Sulemana",
+     "num": "22",
      "pos": "F",
      "starter": false
     },
@@ -5421,7 +5421,7 @@
      "starter": true
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Alex Paulsen",
      "num": "12",
      "pos": "G",
@@ -5823,6 +5823,13 @@
      "starter": true
     },
     {
+     "age": 27,
+     "name": "Andrés Andrade",
+     "num": "16",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 30,
      "name": "Amir Murillo",
      "num": "23",
@@ -5896,13 +5903,6 @@
      "age": 26,
      "name": "Carlos Harvey",
      "num": "14",
-     "pos": "M",
-     "starter": true
-    },
-    {
-     "age": 37,
-     "name": "Andrés Andrade",
-     "num": "16",
      "pos": "M",
      "starter": true
     },
