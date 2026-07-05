@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-04T13:29:43.613714+00:00",
+ "fetched_at": "2026-07-05T13:30:11.459911+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -491,7 +491,7 @@
      "starter": true
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Ajdin Hrustic",
      "num": "10",
      "pos": "M",
@@ -1297,7 +1297,7 @@
    ]
   },
   "Canada": {
-   "as_of": "Canada at South Africa",
+   "as_of": "Morocco at Canada",
    "players": [
     {
      "age": 32,
@@ -1328,9 +1328,9 @@
      "starter": true
     },
     {
-     "age": 28,
-     "name": "Derek Cornelius",
-     "num": "13",
+     "age": 20,
+     "name": "Luc de Fougerolles",
+     "num": "4",
      "pos": "D",
      "starter": true
     },
@@ -1356,16 +1356,16 @@
      "starter": false
     },
     {
-     "age": 20,
-     "name": "Luc de Fougerolles",
-     "num": "4",
+     "age": 30,
+     "name": "Joel Waterman",
+     "num": "5",
      "pos": "D",
      "starter": false
     },
     {
-     "age": 30,
-     "name": "Joel Waterman",
-     "num": "5",
+     "age": 28,
+     "name": "Derek Cornelius",
+     "num": "13",
      "pos": "D",
      "starter": false
     },
@@ -1384,9 +1384,16 @@
      "starter": true
     },
     {
+     "age": 25,
+     "name": "Ali Ahmed",
+     "num": "20",
+     "pos": "M",
+     "starter": true
+    },
+    {
      "age": 22,
-     "name": "Nathan Saliba",
-     "num": "25",
+     "name": "Niko Sigur",
+     "num": "23",
      "pos": "M",
      "starter": true
     },
@@ -1405,13 +1412,6 @@
      "starter": false
     },
     {
-     "age": 25,
-     "name": "Ali Ahmed",
-     "num": "20",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 34,
      "name": "Jonathan Osorio",
      "num": "21",
@@ -1420,8 +1420,8 @@
     },
     {
      "age": 22,
-     "name": "Niko Sigur",
-     "num": "23",
+     "name": "Nathan Saliba",
+     "num": "25",
      "pos": "M",
      "starter": false
     },
@@ -1429,13 +1429,6 @@
      "age": 26,
      "name": "Jonathan David",
      "num": "10",
-     "pos": "F",
-     "starter": true
-    },
-    {
-     "age": 26,
-     "name": "Liam Millar",
-     "num": "11",
      "pos": "F",
      "starter": true
     },
@@ -1457,6 +1450,13 @@
      "age": 31,
      "name": "Cyle Larin",
      "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Liam Millar",
+     "num": "11",
      "pos": "F",
      "starter": false
     },
@@ -3039,7 +3039,7 @@
      "starter": false
     },
     {
-     "age": 26,
+     "age": 27,
      "name": "Trevoh Chalobah",
      "num": "12",
      "pos": "D",
@@ -3167,7 +3167,7 @@
    ]
   },
   "France": {
-   "as_of": "Sweden at France",
+   "as_of": "France at Paraguay",
    "players": [
     {
      "age": 31,
@@ -3254,9 +3254,9 @@
      "starter": false
     },
     {
-     "age": 26,
-     "name": "Aurélien Tchouaméni",
-     "num": "8",
+     "age": 25,
+     "name": "Manu Koné",
+     "num": "6",
      "pos": "M",
      "starter": true
     },
@@ -3275,9 +3275,9 @@
      "starter": true
     },
     {
-     "age": 25,
-     "name": "Manu Koné",
-     "num": "6",
+     "age": 26,
+     "name": "Aurélien Tchouaméni",
+     "num": "8",
      "pos": "M",
      "starter": false
     },
@@ -5037,7 +5037,7 @@
    ]
   },
   "Morocco": {
-   "as_of": "Morocco at Netherlands",
+   "as_of": "Morocco at Canada",
    "players": [
     {
      "age": 35,
@@ -5083,8 +5083,8 @@
     },
     {
      "age": 23,
-     "name": "Chadi Riad",
-     "num": "18",
+     "name": "Redouane Halhal",
+     "num": "25",
      "pos": "D",
      "starter": true
     },
@@ -5103,16 +5103,16 @@
      "starter": false
     },
     {
-     "age": 27,
-     "name": "Youssef Belammari",
-     "num": "19",
+     "age": 23,
+     "name": "Chadi Riad",
+     "num": "18",
      "pos": "D",
      "starter": false
     },
     {
-     "age": 23,
-     "name": "Redouane Halhal",
-     "num": "25",
+     "age": 27,
+     "name": "Youssef Belammari",
+     "num": "19",
      "pos": "D",
      "starter": false
     },
@@ -5972,7 +5972,7 @@
    ]
   },
   "Paraguay": {
-   "as_of": "Paraguay at Germany",
+   "as_of": "France at Paraguay",
    "players": [
     {
      "age": 26,
@@ -5996,6 +5996,20 @@
      "starter": false
     },
     {
+     "age": 35,
+     "name": "Gustavo Velázquez",
+     "num": "2",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Omar Alderete",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 26,
      "name": "Juan Jose Cáceres",
      "num": "4",
@@ -6010,13 +6024,6 @@
      "starter": true
     },
     {
-     "age": 29,
-     "name": "José Canale",
-     "num": "13",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 33,
      "name": "Gustavo Gómez",
      "num": "15",
@@ -6024,23 +6031,16 @@
      "starter": true
     },
     {
-     "age": 35,
-     "name": "Gustavo Velázquez",
-     "num": "2",
+     "age": 34,
+     "name": "Fabián Balbuena",
+     "num": "5",
      "pos": "D",
      "starter": false
     },
     {
      "age": 29,
-     "name": "Omar Alderete",
-     "num": "3",
-     "pos": "D",
-     "starter": false
-    },
-    {
-     "age": 34,
-     "name": "Fabián Balbuena",
-     "num": "5",
+     "name": "José Canale",
+     "num": "13",
      "pos": "D",
      "starter": false
     },
@@ -6052,16 +6052,16 @@
      "starter": false
     },
     {
-     "age": 30,
-     "name": "Andrés Cubas",
-     "num": "14",
+     "age": 23,
+     "name": "Diego Gómez",
+     "num": "8",
      "pos": "M",
      "starter": true
     },
     {
-     "age": 24,
-     "name": "Damián Bobadilla",
-     "num": "16",
+     "age": 30,
+     "name": "Andrés Cubas",
+     "num": "14",
      "pos": "M",
      "starter": true
     },
@@ -6080,16 +6080,16 @@
      "starter": true
     },
     {
-     "age": 23,
-     "name": "Diego Gómez",
-     "num": "8",
+     "age": 25,
+     "name": "Maurício",
+     "num": "11",
      "pos": "M",
      "starter": false
     },
     {
-     "age": 25,
-     "name": "Maurício",
-     "num": "11",
+     "age": 24,
+     "name": "Damián Bobadilla",
+     "num": "16",
      "pos": "M",
      "starter": false
     },
@@ -6115,13 +6115,6 @@
      "starter": true
     },
     {
-     "age": 35,
-     "name": "Gabriel Ávalos",
-     "num": "21",
-     "pos": "F",
-     "starter": true
-    },
-    {
      "age": 26,
      "name": "Ramón Sosa",
      "num": "7",
@@ -6139,6 +6132,13 @@
      "age": 31,
      "name": "Alex Arce",
      "num": "18",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 35,
+     "name": "Gabriel Ávalos",
+     "num": "21",
      "pos": "F",
      "starter": false
     },
