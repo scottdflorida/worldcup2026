@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-05T13:30:11.459911+00:00",
+ "fetched_at": "2026-07-06T14:10:59.897658+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1110,7 +1110,7 @@
    ]
   },
   "Brazil": {
-   "as_of": "Japan at Brazil",
+   "as_of": "Norway at Brazil",
    "players": [
     {
      "age": 33,
@@ -1204,13 +1204,6 @@
      "starter": true
     },
     {
-     "age": 28,
-     "name": "Lucas Paquetá",
-     "num": "20",
-     "pos": "M",
-     "starter": true
-    },
-    {
      "age": 26,
      "name": "Éderson",
      "num": "2",
@@ -1232,6 +1225,13 @@
      "starter": false
     },
     {
+     "age": 28,
+     "name": "Lucas Paquetá",
+     "num": "20",
+     "pos": "M",
+     "starter": false
+    },
+    {
      "age": 25,
      "name": "Vinícius Júnior",
      "num": "7",
@@ -1242,6 +1242,13 @@
      "age": 27,
      "name": "Matheus Cunha",
      "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Gabriel Martinelli",
+     "num": "22",
      "pos": "F",
      "starter": true
     },
@@ -1277,13 +1284,6 @@
      "age": 25,
      "name": "Luiz Henrique",
      "num": "21",
-     "pos": "F",
-     "starter": false
-    },
-    {
-     "age": 25,
-     "name": "Gabriel Martinelli",
-     "num": "22",
      "pos": "F",
      "starter": false
     },
@@ -2062,7 +2062,7 @@
      "starter": false
     },
     {
-     "age": 26,
+     "age": 27,
      "name": "Trevor Doornbusch",
      "num": "26",
      "pos": "G",
@@ -2980,7 +2980,7 @@
    ]
   },
   "England": {
-   "as_of": "Congo DR at England",
+   "as_of": "England at Mexico",
    "players": [
     {
      "age": 32,
@@ -3025,9 +3025,9 @@
      "starter": true
     },
     {
-     "age": 25,
-     "name": "Djed Spence",
-     "num": "25",
+     "age": 23,
+     "name": "Jarell Quansah",
+     "num": "26",
      "pos": "D",
      "starter": true
     },
@@ -3060,9 +3060,9 @@
      "starter": false
     },
     {
-     "age": 23,
-     "name": "Jarell Quansah",
-     "num": "26",
+     "age": 25,
+     "name": "Djed Spence",
+     "num": "25",
      "pos": "D",
      "starter": false
     },
@@ -3109,6 +3109,13 @@
      "starter": false
     },
     {
+     "age": 24,
+     "name": "Bukayo Saka",
+     "num": "7",
+     "pos": "F",
+     "starter": true
+    },
+    {
      "age": 32,
      "name": "Harry Kane",
      "num": "9",
@@ -3116,23 +3123,16 @@
      "starter": true
     },
     {
+     "age": 25,
+     "name": "Anthony Gordon",
+     "num": "18",
+     "pos": "F",
+     "starter": true
+    },
+    {
      "age": 28,
      "name": "Marcus Rashford",
      "num": "11",
-     "pos": "F",
-     "starter": true
-    },
-    {
-     "age": 24,
-     "name": "Noni Madueke",
-     "num": "20",
-     "pos": "F",
-     "starter": true
-    },
-    {
-     "age": 24,
-     "name": "Bukayo Saka",
-     "num": "7",
      "pos": "F",
      "starter": false
     },
@@ -3144,16 +3144,16 @@
      "starter": false
     },
     {
-     "age": 25,
-     "name": "Anthony Gordon",
-     "num": "18",
+     "age": 30,
+     "name": "Ollie Watkins",
+     "num": "19",
      "pos": "F",
      "starter": false
     },
     {
-     "age": 30,
-     "name": "Ollie Watkins",
-     "num": "19",
+     "age": 24,
+     "name": "Noni Madueke",
+     "num": "20",
      "pos": "F",
      "starter": false
     },
@@ -4850,7 +4850,7 @@
    ]
   },
   "Mexico": {
-   "as_of": "Ecuador at Mexico",
+   "as_of": "England at Mexico",
    "players": [
     {
      "age": 26,
@@ -5598,7 +5598,7 @@
    ]
   },
   "Norway": {
-   "as_of": "Norway at Ivory Coast",
+   "as_of": "Norway at Brazil",
    "players": [
     {
      "age": 35,
@@ -5636,16 +5636,16 @@
      "starter": true
     },
     {
-     "age": 25,
-     "name": "Marcus Holmgren Pedersen",
-     "num": "16",
+     "age": 27,
+     "name": "Torbjørn Heggem",
+     "num": "17",
      "pos": "D",
      "starter": true
     },
     {
-     "age": 27,
-     "name": "Torbjørn Heggem",
-     "num": "17",
+     "age": 28,
+     "name": "Julian Ryerson",
+     "num": "26",
      "pos": "D",
      "starter": true
     },
@@ -5665,6 +5665,13 @@
     },
     {
      "age": 25,
+     "name": "Marcus Holmgren Pedersen",
+     "num": "16",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
      "name": "Sondre Langas",
      "num": "24",
      "pos": "D",
@@ -5674,13 +5681,6 @@
      "age": 23,
      "name": "Henrik Falchener",
      "num": "25",
-     "pos": "D",
-     "starter": false
-    },
-    {
-     "age": 28,
-     "name": "Julian Ryerson",
-     "num": "26",
      "pos": "D",
      "starter": false
     },
