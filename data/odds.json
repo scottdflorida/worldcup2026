@@ -1,29 +1,25 @@
 {
- "fetched_at": "2026-07-06T14:10:43.922195+00:00",
+ "fetched_at": "2026-07-07T13:41:28.848544+00:00",
  "pairs": {
   "Argentina|Egypt": {
-   "Argentina": 1.2,
-   "Egypt": 4.74
+   "Argentina": 1.18,
+   "Egypt": 5.15
   },
-  "Belgium|USA": {
-   "Belgium": 2.03,
-   "USA": 1.82
+  "Belgium|Spain": {
+   "Belgium": 3.29,
+   "Spain": 1.36
   },
   "Colombia|Switzerland": {
-   "Colombia": 1.68,
-   "Switzerland": 2.24
+   "Colombia": 1.66,
+   "Switzerland": 2.28
   },
   "England|Norway": {
-   "England": 1.52,
-   "Norway": 2.6
+   "England": 1.51,
+   "Norway": 2.64
   },
   "France|Morocco": {
    "France": 1.33,
-   "Morocco": 3.48
-  },
-  "Portugal|Spain": {
-   "Portugal": 2.62,
-   "Spain": 1.52
+   "Morocco": 3.43
   }
  }
 }

@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-06T14:10:59.897658+00:00",
+ "fetched_at": "2026-07-07T13:41:37.900086+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -727,7 +727,7 @@
      "starter": false
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Sasa Kalajdzic",
      "num": "14",
      "pos": "F",
@@ -736,7 +736,7 @@
    ]
   },
   "Belgium": {
-   "as_of": "Senegal at Belgium",
+   "as_of": "Belgium at United States",
    "players": [
     {
      "age": 34,
@@ -746,7 +746,7 @@
      "starter": true
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Senne Lammens",
      "num": "12",
      "pos": "G",
@@ -758,13 +758,6 @@
      "num": "13",
      "pos": "G",
      "starter": false
-    },
-    {
-     "age": 26,
-     "name": "Arthur Theate",
-     "num": "3",
-     "pos": "D",
-     "starter": true
     },
     {
      "age": 33,
@@ -788,9 +781,23 @@
      "starter": true
     },
     {
+     "age": 23,
+     "name": "Nathan Ngoy",
+     "num": "25",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 22,
      "name": "Zeno Debast",
      "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Arthur Theate",
+     "num": "3",
      "pos": "D",
      "starter": false
     },
@@ -823,30 +830,9 @@
      "starter": false
     },
     {
-     "age": 23,
-     "name": "Nathan Ngoy",
-     "num": "25",
-     "pos": "D",
-     "starter": false
-    },
-    {
-     "age": 35,
-     "name": "Kevin De Bruyne",
-     "num": "7",
-     "pos": "M",
-     "starter": true
-    },
-    {
      "age": 29,
      "name": "Youri Tielemans",
      "num": "8",
-     "pos": "M",
-     "starter": true
-    },
-    {
-     "age": 33,
-     "name": "Hans Vanaken",
-     "num": "20",
      "pos": "M",
      "starter": true
     },
@@ -855,12 +841,26 @@
      "name": "Nicolas Raskin",
      "num": "23",
      "pos": "M",
-     "starter": false
+     "starter": true
     },
     {
      "age": 24,
      "name": "Amadou Onana",
      "num": "24",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 35,
+     "name": "Kevin De Bruyne",
+     "num": "7",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Hans Vanaken",
+     "num": "20",
      "pos": "M",
      "starter": false
     },
@@ -872,9 +872,9 @@
      "starter": true
     },
     {
-     "age": 24,
-     "name": "Jérémy Doku",
-     "num": "11",
+     "age": 28,
+     "name": "Dodi Lukébakio",
+     "num": "14",
      "pos": "F",
      "starter": true
     },
@@ -893,9 +893,9 @@
      "starter": false
     },
     {
-     "age": 28,
-     "name": "Dodi Lukébakio",
-     "num": "14",
+     "age": 24,
+     "name": "Jérémy Doku",
+     "num": "11",
      "pos": "F",
      "starter": false
     },
@@ -1204,7 +1204,7 @@
      "starter": true
     },
     {
-     "age": 26,
+     "age": 27,
      "name": "Éderson",
      "num": "2",
      "pos": "M",
@@ -2665,6 +2665,13 @@
      "starter": false
     },
     {
+     "age": 20,
+     "name": "Kevin Rodríguez",
+     "num": "11",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 28,
      "name": "Ángelo Preciado",
      "num": "17",
@@ -2759,13 +2766,6 @@
      "age": 22,
      "name": "Anthony Valencia",
      "num": "8",
-     "pos": "F",
-     "starter": false
-    },
-    {
-     "age": 26,
-     "name": "Kevin Rodríguez",
-     "num": "11",
      "pos": "F",
      "starter": false
     },
@@ -3850,7 +3850,7 @@
      "starter": false
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Ruben Providence",
      "num": "15",
      "pos": "F",
@@ -4273,8 +4273,8 @@
      "starter": false
     },
     {
-     "age": 30,
-     "name": "Ali Yousif",
+     "age": 25,
+     "name": "Hashim Ali",
      "num": "13",
      "pos": "F",
      "starter": false
@@ -5484,7 +5484,7 @@
      "starter": false
     },
     {
-     "age": 26,
+     "age": 27,
      "name": "Callan Elliot",
      "num": "24",
      "pos": "D",
@@ -6159,7 +6159,7 @@
    ]
   },
   "Portugal": {
-   "as_of": "Croatia at Portugal",
+   "as_of": "Spain at Portugal",
    "players": [
     {
      "age": 26,
@@ -6295,9 +6295,9 @@
      "starter": true
     },
     {
-     "age": 27,
-     "name": "Rafael Leão",
-     "num": "17",
+     "age": 26,
+     "name": "João Félix",
+     "num": "11",
      "pos": "F",
      "starter": true
     },
@@ -6317,15 +6317,15 @@
     },
     {
      "age": 26,
-     "name": "João Félix",
-     "num": "11",
+     "name": "Francisco Trincão",
+     "num": "16",
      "pos": "F",
      "starter": false
     },
     {
-     "age": 26,
-     "name": "Francisco Trincão",
-     "num": "16",
+     "age": 27,
+     "name": "Rafael Leão",
+     "num": "17",
      "pos": "F",
      "starter": false
     },
@@ -7312,7 +7312,7 @@
      "starter": true
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Lee Gi-Hyuk",
      "num": "3",
      "pos": "D",
@@ -7468,7 +7468,7 @@
    ]
   },
   "Spain": {
-   "as_of": "Austria at Spain",
+   "as_of": "Spain at Portugal",
    "players": [
     {
      "age": 29,
@@ -8247,7 +8247,7 @@
      "starter": true
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Eren Elmali",
      "num": "13",
      "pos": "D",
@@ -8394,7 +8394,7 @@
      "starter": false
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Yunus Akgün",
      "num": "19",
      "pos": "F",
@@ -8403,7 +8403,7 @@
    ]
   },
   "USA": {
-   "as_of": "Bosnia-Herzegovina at United States",
+   "as_of": "Belgium at United States",
    "players": [
     {
      "age": 27,
@@ -8815,7 +8815,7 @@
      "starter": true
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Rustam Ashurmatov",
      "num": "5",
      "pos": "D",
@@ -8913,13 +8913,6 @@
      "starter": false
     },
     {
-     "age": 25,
-     "name": "Oston Urunov",
-     "num": "11",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 28,
      "name": "Abdulla Abdullaev",
      "num": "18",
@@ -8946,6 +8939,13 @@
      "num": "14",
      "pos": "F",
      "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Oston Urunov",
+     "num": "11",
+     "pos": "F",
+     "starter": false
     },
     {
      "age": 28,
