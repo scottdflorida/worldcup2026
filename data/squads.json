@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-07T13:41:37.900086+00:00",
+ "fetched_at": "2026-07-08T13:32:01.631787+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -189,7 +189,7 @@
    ]
   },
   "Argentina": {
-   "as_of": "Cape Verde at Argentina",
+   "as_of": "Egypt at Argentina",
    "players": [
     {
      "age": 33,
@@ -213,6 +213,13 @@
      "starter": false
     },
     {
+     "age": 33,
+     "name": "Nicolás Tagliafico",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 28,
      "name": "Lisandro Martínez",
      "num": "6",
@@ -227,25 +234,11 @@
      "starter": true
     },
     {
-     "age": 27,
-     "name": "Facundo Medina",
-     "num": "25",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 28,
      "name": "Nahuel Molina",
      "num": "26",
      "pos": "D",
      "starter": true
-    },
-    {
-     "age": 33,
-     "name": "Nicolás Tagliafico",
-     "num": "3",
-     "pos": "D",
-     "starter": false
     },
     {
      "age": 29,
@@ -262,16 +255,23 @@
      "starter": false
     },
     {
+     "age": 27,
+     "name": "Facundo Medina",
+     "num": "25",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 32,
-     "name": "Rodrigo De Paul",
-     "num": "7",
+     "name": "Leandro Paredes",
+     "num": "5",
      "pos": "M",
      "starter": true
     },
     {
-     "age": 25,
-     "name": "Thiago Almada",
-     "num": "16",
+     "age": 32,
+     "name": "Rodrigo De Paul",
+     "num": "7",
      "pos": "M",
      "starter": true
     },
@@ -288,13 +288,6 @@
      "num": "24",
      "pos": "M",
      "starter": true
-    },
-    {
-     "age": 32,
-     "name": "Leandro Paredes",
-     "num": "5",
-     "pos": "M",
-     "starter": false
     },
     {
      "age": 21,
@@ -318,6 +311,13 @@
      "starter": false
     },
     {
+     "age": 25,
+     "name": "Thiago Almada",
+     "num": "16",
+     "pos": "M",
+     "starter": false
+    },
+    {
      "age": 21,
      "name": "Nico Paz",
      "num": "18",
@@ -325,25 +325,18 @@
      "starter": false
     },
     {
+     "age": 26,
+     "name": "Julián Álvarez",
+     "num": "9",
+     "pos": "F",
+     "starter": true
+    },
+    {
      "age": 39,
      "name": "Lionel Messi",
      "num": "10",
      "pos": "F",
      "starter": true
-    },
-    {
-     "age": 28,
-     "name": "Lautaro Martínez",
-     "num": "22",
-     "pos": "F",
-     "starter": true
-    },
-    {
-     "age": 26,
-     "name": "Julián Álvarez",
-     "num": "9",
-     "pos": "F",
-     "starter": false
     },
     {
      "age": 28,
@@ -363,6 +356,13 @@
      "age": 25,
      "name": "José Manuel López",
      "num": "21",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Lautaro Martínez",
+     "num": "22",
      "pos": "F",
      "starter": false
     }
@@ -1671,7 +1671,7 @@
    ]
   },
   "Colombia": {
-   "as_of": "Ghana at Colombia",
+   "as_of": "Colombia at Switzerland",
    "players": [
     {
      "age": 37,
@@ -1828,23 +1828,23 @@
      "starter": true
     },
     {
+     "age": 28,
+     "name": "Luis Suárez",
+     "num": "25",
+     "pos": "F",
+     "starter": true
+    },
+    {
      "age": 33,
      "name": "Jhon Córdoba",
      "num": "9",
      "pos": "F",
-     "starter": true
+     "starter": false
     },
     {
      "age": 27,
      "name": "Cucho Hernández",
      "num": "19",
-     "pos": "F",
-     "starter": false
-    },
-    {
-     "age": 28,
-     "name": "Luis Suárez",
-     "num": "25",
      "pos": "F",
      "starter": false
     },
@@ -2793,7 +2793,7 @@
    ]
   },
   "Egypt": {
-   "as_of": "Egypt at Australia",
+   "as_of": "Egypt at Argentina",
    "players": [
     {
      "age": 26,
@@ -2894,9 +2894,9 @@
      "starter": true
     },
     {
-     "age": 31,
-     "name": "Hamdy Fathy",
-     "num": "14",
+     "age": 30,
+     "name": "Mohanad Lashin",
+     "num": "17",
      "pos": "M",
      "starter": true
     },
@@ -2908,9 +2908,9 @@
      "starter": true
     },
     {
-     "age": 30,
-     "name": "Mohanad Lashin",
-     "num": "17",
+     "age": 31,
+     "name": "Hamdy Fathy",
+     "num": "14",
      "pos": "M",
      "starter": false
     },
@@ -2936,9 +2936,9 @@
      "starter": true
     },
     {
-     "age": 27,
-     "name": "Omar Marmoush",
-     "num": "22",
+     "age": 24,
+     "name": "Haissem Hassan",
+     "num": "12",
      "pos": "F",
      "starter": true
     },
@@ -2957,16 +2957,16 @@
      "starter": false
     },
     {
-     "age": 24,
-     "name": "Haissem Hassan",
-     "num": "12",
+     "age": 25,
+     "name": "Ibrahim Adel",
+     "num": "20",
      "pos": "F",
      "starter": false
     },
     {
-     "age": 25,
-     "name": "Ibrahim Adel",
-     "num": "20",
+     "age": 27,
+     "name": "Omar Marmoush",
+     "num": "22",
      "pos": "F",
      "starter": false
     },
@@ -5248,7 +5248,7 @@
      "starter": false
     },
     {
-     "age": 34,
+     "age": 35,
      "name": "Virgil van Dijk",
      "num": "4",
      "pos": "D",
@@ -7438,7 +7438,7 @@
      "starter": true
     },
     {
-     "age": 33,
+     "age": 34,
      "name": "Son Heung-Min",
      "num": "7",
      "pos": "F",
@@ -7819,7 +7819,7 @@
      "starter": true
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Benjamin Nygren",
      "num": "10",
      "pos": "F",
@@ -7842,7 +7842,7 @@
    ]
   },
   "Switzerland": {
-   "as_of": "Algeria at Switzerland",
+   "as_of": "Colombia at Switzerland",
    "players": [
     {
      "age": 28,
@@ -7936,13 +7936,6 @@
      "starter": true
     },
     {
-     "age": 20,
-     "name": "Johan Manzambi",
-     "num": "9",
-     "pos": "M",
-     "starter": true
-    },
-    {
      "age": 33,
      "name": "Granit Xhaka",
      "num": "10",
@@ -7950,16 +7943,23 @@
      "starter": true
     },
     {
-     "age": 27,
-     "name": "Rubén Vargas",
-     "num": "17",
+     "age": 23,
+     "name": "Ardon Jashari",
+     "num": "14",
      "pos": "M",
      "starter": true
     },
     {
-     "age": 23,
-     "name": "Ardon Jashari",
-     "num": "14",
+     "age": 24,
+     "name": "Fabian Rieder",
+     "num": "22",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 20,
+     "name": "Johan Manzambi",
+     "num": "9",
      "pos": "M",
      "starter": false
     },
@@ -7978,16 +7978,16 @@
      "starter": false
     },
     {
-     "age": 29,
-     "name": "Michel Aebischer",
-     "num": "20",
+     "age": 27,
+     "name": "Rubén Vargas",
+     "num": "17",
      "pos": "M",
      "starter": false
     },
     {
-     "age": 24,
-     "name": "Fabian Rieder",
-     "num": "22",
+     "age": 29,
+     "name": "Michel Aebischer",
+     "num": "20",
      "pos": "M",
      "starter": false
     },
