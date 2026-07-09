@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+<rect width="1200" height="630" fill="#F4F2EC"/>
+<g stroke="#13110D" stroke-width="1" opacity=".07">
+<line x1="0" y1="118" x2="1200" y2="118"/><line x1="0" y1="512" x2="1200" y2="512"/>
+<line x1="80" y1="0" x2="80" y2="630"/><line x1="1120" y1="0" x2="1120" y2="630"/>
+</g>
+<g transform="translate(80,52)">
+<rect width="46" height="46" rx="4" fill="#13110D"/>
+<rect width="9" height="46" rx="4" fill="#FF3B14"/>
+<text x="29" y="33" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-weight="800" font-size="22" fill="#F4F2EC" letter-spacing="-1">26</text>
+<text x="68" y="20" font-family="ui-monospace,Menlo,monospace" font-weight="700" font-size="18" fill="#13110D" letter-spacing="4">WORLD CUP TRACKER</text>
+<text x="68" y="44" font-family="ui-monospace,Menlo,monospace" font-weight="600" font-size="14" fill="#6A6458" letter-spacing="4">LIVE MATCH-CENTER · USA · CAN · MEX</text>
+</g>
+<text x="76" y="290" font-family="Helvetica,Arial,sans-serif" font-weight="800" font-size="152" fill="#13110D" letter-spacing="-6">THE WORLD</text>
+<text x="76" y="430" font-family="Helvetica,Arial,sans-serif" font-weight="800" font-size="152" fill="#13110D" letter-spacing="-6">CUP IS <tspan fill="#FF3B14">LIVE</tspan></text>
+<g transform="translate(80,556)" font-family="ui-monospace,Menlo,monospace" font-weight="700" font-size="17" letter-spacing="2">
+<rect x="0" y="-18" width="10" height="22" fill="#FF3B14"/>
+<text x="22" y="0" fill="#13110D">STANDINGS · ADVANCE ODDS · EVERY ROAD TO THE FINAL</text>
+</g>
+</svg>
