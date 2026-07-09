@@ -57,7 +57,7 @@ def page_group(ctx, letter):
 <section aria-label="Completed games"><div class="sec-head"><h2>Results</h2></div>
   <div class="match-list">{match_list(completed, ctx, "None played yet")}</div></section>
 """
-    return shell(f"Group {letter} — World Cup 2026", "", body, ctx,
+    return shell(f"Group {letter} — World Cup 2026", "index.html", body, ctx,
                  desc=(f"Group {letter} at the 2026 World Cup: live standings, advance "
                        f"odds, finish scenarios, fixtures and scorers."),
                  page=f"group-{letter.lower()}.html",

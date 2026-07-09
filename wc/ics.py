@@ -67,7 +67,11 @@ def _dtstamp(ctx):
     lu = ctx.last_updated
     if lu:
         try:
-            return _basic(datetime.fromisoformat(lu).astimezone(timezone.utc))
+            dt = datetime.fromisoformat(lu)
+            # A naive stamp is treated as UTC rather than astimezone()'d, so the
+            # emitted DTSTAMP never depends on the build machine's local zone.
+            dt = dt.replace(tzinfo=timezone.utc) if dt.tzinfo is None else dt.astimezone(timezone.utc)
+            return _basic(dt)
         except ValueError:
             pass
     return _basic(datetime(2026, 6, 11, tzinfo=timezone.utc))

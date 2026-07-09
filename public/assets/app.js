@@ -255,7 +255,7 @@
   function wireBracketGhosts(){
     var tree=document.querySelector('.kbracket'); if(!tree)return;
     var picks={};
-    try{var v=JSON.parse(localStorage.getItem('wc26.fantasy'));if(v&&typeof v==='object')picks=v;}catch(e){}
+    try{var v=JSON.parse(localStorage.getItem('wc26.fantasy'));if(v&&typeof v==='object'&&!Array.isArray(v))picks=v;}catch(e){}
     if(!Object.keys(picks).length)return;                 // no picks: leave untouched
     var shown=0;
     tree.querySelectorAll('.km[data-mnum]').forEach(function(km){
@@ -435,7 +435,7 @@
   function initFantasy(){
     var root=document.querySelector('.fb'); if(!root||!window.FB_DATA)return;
     var M=window.FB_DATA.matches, FLAGS=window.FB_DATA.flags, FKEY='wc26.fantasy';
-    var picks={}; try{var v=JSON.parse(localStorage.getItem(FKEY));if(v&&typeof v==='object')picks=v;}catch(e){}
+    var picks={}; try{var v=JSON.parse(localStorage.getItem(FKEY));if(v&&typeof v==='object'&&!Array.isArray(v))picks=v;}catch(e){}
     function savePicks(){try{localStorage.setItem(FKEY,JSON.stringify(picks));}catch(e){}}
     function occupant(num){var m=M[num];if(!m)return null;return m.winner||picks[num]||null;}
     function feasible(num,depth){

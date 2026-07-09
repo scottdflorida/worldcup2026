@@ -752,7 +752,7 @@ def archive_band(ctx):
             f'<a class="ga-link" href="{href}" aria-label="Group {E(letter)} table">'
             f'<span class="arrow" aria-hidden="true">→</span></a></div>')
     return f"""
-<section class="ko-archive" data-reveal aria-label="Group stage — final">
+<section id="groups" class="ko-archive" data-reveal aria-label="Group stage — final">
   <div class="sec-head"><h2>Group stage</h2><span class="muted">Final standings</span></div>
   <div class="ga-band">{"".join(rows)}</div>
 </section>

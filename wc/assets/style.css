@@ -1081,7 +1081,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 
 /* Group-stage archive strip — one compact row per group (top two + best third). */
 .ko-archive{margin-top:var(--s7)}
-.ga-band{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:10px}
+.ga-band{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:10px}
 .ga-row{display:flex;align-items:center;gap:12px;padding:9px 12px;border:2px solid var(--ink);background:var(--paper);transition:background .14s}
 .ga-row:hover{background:var(--paper2)}
 .ga-row.has-watched{box-shadow:inset 6px 0 0 var(--sig)}

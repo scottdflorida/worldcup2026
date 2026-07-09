@@ -279,6 +279,9 @@ UI = {
     "Third-place match": "Disputa de terceiro lugar",
     "Third place": "Terceiro lugar",
     "BRONZE": "3º LUGAR",
+    # groups-mode team-page third-place road (pre-existing gap caught in review)
+    "Sneak through as a best third": "Passar como um dos melhores terceiros",
+    "if 3rd qualifies": "se o 3º se classificar",
     "3rd": "3º",
 
     # ---- group pages ----
