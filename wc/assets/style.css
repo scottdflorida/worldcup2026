@@ -1334,3 +1334,20 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   .ab-tok,.ab-cl-row{grid-template-columns:1fr;gap:2px}
   .ab-title{font-size:var(--t-2xl)}
 }
+
+/* 404 (off-target) page ---------------------------------------------- */
+.nf{max-width:46ch;margin:var(--s7) auto var(--s8);text-align:center}
+.nf-eyebrow{font-family:var(--mono);font-weight:700;text-transform:uppercase;
+  letter-spacing:.22em;font-size:var(--t-2xs);color:var(--accent-text);margin:0 0 var(--s3)}
+.nf-code{font-family:var(--mono);font-weight:800;font-size:var(--t-hero);line-height:.86;
+  letter-spacing:-.05em;color:var(--ink);margin:0}
+.nf-title{font-size:var(--t-2xl);margin:var(--s2) 0 var(--s3)}
+.nf-sub{font-size:var(--t-lg);line-height:1.5;color:var(--ink2);margin:0 auto var(--s6);max-width:38ch}
+.nf-actions{display:flex;flex-wrap:wrap;gap:var(--s3);justify-content:center}
+.nf-btn{font-family:var(--mono);font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  font-size:var(--t-2xs);padding:12px 18px;border:1.5px solid var(--ink);color:var(--ink);
+  text-decoration:none;transition:background .15s,color .15s,border-color .15s}
+.nf-btn:hover,.nf-btn:focus-visible{background:var(--ink-block);color:var(--on-ink);border-color:var(--ink-block)}
+.nf-btn-primary{background:var(--ink-block);color:var(--on-ink);border-color:var(--ink-block)}
+.nf-btn-primary:hover,.nf-btn-primary:focus-visible{background:var(--vermilion);
+  border-color:var(--vermilion);color:var(--on-accent)}

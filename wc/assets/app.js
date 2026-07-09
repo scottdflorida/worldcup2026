@@ -1054,4 +1054,13 @@
   window.addEventListener('load',landOnToday);
   window.addEventListener('load',drawBracket);
   window.addEventListener('resize',scheduleDraw);
+
+  // Service worker (PWA): precaches the shell + offline core (home/calendar/
+  // bracket), serves hashed /assets/ cache-first and HTML documents network-first
+  // so a live deploy always wins. Registered after load, feature-detected.
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',function(){
+      navigator.serviceWorker.register('/sw.js').catch(function(){});
+    });
+  }
 })();

@@ -3,11 +3,12 @@
 """
 from __future__ import annotations
 
+import json
 from datetime import datetime, timedelta, timezone
 
-from . import config, i18n
+from . import bracket, config, i18n, util
 from .art import _asset_ver
-from .times import E, PT_LABEL, PT_OFFSET_HOURS
+from .times import E, PT_LABEL, PT_OFFSET_HOURS, _utc_iso
 
 SITE_URL = "https://worldcup.sflorida.studio"
 
@@ -33,19 +34,37 @@ FAVICON = "assets/favicon.svg"
 APPLE_ICON = "assets/apple-touch-icon.png"
 
 
-def head_meta(title, desc, page):
-    url = f"{SITE_URL}/{page}"
+def canonical_url(page):
+    """Clean canonical URL for a page file (Pages 308-redirects .html -> clean):
+    index.html -> https://…/ , usa.html -> https://…/usa , etc."""
+    slug = page[:-5] if page.endswith(".html") else page
+    if slug == "index":
+        return SITE_URL + "/"
+    return f"{SITE_URL}/{slug}"
+
+
+def head_meta(title, desc, page, noindex=False):
+    url = canonical_url(page)
     img = f"{SITE_URL}/{OG_IMG}"
+    # 404 is served for ANY missing path at any depth, so a <base href="/"> makes
+    # every relative URL below (assets, nav) resolve against the root. It is also
+    # noindex (skip canonical) and must not advertise itself as a real page.
+    base = '<base href="/">\n' if noindex else ""
+    robots = '<meta name="robots" content="noindex, follow">\n' if noindex else ""
+    canonical = "" if noindex else f'<link rel="canonical" href="{url}">\n'
     return f"""<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{E(title)}</title>
+{base}<title>{E(title)}</title>
 <meta name="description" content="{E(desc)}">
+{robots}{canonical}<link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#F4F2EC" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#14120D" media="(prefers-color-scheme: dark)">
 <link rel="icon" type="image/svg+xml" href="{FAVICON}">
 <link rel="apple-touch-icon" sizes="180x180" href="{APPLE_ICON}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="World Cup 2026 Tracker">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
 <meta property="og:title" content="{E(title)}">
 <meta property="og:description" content="{E(desc)}">
 <meta property="og:url" content="{url}">
@@ -60,6 +79,106 @@ def head_meta(title, desc, page):
 <meta name="twitter:description" content="{E(desc)}">
 <meta name="twitter:image" content="{img}">
 <meta name="twitter:image:alt" content="World Cup 2026 Tracker — the World Cup is live">"""
+
+
+# --------------------------------------------------------------------------
+# JSON-LD structured data (small, honest, deterministic).  All blocks live in
+# <script type="application/ld+json"> — inside a SCRIPT node, so the i18n DOM
+# walker skips them (no pt-BR needed).  Emitted with sort_keys=True so identical
+# inputs yield identical bytes.
+# --------------------------------------------------------------------------
+_TOURNAMENT = config.TOURNAMENT["name"]   # "FIFA World Cup 2026"
+_SPORT = "Association football"
+
+
+def _team_for_page(ctx, page):
+    """The team name whose hub page is `page`, or None (derived from ctx so shell
+    can recognise a team page without the page builder passing anything in)."""
+    for team in ctx.teams:
+        if util.page_for(team) == page:
+            return team
+    return None
+
+
+def _ld_website():
+    return {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "World Cup 2026 Tracker",
+        "url": SITE_URL + "/",
+        "description": ("Live FIFA World Cup 2026 tracker — groups, standings, "
+                        "advance odds and a connected knockout bracket."),
+        "inLanguage": ["en", "pt-BR"],
+    }
+
+
+def _ld_next_event(ctx):
+    """SportsEvent for the next scheduled match (or None when there is no upcoming
+    match with a usable UTC kickoff). Slot tokens are resolved to real nations
+    where the draw is known; competitors are listed only once concrete."""
+    up = ctx.upcoming(1)
+    if not up:
+        return None
+    m = up[0]
+    start = _utc_iso(m)
+    if not start:
+        return None
+    by_num = ctx.by_num
+    r1 = bracket.resolve_slot(m.get("team1"), ctx.analyses, by_num)
+    r2 = bracket.resolve_slot(m.get("team2"), ctx.analyses, by_num)
+    n1 = r1["team"] or r1["label"]
+    n2 = r2["team"] or r2["label"]
+    ev = {
+        "@context": "https://schema.org",
+        "@type": "SportsEvent",
+        "name": f"{n1} vs {n2}",
+        "sport": _SPORT,
+        "startDate": start,
+        "eventStatus": "https://schema.org/EventScheduled",
+        "superEvent": {"@type": "SportsEvent", "name": _TOURNAMENT},
+    }
+    ground = m.get("ground")
+    if ground:
+        ev["location"] = {"@type": "Place", "name": ground}
+    competitors = [{"@type": "SportsTeam", "name": t}
+                   for t in (r1["team"], r2["team"]) if t]
+    if competitors:
+        ev["competitor"] = competitors
+    return ev
+
+
+def _ld_team(team):
+    return {
+        "@context": "https://schema.org",
+        "@type": "SportsTeam",
+        "name": team,
+        "sport": _SPORT,
+        "url": canonical_url(util.page_for(team)),
+        "memberOf": {"@type": "SportsEvent", "name": _TOURNAMENT},
+    }
+
+
+def _jsonld_blocks(ctx, page):
+    blocks = []
+    if page == "index.html":
+        blocks.append(_ld_website())
+        ev = _ld_next_event(ctx)
+        if ev:
+            blocks.append(ev)
+    else:
+        team = _team_for_page(ctx, page)
+        if team:
+            blocks.append(_ld_team(team))
+    return blocks
+
+
+def _jsonld_html(ctx, page):
+    parts = []
+    for block in _jsonld_blocks(ctx, page):
+        payload = json.dumps(block, sort_keys=True, ensure_ascii=False,
+                             separators=(",", ":"))
+        parts.append(f'<script type="application/ld+json">{payload}</script>')
+    return ("\n" + "\n".join(parts)) if parts else ""
 
 
 def _breadcrumb(crumb):
@@ -78,7 +197,8 @@ def _breadcrumb(crumb):
     return (f'<nav class="crumb" aria-label="Breadcrumb">{sep.join(parts)}</nav>')
 
 
-def shell(title, active, body, ctx, desc=None, page="index.html", crumb=None):
+def shell(title, active, body, ctx, desc=None, page="index.html", crumb=None,
+          noindex=False):
     desc = desc or ("Live FIFA World Cup 2026 tracker — groups, standings, advance "
                     "odds, team road-to-the-final and a connected knockout bracket. "
                     "Pin your teams with ★.")
@@ -109,7 +229,7 @@ def shell(title, active, body, ctx, desc=None, page="index.html", crumb=None):
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
-{head_meta(title, desc, page)}
+{head_meta(title, desc, page, noindex)}{"" if noindex else _jsonld_html(ctx, page)}
 <script>(function(){{try{{var t=localStorage.getItem("wc26.theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t);}}catch(e){{}}}})();</script>
 <link rel="preload" href="assets/TwemojiCountryFlags.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/style.css?v={_asset_ver()}">

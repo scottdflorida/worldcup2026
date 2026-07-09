@@ -421,6 +421,15 @@ UI = {
         "Ainda sem caminho no mata-mata — a chave abre quando a fase de grupos terminar.",
     "your team highlighted · advance odds as a tally":
         "sua seleção destacada · chances de avanço em barras",
+
+    # ---- 404 (off-target) page ----
+    "Error 404": "Erro 404",
+    "Off target": "Para fora",
+    "That link skied over the bar. The page may have moved, or never existed.":
+        "Esse link foi para fora. A página pode ter mudado de lugar ou nunca existiu.",
+    "Back to home": "Voltar ao início",
+    "See the calendar": "Ver o calendário",
+    "404 recovery": "Recuperação do 404",
 }
 
 

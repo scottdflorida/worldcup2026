@@ -16,8 +16,11 @@ from __future__ import annotations
 
 import json
 import os
+from datetime import datetime, timezone
+from xml.sax.saxutils import escape as _xml_escape
 
-from . import art, blurbs, bracket, config, data, i18n, ics, pages, squads, standings, util
+from . import art, blurbs, bracket, config, data, i18n, ics, pages, pwa, shell, squads, standings, util
+from .pages.notfound import page_notfound
 
 
 class Context:
@@ -138,6 +141,43 @@ class Context:
 
 
 # --------------------------------------------------------------------------
+# SEO artifacts (robots + sitemap). Deterministic: URLs sorted, <lastmod> is the
+# UTC date of data/last_updated.txt (never a wall clock).
+# --------------------------------------------------------------------------
+def _robots_txt():
+    return (
+        "User-agent: *\n"
+        "Allow: /\n"
+        "\n"
+        f"Sitemap: {shell.SITE_URL}/sitemap.xml\n"
+    )
+
+
+def _sitemap_lastmod(ctx):
+    """UTC calendar date of the last data refresh (YYYY-MM-DD), deterministic."""
+    lu = ctx.last_updated
+    if lu:
+        try:
+            return datetime.fromisoformat(lu).astimezone(timezone.utc).date().isoformat()
+        except ValueError:
+            pass
+    return config.TOURNAMENT["start"]
+
+
+def _sitemap_xml(ctx, html_pages):
+    lastmod = _sitemap_lastmod(ctx)
+    urls = sorted(shell.canonical_url(p) for p in html_pages)
+    rows = "\n".join(
+        f"  <url><loc>{_xml_escape(u)}</loc><lastmod>{lastmod}</lastmod></url>"
+        for u in urls
+    )
+    return ('<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+            f"{rows}\n"
+            "</urlset>\n")
+
+
+# --------------------------------------------------------------------------
 # Entry point
 # --------------------------------------------------------------------------
 def render_site(payload):
@@ -154,6 +194,7 @@ def render_site(payload):
         "bets-data.json": json.dumps(pages.betting_data(ctx), ensure_ascii=False, separators=(",", ":")),
         "calendar.html": pages.page_calendar(ctx),
         "about.html": pages.page_about(ctx),
+        "404.html": page_notfound(ctx),
         "assets/style.css": art.STYLE,
         "assets/app.js": art.APP_JS,
         "assets/i18n.js": i18n.build_js(),
@@ -172,6 +213,15 @@ def render_site(payload):
     files["ics/all-matches.ics"] = ics.all_matches_ics(ctx)
     for team in ctx.teams:
         files[f"ics/{util.slug(team)}.ics"] = ics.team_ics(ctx, team)
+    # SEO + PWA artifacts. The sitemap lists every crawlable HTML page (the 404 is
+    # noindex, so it is excluded). The service worker is versioned by the shared
+    # asset fingerprint so it changes exactly when the shell assets do.
+    html_pages = [k for k in files if k.endswith(".html") and k != "404.html"]
+    version = art._asset_ver()
+    files["robots.txt"] = _robots_txt()
+    files["sitemap.xml"] = _sitemap_xml(ctx, html_pages)
+    files["manifest.webmanifest"] = pwa.manifest()
+    files["sw.js"] = pwa.service_worker(version)
     return files
 
 
