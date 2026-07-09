@@ -34,7 +34,7 @@
       var t=el.getAttribute('data-team');
       el.classList.toggle('watched', !!t && w.indexOf(t)>=0);
     });
-    document.querySelectorAll('.match,.km,.dist-row,.pz,.road-step,.tcard,.cal-m').forEach(function(el){
+    document.querySelectorAll('.match,.km,.dist-row,.pz,.road-step,.tcard,.cal-m,.scorebug,.ga-row').forEach(function(el){
       el.classList.toggle('has-watched',!!el.querySelector('.watched'));
     });
     document.querySelectorAll('[data-watch]').forEach(function(btn){

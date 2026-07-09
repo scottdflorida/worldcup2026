@@ -280,6 +280,62 @@ def match_list(ms, ctx, empty="None"):
     return "".join(match_line(m, ctx) for m in ms) or f'<div class="muted empty">{E(empty)}</div>'
 
 
+def _pulse_card(ctx, m, kind):
+    """One Pulse-ribbon card — a compact scorebug for a single match. `kind` is
+    'done' (final score + scorers) or 'up' (kickoff time). Carries the shared
+    data-live / data-ts / data-live-mid / data-live-tag hooks so the generalised
+    live poller lights it in place. Shared by the Matchday-Pulse band and the
+    knockout-mode current-round ribbon (reflow, don't reinvent)."""
+    by_num = ctx.by_num
+    t1 = bracket.resolve_slot(m["team1"], ctx.analyses, by_num)
+    t2 = bracket.resolve_slot(m["team2"], ctx.analyses, by_num)
+    grp = m.get("group") or m.get("round") or ""
+    venue_stadium, _ = venues.venue(m.get("ground", ""))
+    pt_day, pt_time = _pt_parts(m)
+    date = pt_day or ""
+    utc = _utc_iso(m)
+    date_attr = f' data-utc="{utc}" data-tfmt="day"' if (date and utc) else ""
+    w1 = w2 = ""
+    if kind == "done":
+        g1, g2 = data.final_score(m)
+        win = bracket.match_winner(m)
+        w1 = _WL_CLASS[side_result(True, t1["team"], win)]
+        w2 = _WL_CLASS[side_result(True, t2["team"], win)]
+        pens = (m.get("score") or {}).get("p")
+        pen_html = f'<span class="pz-pens">{pens[0]}–{pens[1]} pens</span>' if pens else ""
+        mid = (f'<div class="pz-mid"><div class="pz-score" data-live-mid>'
+               f'<b class="sg{" win" if w1==" won" else ""}">{g1}</b><span class="sdash">–</span>'
+               f'<b class="sg{" win" if w2==" won" else ""}">{g2}</b></div>{pen_html}</div>')
+        foot = scorers(m) or f'<div class="pz-foot muted">{E(venue_stadium)}</div>'
+        tag = '<span class="pz-tag done" data-live-tag>FT</span>'
+    else:
+        ko = (f'{E(pt_time)}<span class="pz-tz tz">{PT_LABEL}</span>') if pt_time else "TBD"
+        ko_attr = f' data-utc="{utc}" data-tfmt="time"' if (pt_time and utc) else ""
+        mid = f'<div class="pz-ko" data-live-mid{ko_attr}>{ko}</div>'
+        foot = f'<div class="pz-foot muted">{E(venue_stadium)}</div>'
+        tag = '<span class="pz-tag up" data-live-tag>Kicks off</span>'
+    live = bool(t1["team"] and t2["team"])
+    live_attr = f' data-live data-date="{E(m.get("date",""))}"' if live else ""
+
+    def pzteam(res, wc, is_b=False):
+        t = res["team"]
+        inner = (f'<span class="fl">{flag(t) if t else "·"}</span>'
+                 f'<span class="nm">{E(t or res["label"])}</span>')
+        badge = wl_badge({v: k for k, v in _WL_CLASS.items()}.get(wc, ""))
+        body = (badge + inner) if is_b else (inner + badge)
+        if t:
+            return f'<a class="pz-team{wc}" data-team="{E(t)}" href="{util.page_for(t)}">{body}</a>'
+        return f'<div class="pz-team{wc}" data-team="">{body}</div>'
+    return (
+        f'<div class="pz {"is-done" if kind=="done" else "is-upcoming"}" '
+        f'data-ts="{_epoch(m)}"{live_attr}>'
+        f'<div class="pz-head"><span class="pz-grp">{E(grp)}</span>{tag}'
+        f'<span class="pz-date muted"{date_attr}>{E(date)}</span></div>'
+        f'<div class="pz-row">{pzteam(t1, w1)}{mid}{pzteam(t2, w2, is_b=True)}</div>'
+        f'{foot}</div>'
+    )
+
+
 def pulse_band(ctx):
     """The signature "Pulse" band: a single time-ordered ribbon fusing the latest
     results and the next kickoffs, with exactly one "now" divider between them.
@@ -288,7 +344,6 @@ def pulse_band(ctx):
     kickoff (upcoming). The divider IS the Live Wire signal element (.now-divider
     + .wire-pulse), shared with the bracket's live edge and the watched glow.
     """
-    by_num = ctx.by_num
     # A tight "now" window: yesterday + today behind us, today + tomorrow ahead —
     # the pulse is about what just happened and what's next, not the whole schedule.
     today = today_pt()
@@ -306,57 +361,8 @@ def pulse_band(ctx):
     if not done and not up:
         return ""
 
-    def card(m, kind):
-        t1 = bracket.resolve_slot(m["team1"], ctx.analyses, by_num)
-        t2 = bracket.resolve_slot(m["team2"], ctx.analyses, by_num)
-        grp = m.get("group") or m.get("round") or ""
-        venue_stadium, _ = venues.venue(m.get("ground", ""))
-        pt_day, pt_time = _pt_parts(m)
-        date = pt_day or ""
-        utc = _utc_iso(m)
-        date_attr = f' data-utc="{utc}" data-tfmt="day"' if (date and utc) else ""
-        w1 = w2 = ""
-        if kind == "done":
-            g1, g2 = data.final_score(m)
-            win = bracket.match_winner(m)
-            w1 = _WL_CLASS[side_result(True, t1["team"], win)]
-            w2 = _WL_CLASS[side_result(True, t2["team"], win)]
-            pens = (m.get("score") or {}).get("p")
-            pen_html = f'<span class="pz-pens">{pens[0]}–{pens[1]} pens</span>' if pens else ""
-            mid = (f'<div class="pz-mid"><div class="pz-score" data-live-mid>'
-                   f'<b class="sg{" win" if w1==" won" else ""}">{g1}</b><span class="sdash">–</span>'
-                   f'<b class="sg{" win" if w2==" won" else ""}">{g2}</b></div>{pen_html}</div>')
-            foot = scorers(m) or f'<div class="pz-foot muted">{E(venue_stadium)}</div>'
-            tag = '<span class="pz-tag done" data-live-tag>FT</span>'
-        else:
-            ko = (f'{E(pt_time)}<span class="pz-tz tz">{PT_LABEL}</span>') if pt_time else "TBD"
-            ko_attr = f' data-utc="{utc}" data-tfmt="time"' if (pt_time and utc) else ""
-            mid = f'<div class="pz-ko" data-live-mid{ko_attr}>{ko}</div>'
-            foot = f'<div class="pz-foot muted">{E(venue_stadium)}</div>'
-            tag = '<span class="pz-tag up" data-live-tag>Kicks off</span>'
-        live = bool(t1["team"] and t2["team"])
-        live_attr = f' data-live data-date="{E(m.get("date",""))}"' if live else ""
-
-        def pzteam(res, wc, is_b=False):
-            t = res["team"]
-            inner = (f'<span class="fl">{flag(t) if t else "·"}</span>'
-                     f'<span class="nm">{E(t or res["label"])}</span>')
-            badge = wl_badge({v: k for k, v in _WL_CLASS.items()}.get(wc, ""))
-            body = (badge + inner) if is_b else (inner + badge)
-            if t:
-                return f'<a class="pz-team{wc}" data-team="{E(t)}" href="{util.page_for(t)}">{body}</a>'
-            return f'<div class="pz-team{wc}" data-team="">{body}</div>'
-        return (
-            f'<div class="pz {"is-done" if kind=="done" else "is-upcoming"}" '
-            f'data-ts="{_epoch(m)}"{live_attr}>'
-            f'<div class="pz-head"><span class="pz-grp">{E(grp)}</span>{tag}'
-            f'<span class="pz-date muted"{date_attr}>{E(date)}</span></div>'
-            f'<div class="pz-row">{pzteam(t1, w1)}{mid}{pzteam(t2, w2, is_b=True)}</div>'
-            f'{foot}</div>'
-        )
-
-    done_cards = "".join(card(m, "done") for m in done)
-    up_cards = "".join(card(m, "up") for m in up)
+    done_cards = "".join(_pulse_card(ctx, m, "done") for m in done)
+    up_cards = "".join(_pulse_card(ctx, m, "up") for m in up)
     # The Live Wire "now" divider: exactly one, between done and upcoming.
     divider = (
         '<div class="now-divider wire" aria-label="now">'
@@ -430,11 +436,61 @@ def _tcard_fixtures(ctx, team):
     return f'<div class="tcard-fix">{"".join(rows)}</div>'
 
 
-def team_card(ctx, team, rich=False):
+def _card_status(ctx, team):
+    """Tournament-status meta for a watchlist card (knockout / champion mode),
+    mirroring the team-hero language so a pinned team reads the same everywhere:
+      alive  -> the round it is playing next (e.g. "Quarter-final")
+      out    -> "Out · <round> · v <opponent>" (group stage or the game it lost)
+      champ  -> "World champions" / "Runners-up"
+    Returns (inner_html, tone) with tone in {'alive','out','champ',''}."""
+    final_m = next((m for m in ctx.matches if m.get("round") == "Final"), None)
+    if final_m is not None and data.has_result(final_m):
+        if bracket.match_winner(final_m) == team:
+            return ("<span>World champions</span>", "champ")
+        if bracket.match_loser(final_m) == team:
+            return ("<span>Runners-up</span>", "out")
+    nm = ctx.next_match(team)
+    if nm is not None:
+        m, _opp, rd = nm
+        proj = ctx.projections[team]
+        is_group = str(rd).startswith("Matchday")
+        # A team that has finished its group but whose group isn't settled only
+        # projects SPECULATIVELY forward — don't claim a knockout round yet.
+        if is_group or not proj["group_complete"]:
+            return ("<span>Group stage</span>", "alive")
+        return (f'<span>{E(_round_full(rd))}</span>', "alive")
+    if ctx.knocked_out(team):
+        return ('<span>Out</span> · <span>group stage</span>', "out")
+    _, recent = ctx.team_fixtures(team)
+    if recent is not None:
+        rd_short = _round_short(recent.get("round", ""))
+        opp = recent.get("team2") if recent.get("team1") == team else recent.get("team1")
+        # This meta sits INSIDE the card's .tcard-main <a>, so the opponent must be
+        # a plain chip (data-team keeps the watched glow) — a nested <a> is invalid
+        # and the browser drops it, losing the opponent.
+        opp_html = (f'<span class="team tcs-opp" data-team="{E(opp)}">'
+                    f'<span class="fl">{flag(opp)}</span><span class="nm">{E(opp)}</span></span>'
+                    if opp else "TBD")
+        return (f'<span>Out</span> · <span>{E(rd_short)}</span> · v {opp_html}', "out")
+    return ("", "")
+
+
+def team_card(ctx, team, rich=False, status=False):
+    """A watchlist card. `status=True` swaps the group-position meta ("Group A ·
+    1st · 9 pts") for a live tournament-status line — used on the phase-aware home
+    once the group stage is settled, so a pinned team leads with where it IS in
+    the knockouts rather than a frozen group standing."""
     proj = ctx.projections[team]
     pr, sec = util.accent(team)
     rec = proj["row"]
     fixtures = _tcard_fixtures(ctx, team) if rich else ""
+    if status:
+        st_html, tone = _card_status(ctx, team)
+        meta = (f'<span class="tcard-meta tcard-status {tone}">{st_html}</span>'
+                if st_html else "")
+    else:
+        meta = (f'<span class="tcard-meta muted">{E(proj["group"])} · '
+                f'{_ordinal(proj["rank"])} · {rec["Pts"]} pts</span>')
     return (
         f'<div class="tcard{" rich" if rich else ""}" data-team-card="{E(team)}" data-team="{E(team)}" '
         f'style="--accent:{pr};--accent2:{sec}">'
@@ -442,7 +498,7 @@ def team_card(ctx, team, rich=False):
         f'<a class="tcard-main" href="{util.page_for(team)}">'
         f'<span class="tcard-flag">{flag(team)}</span>'
         f'<span class="tcard-body"><span class="tcard-name">{E(team)}</span>'
-        f'<span class="tcard-meta muted">{E(proj["group"])} · {_ordinal(proj["rank"])} · {rec["Pts"]} pts</span></span>'
+        f'{meta}</span>'
         f'</a>{star_icon(team)}</div>'
         f'{fixtures}</div>'
     )
@@ -462,3 +518,212 @@ def _round_short(rd):
     if rd == "Final":
         return "Final"
     return config.KO_SHORT.get(rd, rd)
+
+
+# Full round labels for the phase-aware home (hero line, scorebug, section heads).
+# Multi-match rounds read as plurals ("Quarter-finals"); the bronze match uses its
+# stage name. Every value here already has pt-BR coverage in wc/i18n.py.
+_ROUND_FULL = {
+    "Round of 32": "Round of 32",
+    "Round of 16": "Round of 16",
+    "Quarter-final": "Quarter-finals",
+    "Semi-final": "Semi-finals",
+    "Match for third place": "Third-place match",
+    "Final": "Final",
+}
+
+
+def _round_full(rd):
+    return _ROUND_FULL.get(rd, rd)
+
+
+def _slot_name(res, cls=""):
+    """A bracket slot as a team chip (resolved nation, reusing the .team device so
+    a pinned side still glows) or a terse placeholder — the compact form used by
+    the hero line and the home bracket rail."""
+    if res["team"]:
+        return team_link(res["team"], f"team {cls}".strip())
+    return f'<span class="{cls} tbd muted">{E(res["label"])}</span>'
+
+
+# --------------------------------------------------------------------------
+# Phase-aware home builders (knockout / champion mode). The hero, Your-teams,
+# groups grid and thirds race live in wc/pages/home.py; these are the shared
+# fragments the knockout layout is assembled from.
+# --------------------------------------------------------------------------
+def scorebug(ctx, m):
+    """A large broadcast scorebug for the next (or in-play) knockout match. Scales
+    up the .pz card language — flags, mono kickoff, W/L tag — and carries the same
+    data-live / data-ts / data-live-mid / data-live-tag hooks, so the generalised
+    live poller lights it the moment the match kicks off (no bespoke wiring)."""
+    by_num = ctx.by_num
+    t1 = bracket.resolve_slot(m["team1"], ctx.analyses, by_num)
+    t2 = bracket.resolve_slot(m["team2"], ctx.analyses, by_num)
+    done = data.has_result(m)
+    win = bracket.match_winner(m) if done else None
+    r1, r2 = side_result(done, t1["team"], win), side_result(done, t2["team"], win)
+    rd_lbl = _round_full(m.get("round", ""))
+    venue_stadium, _v = venues.venue(m.get("ground", ""))
+    pt_day, pt_time = _pt_parts(m)
+    utc = _utc_iso(m)
+    date_attr = f' data-utc="{utc}" data-tfmt="day"' if (pt_day and utc) else ""
+    if done:
+        g1, g2 = data.final_score(m)
+        pens = (m.get("score") or {}).get("p")
+        pen_html = f'<span class="sb-pens">{pens[0]}–{pens[1]} pens</span>' if pens else ""
+        figure = (f'<div class="sb-figure sb-score" data-live-mid>'
+                  f'<b class="sg{" win" if r1=="w" else ""}">{g1}</b><span class="sdash">–</span>'
+                  f'<b class="sg{" win" if r2=="w" else ""}">{g2}</b></div>{pen_html}')
+        tag = '<span class="pz-tag done" data-live-tag>FT</span>'
+    else:
+        ko = (f'{E(pt_time)}<span class="pz-tz tz">{PT_LABEL}</span>') if pt_time else "TBD"
+        ko_attr = f' data-utc="{utc}" data-tfmt="time"' if (pt_time and utc) else ""
+        figure = f'<div class="sb-figure sb-ko" data-live-mid{ko_attr}>{ko}</div>'
+        tag = '<span class="pz-tag up" data-live-tag>Kicks off</span>'
+    live = bool(t1["team"] and t2["team"])
+    live_attr = f' data-live data-date="{E(m.get("date",""))}"' if live else ""
+
+    def sbteam(res, code, is_b=False):
+        t = res["team"]
+        inner = (f'<span class="fl">{flag(t) if t else "·"}</span>'
+                 f'<span class="nm">{E(t or res["label"])}</span>')
+        badge = wl_badge(code)
+        body = (badge + inner) if is_b else (inner + badge)
+        cls = "sb-team" + (" b" if is_b else "") + (_WL_CLASS.get(code, ""))
+        if t:
+            return f'<a class="{cls}" data-team="{E(t)}" href="{util.page_for(t)}">{body}</a>'
+        return f'<div class="{cls}" data-team="">{body}</div>'
+    return (
+        f'<div class="scorebug {"is-done" if done else "is-upcoming"}" '
+        f'data-ts="{_epoch(m)}"{live_attr}>'
+        f'<div class="sb-head"><span class="sb-rd">{E(rd_lbl)}</span>{tag}'
+        f'<span class="sb-date muted"{date_attr}>{E(pt_day or "")}</span></div>'
+        f'<div class="sb-row">{sbteam(t1, r1)}<div class="sb-mid">{figure}</div>'
+        f'{sbteam(t2, r2, is_b=True)}</div>'
+        f'<div class="sb-foot muted">{E(venue_stadium)}</div></div>'
+    )
+
+
+def round_ribbon(ctx, matches):
+    """The rest of the current knockout round beside the scorebug — the same Pulse
+    ribbon device (each card live-wired), reflowed as a round schedule."""
+    if not matches:
+        return ""
+    cards = "".join(_pulse_card(ctx, m, "done" if data.has_result(m) else "up")
+                    for m in matches)
+    return f'<div class="pulse-band ko-sched" data-band="ko-round">{cards}</div>'
+
+
+def _rail_slot(res):
+    """A compact rail slot: the resolved nation, its ≤2 candidate names, ≤4
+    candidate flags, or a terse count — never a "Winner of M…" token, matching
+    the bracket page's slot device (the connectors, not jargon, carry structure)."""
+    if res["team"]:
+        return team_link(res["team"], "team krl-tm")
+    cands = sorted(res.get("candidates") or [])
+    if not cands:
+        return '<span class="krl-tm tbd muted">TBD</span>'
+    if len(cands) <= 2:
+        inner = '<span class="krl-slash" aria-hidden="true">/</span>'.join(
+            team_link(c, "team krl-cand") for c in cands)
+        return f'<span class="krl-cands">{inner}</span>'
+    if len(cands) <= 4:
+        flags = "".join(f'<span class="krl-fl" data-team="{E(c)}" title="{E(c)}">{flag(c)}</span>'
+                        for c in cands)
+        return f'<span class="krl-cands flags">{flags}</span>'
+    return f'<span class="krl-tm tbd muted">{len(cands)} possible</span>'
+
+
+def _rail_side(r, key):
+    """One side of a compact bracket-rail tie: the slot plus, for a played tie, its
+    goal count and winner emphasis (reusing the km W/L read)."""
+    res = r[key]
+    code = side_result(r["played"], res["team"], r["winner"])
+    g = ""
+    if r["played"]:
+        g1, g2 = data.final_score({"score": r["score"]})
+        gv = g1 if key == "team1" else g2
+        g = f'<span class="krl-g{" kw" if code == "w" else ""}">{gv}</span>'
+    cls = "krl-side" + (" b" if key == "team2" else "")
+    cls += (" kw" if code == "w" else (" kl" if r["played"] else ""))
+    return f'<span class="{cls}">{_rail_slot(res)}{g}</span>'
+
+
+def bracket_rail(ctx, current_round):
+    """A compact horizontal bracket summary: the current round's ties, then the
+    path to the final as slot chips (candidate fans until each tie resolves),
+    linking out to the full connected tree on bracket.html. Reuses the bracket
+    slot device rather than reinventing it."""
+    main = [(rd, rows) for rd, rows in ctx.bracket if rd in config.KO_ROUNDS]
+    if not main:
+        return ""
+    # Anchor on the current MAIN round (the bronze match rides with the Final).
+    anchor = current_round if current_round in config.KO_ROUNDS else "Final"
+    start = next((i for i, (rd, _) in enumerate(main) if rd == anchor), 0)
+    cols = []
+    for rd, rows in main[start:]:
+        ties = "".join(
+            f'<div class="krl-tie{" is-done" if r["played"] else ""}">'
+            f'{_rail_side(r, "team1")}{_rail_side(r, "team2")}</div>'
+            for r in rows)
+        cur = " krl-cur" if rd == anchor else ""
+        cols.append(f'<div class="krl-col{cur}"><div class="krl-h">{E(config.KO_SHORT[rd])}</div>'
+                    f'<div class="krl-ties">{ties}</div></div>')
+    champ = _champion(ctx)
+    if champ:
+        cap = (f'<div class="krl-champ-tm">{team_link(champ, "krl-tm")}</div>')
+    else:
+        cap = '<div class="krl-champ-tm pending muted">Champion T.B.D.</div>'
+    cols.append(
+        '<div class="krl-col krl-champ">'
+        '<div class="krl-h"><img class="krl-trophy" src="assets/trophy.svg" alt="" '
+        'width="14" height="14" aria-hidden="true">World Champion</div>'
+        f'{cap}</div>')
+    return f"""
+<section class="ko-rail-sec" data-reveal aria-label="Bracket">
+  <div class="sec-head"><h2>The bracket</h2>
+    <a class="sec-link" href="bracket.html">Full bracket <span class="arrow" aria-hidden="true">→</span></a></div>
+  <div class="ko-rail-frame"><div class="ko-rail" data-hscroll>{"".join(cols)}</div></div>
+</section>
+"""
+
+
+def archive_band(ctx):
+    """The settled group stage as one compact archive strip — one row per group:
+    the letter (linking to its page), the two qualifiers, and the best-third if
+    that group's third-placed side made the bracket. The full tables live on the
+    group pages; the home stops re-printing twelve of them once the stage is done."""
+    rows = []
+    for g in sorted(ctx.analyses):
+        info = ctx.analyses[g]
+        letter = info["group"].split()[-1]
+        table = info["table"]
+        chips = []
+        for i, row in enumerate(table[:2], 1):
+            chips.append(f'<span class="ga-team">{team_link(row["team"], "ga-tm")}'
+                         f'<span class="ga-pos">{i}</span></span>')
+        third = table[2] if len(table) >= 3 else None
+        if third and third["team"] in ctx.advanced:
+            chips.append(f'<span class="ga-team ga-third">{team_link(third["team"], "ga-tm")}'
+                         f'<span class="ga-badge">3rd</span></span>')
+        href = f"group-{letter.lower()}.html"
+        rows.append(
+            f'<div class="ga-row">'
+            f'<a class="ga-letter" href="{href}" aria-label="Group {E(letter)}">{E(letter)}</a>'
+            f'<div class="ga-teams">{"".join(chips)}</div>'
+            f'<a class="ga-link" href="{href}" aria-label="Group {E(letter)} table">'
+            f'<span class="arrow" aria-hidden="true">→</span></a></div>')
+    return f"""
+<section class="ko-archive" data-reveal aria-label="Group stage — final">
+  <div class="sec-head"><h2>Group stage</h2><span class="muted">Final standings</span></div>
+  <div class="ga-band">{"".join(rows)}</div>
+</section>
+"""
+
+
+def _champion(ctx):
+    """The tournament winner once the Final is decided, else None."""
+    final_m = next((m for m in ctx.matches if m.get("round") == "Final"), None)
+    if final_m is not None and data.has_result(final_m):
+        return bracket.match_winner(final_m)
+    return None

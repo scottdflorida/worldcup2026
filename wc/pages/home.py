@@ -1,18 +1,176 @@
-"""Home / command-center page: hero, your-teams, Pulse band, the twelve
-group tables and the best-third race."""
+"""Home / command-center page — phase-aware.
+
+The layout is driven by the tournament stage the engine already computes, in three
+explicit modes (the branch in `page_home` reads in one screen):
+
+  GROUPS MODE   (group stage running) — hero + progress, Your Teams, Matchday
+                Pulse, the twelve group tables and the best-third race.
+  KNOCKOUT MODE (bracket running)     — hero carrying the current round + next
+                kickoff, a large next/live scorebug with the round's schedule
+                beside it, a compact bracket rail, status-aware Your Teams, and
+                the settled group stage collapsed to one archive strip.
+  CHAMPION MODE (final decided)       — hero states the champions; the rest as
+                knockout mode. Deliberately simple; not fixture-testable yet.
+"""
 from __future__ import annotations
 
-from .. import config, data
-from ..components import (group_table, pulse_band, star_icon, team_card,
-                          team_link)
+from .. import bracket, config, data
+from ..components import (archive_band, bracket_rail, group_table, pulse_band,
+                          round_ribbon, scorebug, star_icon, team_card,
+                          team_link, _champion, _round_full, _slot_name)
+from ..flags import flag
 from ..shell import shell
-from ..times import E
+from ..times import E, kickoff_label
 
 
 def page_home(ctx):
+    champ = _champion(ctx)
+    if ctx.stage() == "Group stage":
+        body = _mode_groups(ctx)
+    elif champ:
+        body = _mode_champion(ctx, champ)
+    else:
+        body = _mode_knockout(ctx)
+    return shell(config.TOURNAMENT["name"] + " — Live Tracker", "index.html", body, ctx,
+                 page="index.html")
+
+
+# --------------------------------------------------------------------------
+# Stage helpers
+# --------------------------------------------------------------------------
+def _current_round(ctx):
+    """(round_name, [matches]) for the earliest knockout round with an unplayed
+    game — the round the tournament is currently contesting. ("", []) when the
+    group stage is still running or every knockout match is done."""
+    for rd in config.KO_ROUNDS_ALL:
+        ms = [m for m in ctx.sorted_matches() if m.get("round") == rd]
+        if ms and not all(data.has_result(m) for m in ms):
+            return rd, ms
+    return "", []
+
+
+def _next_match_of(round_ms):
+    """The earliest unplayed match of a round (the one to promote), or None."""
+    up = sorted((m for m in round_ms if not data.has_result(m)),
+                key=lambda m: (m.get("date", ""), m.get("time", "")))
+    return up[0] if up else None
+
+
+# --------------------------------------------------------------------------
+# Shared fragments
+# --------------------------------------------------------------------------
+def _hero_progress(ctx):
+    n_played = sum(1 for m in ctx.matches if data.has_result(m))
+    n_total = len(ctx.matches)
+    pct = (n_played / n_total * 100) if n_total else 0
+    return f"""<div class="hero-foot">
+    <div class="hero-prog">
+      <div class="hp-head"><span class="hp-k">TOURNAMENT&nbsp;PROGRESS</span><span class="hp-pct">{round(pct)}<span class="hp-of">%</span></span></div>
+      <div class="tally hero-tally" role="img" aria-label="{n_played} of {n_total} matches played">
+        <span class="tally-fill" data-pct="{pct:.2f}" style="width:{pct:.3f}%"></span>
+        <span class="tally-tick" style="left:100%" aria-hidden="true"></span>
+      </div>
+      <div class="hp-scale"><span>{n_played} of {n_total} matches played</span></div>
+    </div>
+  </div>"""
+
+
+def _hero(ctx, now=""):
+    """The type-led hero. `now` is the optional current-round supporting line
+    (knockout mode); the big headline + progress tally are shared across stages."""
+    return f"""
+<section class="hero" aria-label="Tournament status">
+  <h1 class="hero-title">THE&nbsp;2026<br><span class="ht-big">WORLD&nbsp;CUP</span><br>IS&nbsp;<span class="ht-live">LIVE</span></h1>
+  {now}
+  {_hero_progress(ctx)}
+</section>
+"""
+
+
+def _hero_now(ctx, rd, nxt):
+    """The hero's supporting line: CURRENT ROUND · FIXTURE · KICKOFF, in the
+    established mono style (e.g. QUARTER-FINALS · FRANCE v MOROCCO · THU 13:00 PT)."""
+    by_num = ctx.by_num
+    t1 = bracket.resolve_slot(nxt["team1"], ctx.analyses, by_num)
+    t2 = bracket.resolve_slot(nxt["team2"], ctx.analyses, by_num)
+    ko = kickoff_label(nxt)
+    ko_html = (f'<span class="hn-sep" aria-hidden="true">·</span>'
+               f'<span class="hn-ko">{ko}</span>') if ko else ""
+    return (f'<p class="hero-now">'
+            f'<span class="hn-rd">{E(_round_full(rd))}</span>'
+            f'<span class="hn-sep" aria-hidden="true">·</span>'
+            f'<span class="hn-fix">{_slot_name(t1, "hn-tm")}'
+            f'<span class="hn-v"> v </span>{_slot_name(t2, "hn-tm")}</span>'
+            f'{ko_html}</p>')
+
+
+def _your_teams(ctx, status=False):
+    src = "".join(team_card(ctx, t, rich=True, status=status) for t in ctx.teams)
+    return f"""
+<section id="your-teams-sec" class="your-teams-sec" data-reveal aria-label="Your teams">
+  <div class="sec-head"><h2>Your teams</h2><span class="muted">Pin any team with ★ — next &amp; latest match, lit up everywhere</span></div>
+  <div id="your-teams" class="tcard-grid yt-grid"></div>
+  <div id="team-src" hidden>{src}</div>
+</section>
+"""
+
+
+def _scorebug_section(ctx, rd, round_ms, nxt):
+    """The next/live match promoted to a large scorebug band, with the rest of the
+    current round as a reflowed Pulse ribbon beside/under it."""
+    if nxt is None:
+        return ""
+    n_up = sum(1 for m in round_ms if not data.has_result(m))
+    others = [m for m in sorted(round_ms, key=lambda m: (m.get("date", ""), m.get("time", "")))
+              if m is not nxt]
+    return f"""
+<section class="ko-next" data-reveal aria-label="Next match">
+  <div class="sec-head"><h2>Next up</h2><span class="muted"><span>{E(_round_full(rd))}</span> · <span>{n_up} to play</span></span></div>
+  {scorebug(ctx, nxt)}
+  {round_ribbon(ctx, others)}
+</section>
+"""
+
+
+# --------------------------------------------------------------------------
+# Modes
+# --------------------------------------------------------------------------
+def _mode_knockout(ctx):
+    rd, round_ms = _current_round(ctx)
+    nxt = _next_match_of(round_ms)
+    return (
+        _hero(ctx, now=_hero_now(ctx, rd, nxt) if nxt is not None else "")
+        + _scorebug_section(ctx, rd, round_ms, nxt)
+        + bracket_rail(ctx, rd)
+        + _your_teams(ctx, status=True)
+        + archive_band(ctx)
+    )
+
+
+def _mode_champion(ctx, champ):
+    # Final decided: lead with the champions; the bracket rail shows the completed
+    # final and the rest mirrors knockout mode. Kept deliberately simple — there is
+    # no live scorebug once the tournament is won (nothing is "next"). Not yet
+    # fixture-testable (no completed-final fixture exists).
+    hero = f"""
+<section class="hero hero-champ" aria-label="Champions">
+  <h1 class="hero-title"><span class="hc-flag" aria-hidden="true">{flag(champ)}</span>{E(champ)}<br><span class="ht-live">World champions</span></h1>
+  {_hero_progress(ctx)}
+</section>
+"""
+    rd, _round_ms = _current_round(ctx)  # "" once every match is played
+    return (
+        hero
+        + bracket_rail(ctx, rd or "Final")
+        + _your_teams(ctx, status=True)
+        + archive_band(ctx)
+    )
+
+
+def _mode_groups(ctx):
+    """Group stage running — the original command-center layout, preserved."""
     grid = "".join(group_table(ctx.analyses[g], link_header=True, advance=ctx.advance, knocked=ctx.knocked)
                    for g in sorted(ctx.analyses))
-    src = "".join(team_card(ctx, t, rich=True) for t in ctx.teams)
 
     resolvable = ctx.thirds_resolvable()
     # Best-third allocation race rendered as the Tally device: each team's points
@@ -40,30 +198,11 @@ def page_home(ctx):
                    if resolvable else
                    "Provisional — the eight best third-placed teams are fixed once "
                    "every group finishes. This race updates as groups conclude.")
-    n_played = sum(1 for m in ctx.matches if data.has_result(m))
-    n_total = len(ctx.matches)
-    pct_played = (n_played / n_total * 100) if n_total else 0
 
-    body = f"""
-<section class="hero" aria-label="Tournament status">
-  <h1 class="hero-title">THE&nbsp;2026<br><span class="ht-big">WORLD&nbsp;CUP</span><br>IS&nbsp;<span class="ht-live">LIVE</span></h1>
-  <div class="hero-foot">
-    <div class="hero-prog">
-      <div class="hp-head"><span class="hp-k">TOURNAMENT&nbsp;PROGRESS</span><span class="hp-pct">{round(pct_played)}<span class="hp-of">%</span></span></div>
-      <div class="tally hero-tally" role="img" aria-label="{n_played} of {n_total} matches played">
-        <span class="tally-fill" data-pct="{pct_played:.2f}" style="width:{pct_played:.3f}%"></span>
-        <span class="tally-tick" style="left:100%" aria-hidden="true"></span>
-      </div>
-      <div class="hp-scale"><span>{n_played} of {n_total} matches played</span></div>
-    </div>
-  </div>
-</section>
+    return f"""
+{_hero(ctx)}
 
-<section id="your-teams-sec" class="your-teams-sec" data-reveal aria-label="Your teams">
-  <div class="sec-head"><h2>Your teams</h2><span class="muted">Pin any team with ★ — next &amp; latest match, lit up everywhere</span></div>
-  <div id="your-teams" class="tcard-grid yt-grid"></div>
-  <div id="team-src" hidden>{src}</div>
-</section>
+{_your_teams(ctx)}
 
 {pulse_band(ctx)}
 
@@ -80,8 +219,6 @@ def page_home(ctx):
   <p class="muted dist-note">{thirds_note}</p></div>
 </section>
 """
-    return shell(config.TOURNAMENT["name"] + " — Live Tracker", "index.html", body, ctx,
-                 page="index.html")
 
 
 def _third_in(ctx, r):

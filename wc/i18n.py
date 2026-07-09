@@ -170,6 +170,10 @@ UI = {
     "Best third-placed race": "Disputa pelos melhores terceiros",
     "Race\xa0to\xa08th": "Disputa\xa0pelo\xa08º",
     "Your teams": "Suas seleções",
+    # phase-aware home: knockout-mode section heads + the compact bracket rail
+    "Next up": "A seguir",
+    "The bracket": "A chave",
+    "Full bracket": "Chave completa",
     "Standings": "Classificação",
     "Scenarios": "Cenários",
     "Wins group": "Vence o grupo",
@@ -436,6 +440,9 @@ _RUNTIME = r"""/* World Cup 2026 — pt-BR localisation (generated from wc/i18n.
     // "76/104 played"
     function (s) { var m = s.match(/^(\d+)\/(\d+) played$/);
       return m ? m[1] + "/" + m[2] + " disputados" : null; },
+    // group/round schedule count "4 to play" (group cards + knockout "Next up")
+    function (s) { var m = s.match(/^(\d+) to play$/);
+      return m ? m[1] + " a disputar" : null; },
     // home sub: "latest results, then next kickoffs · 76/104 played"
     function (s) { var m = s.match(/^latest results, then next kickoffs · (\d+)\/(\d+) played$/);
       return m ? "resultados recentes, depois os próximos jogos · " + m[1] + "/" + m[2] + " disputados" : null; },
