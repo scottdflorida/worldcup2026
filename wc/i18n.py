@@ -118,6 +118,8 @@ UI = {
     "THEME": "TEMA",
     "Light": "Claro",
     "Dark": "Escuro",
+    "Toggle dark mode": "Alternar modo escuro",
+    "Today": "Hoje",
 
     # ---- status words / chips ----
     "Group stage": "Fase de grupos",
@@ -502,6 +504,11 @@ _RUNTIME = r"""/* World Cup 2026 — pt-BR localisation (generated from wc/i18n.
   function ord(o){ return ORD[o] || o; }
 
   var RULES = [
+    // "Today — Thu Jul 9" -> "Hoje — Qui 9 Jul" (client tz renderer prefixes
+    // today's kickoff dates; must run before the bare-date rule)
+    function (s) { var m = s.match(/^Today — (.+)$/); if (!m) return null;
+      var d = m[1].match(/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{1,2})$/);
+      return d ? "Hoje — " + WD[d[1]] + " " + d[3] + " " + MON[d[2]] : "Hoje — " + m[1]; },
     // "Fri Jul 3" -> "Sex 3 Jul"
     function (s) { var m = s.match(/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{1,2})$/);
       return m ? WD[m[1]] + " " + m[3] + " " + MON[m[2]] : null; },

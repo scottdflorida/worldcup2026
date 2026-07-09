@@ -150,6 +150,16 @@
   }
   function applyTZ(){
     var tz=effTZ(), label=tzTag(tz);
+    // Today's date string in the effective zone, via the SAME formatter tzParts
+    // uses — string equality is then an exact same-day test.
+    var todayStr='';
+    try{todayStr=new Intl.DateTimeFormat('en-US',{timeZone:tz,weekday:'short',month:'short',day:'numeric'})
+      .format(new Date()).replace(/,/g,'');}catch(e){}
+    function dayText(el,day){                // "Thu Jul 9" -> "Today — Thu Jul 9" + accent
+      var isToday=!!todayStr&&day===todayStr;
+      el.classList.toggle('is-today',isToday);
+      return isToday?('Today — '+day):day;
+    }
     document.querySelectorAll('[data-utc]').forEach(function(el){
       if(el.classList.contains('live-mid'))return;          // currently showing a live score
       var p=tzParts(el.getAttribute('data-utc'),tz); if(!p)return;
@@ -159,9 +169,9 @@
         var ds=new Intl.DateTimeFormat('en-US',{timeZone:tz,month:'short',day:'numeric',year:'numeric'}).format(sd);
         el.textContent=ds+' · '+p.time+' '+label;return;
       }
-      if(fmt==='day'){el.textContent=p.day;return;}
+      if(fmt==='day'){el.textContent=dayText(el,p.day);return;}
       if(fmt==='daytime'){
-        var dy=el.querySelector('.ko-day'); if(dy)dy.textContent=p.day;
+        var dy=el.querySelector('.ko-day'); if(dy)dy.textContent=dayText(dy,p.day);
         var tm=el.querySelector('.ko-time');
         if(tm){var c=(tm.querySelector('.tz')||{}).className||'ko-tz tz';
           tm.innerHTML=p.time+'<span class="'+c+'">'+label+'</span>';}
@@ -297,8 +307,44 @@
     }
     tree.setAttribute('data-links',made);
   }
+  // Home bracket rail: straight DIAGONAL connectors (feeder tie → the tie it
+  // feeds), drawn over the staggered grid. Columns pair positionally — tie i in
+  // column c feeds tie i>>1 in column c+1 (rows are in tree order server-side).
+  function drawRail(){
+    var rail=document.querySelector('.ko-rail.krl-stagger');
+    if(!rail)return;
+    var svg=rail.querySelector('.krl-lines');
+    if(!svg){
+      svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+      svg.setAttribute('class','krl-lines');svg.setAttribute('aria-hidden','true');
+      rail.insertBefore(svg,rail.firstChild);
+    }
+    while(svg.firstChild)svg.removeChild(svg.firstChild);
+    var W=rail.scrollWidth,H=rail.scrollHeight;
+    svg.setAttribute('width',W);svg.setAttribute('height',H);
+    svg.setAttribute('viewBox','0 0 '+W+' '+H);
+    var rb=rail.getBoundingClientRect();
+    function box(el){var r=el.getBoundingClientRect();
+      return {left:r.left-rb.left+rail.scrollLeft,right:r.right-rb.left+rail.scrollLeft,y:r.top-rb.top+r.height/2};}
+    var cols=[].slice.call(rail.querySelectorAll('.krl-col')).map(function(col){
+      return [].slice.call(col.querySelectorAll('.krl-tie:not(.krl-bronze)'));});
+    for(var ci=1;ci<cols.length;ci++){
+      if(!cols[ci].length)continue;
+      for(var i=0;i<cols[ci].length;i++){
+        var child=box(cols[ci][i]);
+        [cols[ci-1][i*2],cols[ci-1][i*2+1]].forEach(function(p){
+          if(!p)return;
+          var pc=box(p);
+          var ln=document.createElementNS('http://www.w3.org/2000/svg','line');
+          ln.setAttribute('x1',pc.right);ln.setAttribute('y1',pc.y);
+          ln.setAttribute('x2',child.left);ln.setAttribute('y2',child.y);
+          svg.appendChild(ln);
+        });
+      }
+    }
+  }
   var rzTimer;
-  function scheduleDraw(){clearTimeout(rzTimer);rzTimer=setTimeout(drawBracket,60);}
+  function scheduleDraw(){clearTimeout(rzTimer);rzTimer=setTimeout(function(){drawBracket();drawRail();},60);}
   // Box heights depend on how many candidate flags wrap, which depends on the
   // emoji metrics — and those can land AFTER our first measure (font/emoji paint),
   // leaving stale positions (overlaps). Re-lay out once fonts are ready and again
@@ -1036,23 +1082,38 @@
     var lab=document.querySelector('#theme-btn [data-theme-label]');
     if(lab)lab.textContent=THEME_LABEL[mode]||'Auto';
   }
+  function effTheme(){                       // what's actually on screen right now
+    var m=themeMode();
+    if(m==='light'||m==='dark')return m;
+    try{return matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}catch(e){return 'light';}
+  }
+  function setTheme(next){
+    try{localStorage.setItem(THEME_KEY,next);}catch(e){}
+    applyTheme(next);
+    scheduleDraw();                          // connector strokes read theme tokens
+  }
   function wireTheme(){
     applyTheme(themeMode());                 // sync label + theme-color (attr already set inline)
-    var btn=document.getElementById('theme-btn'); if(!btn)return;
-    btn.addEventListener('click',function(){
-      var next=THEME_ORDER[(THEME_ORDER.indexOf(themeMode())+1)%THEME_ORDER.length];
-      try{localStorage.setItem(THEME_KEY,next);}catch(e){}
-      applyTheme(next);
+    var btn=document.getElementById('theme-btn');
+    if(btn)btn.addEventListener('click',function(){
+      setTheme(THEME_ORDER[(THEME_ORDER.indexOf(themeMode())+1)%THEME_ORDER.length]);
+    });
+    // Header icon: a quick, explicit flip between light and dark (the footer
+    // control keeps the three-state cycle including AUTO).
+    var ico=document.getElementById('theme-ico');
+    if(ico)ico.addEventListener('click',function(){
+      setTheme(effTheme()==='dark'?'light':'dark');
     });
   }
 
   document.addEventListener('DOMContentLoaded',function(){
     wireTheme();wireTZ();apply();wireReveal();wireLive();wireBracketScroll();wireBracketObserver();
-    wireBracketGhosts();drawBracket();
+    wireBracketGhosts();drawBracket();drawRail();
     landOnActiveColumn();initFantasy();initBetting();wireCalFilter();landOnToday();
   });
   window.addEventListener('load',landOnToday);
   window.addEventListener('load',drawBracket);
+  window.addEventListener('load',drawRail);
   window.addEventListener('resize',scheduleDraw);
 
   // Service worker (PWA): precaches the shell + offline core (home/calendar/

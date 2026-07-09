@@ -1,14 +1,14 @@
 /* World Cup 2026 — service worker (generated from wc/pwa.py; do not edit). */
 'use strict';
-var VERSION = '81e7000c52';
+var VERSION = 'facf3e7d43';
 var CACHE = 'wc26-' + VERSION;
 var PRECACHE = [
   "/",
   "/calendar",
   "/bracket",
-  "/assets/style.css?v=81e7000c52",
-  "/assets/app.js?v=81e7000c52",
-  "/assets/i18n.js?v=81e7000c52",
+  "/assets/style.css?v=facf3e7d43",
+  "/assets/app.js?v=facf3e7d43",
+  "/assets/i18n.js?v=facf3e7d43",
   "/assets/favicon.svg",
   "/assets/TwemojiCountryFlags.woff2"
 ];

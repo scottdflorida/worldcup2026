@@ -791,6 +791,12 @@ def bracket_rail(ctx, current_round):
     # Anchor on the current MAIN round (the bronze match rides with the Final).
     anchor = current_round if current_round in config.KO_ROUNDS else "Final"
     start = next((i for i, (rd, _) in enumerate(main) if rd == anchor), 0)
+    # Tree stagger: each round's ties vertically centred between the two feeders
+    # (space-around slices give exact 1/8-3/8-… centres when columns share one
+    # height), with diagonal connector lines drawn client-side (.krl-lines).
+    # A 16-tie Round-of-32 column would make the tree impractically tall, so
+    # that case keeps the flat stacked layout.
+    stagger = len(main[start][1]) <= 8
     cols = []
     for rd, rows in main[start:]:
         ties = "".join(
@@ -805,16 +811,23 @@ def bracket_rail(ctx, current_round):
         cap = (f'<div class="krl-champ-tm">{team_link(champ, "krl-tm")}</div>')
     else:
         cap = '<div class="krl-champ-tm pending muted">Champion T.B.D.</div>'
+    bronze = next((r for rd, rows in ctx.bracket if rd == "Match for third place"
+                   for r in rows), None)
+    bz = ""
+    if bronze is not None:
+        bz = (f'<div class="krl-tie krl-bronze{" is-done" if bronze["played"] else ""}">'
+              f'<div class="krl-bz-h">Bronze</div>'
+              f'{_rail_side(bronze, "team1")}{_rail_side(bronze, "team2")}</div>')
     cols.append(
         '<div class="krl-col krl-champ">'
         '<div class="krl-h"><img class="krl-trophy" src="assets/trophy.svg" alt="" '
         'width="14" height="14" aria-hidden="true">World Champion</div>'
-        f'{cap}</div>')
+        f'<div class="krl-champ-stack">{cap}{bz}</div></div>')
     return f"""
 <section class="ko-rail-sec" data-reveal aria-label="Bracket">
   <div class="sec-head"><h2>The bracket</h2>
     <a class="sec-link" href="bracket.html">Full bracket <span class="arrow" aria-hidden="true">→</span></a></div>
-  <div class="ko-rail-frame"><div class="ko-rail" data-hscroll>{"".join(cols)}</div></div>
+  <div class="ko-rail-frame"><div class="ko-rail{" krl-stagger" if stagger else ""}" data-hscroll>{"".join(cols)}</div></div>
 </section>
 """
 
@@ -832,7 +845,7 @@ def archive_band(ctx):
         chips = []
         for i, row in enumerate(table[:2], 1):
             chips.append(f'<span class="ga-team">{team_link(row["team"], "ga-tm")}'
-                         f'<span class="ga-pos">{i}</span></span>')
+                         f'<span class="ga-badge">{i}</span></span>')
         third = table[2] if len(table) >= 3 else None
         if third and third["team"] in ctx.advanced:
             chips.append(f'<span class="ga-team ga-third">{team_link(third["team"], "ga-tm")}'

@@ -243,6 +243,7 @@ def shell(title, active, body, ctx, desc=None, page="index.html", crumb=None,
   <div class="head-right">
     <nav class="site-nav" aria-label="Primary">{nav}</nav>
     {i18n.TOGGLE_HTML}
+    <button id="theme-ico" class="theme-ico" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 2.5a7.5 7.5 0 0 1 0 15z" fill="currentColor"/></svg></button>
   </div>
 </header>
 {_breadcrumb(crumb)}
