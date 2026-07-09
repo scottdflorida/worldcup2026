@@ -45,7 +45,7 @@ tests/         golden fixtures for five tournament states + unit tests (see Test
 .github/workflows/
   update.yml   polls the live feed and rebuilds; commits only when results change
   ci.yml       runs the test suite on every push to main and every PR
-wrangler.toml  local Cloudflare config (Pages build output + D1 binding) — see scripts/setup-d1.md
+wrangler.example.toml  template for a local-only wrangler.toml (D1 binding) — see scripts/setup-d1.md
 ```
 
 The bracket and projections are **fully data-driven**: the feed encodes knockout
@@ -146,7 +146,7 @@ scripts/build.py`) is byte-identical to the committed site.
 ## Local backend (betting)
 
 The `/bets` pool needs a Cloudflare D1 database bound as `DB`. See
-[`wrangler.toml`](wrangler.toml) for the local config and
+[`wrangler.example.toml`](wrangler.example.toml) for the local-config template and
 [`scripts/setup-d1.md`](scripts/setup-d1.md) for the one-time setup (create
 the database, apply `schema.sql`, bind it in the Pages project) and for
 running `wrangler pages dev` locally. Details on how the pool itself works —

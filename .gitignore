@@ -16,3 +16,7 @@ wc-*.png
 
 # golden reference trees (local diff aids; the committed truth is golden/*.json)
 tests/golden/*/
+
+# local wrangler config (copy wrangler.example.toml, fill database_id) — a committed
+# wrangler.toml with pages config hijacks Pages Git deploys (config-as-code mode)
+wrangler.toml

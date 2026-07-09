@@ -11,7 +11,15 @@ do it once from your machine.
 npx wrangler d1 create wc26-bets
 ```
 
-This prints a `database_id`. Copy it into `wrangler.toml`:
+This prints a `database_id`. Copy `wrangler.example.toml` to `wrangler.toml`
+(gitignored) and fill it in:
+
+> **Why the example file?** A committed `wrangler.toml` containing
+> `pages_build_output_dir` switches the Pages project to configuration-as-code:
+> Cloudflare then validates bindings from the file on every Git deploy (a
+> placeholder `database_id` fails the whole deployment) and the file's bindings
+> override the dashboard's. Keeping the real file local-only leaves the Git
+> integration deploying from the dashboard config.
 
 ```toml
 [[d1_databases]]
@@ -32,9 +40,9 @@ columns). Safe to re-run — every statement is `CREATE TABLE IF NOT EXISTS` /
 
 ## 3. Bind it in the Pages project
 
-The `[[d1_databases]]` block in `wrangler.toml` is only read by the local CLI
-(`wrangler pages dev`, `wrangler d1 ...`). The deployed Pages project needs
-its own binding, set in the dashboard:
+The `[[d1_databases]]` block in your local `wrangler.toml` is only read by the
+local CLI (`wrangler pages dev`, `wrangler d1 ...`). The deployed Pages project
+needs its own binding, set in the dashboard:
 
 Cloudflare dashboard → **Workers & Pages** → the `worldcup2026` Pages project
 → **Settings → Functions → D1 database bindings** → **Add binding**:
