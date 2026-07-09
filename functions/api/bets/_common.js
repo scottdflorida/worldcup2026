@@ -4,7 +4,11 @@
 export function json(obj, status, headers) {
   return new Response(JSON.stringify(obj), {
     status: status || 200,
-    headers: Object.assign({ "content-type": "application/json; charset=utf-8" }, headers || {}),
+    // no-store: these are per-player, balance-bearing replies — never let a CDN or
+    // browser cache serve one player's pool state (or a stale balance) to anyone.
+    headers: Object.assign(
+      { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" },
+      headers || {}),
   });
 }
 
@@ -51,20 +55,47 @@ export async function getPlayer(env, request) {
 
 // Settle every still-open bet whose match now has a result. Stake was already
 // taken at placement, so a win just credits stake*odds back; a loss does nothing.
+//
+// IDEMPOTENT + ATOMIC. This runs on EVERY request from EVERY pool member, so
+// concurrent callers routinely try to settle the same bets at once. The fix is
+// per-decided-match, three statements inside ONE db.batch() (an atomic, all-or-
+// nothing transaction):
+//   1. credit each winner's balance by the SUM of their winning bets' payouts,
+//      read from bets that are STILL 'open' at this point in the batch;
+//   2. flip those winning bets 'open' -> 'won' (guarded on status='open');
+//   3. flip the losing bets 'open' -> 'lost'.
+// Ordering is load-bearing: statement 1 must read the payouts BEFORE statement 2
+// changes their status. Because all three commit together, there is no window in
+// which a winner is credited-but-unclaimed or claimed-but-uncredited — a crash
+// rolls the whole transaction back. And it is idempotent: a second (concurrent or
+// later) settle finds the bets already 'won', so statement 1 sums 0 open payouts
+// and updates 0 players, and statement 2 updates 0 rows. Winners are paid exactly
+// once. SQLite serializes write transactions, so two racing batches can't
+// interleave: one commits fully, the other then sees no open bets and no-ops.
+// The credit uses the same ROUND(stake*odds,2) expression stored as `payout`, so
+// balance and payout can never drift apart.
 export async function settleAll(env, data) {
   const decided = {};
   (data.matches || []).forEach((m) => { if (m.decided) decided[m.num] = m.winner; });
   if (!Object.keys(decided).length) return;
-  const open = (await env.DB.prepare("SELECT * FROM bets WHERE status='open'").all()).results || [];
+  const open = (await env.DB.prepare("SELECT DISTINCT match_num FROM bets WHERE status='open'").all()).results || [];
+  const todo = open.map((r) => r.match_num).filter((n) => n in decided);
+  if (!todo.length) return;
   const stmts = [];
-  for (const b of open) {
-    if (!(b.match_num in decided)) continue;
-    const won = decided[b.match_num] === b.pick;
-    const payout = won ? round2(b.stake * b.odds) : 0;
-    stmts.push(env.DB.prepare("UPDATE bets SET status=?, payout=? WHERE id=?")
-      .bind(won ? "won" : "lost", payout, b.id));
-    if (won) stmts.push(env.DB.prepare("UPDATE players SET balance=balance+? WHERE id=?")
-      .bind(payout, b.player_id));
+  for (const num of todo) {
+    const winner = decided[num];
+    stmts.push(env.DB.prepare(
+      "UPDATE players SET balance = balance + (" +
+      "SELECT COALESCE(SUM(ROUND(stake*odds,2)),0) FROM bets " +
+      "WHERE player_id=players.id AND status='open' AND match_num=? AND pick=?) " +
+      "WHERE id IN (SELECT player_id FROM bets WHERE status='open' AND match_num=? AND pick=?)")
+      .bind(num, winner, num, winner));
+    stmts.push(env.DB.prepare(
+      "UPDATE bets SET status='won', payout=ROUND(stake*odds,2) WHERE status='open' AND match_num=? AND pick=?")
+      .bind(num, winner));
+    stmts.push(env.DB.prepare(
+      "UPDATE bets SET status='lost', payout=0 WHERE status='open' AND match_num=? AND pick<>?")
+      .bind(num, winner));
   }
   if (stmts.length) await env.DB.batch(stmts);
 }

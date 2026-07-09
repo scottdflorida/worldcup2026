@@ -31,11 +31,30 @@ export async function onRequestPost({ request, env }) {
 
   const odds = pick === m.team1 ? m.odds1 : m.odds2;
   const now = new Date().toISOString();
-  await env.DB.batch([
-    env.DB.prepare("UPDATE players SET balance=balance-? WHERE id=?").bind(stake, me.id),
-    env.DB.prepare(
+
+  // Guarded debit: subtract the stake ONLY if the balance still covers it, in a
+  // single conditional write. The read-check above is a fast early reject; THIS is
+  // the authoritative one — two concurrent places can no longer both pass a stale
+  // read and overdraw, because SQLite serializes the writes and the second finds
+  // balance too low and claims 0 rows.
+  const debit = await env.DB.prepare(
+    "UPDATE players SET balance=balance-? WHERE id=? AND balance>=?-1e-9")
+    .bind(stake, me.id, stake).run();
+  if (!debit.meta || debit.meta.changes !== 1) return json({ ok: false, error: "insufficient" });
+
+  // Debit-first-then-insert (not one batch): a batch can't skip the insert when
+  // the guarded debit claims 0 rows, which would orphan a bet with no debit. If the
+  // insert fails after a successful debit, compensate with a refund so the stake is
+  // never stranded on a phantom debit.
+  try {
+    await env.DB.prepare(
       "INSERT INTO bets(player_id,match_num,pick,stake,odds,status,payout,placed_at) VALUES(?,?,?,?,?,'open',0,?)")
-      .bind(me.id, matchNum, pick, stake, odds, now),
-  ]);
-  return json({ ok: true, balance: round2(me.balance - stake) });
+      .bind(me.id, matchNum, pick, stake, odds, now).run();
+  } catch (e) {
+    await env.DB.prepare("UPDATE players SET balance=balance+? WHERE id=?").bind(stake, me.id).run();
+    return json({ ok: false, error: "place_failed" });
+  }
+
+  const fresh = await env.DB.prepare("SELECT balance FROM players WHERE id=?").bind(me.id).first();
+  return json({ ok: true, balance: round2(fresh ? fresh.balance : me.balance - stake) });
 }
