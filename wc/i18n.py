@@ -222,6 +222,10 @@ UI = {
     "Upcoming matches": "Próximos jogos",
     "Completed games": "Jogos encerrados",
     "Match for third place": "Disputa de terceiro lugar",
+    # third-place / bronze final: stage label, fantasy pick label, short round tag
+    "Third-place match": "Disputa de terceiro lugar",
+    "Third place": "Terceiro lugar",
+    "3rd": "3º",
 
     # ---- group pages ----
     "live table · advance odds as a tally": "tabela ao vivo · chances de avanço em barras",

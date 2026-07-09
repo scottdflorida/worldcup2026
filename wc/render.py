@@ -120,10 +120,13 @@ class Context:
     def stage(self):
         if not all(i["complete"] for i in self.analyses.values()):
             return "Group stage"
-        for rd in config.KO_ROUNDS:
+        # Walk the full knockout order (bronze final sits between the semis and
+        # the Final) so the tournament reports "Third-place match" on Jul 16–18
+        # rather than jumping straight to "Final".
+        for rd in config.KO_ROUNDS_ALL:
             ms = [m for m in self.matches if m.get("round") == rd]
             if ms and not all(data.has_result(m) for m in ms):
-                return rd
+                return "Third-place match" if rd == "Match for third place" else rd
         return "Final"
 
     def thirds_resolvable(self):

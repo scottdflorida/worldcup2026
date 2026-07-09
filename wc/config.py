@@ -77,5 +77,6 @@ KO_SHORT = {
     "Round of 16": "R16",
     "Quarter-final": "QF",
     "Semi-final": "SF",
+    "Match for third place": "3rd",
     "Final": "F",
 }

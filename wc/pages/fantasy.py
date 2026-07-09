@@ -43,6 +43,23 @@ def fantasy_data(ctx):
             matches[str(num)] = entry
             (order["F"].append(num) if side == "F"
              else order[side].setdefault(rkey, []).append(num))
+    # Third-place (bronze) match: pickable like any other tie. app.js's feasible()
+    # only reads an `entrants` pool for a match tagged round "R32", so the bronze
+    # node borrows that tag and is handed the two semi-final LOSERS (resolve_slot
+    # on its L-tokens -> concrete loser, or the candidate pool while the semis are
+    # open). It's rendered as a standalone box beside the Final, never in the tree.
+    tp = next((mm for mm in ctx.matches if mm.get("round") == "Match for third place"), None)
+    if tp is not None:
+        ents = []
+        for slot in (tp["team1"], tp["team2"]):
+            r = bracket.resolve_slot(slot, ctx.analyses, by_num)
+            ents.append({"team": r["team"]} if r["team"] else {"pool": sorted(r["candidates"])})
+        matches[str(tp["num"])] = {
+            "round": "R32", "side": "F", "third": True,
+            "winner": bracket.match_winner(tp) if data.has_result(tp) else None,
+            "entrants": ents,
+        }
+        order["third"] = tp["num"]
     teams = set()
     for e in matches.values():
         if e.get("winner"):
@@ -119,7 +136,13 @@ def page_fantasy(ctx):
             + "".join(_fb_col(rk, od["L"].get(rk, []), m) for rk in ("R32", "R16", "QF", "SF")))
     right = ("".join(_fb_col(rk, od["R"].get(rk, []), m) for rk in ("SF", "QF", "R16", "R32"))
              + _fb_entrants_col(rr32, m))
-    final = _fb_col("F", od["F"], m)
+    final_inner = "".join(_fb_box(n, m[str(n)]) for n in od["F"])
+    third_num = od.get("third")
+    if third_num is not None:
+        final_inner += ('<div class="fb-third">'
+                        '<span class="fb-third-k">Third place</span>'
+                        + _fb_box(third_num, m[str(third_num)]) + '</div>')
+    final = f'<div class="fb-col fb-final-col" data-round="F">{final_inner}</div>'
     body = f"""
 <section class="fb-intro" aria-label="Fantasy bracket">
   <div class="fb-head"><h1>Fantasy bracket</h1>

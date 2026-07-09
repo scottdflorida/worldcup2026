@@ -5,7 +5,7 @@ from .. import config, data
 from ..components import side_result, team_link, wl_badge
 from ..flags import flag
 from ..shell import shell
-from ..times import E, kickoff_label
+from ..times import E, _epoch, kickoff_label
 
 
 # (short label, full round name) per main knockout round, straight from config.
@@ -71,8 +71,56 @@ def _bracket_side(res):
     return f'<span class="{cls}" data-n="{len(cands)}">{chips}</span>'
 
 
+def _bronze_side(res):
+    """Compact bronze-match side: the resolved semi-final loser, its (≤2) candidate
+    losers as chips, or a terse placeholder while the semis are still deep in
+    candidates — keeps the mini-card small on the plinth."""
+    if res["team"]:
+        return team_link(res["team"], "bteam")
+    cands = sorted(res.get("candidates") or [])
+    if 1 <= len(cands) <= 2:
+        return "".join(team_link(c, "bcand") for c in cands)
+    return '<span class="bslot muted">T.B.D.</span>'
+
+
+def _bronze_card(r):
+    """The third-place (bronze) match as a compact card seated beneath the champion
+    plinth. Carries the shared data-live / data-ts / data-team hooks so the
+    generalised [data-live] poller lights it up once both semi-final losers are
+    known (its two sides are L-token candidates until the semis decide)."""
+    t1, t2 = r["team1"], r["team2"]
+    played = r["played"]
+    code1 = side_result(played, t1["team"], r["winner"])
+    code2 = side_result(played, t2["team"], r["winner"])
+    s1 = (f'<span class="cpb-side{" won" if code1 == "w" else ""}">'
+          f'{_bronze_side(t1)}{wl_badge(code1)}</span>')
+    s2 = (f'<span class="cpb-side b{" won" if code2 == "w" else ""}">'
+          f'{wl_badge(code2)}{_bronze_side(t2)}</span>')
+    if played:
+        g1, g2 = data.final_score({"score": r["score"]})
+        mid = (f'<span class="cpb-mid" data-live-mid>'
+               f'<b class="sg{" win" if code1 == "w" else ""}">{g1}</b>'
+               f'<span class="sdash">–</span>'
+               f'<b class="sg{" win" if code2 == "w" else ""}">{g2}</b></span>')
+    else:
+        mid = '<span class="cpb-mid vs" data-live-mid>v</span>'
+    when = kickoff_label(r) or '<span class="ko"><span class="ko-day">TBD</span></span>'
+    live = bool(t1["team"] and t2["team"]) and not played
+    live_attr = f' data-live data-date="{E(r.get("date",""))}"' if live else ""
+    tag = '<span class="cpb-tag" data-live-tag hidden></span>' if live else ""
+    return (
+        f'<div class="cp-bronze{" is-done" if played else ""}" data-mnum="{r["num"]}" '
+        f'data-ts="{_epoch(r)}"{live_attr} aria-label="Third-place match">'
+        f'<div class="cpb-k">BRONZE{tag}</div>'
+        f'<div class="cpb-when">{when}</div>'
+        f'<div class="cpb-row">{s1}{mid}{s2}</div></div>'
+    )
+
+
 def page_bracket(ctx):
     rounds = [(rd, rows) for rd, rows in ctx.bracket if rd != "Match for third place"]
+    bronze_row = next((rows[0] for rd, rows in ctx.bracket
+                       if rd == "Match for third place" and rows), None)
     n_round = len(rounds)
     cols = []
     for ci, (rd, rows) in enumerate(rounds):
@@ -87,11 +135,12 @@ def page_bracket(ctx):
                          f'<span class="nm">{E(champ_team)}</span></div>')
             else:
                 champ = '<div class="champ-name pending muted">Champion T.B.D.</div>'
+            bronze = _bronze_card(bronze_row) if bronze_row else ""
             plinth = (
                 '<div class="champion-plinth">'
                 '<img class="cp-trophy" src="assets/trophy.svg" alt="" width="40" height="40" aria-hidden="true">'
                 '<div class="cp-lbl">World Champion</div>'
-                f'{champ}</div>'
+                f'{champ}{bronze}</div>'
             )
             cols.append(
                 f'<div class="kr-col kr-final">'
@@ -106,7 +155,10 @@ def page_bracket(ctx):
             )
 
     stage = ctx.stage()
-    active = next((i for i, (_, key) in enumerate(_BRACKET_RAIL) if key == stage), 0)
+    # The bronze final isn't a rail round; while it's the live stage keep the rail
+    # anchored on the Final (the last column) rather than falling back to R32.
+    rail_stage = "Final" if stage == "Third-place match" else stage
+    active = next((i for i, (_, key) in enumerate(_BRACKET_RAIL) if key == rail_stage), 0)
     rail_items = "".join(
         f'<span class="brn-item{" on" if i == active else ""}" data-rd="{i}">{E(short)}</span>'
         for i, (short, _) in enumerate(_BRACKET_RAIL))

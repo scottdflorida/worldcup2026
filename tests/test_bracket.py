@@ -148,5 +148,38 @@ class ResolveConcreteNameTest(unittest.TestCase):
         self.assertEqual(r["candidates"], {"Brazil"})
 
 
+class SettlementGuardTest(unittest.TestCase):
+    """The betting settlement oracle must never call a knockout tie decided while
+    its winner is still unknown (level score, penalties pending) — otherwise the
+    backend would settle every bet against a null winner."""
+
+    def test_unplayed_is_not_decided(self):
+        from wc.pages.betting import match_settlement
+        self.assertEqual(match_settlement({"team1": "A", "team2": "B", "score": {}}),
+                         (False, None))
+
+    def test_regulation_result_settles(self):
+        from wc.pages.betting import match_settlement
+        self.assertEqual(match_settlement(played(101, "Spain", "Japan", ft=[2, 1])),
+                         (True, "Spain"))
+
+    def test_level_after_ninety_without_pens_does_not_settle(self):
+        from wc.pages.betting import match_settlement
+        # A knockout drawn in regulation with no shootout in the feed yet.
+        self.assertEqual(match_settlement(played(101, "Spain", "Japan", ft=[1, 1])),
+                         (False, None))
+
+    def test_level_after_extra_time_without_pens_does_not_settle(self):
+        from wc.pages.betting import match_settlement
+        # ft present, ET still level, penalties not recorded -> winner unknown.
+        self.assertEqual(match_settlement(played(101, "Spain", "Japan", ft=[1, 1], et=[2, 2])),
+                         (False, None))
+
+    def test_shootout_resolves_and_settles(self):
+        from wc.pages.betting import match_settlement
+        self.assertEqual(match_settlement(played(101, "Spain", "Japan", ft=[1, 1], et=[2, 2], p=[4, 3])),
+                         (True, "Spain"))
+
+
 if __name__ == "__main__":
     unittest.main()

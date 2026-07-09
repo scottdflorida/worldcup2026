@@ -30,6 +30,19 @@ def _odds_pair(ra, rb):
             round(max(1.05, (1.0 / (1.0 - pa)) * 0.93), 2))
 
 
+def match_settlement(m):
+    """(decided, winner) for a knockout match, with the settlement-oracle guard.
+
+    A knockout tie that finished level but has no penalty result in the feed yet
+    (winner still unknown) must NOT settle: we emit decided=False so the backend
+    never resolves bets against a null winner while the shootout is pending. A bet
+    only settles once a concrete winner exists (regulation, extra time or pens)."""
+    if not data.has_result(m):
+        return False, None
+    winner = bracket.match_winner(m)
+    return (winner is not None), winner
+
+
 def betting_data(ctx):
     """Every knockout match whose two sides are known: the matchup, model odds,
     kickoff, and result. The Pages Functions read this to list bettable games,
@@ -39,7 +52,7 @@ def betting_data(ctx):
     cache = odds_api.load_cache()      # public market odds, when available
     out = []
     for m in ctx.matches:
-        if m.get("round") not in config.KO_ROUNDS:
+        if m.get("round") not in config.KO_ROUNDS_ALL:
             continue
         t1 = bracket.resolve_slot(m["team1"], ctx.analyses, by_num)
         t2 = bracket.resolve_slot(m["team2"], ctx.analyses, by_num)
@@ -51,11 +64,12 @@ def betting_data(ctx):
         else:
             o1, o2 = _odds_pair(ratings.get(t1["team"], 3), ratings.get(t2["team"], 3))
             src = "model"
+        decided, winner = match_settlement(m)
         out.append({
             "num": m["num"], "round": _FB_RND.get(m.get("round"), m.get("round")),
             "team1": t1["team"], "team2": t2["team"], "odds1": o1, "odds2": o2,
-            "oddsSrc": src, "kickoff": _utc_iso(m), "decided": data.has_result(m),
-            "winner": bracket.match_winner(m) if data.has_result(m) else None,
+            "oddsSrc": src, "kickoff": _utc_iso(m), "decided": decided,
+            "winner": winner,
         })
     teams = sorted({x for m in out for x in (m["team1"], m["team2"])})
     return {"matches": out, "flags": {t: flag(t) for t in teams},
