@@ -240,8 +240,11 @@ def _team_hero(team, proj, g, pr, sec, kicker, status_detail, tone):
     """The status-toned team hero (rebuilt in Phase 0) — kept intact here."""
     tone_cls = f" {tone}" if tone else ""
     status_line = f'<p class="th-status">{status_detail}</p>' if status_detail else ""
+    # Dark national colors (USA navy…) vanish on the ink-block hero; --haccent is
+    # the same hue lifted until it clears the ground, --on-haccent its text color.
+    ha, on_ha = util.hero_accent(pr)
     return f"""
-<section class="team-hero{tone_cls}" data-team="{E(team)}" style="--accent:{pr};--accent2:{sec}">
+<section class="team-hero{tone_cls}" data-team="{E(team)}" style="--accent:{pr};--accent2:{sec};--haccent:{ha};--on-haccent:{on_ha}">
   <div class="th-inner">
     <div class="th-flag" aria-hidden="true">{flag(team)}</div>
     <div class="th-main">

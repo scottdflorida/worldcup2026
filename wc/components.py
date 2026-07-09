@@ -842,14 +842,21 @@ def archive_band(ctx):
         info = ctx.analyses[g]
         letter = info["group"].split()[-1]
         table = info["table"]
+        # All four finishers, medal-badged by what the finish EARNED: gold/silver
+        # for the automatic spots, bronze for a best-third that advanced. Teams
+        # whose finish sent them home get an empty (invisible) badge slot so the
+        # flags stay column-aligned.
+        _MEDAL = {1: ("m-gold", "1st"), 2: ("m-silver", "2nd"), 3: ("m-bronze", "3rd")}
         chips = []
-        for i, row in enumerate(table[:2], 1):
-            chips.append(f'<span class="ga-team">{team_link(row["team"], "ga-tm")}'
-                         f'<span class="ga-badge">{i}</span></span>')
-        third = table[2] if len(table) >= 3 else None
-        if third and third["team"] in ctx.advanced:
-            chips.append(f'<span class="ga-team ga-third">{team_link(third["team"], "ga-tm")}'
-                         f'<span class="ga-badge">3rd</span></span>')
+        for i, row in enumerate(table[:4], 1):
+            advanced = row["team"] in ctx.advanced
+            if advanced and i in _MEDAL:
+                mcls, mtxt = _MEDAL[i]
+                badge = f'<span class="ga-badge {mcls}">{mtxt}</span>'
+            else:
+                badge = '<span class="ga-badge ga-none" aria-hidden="true">3rd</span>'
+            chips.append(f'<span class="ga-team{"" if advanced else " ga-out"}">'
+                         f'{badge}{team_link(row["team"], "ga-tm")}</span>')
         href = f"group-{letter.lower()}.html"
         rows.append(
             f'<div class="ga-row">'

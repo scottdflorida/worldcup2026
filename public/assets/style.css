@@ -392,6 +392,9 @@ section:first-of-type{margin-top:var(--s4)}
 /* ============ TEAM LINKS / CHIPS ================================== */
 .team,.cand,.bteam{display:inline-flex;align-items:center;gap:6px;font-weight:700;padding:1px 4px;transition:background .12s,color .12s}
 .team .fl,.cand .fl,.bteam .fl{font-size:1.08em;line-height:1}
+/* Every server-rendered team link carries data-team: one rule gives all of them
+   a uniform flag+name gap (individual parents' gap rules are superseded). */
+a[data-team]{display:inline-flex;align-items:center;gap:5px;min-width:0}
 .team:hover,.cand:hover,.bteam:hover,.krl-tm:hover,.ga-tm:hover,.cal-tm:hover,.pz-team:hover,.sb-team:hover,.bcand:hover,
 .team:focus-visible,.cand:focus-visible,.bteam:focus-visible,.krl-tm:focus-visible,.ga-tm:focus-visible,.cal-tm:focus-visible,.pz-team:focus-visible,.sb-team:focus-visible{
   background:var(--ink);color:var(--paper);box-shadow:0 0 0 2px var(--ink)}
@@ -551,16 +554,16 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 
 /* ============ TEAM HERO (per-team accent block) ================== */
 .team-hero{position:relative;overflow:hidden;color:var(--on-ink);background:var(--ink-block);border:2px solid var(--ink)}
-.team-hero::before{content:"";position:absolute;left:0;top:0;bottom:0;width:14px;background:var(--accent)}
+.team-hero::before{content:"";position:absolute;left:0;top:0;bottom:0;width:14px;background:var(--haccent,var(--accent))}
 .th-inner{position:relative;z-index:1;display:flex;align-items:center;gap:26px;
   padding:clamp(24px,4vw,38px) clamp(24px,4vw,40px) clamp(24px,4vw,38px) clamp(34px,5vw,54px);flex-wrap:wrap}
 .th-flag{font-size:4.4rem;line-height:1}
 .th-main{flex:1;min-width:220px}
-.th-eyebrow{font-size:.66rem;letter-spacing:.18em;color:var(--accent);margin-bottom:8px}
+.th-eyebrow{font-size:.66rem;letter-spacing:.18em;color:var(--haccent,var(--accent));margin-bottom:8px}
 .team-hero h1{margin:0;font-size:var(--t-3xl);color:var(--on-ink);letter-spacing:-.03em;line-height:.92}
 .th-line{margin:10px 0;color:rgba(244,242,236,.82);font-family:var(--mono);font-size:.82rem;text-transform:uppercase;letter-spacing:.04em}
-.th-grp{box-shadow:inset 0 -2px 0 var(--accent);font-weight:800}
-.th-grp:hover{color:var(--accent)}
+.th-grp{box-shadow:inset 0 -2px 0 var(--haccent,var(--accent));font-weight:800}
+.th-grp:hover{color:var(--haccent,var(--accent))}
 .th-outlook{display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap}
 .th-badge{font-size:.625rem;padding:5px 11px;background:transparent;color:var(--on-ink);border-color:rgba(244,242,236,.4)}
 .th-badge.win{background:var(--accent);color:var(--ink);border-color:var(--accent)}
@@ -568,7 +571,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .th-watch{position:relative;z-index:1}
 .th-watch .wl{background:transparent;border-color:rgba(244,242,236,.5);color:var(--on-ink)}
 .th-watch .wl:hover{background:rgba(244,242,236,.12)}
-.th-watch .wl.on{background:var(--accent);color:var(--ink);border-color:var(--accent)}
+.th-watch .wl.on{background:var(--haccent,var(--accent));color:var(--on-haccent,var(--ink));border-color:var(--haccent,var(--accent))}
 /* Live status line — leads the hero (round + opponent + kickoff, or the losing
    scoreline once a team is out). The group·place·pts line drops to secondary. */
 .th-status{margin:9px 0 6px;font-family:var(--mono);font-size:.84rem;line-height:1.5;
@@ -933,8 +936,9 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   font-size:.625rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
 .xlink .xl-to{color:var(--ink2)}
 .xlink .arrow{color:var(--line2);transition:transform .15s,color .15s}
-.xlink:hover{color:var(--ink)}
-.xlink:hover .xl-to,.xlink:hover .arrow{color:var(--ink)}
+.xlink{padding:3px 7px;margin:-3px -7px}
+.xlink:hover,.xlink:focus-visible{background:var(--ink);color:var(--paper)}
+.xlink:hover .xl-to,.xlink:hover .arrow,.xlink:focus-visible .xl-to,.xlink:focus-visible .arrow{color:var(--paper)}
 .xlink:hover .arrow{transform:translateX(3px)}
 
 /* Betting pool ----------------------------------------------------- */
@@ -1206,17 +1210,25 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   font-weight:800;font-size:1.2rem;background:var(--ink-block);color:var(--on-ink)}
 .ga-letter:hover{background:var(--vermilion);color:var(--on-accent)}
 .ga-teams{display:flex;flex-direction:column;align-items:flex-start;gap:5px;flex:1;min-width:0}
-.ga-team{display:inline-flex;align-items:center;gap:5px;min-width:0}
-.ga-team .ga-tm{font-weight:700;min-width:0;padding:0}
+.ga-team{display:inline-flex;align-items:center;gap:8px;min-width:0}
+.ga-team .ga-tm{font-weight:700;min-width:0;padding:0;display:inline-flex;align-items:center;gap:6px}
 .ga-team .ga-tm .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px}
-.ga-badge{font-family:var(--mono);font-size:.625rem;font-weight:800;letter-spacing:.06em;color:var(--ink);
-  border:1px solid var(--line2);padding:1px 4px;text-transform:uppercase;white-space:nowrap;flex:none;min-width:26px;text-align:center}
+.ga-badge{font-family:var(--mono);font-size:.625rem;font-weight:800;letter-spacing:.06em;
+  padding:1px 4px;text-transform:uppercase;white-space:nowrap;flex:none;min-width:30px;text-align:center;
+  border:1px solid rgba(0,0,0,.35);color:#171512}
+/* medal fills: fixed mid-tone metals, dark text — legible on both themes */
+.ga-badge.m-gold{background:#E3B23C}
+.ga-badge.m-silver{background:#C9CDD2}
+.ga-badge.m-bronze{background:#C98F52}
+.ga-badge.ga-none{visibility:hidden}
+.ga-team.ga-out .ga-tm{color:var(--muted)}
+.ga-team.ga-out .ga-tm .nm{font-weight:600}
 .is-today{color:var(--accent-text) !important;font-weight:800}
 .ga-link{flex:0 0 auto;margin-left:auto;color:var(--vermilion);font-weight:800}
 .ga-link .arrow{display:inline-block;transition:transform .15s}
-.theme-ico{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;flex:none;
-  background:none;border:1px solid var(--line2);color:var(--ink);cursor:pointer;margin-left:8px}
-.theme-ico:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.theme-ico{display:inline-flex;align-items:center;justify-content:center;align-self:stretch;flex:none;
+  padding:0 13px;background:none;border:0;border-left:2px solid var(--ink);color:var(--ink);cursor:pointer}
+.theme-ico:hover{background:var(--ink-block);color:var(--on-ink)}
 .theme-ico:focus-visible{outline:2px solid var(--vermilion);outline-offset:2px}
 .ga-link:hover .arrow{transform:translateX(3px)}
 

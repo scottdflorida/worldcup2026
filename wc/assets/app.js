@@ -771,16 +771,16 @@
         var src=SRC[m.oddsSrc]?'<span class="bet-src">'+SRC[m.oddsSrc]+'</span>':'';
         return '<div class="bet-game"><div class="bet-g-rd">'+he(m.round)+when+src+'</div>'+
           '<div class="bet-g-row">'+side(m.team1,m.odds1)+side(m.team2,m.odds2)+'</div></div>';
-      }).join(''):'<p class="muted">No matches are open for betting right now — check back when the next ties are set.</p>';
+      }).join(''):'<p class="muted">No matches are open for betting right now — check back when the next matches are set.</p>';
       return '<div class="bet-card bet-board"><h2>Odds board</h2>'+
-        '<p class="bet-board-sub muted">Chance to win each tie</p>'+rows+'</div>';
+        '<p class="bet-board-sub muted">Chance to win each match</p>'+rows+'</div>';
     }
     function howItWorks(){
       var items=['Play money — join a pool and everyone starts with $100.',
-        'Bet any amount on who wins each knockout tie.',
+        'Bet any amount on who wins each knockout match.',
         'Odds are locked in the moment you place a bet.',
         'Bets settle automatically at full time.',
-        'You can\'t back both sides of the same tie.',
+        'You can\'t back both sides of the same match.',
         'Reach $0 and you\'re out.'];
       return '<div class="bet-card bet-how"><h2>How it works</h2><ul class="bet-how-list">'+
         items.map(function(t){return '<li>'+t+'</li>';}).join('')+'</ul></div>';
@@ -868,7 +868,7 @@
         return '<div class="bet-game"><div class="bet-g-rd">'+he(m.round)+when+'</div><div class="bet-g-row">'+
           pickBtn(m.team1,m.odds1)+pickBtn(m.team2,m.odds2)+'</div>'+
           '<div class="bet-g-links">'+detail(m.team1)+detail(m.team2)+'</div>'+block+'</div>';
-      }).join(''):'<p class="muted">No matches are open for betting right now — check back when the next ties are set.</p>';
+      }).join(''):'<p class="muted">No matches are open for betting right now — check back when the next matches are set.</p>';
       // closed + in-play matches this round — dimmed, not selectable, everyone's bets
       var RORD={R32:0,R16:1,QF:2,SF:3,F:4};
       var curRound=openM.length?openM[0].round:(function(){

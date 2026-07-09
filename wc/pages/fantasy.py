@@ -159,7 +159,7 @@ def page_fantasy(ctx):
 <section class="fb-intro" aria-label="Fantasy bracket">
   <div class="fb-head"><h1>Fantasy bracket</h1>
     <button id="fb-reset" class="fb-reset" type="button">Reset</button></div>
-  <p class="muted">Tap to pick a winner in every undecided tie — settled results are locked. Saved on this device.</p>
+  <p class="muted">Tap to pick a winner in every undecided match-up — settled results are locked. Saved on this device.</p>
   {betting.cross_links("fantasy")}
 </section>
 <div class="fb-wrap" aria-label="Knockout bracket">
@@ -184,5 +184,5 @@ def page_fantasy(ctx):
 """
     return shell("Fantasy Bracket — World Cup 2026", "fantasy.html", body, ctx,
                  desc="Fill in your own 2026 World Cup knockout bracket — a compact, flags-only "
-                      "picker where every undecided tie is yours to call.",
+                      "picker where every undecided match-up is yours to call.",
                  page="fantasy.html")

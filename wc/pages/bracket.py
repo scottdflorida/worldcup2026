@@ -194,7 +194,7 @@ def page_bracket(ctx):
     if shown_srcs:
         odds_legend = (
             '<p class="odds-legend muted" aria-label="Odds key">'
-            '<span class="ol-t">Chance to win each tie</span>'
+            '<span class="ol-t">Chance to win each match</span>'
             '<span class="ol-sep" aria-hidden="true">·</span>'
             f'<span class="ol-src">{E(_odds_src_phrase(shown_srcs))}</span></p>')
 
