@@ -1,0 +1,24 @@
+name: CI
+
+# Runs the test suite on every push to main and every pull request. Stdlib
+# only — no pip install — matching the project's zero-dependency story.
+# (Separate from .github/workflows/update.yml, which refreshes data/rebuilds
+# the site and does need the optional ANTHROPIC_API_KEY / ODDS_API_KEY secrets.)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run tests
+        run: python3 -m unittest discover -s tests -v

@@ -13,3 +13,6 @@ wc-*.png
 
 # wrangler local dev
 .wrangler/
+
+# golden reference trees (local diff aids; the committed truth is golden/*.json)
+tests/golden/*/

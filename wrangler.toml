@@ -1,0 +1,18 @@
+# Cloudflare Pages config for worldcup2026 (worldcup.sflorida.studio).
+#
+# The actual deploy path is the Pages *Git integration* — Cloudflare builds
+# and publishes on every push to main, no `wrangler pages deploy` involved.
+# This file exists so the infra is reproducible and inspectable, and so
+# `wrangler pages dev` / `wrangler d1 ...` work the same locally as they do
+# against the real project. See scripts/setup-d1.md for one-time D1 setup.
+
+name = "worldcup2026"
+pages_build_output_dir = "public"
+compatibility_date = "2026-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "wc26-bets"
+# Fill in after `wrangler d1 create wc26-bets` (see scripts/setup-d1.md), or
+# copy it from the Cloudflare dashboard → Workers & Pages → D1 → wc26-bets.
+database_id = "<fill-in-from-dashboard-or-wrangler-d1-create>"
