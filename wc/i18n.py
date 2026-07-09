@@ -13,9 +13,8 @@ Single source of truth, per the build contract: edit the maps here, never the
 generated ``assets/i18n.js``.
 """
 import json
-import os
 
-DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
+from . import config
 
 # --------------------------------------------------------------------------
 # Country / national-team names.  Used both as standalone dictionary entries
@@ -310,8 +309,7 @@ UI = {
 }
 
 
-def _load_json(name):
-    path = os.path.join(DATA_DIR, name)
+def _load_json(path):
     try:
         with open(path, encoding="utf-8") as fh:
             return json.load(fh)
@@ -326,8 +324,8 @@ def _blurbs_pt():
     team, and only emits a translation whose fingerprint still matches the live
     English blurb — so a blurb regenerated since its last translation falls back
     to English instead of showing a stale pt version."""
-    en = _load_json("blurbs.json")
-    pt = _load_json("blurbs.pt.json")
+    en = _load_json(config.BLURBS_PATH)
+    pt = _load_json(config.BLURBS_PT_PATH)
     out = {}
     for team, e in en.items():
         p = pt.get(team)

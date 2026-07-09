@@ -2,7 +2,7 @@
 Pages Functions backend as bets-data.json."""
 from __future__ import annotations
 
-from .. import bracket, data, util
+from .. import bracket, config, data, util
 from .. import odds as odds_api
 from ..components import _FB_RND
 from ..flags import flag
@@ -34,13 +34,12 @@ def betting_data(ctx):
     """Every knockout match whose two sides are known: the matchup, model odds,
     kickoff, and result. The Pages Functions read this to list bettable games,
     snapshot odds onto a wager, and settle once a match is decided."""
-    by_num = bracket.index_matches(ctx.matches)
+    by_num = ctx.by_num
     ratings = _team_ratings(ctx)
     cache = odds_api.load_cache()      # public market odds, when available
     out = []
     for m in ctx.matches:
-        if m.get("round") not in ("Round of 32", "Round of 16", "Quarter-final",
-                                  "Semi-final", "Final"):
+        if m.get("round") not in config.KO_ROUNDS:
             continue
         t1 = bracket.resolve_slot(m["team1"], ctx.analyses, by_num)
         t2 = bracket.resolve_slot(m["team2"], ctx.analyses, by_num)

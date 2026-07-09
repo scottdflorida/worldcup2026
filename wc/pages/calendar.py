@@ -2,12 +2,12 @@
 Pacific time."""
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 
 from .. import bracket, data
-from ..components import _round_short, side_result, team_link, wl_badge
+from ..components import _round_short, _WL_CLASS, side_result, team_link, wl_badge
 from ..shell import shell
-from ..times import E, PT_OFFSET_HOURS, _pt_datetime, _pt_parts, _utc_iso
+from ..times import E, _pt_datetime, _pt_parts, _utc_iso, today_pt
 
 
 def _calendar_weeks(ctx):
@@ -64,8 +64,7 @@ def _cal_match(ctx, m, by_num):
                  if time else '')
     win = bracket.match_winner(m) if done else None
     r1, r2 = side_result(done, t1["team"], win), side_result(done, t2["team"], win)
-    _wc = {"w": " won", "l": " lost", "d": " drew"}
-    w1, w2 = _wc.get(r1, ""), _wc.get(r2, "")
+    w1, w2 = _WL_CLASS.get(r1, ""), _WL_CLASS.get(r2, "")
     if done:
         g1, g2 = data.final_score(m)
         pens = (m.get("score") or {}).get("p")
@@ -87,9 +86,9 @@ def _cal_match(ctx, m, by_num):
 
 
 def page_calendar(ctx):
-    by_num = bracket.index_matches(ctx.matches)
+    by_num = ctx.by_num
     weeks = _calendar_weeks(ctx)
-    today = (datetime.now(timezone.utc) + timedelta(hours=PT_OFFSET_HOURS)).date()
+    today = today_pt()
     dow_head = "".join(f'<div class="cal-dow-h">{d}</div>'
                        for d in ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
     week_html = []

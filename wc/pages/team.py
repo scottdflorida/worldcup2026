@@ -125,7 +125,7 @@ def road_branch(team, group_letter, ctx, entry_slot, heading, entered=False):
 
 
 def _third_road(ctx, proj):
-    by_num = bracket.index_matches(ctx.matches)
+    by_num = ctx.by_num
     steps = []
     for tgt in proj["third_targets"]:
         m = by_num[tgt["num"]]
@@ -214,7 +214,7 @@ def page_team(ctx, team):
         # contested. For a team that already won a round (e.g. through to the
         # Round of 16) this is the upcoming game, even if its opponent is still
         # being decided.
-        by_num = bracket.index_matches(ctx.matches)
+        by_num = ctx.by_num
         for step in (bracket.project_path(team, ctx.matches, ctx.analyses, g, entry) or []):
             mm = by_num.get(step["num"])
             if mm is not None and not data.has_result(mm):

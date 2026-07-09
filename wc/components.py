@@ -4,12 +4,12 @@ Pulse band, team cards, and the ordinal/round-label helpers several pages share.
 """
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 
-from . import bracket, data, util, venues
+from . import bracket, config, data, util, venues
 from .flags import flag
-from .times import (E, PT_LABEL, PT_OFFSET_HOURS, _epoch, _pt_datetime,
-                    _pt_parts, _utc_iso, kickoff_label)
+from .times import (E, PT_LABEL, _epoch, _pt_datetime, _pt_parts, _utc_iso,
+                    kickoff_label, today_pt)
 
 
 def team_link(team, cls="team"):
@@ -214,6 +214,10 @@ def scorers(m):
 
 _WL = {"w": ("W", "Won"), "l": ("L", "Lost"), "d": ("D", "Drew")}
 
+# code -> the CSS word suffix on a match side. The single source for the W/L/D
+# class fragment shared by match_line, the Pulse band and the calendar.
+_WL_CLASS = {"w": " won", "l": " lost", "d": " drew"}
+
 
 def wl_badge(code):
     """Compact result tag for a played match — solid vermilion W (won), solid
@@ -237,14 +241,13 @@ def side_result(done, team, winner):
 
 
 def match_line(m, ctx, compact=False):
-    by_num = bracket.index_matches(ctx.matches)
+    by_num = ctx.by_num
     t1 = bracket.resolve_slot(m["team1"], ctx.analyses, by_num)
     t2 = bracket.resolve_slot(m["team2"], ctx.analyses, by_num)
     done = data.has_result(m)
     win = bracket.match_winner(m) if done else None
     r1, r2 = side_result(done, t1["team"], win), side_result(done, t2["team"], win)
-    _wcls = {"w": " won", "l": " lost", "d": " drew"}
-    w1, w2 = _wcls.get(r1, ""), _wcls.get(r2, "")
+    w1, w2 = _WL_CLASS.get(r1, ""), _WL_CLASS.get(r2, "")
     if done:
         g1, g2 = data.final_score(m)
         score = (f'<span class="score" data-live-mid><b class="sg{" win" if w1==" won" else ""}">{g1}</b>'
@@ -285,10 +288,10 @@ def pulse_band(ctx):
     kickoff (upcoming). The divider IS the Live Wire signal element (.now-divider
     + .wire-pulse), shared with the bracket's live edge and the watched glow.
     """
-    by_num = bracket.index_matches(ctx.matches)
+    by_num = ctx.by_num
     # A tight "now" window: yesterday + today behind us, today + tomorrow ahead —
     # the pulse is about what just happened and what's next, not the whole schedule.
-    today = (datetime.now(timezone.utc) + timedelta(hours=PT_OFFSET_HOURS)).date()
+    today = today_pt()
     yesterday, tomorrow = today - timedelta(days=1), today + timedelta(days=1)
 
     def pt_date(m):
@@ -316,9 +319,8 @@ def pulse_band(ctx):
         if kind == "done":
             g1, g2 = data.final_score(m)
             win = bracket.match_winner(m)
-            _wc = {"w": " won", "l": " lost", "d": " drew"}
-            w1 = _wc[side_result(True, t1["team"], win)]
-            w2 = _wc[side_result(True, t2["team"], win)]
+            w1 = _WL_CLASS[side_result(True, t1["team"], win)]
+            w2 = _WL_CLASS[side_result(True, t2["team"], win)]
             pens = (m.get("score") or {}).get("p")
             pen_html = f'<span class="pz-pens">{pens[0]}–{pens[1]} pens</span>' if pens else ""
             mid = (f'<div class="pz-mid"><div class="pz-score" data-live-mid>'
@@ -339,7 +341,7 @@ def pulse_band(ctx):
             t = res["team"]
             inner = (f'<span class="fl">{flag(t) if t else "·"}</span>'
                      f'<span class="nm">{E(t or res["label"])}</span>')
-            badge = wl_badge({" won": "w", " lost": "l", " drew": "d"}.get(wc, ""))
+            badge = wl_badge({v: k for k, v in _WL_CLASS.items()}.get(wc, ""))
             body = (badge + inner) if is_b else (inner + badge)
             if t:
                 return f'<a class="pz-team{wc}" data-team="{E(t)}" href="{util.page_for(t)}">{body}</a>'
@@ -376,7 +378,7 @@ def pulse_band(ctx):
 
 def _card_opponent(ctx, m, team):
     """Resolve a team's opponent in match m to a concrete nation or candidate set."""
-    by_num = bracket.index_matches(ctx.matches)
+    by_num = ctx.by_num
     opp_token = m["team2"] if m.get("team1") == team else m["team1"]
     return bracket.resolve_slot(opp_token, ctx.analyses, by_num)
 
@@ -446,14 +448,17 @@ def team_card(ctx, team, rich=False):
     )
 
 
-_FB_RND = {"Round of 32": "R32", "Round of 16": "R16", "Quarter-final": "QF",
-           "Semi-final": "SF", "Final": "F"}
+# The short round labels (R32/R16/QF/SF/F) come straight from the one config map;
+# the bracket rail, fantasy and betting emit them verbatim.
+_FB_RND = config.KO_SHORT
 
-
-def _ordinal(n):
-    return {1: "1st", 2: "2nd", 3: "3rd", 4: "4th"}.get(n, f"{n}th")
+# Ordinal helper now lives in util (shared with the blurbs pipeline).
+_ordinal = util.ordinal
 
 
 def _round_short(rd):
-    return {"Round of 32": "R32", "Round of 16": "R16", "Quarter-final": "QF",
-            "Semi-final": "SF", "Final": "Final"}.get(rd, rd)
+    """config.KO_SHORT, but spelling the Final out in full (only the bracket rail
+    wants the bare 'F')."""
+    if rd == "Final":
+        return "Final"
+    return config.KO_SHORT.get(rd, rd)

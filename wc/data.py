@@ -55,14 +55,6 @@ def refresh(cache_path: str = config.CACHE_PATH) -> dict:
     return payload
 
 
-def changed_since_cache(cache_path: str = config.CACHE_PATH) -> bool:
-    """True if a live fetch would differ from the cached copy (best-effort)."""
-    try:
-        return fetch() != load_cache(cache_path)
-    except Exception:  # noqa: BLE001
-        return False
-
-
 def last_updated() -> str | None:
     try:
         with open(config.LAST_UPDATED_PATH, encoding="utf-8") as fh:

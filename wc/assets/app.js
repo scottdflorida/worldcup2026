@@ -482,7 +482,7 @@
         if(!name||!code){showErr('bet-join-err','Enter a name and a code.');return;}
         api('join',{method:'POST',body:JSON.stringify({name:name,code:code})}).then(function(r){
           if(r.ok){joining=false;upsertPool({code:r.code,name:r.name,token:r.token});load();}
-          else showErr('bet-join-err',r.error==='name_taken'?'That name is taken in this pool.':'Could not join.');
+          else showErr('bet-join-err','Could not join.');
         });
       };
       var cc=document.getElementById('bet-join-cancel');

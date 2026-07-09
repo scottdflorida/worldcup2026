@@ -19,8 +19,10 @@ import urllib.request
 from datetime import datetime, timezone
 from statistics import median
 
+from . import config
+
 SPORT = "soccer_fifa_world_cup"
-ODDS_PATH = "data/odds.json"
+ODDS_PATH = config.ODDS_PATH
 TTL_HOURS = 8
 MARGIN = 0.96  # house edge baked back in after de-vigging
 

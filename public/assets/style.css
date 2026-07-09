@@ -75,7 +75,7 @@ b,strong{font-weight:800}
 main{max-width:var(--maxw);margin:0 auto;padding:var(--s5) clamp(14px,4vw,28px) var(--s8);position:relative;z-index:1}
 
 /* mono label primitive (overline) ----------------------------------- */
-.eyebrow,.hs-k,.hp-k,.foot-k,.hn-k,.yt-k,.odds-h,.race-h,.kr-head,.gb-tag,.th-eyebrow,.dist-advh,
+.eyebrow,.hp-k,.foot-k,.yt-k,.odds-h,.race-h,.kr-head,.gb-tag,.th-eyebrow,.dist-advh,
 .pz-grp,.pz-tag,.live-tag,.km-no,.road-rd,.road-vs,.road-track,.badge,.th-badge,.dir-head .muted,
 .group-head .muted,.standings th,.km-m,.bcode,.cp-lbl{
   font-family:var(--mono);font-weight:700;text-transform:uppercase;letter-spacing:.12em}
@@ -145,14 +145,6 @@ section:first-of-type{margin-top:var(--s4)}
 
 /* ============ HERO (type-led, no pills / eyebrow / subtitle) ======= */
 .hero{position:relative;margin-top:0;padding:0 0 var(--s6);border-bottom:3px solid var(--ink)}
-.hero-strip{display:flex;flex-wrap:wrap;border-bottom:2px solid var(--ink);margin-bottom:clamp(18px,3vw,38px)}
-.hs-cell{display:flex;flex-direction:column;gap:3px;padding:12px 18px 14px;border-right:1px solid var(--line);min-width:0}
-.hs-cell:first-child{padding-left:0}
-.hs-k{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;color:var(--muted)}
-.hs-v{font-family:var(--mono);font-weight:800;font-size:.96rem;letter-spacing:.02em;color:var(--ink);
-  text-transform:uppercase;font-variant-numeric:tabular-nums}
-.hs-of{color:var(--muted);font-weight:700}
-.hs-host{margin-left:auto;border-right:0;text-align:right;align-items:flex-end}
 .hero-title{font-size:var(--t-hero);line-height:.86;letter-spacing:-.045em;margin:0;color:var(--ink);
   font-weight:800;text-transform:uppercase}
 .ht-big{display:inline-block}
@@ -171,9 +163,6 @@ section:first-of-type{margin-top:var(--s4)}
 .hp-of{font-size:.55em;color:var(--muted);margin-left:1px}
 .hp-scale{display:flex;justify-content:space-between;margin-top:7px;font-family:var(--mono);
   font-size:.6rem;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
-.hero-next{flex:0 0 auto;border-left:2px solid var(--ink);padding-left:clamp(16px,3vw,28px);max-width:46%}
-.hn-k{display:block;font-size:.62rem;letter-spacing:.18em;color:var(--muted);margin-bottom:6px}
-.hn-v{font-family:var(--mono);font-weight:800;font-size:clamp(.95rem,1.6vw,1.25rem);color:var(--ink);line-height:1.15}
 
 /* ============ TALLY DEVICE (signature, recurs as a system) ========= */
 /* A segmented horizontal meter with a hard qualification-threshold tick. */
@@ -487,7 +476,6 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .roads{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4)}
 .road-blurb{margin:2px 0 14px;font-size:1.02rem;line-height:1.6;color:var(--ink);max-width:64ch;
   border-left:3px solid var(--vermilion);padding-left:14px}
-.road-intro{margin:-8px 0 var(--s5);font-size:.88rem;color:var(--ink2)}
 .road-line{background:var(--paper);border:2px solid var(--ink);padding:18px 20px}
 .road-line.third{grid-column:1/-1}
 .road-line-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;padding-bottom:10px;border-bottom:1px solid var(--line)}
@@ -757,7 +745,6 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-toggle{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.64rem;font-weight:700;
   letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);cursor:pointer;user-select:none}
 .bet-toggle input{width:15px;height:15px;accent-color:var(--vermilion);cursor:pointer}
-.bet-locked{margin-top:9px;font-size:.78rem}
 .bet-pools{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
 .bet-pool{font-family:var(--mono);font-size:.64rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
   color:var(--ink2);background:var(--paper2);border:1.5px solid var(--line2);padding:6px 11px;cursor:pointer}
@@ -818,14 +805,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-db-amt.won{color:var(--vermilion)}
 .bet-db-amt.lost{color:var(--muted)}
 .bet-dbets-none{margin-top:8px;font-size:.82rem}
-.bet-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:.92rem}
-.bet-row:first-of-type{border-top:0}
-.bet-r-pick{font-weight:700;flex:1;min-width:0}
-.bet-r-stk{font-family:var(--mono);color:var(--ink2);font-size:.82rem}
 .bet-st{font-family:var(--mono);font-size:.58rem;font-weight:800;letter-spacing:.06em;padding:2px 6px;white-space:nowrap}
-.bet-st.won{color:var(--on-accent);background:var(--vermilion)}
-.bet-st.lost{color:var(--muted);border:1px solid var(--line2)}
-.bet-st.open{color:var(--ink);border:1px solid var(--ink)}
 .bet-lb{list-style:none;margin:0;padding:0}
 .bet-lb li{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:.95rem}
 .bet-lb li:first-child{border-top:0}
@@ -859,7 +839,6 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .foot-k{font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;color:var(--muted)}
 .foot-v{font-family:var(--mono);font-weight:800;font-size:.92rem;color:var(--ink);display:inline-flex;align-items:center;gap:8px}
 .upd-dot{display:inline-flex}.upd-dot .wire-pulse{width:8px;height:8px}
-.foot-fine{font-family:var(--mono);font-size:.64rem;line-height:1.7;color:var(--muted);max-width:780px;margin-top:16px;letter-spacing:.02em}
 .foot-tz{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:9px;margin-top:14px;font-family:var(--mono)}
 .foot-tz-k{font-size:.58rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .tz-select{font-family:var(--mono);font-size:.7rem;font-weight:700;color:var(--ink);background-color:var(--paper);
@@ -900,11 +879,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   section{margin:var(--s7) 0}
   .cols{grid-template-columns:1fr;gap:var(--s4)}
   .group-grid{grid-template-columns:1fr}
-  .hero-strip{flex-wrap:wrap}
-  .hs-cell{flex:1 0 44%;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 12px}
-  .hs-host{margin-left:0;text-align:left;align-items:flex-start}
   .hero-foot{flex-direction:column;align-items:stretch;gap:20px}
-  .hero-next{border-left:0;border-top:2px solid var(--ink);padding-left:0;padding-top:16px;max-width:100%}
   .site-nav a{padding:0 12px;font-size:.68rem}
   .brand a{gap:9px;padding:11px 14px}
   .wm-l1,.wm-l2{font-size:.7rem}

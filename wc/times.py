@@ -7,7 +7,8 @@ one definition instead of re-aliasing it.
 from __future__ import annotations
 
 import html
-from datetime import datetime, timedelta, timezone
+import os
+from datetime import date, datetime, timedelta, timezone
 
 E = html.escape
 
@@ -42,6 +43,16 @@ def _epoch(m):
 # 2026 are all inside US daylight time), so a fixed offset is exact here.
 PT_OFFSET_HOURS = -7
 PT_LABEL = "PT"
+
+
+def today_pt():
+    """Today's date in US Pacific — the single 'now' the build embeds (Matchday
+    Pulse window, calendar today-cell). WC_TODAY (an ISO date) pins it for tests;
+    unset, it is behavior-identical to the previous inline computation."""
+    ov = os.environ.get("WC_TODAY")
+    if ov:
+        return date.fromisoformat(ov)
+    return (datetime.now(timezone.utc) + timedelta(hours=PT_OFFSET_HOURS)).date()
 
 
 def _pt_datetime(m):

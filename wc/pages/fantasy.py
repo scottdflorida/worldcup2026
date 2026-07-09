@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import json
 
-from .. import bracket, data
+from .. import bracket, config, data
 from ..components import _FB_RND
 from ..flags import flag
 from ..shell import shell
@@ -15,14 +15,14 @@ def fantasy_data(ctx):
     (or R32 entrants) and any winner already locked by a real result. The client
     builds the picker options from this — a slot's feasible teams are its feeders'
     picked/locked occupants, or, while those are open, their whole candidate pool."""
-    by_num = bracket.index_matches(ctx.matches)
+    by_num = ctx.by_num
     fmap = bracket.forward_map(ctx.matches)
     rev = {}
     for a, b in fmap.items():
         rev.setdefault(b, []).append(a)
     keys = bracket.tree_order_keys(ctx.matches)
     matches, order = {}, {"L": {}, "R": {}, "F": []}
-    for rd in ("Round of 32", "Round of 16", "Quarter-final", "Semi-final", "Final"):
+    for rd in config.KO_ROUNDS:
         ms = sorted([m for m in ctx.matches if m.get("round") == rd],
                     key=lambda m: keys.get(m["num"], 10 ** 9))
         rkey, half = _FB_RND[rd], len(ms) // 2
@@ -85,10 +85,9 @@ def _fb_col(rkey, nums, matches):
 def _fb_upcoming(ctx, n=4):
     """A short list of the next n knockout matches still to be played, each with
     its sides (or TBD) and tz-aware kickoff — shown beneath the bracket."""
-    by_num = bracket.index_matches(ctx.matches)
+    by_num = ctx.by_num
     ko = [m for m in ctx.matches
-          if m.get("round") in ("Round of 32", "Round of 16", "Quarter-final",
-                                 "Semi-final", "Final")
+          if m.get("round") in config.KO_ROUNDS
           and not data.has_result(m) and _utc_iso(m)]
     ko.sort(key=lambda m: _utc_iso(m) or "9999")
 

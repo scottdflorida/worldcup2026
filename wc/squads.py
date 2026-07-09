@@ -15,11 +15,11 @@ import json
 import urllib.request
 from datetime import datetime, timezone
 
-from . import util
+from . import config, util
 
 LEAGUE = "fifa.world"
 BASE = "https://site.api.espn.com/apis/site/v2/sports/soccer/%s" % LEAGUE
-SQUADS_PATH = "data/squads.json"
+SQUADS_PATH = config.SQUADS_PATH
 TTL_HOURS = 20  # squads change rarely — refresh about once a day
 
 # ESPN display names whose slug doesn't match our openfootball name.

@@ -26,6 +26,11 @@ def fmt_date_short(d: str) -> str:
     return f"{dt.strftime('%b')} {dt.day}"
 
 
+def ordinal(n) -> str:
+    """1 -> '1st', 2 -> '2nd', 3 -> '3rd', 4 -> '4th', anything else -> '<n>th'."""
+    return {1: "1st", 2: "2nd", 3: "3rd", 4: "4th"}.get(n, f"{n}th")
+
+
 def slug(team: str) -> str:
     s = unicodedata.normalize("NFKD", team).encode("ascii", "ignore").decode()
     s = s.lower().replace("&", "and")

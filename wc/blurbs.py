@@ -14,16 +14,15 @@ import json
 import os
 import re
 
-from . import bracket, data, times
+from . import bracket, config, data, times, util
 
 # The user explicitly asked for a Sonnet call.
 MODEL = "claude-sonnet-4-6"
-BLURBS_PATH = "data/blurbs.json"
+BLURBS_PATH = config.BLURBS_PATH
 # Bump when the prompt changes so cached blurbs regenerate even if the facts
 # (and therefore the brief) are unchanged.
 PROMPT_VERSION = "3"
 
-_ORDINAL = {1: "1st", 2: "2nd", 3: "3rd", 4: "4th"}
 _ROUND = {"Round of 32": "Round of 32", "Round of 16": "Round of 16",
           "Quarter-final": "quarterfinal", "Semi-final": "semifinal", "Final": "final"}
 
@@ -86,7 +85,7 @@ def _status(proj):
         return f'qualified from {proj["group"]}'
     if proj["rank"] >= 3:
         return f'advanced as a best third-placed team out of {proj["group"]}'
-    return f'{_ORDINAL.get(proj["rank"], "")} in {proj["group"]}'
+    return f'{util.ordinal(proj["rank"])} in {proj["group"]}'
 
 
 def team_brief(ctx, team):
@@ -101,7 +100,7 @@ def team_brief(ctx, team):
     brief = {
         "team": team,
         "group": proj["group"],
-        "finish": f'{_ORDINAL.get(proj["rank"], "")} place',
+        "finish": f'{util.ordinal(proj["rank"])} place',
         "record": f'{row["W"]}W-{row["D"]}D-{row["L"]}L, {row["GF"]}-{row["GA"]} GD, {row["Pts"]} pts',
         "status": _status(proj),
         "eliminated": bool(knocked),
@@ -302,7 +301,7 @@ def refresh_stale(ctx, *, force=False, path=BLURBS_PATH, client=None, log=print)
 # blurb when its fingerprint still matches the live English one (else it falls
 # back to English), so a translation can never go stale on the page.
 # --------------------------------------------------------------------------
-BLURBS_PT_PATH = "data/blurbs.pt.json"
+BLURBS_PT_PATH = config.BLURBS_PT_PATH
 TRANSLATE_MODEL = "claude-sonnet-4-6"
 # Bump to force every blurb to re-translate even when the English text is unchanged.
 TRANSLATE_PROMPT_VERSION = "1"

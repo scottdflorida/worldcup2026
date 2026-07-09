@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import re
 
-from . import data
+from . import config, data
 
 GROUP_SLOT = re.compile(r"^([123])([A-L])$")
 THIRD_SLOT = re.compile(r"^3((?:[A-L]/)+[A-L])$")
@@ -127,7 +127,7 @@ def tree_order_keys(matches):
     which is exactly what the column layout and the connector lines assume.
     """
     by_num = index_matches(matches)
-    prev_round = {b: a for a, b in zip(_KO_ORDER, _KO_ORDER[1:])}
+    prev_round = {b: a for a, b in zip(config.KO_ROUNDS, config.KO_ROUNDS[1:])}
 
     def feeders(m):
         # Each side is either a W{n} edge or — once that feeder match is played —
@@ -187,19 +187,17 @@ def tree_order_keys(matches):
     return {m["num"]: min_leaf(m["num"]) for m in matches if "num" in m}
 
 
-def build_bracket(matches, analyses, focus_teams):
+def build_bracket(matches, analyses):
     """Resolve every knockout match into rendered rows grouped by round."""
     by_num = index_matches(matches)
     rounds = {}
-    order = ["Round of 32", "Round of 16", "Quarter-final", "Semi-final",
-             "Match for third place", "Final"]
+    order = config.KO_ROUNDS_ALL
     for m in matches:
         rd = m.get("round")
         if rd not in order:
             continue
         t1 = resolve_slot(m["team1"], analyses, by_num)
         t2 = resolve_slot(m["team2"], analyses, by_num)
-        focus = set(focus_teams)
         row = {
             "num": m.get("num"),
             "date": m.get("date"),
@@ -209,16 +207,12 @@ def build_bracket(matches, analyses, focus_teams):
             "score": m.get("score"),
             "played": data.has_result(m),
             "winner": match_winner(m),
-            "touches_focus": bool((t1["candidates"] | t2["candidates"]) & focus),
             "round": rd,
         }
         rounds.setdefault(rd, []).append(row)
     keys = tree_order_keys(matches)
     return [(rd, sorted(rounds[rd], key=lambda r: keys.get(r["num"], 10 ** 9)))
             for rd in order if rd in rounds]
-
-
-_KO_ORDER = ["Round of 32", "Round of 16", "Quarter-final", "Semi-final", "Final"]
 
 
 def forward_map(matches):
@@ -235,7 +229,7 @@ def forward_map(matches):
             mm = WIN_SLOT.match(str(slot))
             if mm:
                 fmap[int(mm.group(1))] = m["num"]
-    nxt_round = dict(zip(_KO_ORDER, _KO_ORDER[1:]))
+    nxt_round = dict(zip(config.KO_ROUNDS, config.KO_ROUNDS[1:]))
     for m in matches:
         num = m.get("num")
         if num is None or num in fmap:

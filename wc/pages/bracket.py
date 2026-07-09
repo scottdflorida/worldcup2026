@@ -1,15 +1,15 @@
 """Knockout bracket page: the connected Round-of-32 → Final tree."""
 from __future__ import annotations
 
-from .. import data
+from .. import config, data
 from ..components import side_result, team_link, wl_badge
 from ..flags import flag
 from ..shell import shell
 from ..times import E, kickoff_label
 
 
-_BRACKET_RAIL = [("R32", "Round of 32"), ("R16", "Round of 16"),
-                 ("QF", "Quarter-final"), ("SF", "Semi-final"), ("F", "Final")]
+# (short label, full round name) per main knockout round, straight from config.
+_BRACKET_RAIL = [(config.KO_SHORT[r], r) for r in config.KO_ROUNDS]
 
 
 def _km_cell(r, ci):

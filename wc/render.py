@@ -18,16 +18,18 @@ import json
 import os
 
 from . import art, blurbs, bracket, config, data, i18n, pages, squads, standings, util
-from .util import fmt_date, fmt_date_short  # noqa: F401
 
 
 class Context:
     def __init__(self, payload):
         self.payload = payload
         self.matches = payload["matches"]
+        # One match-number index, shared by every builder (match_line, the Pulse
+        # band, calendar, fantasy, betting, team roads) instead of each rebuilding it.
+        self.by_num = bracket.index_matches(self.matches)
         self.analyses = standings.all_groups(self.matches)
         self.thirds = standings.best_thirds(self.analyses)
-        self.bracket = bracket.build_bracket(self.matches, self.analyses, [])
+        self.bracket = bracket.build_bracket(self.matches, self.analyses)
         self.teams = sorted({row["team"] for i in self.analyses.values() for row in i["table"]})
         self.projections = {t: bracket.project_team(t, self.matches, self.analyses)
                             for t in self.teams}
@@ -43,7 +45,7 @@ class Context:
         eight best thirds all in one place). Capture it, then mark every other team
         in a finished group as knocked out so badges and tables reflect reality
         without re-deriving the cross-group best-third allocation."""
-        by_num = bracket.index_matches(self.matches)
+        by_num = self.by_num
         advanced = set()
         for m in self.matches:
             if m.get("round") == "Round of 32":
@@ -88,7 +90,7 @@ class Context:
         feed) still surfaces its next match — with the opponent as a live candidate
         set when it isn't decided yet."""
         nxt, _ = self.team_fixtures(team)
-        by_num = bracket.index_matches(self.matches)
+        by_num = self.by_num
         if nxt is not None:
             opp_token = nxt["team2"] if nxt.get("team1") == team else nxt["team1"]
             return nxt, bracket.resolve_slot(opp_token, self.analyses, by_num), nxt.get("round", "")
