@@ -14,7 +14,7 @@ import json
 import os
 import re
 
-from . import bracket, data
+from . import bracket, data, times
 
 # The user explicitly asked for a Sonnet call.
 MODEL = "claude-sonnet-4-6"
@@ -29,9 +29,8 @@ _ROUND = {"Round of 32": "Round of 32", "Round of 16": "Round of 16",
 
 
 def _kickoff_pt(m):
-    """'Wed Jul 1 17:00 PT' — reuse the renderer's Pacific conversion."""
-    from . import render
-    day, time = render._pt_parts(m)
+    """'Wed Jul 1 17:00 PT' — reuse the shared Pacific conversion."""
+    day, time = times._pt_parts(m)
     if not day:
         return None
     return f"{day} {time} PT" if time else day
