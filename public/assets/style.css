@@ -1041,6 +1041,9 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .scorebug.is-live .sb-figure{color:var(--accent)}
 .scorebug.is-livedone{outline:1px solid var(--line2);outline-offset:-1px}
 .ko-sched{margin-top:12px}
+/* The knockout schedule band holds ≤4 cards (vs the long pulse ribbon), so let
+   them grow — full national names must never fracture mid-word here. */
+.ko-sched .pz{flex:1 1 300px}
 
 /* Bracket rail — compact horizontal summary; reuses the bracket slot device. */
 .ko-rail-sec{margin-top:var(--s7)}
