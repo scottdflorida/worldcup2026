@@ -43,6 +43,21 @@
   --c-bub:#B8B2A2;                /* bubble = warm grey */
   --c-out:#D8D4C7;                /* out = pale grey */
   --c-gone:var(--muted-c);
+  /* semantic "ink block" tokens. Aliased to ink/ink2/paper in light (so light
+     output is byte-identical); the dark theme redefines them so bold blocks
+     (hero, plinth, brand plate, active nav/scorebug) stay DARK lifted panels
+     instead of inverting to light slabs. Marks/rules keep using --ink directly
+     (they SHOULD flip to light on dark). */
+  --ink-block:var(--ink);         /* bold dark block background */
+  --ink-block2:var(--ink2);       /* secondary dark chip background */
+  --on-ink:var(--paper);          /* text / icons on an ink block */
+  /* rgb triplets for alpha compositing (glow / edge-fade / tint) + select chevron,
+     so those literals track the theme too. */
+  --accent-rgb:255,59,20;
+  --paper-rgb:244,242,236;
+  --scrim:rgba(19,17,13,.55);     /* modal backdrop */
+  --sel-arrow:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%2313110d' stroke-width='1.6'/%3E%3C/svg%3E");
+  color-scheme:light;
   /* type — neo-grotesque display + tracked mono labels */
   --sans:"Twemoji Country Flags","Helvetica Neue",Helvetica,"Inter",Arial,system-ui,-apple-system,sans-serif;
   --mono:"Twemoji Country Flags",ui-monospace,"SF Mono",Menlo,Consolas,"Roboto Mono",monospace;
@@ -57,6 +72,64 @@
   --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px;--s8:72px;
   --maxw:1200px;
   --r:3px;--r-sm:2px;--r-lg:4px;   /* hard edges */
+}
+/* ===================================================================
+   "NIGHT MATCH" — dark theme (token flip, not per-component rules).
+   Committed editorial inversion: warm near-black paper, warm off-white ink,
+   muted greys rebalanced, hairlines lightened, the ONE vermilion brightened a
+   step for contrast on dark (small accent text on --paper ≈ 5.8:1, on --paper2
+   ≈ 5.3:1, on --paper3 ≈ 4.85:1 — all ≥ 4.5:1). Ink-blocks (hero, plinth,
+   brand plate, active nav / scorebug-live) do NOT invert to light slabs — they
+   stay LIFTED dark panels (via --ink-block/--on-ink) with a light hairline or
+   accent, so they still read as ink blocks. Declared under BOTH the explicit
+   data-theme flag AND the system query (unless the visitor forced light).
+   =================================================================== */
+html[data-theme="dark"]{color-scheme:dark;
+  --paper:#14120D;--paper2:#1D1A13;--paper3:#272219;
+  --ink:#F2EFE6;--ink2:#C7C1B2;--muted-c:#948C7C;
+  --line:rgba(242,239,230,.16);--line2:rgba(242,239,230,.30);--hair:rgba(242,239,230,.09);
+  --bg-rule:rgba(242,239,230,.05);--zebra:rgba(242,239,230,.045);
+  --vermilion:#FF5230;
+  --ink-block:#2A251C;--ink-block2:#322D22;--on-ink:#F4F1E8;
+  --c-bub:#6B6454;--c-out:#3B3529;
+  --accent-rgb:255,82,48;--paper-rgb:20,18,13;--scrim:rgba(0,0,0,.66);
+  --sel-arrow:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23f2efe6' stroke-width='1.6'/%3E%3C/svg%3E");
+}
+@media (prefers-color-scheme: dark){
+  html:not([data-theme="light"]){color-scheme:dark;
+    --paper:#14120D;--paper2:#1D1A13;--paper3:#272219;
+    --ink:#F2EFE6;--ink2:#C7C1B2;--muted-c:#948C7C;
+    --line:rgba(242,239,230,.16);--line2:rgba(242,239,230,.30);--hair:rgba(242,239,230,.09);
+    --bg-rule:rgba(242,239,230,.05);--zebra:rgba(242,239,230,.045);
+    --vermilion:#FF5230;
+    --ink-block:#2A251C;--ink-block2:#322D22;--on-ink:#F4F1E8;
+    --c-bub:#6B6454;--c-out:#3B3529;
+    --accent-rgb:255,82,48;--paper-rgb:20,18,13;--scrim:rgba(0,0,0,.66);
+    --sel-arrow:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23f2efe6' stroke-width='1.6'/%3E%3C/svg%3E");
+  }
+}
+/* trophy line-art (a fixed-ink SVG) is a dark silhouette in light mode; on dark
+   it must read light. The plinth trophy already inverts (its block stays dark in
+   both themes); the bracket-rail trophy sits on the paper surface, so it needs
+   the flip only in dark mode. brightness(0) first → a clean monochrome silhouette
+   (no inverted-hue star). */
+html[data-theme="dark"] .krl-trophy{filter:brightness(0) invert(1)}
+@media (prefers-color-scheme: dark){html:not([data-theme="light"]) .krl-trophy{filter:brightness(0) invert(1)}}
+/* text selection: the one accent, in both themes */
+::selection{background:var(--vermilion);color:var(--on-accent)}
+/* print: a visitor who forced dark still prints on paper-white (browsers drop
+   backgrounds, so light-on-white body text would vanish) — restore the light ink
+   set for the forced-dark case. Auto-dark already prints light: the system query
+   above does not match print media. */
+@media print{
+  html[data-theme="dark"]{
+    --paper:#F4F2EC;--paper2:#ECEAE1;--paper3:#E3E0D5;--ink:#13110D;--ink2:#3A372F;--muted-c:#6A6458;
+    --line:rgba(19,17,13,.16);--line2:rgba(19,17,13,.30);--hair:rgba(19,17,13,.09);
+    --bg-rule:rgba(19,17,13,.055);--zebra:rgba(19,17,13,.04);--vermilion:#FF3B14;--on-accent:#FFF4F0;
+    --ink-block:#13110D;--ink-block2:#3A372F;--on-ink:#F4F2EC;--c-bub:#B8B2A2;--c-out:#D8D4C7;
+    --accent-rgb:255,59,20;--paper-rgb:244,242,236;--scrim:rgba(19,17,13,.55)
+  }
+  html[data-theme="dark"] .krl-trophy{filter:none}
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -81,8 +154,8 @@ main{max-width:var(--maxw);margin:0 auto;padding:var(--s5) clamp(14px,4vw,28px) 
   font-family:var(--mono);font-weight:700;text-transform:uppercase;letter-spacing:.12em}
 
 /* skip link + focus ------------------------------------------------- */
-.skip-link{position:fixed;left:var(--s3);top:-60px;z-index:100;background:var(--ink);
-  color:var(--paper);border:2px solid var(--vermilion);border-radius:var(--r);padding:10px 16px;
+.skip-link{position:fixed;left:var(--s3);top:-60px;z-index:100;background:var(--ink-block);
+  color:var(--on-ink);border:2px solid var(--vermilion);border-radius:var(--r);padding:10px 16px;
   font-family:var(--mono);font-weight:700;text-transform:uppercase;letter-spacing:.1em;transition:top .18s}
 .skip-link:focus{top:var(--s3);outline:none}
 :focus-visible{outline:none}
@@ -124,8 +197,8 @@ section:first-of-type{margin-top:var(--s4)}
   font-family:var(--mono);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:.78rem;
   color:var(--muted);border-left:1px solid var(--line);transition:color .12s,background .12s}
 .site-nav a:hover{color:var(--ink);background:var(--paper2)}
-.site-nav a.on{color:var(--paper);background:var(--ink)}
-.site-nav a.on:hover{background:var(--ink)}
+.site-nav a.on{color:var(--on-ink);background:var(--ink-block)}
+.site-nav a.on:hover{background:var(--ink-block)}
 /* Right-side header cluster: nav (scrolls) + language toggle (fixed) ---- */
 .head-right{display:flex;align-items:stretch;min-width:0}
 .lang-toggle{display:inline-flex;align-items:stretch;flex:0 0 auto;border-left:2px solid var(--ink)}
@@ -134,8 +207,8 @@ section:first-of-type{margin-top:var(--s4)}
   padding:0 clamp(9px,1.6vw,13px);cursor:pointer;line-height:1;transition:color .12s,background .12s}
 .lt-btn+.lt-btn{border-left:1px solid var(--line)}
 .lt-btn:hover{color:var(--ink);background:var(--paper2)}
-.lt-btn.on{color:var(--paper);background:var(--ink)}
-.lt-btn.on:hover{background:var(--ink)}
+.lt-btn.on{color:var(--on-ink);background:var(--ink-block)}
+.lt-btn.on:hover{background:var(--ink-block)}
 /* Breadcrumb: a slim wayfinding trail under the nav on pages one level below a
    primary tab (team pages, group pages). Mono, tiny, tracked all-caps. */
 .crumb{max-width:var(--maxw);margin:0 auto;padding:9px clamp(14px,4vw,28px);
@@ -205,7 +278,7 @@ section:first-of-type{margin-top:var(--s4)}
 .pz-head{display:flex;align-items:center;gap:7px;font-size:.6rem;margin-bottom:11px}
 .pz-grp{font-size:.6rem;letter-spacing:.12em;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:96px}
 .pz-tag{margin-left:auto;font-size:.58rem;padding:2px 7px;border:1px solid var(--ink);letter-spacing:.1em}
-.pz-tag.done{background:var(--ink);color:var(--paper)}
+.pz-tag.done{background:var(--ink-block);color:var(--on-ink)}
 .pz-tag.up{background:transparent;color:var(--muted);border-color:var(--line2)}
 .pz-date{font-family:var(--mono);font-weight:600;color:var(--muted);font-size:.62rem}
 .pz-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
@@ -226,9 +299,9 @@ section:first-of-type{margin-top:var(--s4)}
 .m-scorers .scorer,.pz .scorer{color:var(--ink2);white-space:nowrap}
 .m-scorers .scorer::before,.pz .scorer::before{content:"›";margin-right:4px;color:var(--vermilion);font-weight:800}
 .now-divider{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;
-  align-self:stretch;padding:0 10px;position:relative;background:var(--ink)}
+  align-self:stretch;padding:0 10px;position:relative;background:var(--ink-block)}
 .now-divider .wire-pulse{width:11px;height:11px;z-index:1}
-.now-lbl{font-family:var(--mono);font-size:.6rem;font-weight:800;letter-spacing:.2em;color:var(--paper);
+.now-lbl{font-family:var(--mono);font-size:.6rem;font-weight:800;letter-spacing:.2em;color:var(--on-ink);
   writing-mode:vertical-rl;transform:rotate(180deg);z-index:1}
 
 /* ============ LIVE STATE (broadcast scorebug) ===================== */
@@ -279,7 +352,7 @@ section:first-of-type{margin-top:var(--s4)}
 .km-pen{font-family:var(--mono);font-size:.66em;color:var(--muted);margin-left:1px}
 .km-pen.kwin{color:var(--ink);font-weight:800}
 .vs{font-family:var(--mono);color:var(--muted);font-weight:700;font-size:.84rem;white-space:nowrap;font-variant-numeric:tabular-nums}
-.rd{font-family:var(--mono);background:var(--ink);color:var(--paper);padding:1px 7px;font-size:.6rem;font-weight:700;letter-spacing:.08em}
+.rd{font-family:var(--mono);background:var(--ink-block);color:var(--on-ink);padding:1px 7px;font-size:.6rem;font-weight:700;letter-spacing:.08em}
 /* Kickoff stamp — the day reads muted, the time in ink, the zone in the one
    accent: variance by colour, not by jarring size jumps. Em-relative everywhere. */
 .ko{display:inline-flex;align-items:baseline;gap:.6ch;white-space:nowrap}
@@ -294,7 +367,7 @@ section:first-of-type{margin-top:var(--s4)}
 .standings tr.gone .ko-out{border-color:var(--c-out)}
 /* Next-knockout callout on a team page */
 .next-ko{border:2px solid var(--ink);background:var(--paper2);margin-bottom:18px}
-.nk-head{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--ink);color:var(--paper);padding:7px 13px}
+.nk-head{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--ink-block);color:var(--on-ink);padding:7px 13px}
 .nk-k{font-family:var(--mono);font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
 .nk-rd{font-family:var(--mono);font-size:.6rem;font-weight:800;letter-spacing:.08em;color:var(--vermilion)}
 .next-ko .match{padding:13px 15px}
@@ -353,7 +426,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .badge,.th-badge{display:inline-flex;align-items:center;gap:5px;font-size:.58rem;border:1.5px solid var(--ink);padding:3px 8px;white-space:nowrap}
 .badge .bdot{width:6px;height:6px;border-radius:50%;background:currentColor}
 .badge.win,.th-badge.win{background:var(--vermilion);color:var(--on-accent);border-color:var(--vermilion)}
-.badge.q,.th-badge.q{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.badge.q,.th-badge.q{background:var(--ink-block);color:var(--on-ink);border-color:var(--ink)}
 .badge.bub,.th-badge.bub{background:transparent;color:var(--ink);border-color:var(--ink)}
 .badge.gone,.th-badge.gone{background:transparent;color:var(--muted);border-color:var(--line2)}
 .th-badge.work{background:transparent;color:var(--ink2);border-color:var(--line2)}
@@ -398,7 +471,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .tc-line{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;min-width:0}
 .tc-vs{color:var(--ink2)}
 .tc-vs .tc-opp,.tc-vs .cand{font-weight:700;color:var(--ink)}
-.tc-rd{font-family:var(--mono);font-size:.52rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--paper);background:var(--ink2);padding:1px 5px}
+.tc-rd{font-family:var(--mono);font-size:.52rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--on-ink);background:var(--ink-block2);padding:1px 5px}
 .tc-res{font-family:var(--mono);font-weight:800;font-variant-numeric:tabular-nums}
 .tc-res.w{color:var(--ink)}.tc-res.l{color:var(--muted)}.tc-res.d{color:var(--ink2)}
 .tc-cands{color:var(--muted);font-style:italic}
@@ -456,41 +529,41 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .dist-note b{font-weight:800}.k-in{color:var(--ink)}.k-bub{color:var(--ink2)}.k-out{color:var(--muted)}
 
 /* ============ TEAM HERO (per-team accent block) ================== */
-.team-hero{position:relative;overflow:hidden;color:var(--paper);background:var(--ink);border:2px solid var(--ink)}
+.team-hero{position:relative;overflow:hidden;color:var(--on-ink);background:var(--ink-block);border:2px solid var(--ink)}
 .team-hero::before{content:"";position:absolute;left:0;top:0;bottom:0;width:14px;background:var(--accent)}
 .th-inner{position:relative;z-index:1;display:flex;align-items:center;gap:26px;
   padding:clamp(24px,4vw,38px) clamp(24px,4vw,40px) clamp(24px,4vw,38px) clamp(34px,5vw,54px);flex-wrap:wrap}
 .th-flag{font-size:4.4rem;line-height:1}
 .th-main{flex:1;min-width:220px}
 .th-eyebrow{font-size:.66rem;letter-spacing:.18em;color:var(--accent);margin-bottom:8px}
-.team-hero h1{margin:0;font-size:var(--t-3xl);color:var(--paper);letter-spacing:-.03em;line-height:.92}
+.team-hero h1{margin:0;font-size:var(--t-3xl);color:var(--on-ink);letter-spacing:-.03em;line-height:.92}
 .th-line{margin:10px 0;color:rgba(244,242,236,.82);font-family:var(--mono);font-size:.82rem;text-transform:uppercase;letter-spacing:.04em}
 .th-grp{box-shadow:inset 0 -2px 0 var(--accent);font-weight:800}
 .th-grp:hover{color:var(--accent)}
 .th-outlook{display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap}
-.th-badge{font-size:.62rem;padding:5px 11px;background:transparent;color:var(--paper);border-color:rgba(244,242,236,.4)}
+.th-badge{font-size:.62rem;padding:5px 11px;background:transparent;color:var(--on-ink);border-color:rgba(244,242,236,.4)}
 .th-badge.win{background:var(--accent);color:var(--ink);border-color:var(--accent)}
 .th-outline{font-family:var(--mono);font-size:.74rem;color:rgba(244,242,236,.9);text-transform:uppercase;letter-spacing:.04em}
 .th-watch{position:relative;z-index:1}
-.th-watch .wl{background:transparent;border-color:rgba(244,242,236,.5);color:var(--paper)}
+.th-watch .wl{background:transparent;border-color:rgba(244,242,236,.5);color:var(--on-ink)}
 .th-watch .wl:hover{background:rgba(244,242,236,.12)}
 .th-watch .wl.on{background:var(--accent);color:var(--ink);border-color:var(--accent)}
 /* Live status line — leads the hero (round + opponent + kickoff, or the losing
    scoreline once a team is out). The group·place·pts line drops to secondary. */
 .th-status{margin:9px 0 6px;font-family:var(--mono);font-size:.84rem;line-height:1.5;
   color:rgba(244,242,236,.92);display:flex;flex-wrap:wrap;align-items:baseline;gap:0 .5ch}
-.th-status a{color:var(--paper);font-weight:800}
+.th-status a{color:var(--on-ink);font-weight:800}
 .th-status a .nm{box-shadow:inset 0 -2px 0 rgba(244,242,236,.4)}
 .th-status a:hover{color:var(--accent)}
 .th-status a:hover .nm{box-shadow:inset 0 -2px 0 var(--accent)}
 .th-status .fl{box-shadow:none}
 .th-status .ths-sep{color:rgba(244,242,236,.4);margin:0 .3ch}
-.th-status .ths-rd,.th-status .ths-score{font-weight:800;color:var(--paper);font-variant-numeric:tabular-nums}
+.th-status .ths-rd,.th-status .ths-score{font-weight:800;color:var(--on-ink);font-variant-numeric:tabular-nums}
 .th-status .ths-tbd{color:rgba(244,242,236,.7)}
 .th-status .ths-pens{color:rgba(244,242,236,.6);font-size:.92em}
 .th-status .ko{white-space:normal}
 .th-status .ko-day{color:rgba(244,242,236,.7)}
-.th-status .ko-time{color:var(--paper)}
+.th-status .ko-time{color:var(--on-ink)}
 .th-status .ko-tz{color:rgba(244,242,236,.65)}
 .th-status .ths-txt{color:rgba(244,242,236,.9)}
 .team-hero.out .th-eyebrow{color:rgba(244,242,236,.62)}
@@ -500,7 +573,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 /* group banner ----------------------------------------------------- */
 .group-banner{position:relative;overflow:hidden;display:flex;align-items:stretch;gap:0;border:2px solid var(--ink);background:var(--paper)}
 .gb-letter{font-size:clamp(4rem,11vw,7.5rem);font-weight:800;line-height:1;display:flex;align-items:center;justify-content:center;
-  padding:0 clamp(20px,4vw,42px);background:var(--ink);color:var(--paper);letter-spacing:-.04em}
+  padding:0 clamp(20px,4vw,42px);background:var(--ink-block);color:var(--on-ink);letter-spacing:-.04em}
 .gb-main{padding:clamp(20px,3.5vw,32px) clamp(20px,4vw,34px);display:flex;flex-direction:column;justify-content:center;flex:1;min-width:0}
 .gb-tag{font-size:.64rem;letter-spacing:.18em;color:var(--vermilion);margin-bottom:6px}
 .gb-title{margin:0 0 8px;color:var(--ink);font-size:var(--t-2xl);letter-spacing:-.03em;line-height:.95}
@@ -519,14 +592,14 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .road-line-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;padding-bottom:10px;border-bottom:1px solid var(--line)}
 .road-line-head h4{margin:0;font-size:1rem}
 .road-track{font-size:.58rem;letter-spacing:.1em;padding:3px 9px;background:var(--vermilion);color:var(--on-accent)}
-.road-track.alt{background:var(--ink);color:var(--paper)}
+.road-track.alt{background:var(--ink-block);color:var(--on-ink)}
 .road-track.out{background:transparent;color:var(--muted);box-shadow:inset 0 0 0 1px var(--line2)}
 .road-sub{margin:-8px 0 14px;font-size:.82rem;color:var(--ink2)}
 .road-graph{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0}
 .road-step{position:relative;display:grid;grid-template-columns:92px 22px 1fr;align-items:center;gap:10px;padding:11px 0;min-height:48px}
 .road-step+.road-step{border-top:1px dashed var(--line)}
 .road-node{display:flex;flex-direction:column;gap:3px}
-.road-rd{display:inline-grid;place-items:center;min-width:46px;height:24px;padding:0 9px;background:var(--ink);color:var(--paper);font-size:.66rem;font-weight:800;width:fit-content;letter-spacing:.06em}
+.road-rd{display:inline-grid;place-items:center;min-width:46px;height:24px;padding:0 9px;background:var(--ink-block);color:var(--on-ink);font-size:.66rem;font-weight:800;width:fit-content;letter-spacing:.06em}
 .road-date{font-family:var(--mono);font-size:.62rem;color:var(--muted)}
 /* keep the kickoff inside its column — wrap day/time instead of spilling onto the connector */
 .road-date .ko{flex-wrap:wrap;white-space:normal;gap:0 .6ch}
@@ -568,12 +641,12 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .brn-item{font-family:var(--mono);font-weight:800;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;
   padding:7px 13px;color:var(--muted);border-right:1px solid var(--line);background:var(--paper);white-space:nowrap}
 .brn-item:last-child{border-right:0}
-.brn-item.on{background:var(--ink);color:var(--paper)}
+.brn-item.on{background:var(--ink-block);color:var(--on-ink)}
 .bracket-frame{position:relative;border:2px solid var(--ink);background:var(--paper);overflow:hidden}
 .bracket-wrap{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch}
 .bz-edge-l,.bz-edge-r{position:absolute;top:0;bottom:0;width:40px;z-index:6;pointer-events:none;transition:opacity .2s}
-.bz-edge-l{left:0;background:linear-gradient(90deg,var(--paper),rgba(244,242,236,0))}
-.bz-edge-r{right:0;background:linear-gradient(270deg,var(--paper),rgba(244,242,236,0))}
+.bz-edge-l{left:0;background:linear-gradient(90deg,var(--paper),rgba(var(--paper-rgb),0))}
+.bz-edge-r{right:0;background:linear-gradient(270deg,var(--paper),rgba(var(--paper-rgb),0))}
 .bracket-frame.at-start .bz-edge-l{opacity:0}
 .bracket-frame.at-end .bz-edge-r{opacity:0}
 /* Column widths + connector gutters are tuned so the full five-column tree (plus
@@ -589,7 +662,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .kr-head{flex:0 0 auto;display:flex;align-items:center;gap:8px;height:30px;font-size:.66rem;color:var(--ink);
   margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
 .kr-body{flex:1 1 auto;position:relative}
-.kr-count{margin-left:auto;font-family:var(--mono);font-size:.6rem;color:var(--paper);background:var(--ink);padding:1px 8px}
+.kr-count{margin-left:auto;font-family:var(--mono);font-size:.6rem;color:var(--on-ink);background:var(--ink-block);padding:1px 8px}
 /* Boxes size to their content (so a deep round can show every candidate flag);
    JS then centres each one between its two feeders. min-height keeps the early,
    short boxes from looking cramped. */
@@ -649,17 +722,17 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .wl-tag{flex:none;display:inline-grid;place-items:center;width:15px;height:15px;margin-left:5px;border-radius:3px;
   font-family:var(--mono);font-weight:800;font-size:.58rem;line-height:1}
 .wl-tag.w{background:var(--vermilion);color:var(--on-accent)}
-.wl-tag.l{background:var(--ink);color:var(--paper)}
+.wl-tag.l{background:var(--ink-block);color:var(--on-ink)}
 .wl-tag.d{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
 /* badges that precede a name (right-hand side of a head-to-head row) gap right */
 .m-side.b .wl-tag:first-child,.pz-team .wl-tag:first-child{margin-left:0;margin-right:5px}
 .cal-side .wl-tag{width:13px;height:13px;font-size:.52rem;margin-left:4px}
 /* The plinth is positioned by JS directly beneath the final match box. */
-.champion-plinth{position:relative;text-align:center;padding:18px 14px 16px;border:2px solid var(--ink);background:var(--ink);color:var(--paper)}
+.champion-plinth{position:relative;text-align:center;padding:18px 14px 16px;border:2px solid var(--ink);background:var(--ink-block);color:var(--on-ink)}
 .champion-plinth::before{content:"";position:absolute;left:0;right:0;top:0;height:8px;background:var(--vermilion)}
 .cp-trophy{filter:invert(1)}
 .cp-lbl{font-size:.62rem;letter-spacing:.14em;color:var(--vermilion);margin:8px 0 8px}
-.champ-name{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:1.05rem;color:var(--paper)}
+.champ-name{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:1.05rem;color:var(--on-ink)}
 .champ-name .fl{font-size:1.3em}
 .champ-name.pending{font-family:var(--mono);font-weight:700;font-size:.8rem;color:rgba(244,242,236,.7);text-transform:uppercase;letter-spacing:.06em}
 .champ-name.watched{color:var(--vermilion)}
@@ -713,10 +786,10 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .cal-m.is-done{border-left-color:var(--ink)}
 .cal-m.is-live{border-left-color:var(--vermilion)}
 /* a pinned team plays in this match — light it up */
-.cal-m.has-watched{background:rgba(255,59,20,.06);border-left-color:var(--ink);outline:2px solid var(--ink);outline-offset:-1px}
+.cal-m.has-watched{background:rgba(var(--accent-rgb),.06);border-left-color:var(--ink);outline:2px solid var(--ink);outline-offset:-1px}
 .cal-m-head{display:flex;align-items:center;flex-wrap:wrap;gap:2px 6px;margin-bottom:2px}
 .cal-tag{font-family:var(--mono);font-size:.5rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
-  color:var(--paper);background:var(--ink2);padding:0 4px}
+  color:var(--on-ink);background:var(--ink-block2);padding:0 4px}
 .cal-time{font-family:var(--mono);font-size:.62rem;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
 .cal-tz{color:var(--ink2);margin-left:1px;font-size:.85em}
 .cal-score{font-family:var(--mono);font-size:.66rem;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
@@ -738,11 +811,11 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   text-transform:uppercase;color:var(--muted);background:var(--paper);border:0;
   padding:5px 9px;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
 .cal-fbtn+.cal-fbtn{border-left:1.5px solid var(--ink)}
-.cal-fbtn.on{background:var(--ink);color:var(--paper)}
+.cal-fbtn.on{background:var(--ink-block);color:var(--on-ink)}
 .cal-fbtn:focus-visible{outline:2px solid var(--vermilion);outline-offset:2px}
 .cal-fbtn:disabled,.cal-fbtn.disabled{opacity:.4;cursor:not-allowed}
 .cal-fbtn .cf-star{color:var(--vermilion)}          /* the ★ pin accent */
-.cal-fbtn.on .cf-star{color:var(--paper)}
+.cal-fbtn.on .cf-star{color:var(--on-ink)}
 /* Subscribe (.ics): a quiet mono chip — ink on hover, vermilion stays reserved. */
 .ics-sub{font-family:var(--mono);font-size:.58rem;font-weight:800;letter-spacing:.1em;
   text-transform:uppercase;color:var(--muted);border:1.5px solid var(--line2);
@@ -815,7 +888,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .fbu-when{font-family:var(--mono);font-size:.72rem;color:var(--ink2);white-space:nowrap}
 .fb-modal[hidden]{display:none}
 .fb-modal{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:18px}
-.fb-modal-back{position:absolute;inset:0;background:rgba(19,17,13,.55)}
+.fb-modal-back{position:absolute;inset:0;background:var(--scrim)}
 .fb-modal-panel{position:relative;background:var(--paper);border:2px solid var(--ink);width:100%;max-width:340px;
   max-height:80vh;display:flex;flex-direction:column;box-shadow:6px 6px 0 var(--ink)}
 .fb-modal-head{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:2px solid var(--ink)}
@@ -869,7 +942,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-pool{font-family:var(--mono);font-size:.64rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
   color:var(--ink2);background:var(--paper2);border:1.5px solid var(--line2);padding:6px 11px;cursor:pointer}
 .bet-pool:hover{border-color:var(--ink)}
-.bet-pool.on{color:var(--paper);background:var(--ink);border-color:var(--ink)}
+.bet-pool.on{color:var(--on-ink);background:var(--ink-block);border-color:var(--ink)}
 .bet-pool.add{color:var(--vermilion);border-style:dashed}
 .bet-balrow{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .bet-mini{font-family:var(--mono);font-size:.6rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
@@ -964,10 +1037,18 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .tz-select{font-family:var(--mono);font-size:.7rem;font-weight:700;color:var(--ink);background-color:var(--paper);
   border:1.5px solid var(--ink);padding:5px 26px 5px 9px;cursor:pointer;letter-spacing:.02em;border-radius:0;
   -webkit-appearance:none;appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%2313110d' stroke-width='1.6'/%3E%3C/svg%3E");
+  background-image:var(--sel-arrow);
   background-repeat:no-repeat;background-position:right 9px center}
 .tz-select:hover{background-color:var(--paper2)}
 .tz-select:focus-visible{outline:2px solid var(--vermilion);outline-offset:2px}
+/* Theme cycle (AUTO → LIGHT → DARK), seated beside the tz picker. Mono chip that
+   matches the tz select; a min-width keeps the row steady as the word changes. */
+.foot-theme{display:inline-flex;align-items:center;gap:9px}
+.theme-btn{font-family:var(--mono);font-size:.7rem;font-weight:700;color:var(--ink);background-color:var(--paper);
+  border:1.5px solid var(--ink);padding:5px 12px;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;
+  border-radius:0;min-width:66px;text-align:left;line-height:1}
+.theme-btn:hover{background-color:var(--paper2)}
+.theme-btn:focus-visible{outline:2px solid var(--vermilion);outline-offset:2px}
 /* Fine-print attribution line: data source, engine, source link. */
 .foot-fine{margin-top:16px;font-family:var(--mono);font-size:.58rem;line-height:1.7;
   letter-spacing:.02em;color:var(--muted)}
@@ -1089,7 +1170,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .ga-row:hover{background:var(--paper2)}
 .ga-row.has-watched{box-shadow:inset 6px 0 0 var(--sig)}
 .ga-letter{flex:0 0 auto;width:34px;height:34px;display:flex;align-items:center;justify-content:center;
-  font-weight:800;font-size:1.2rem;background:var(--ink);color:var(--paper)}
+  font-weight:800;font-size:1.2rem;background:var(--ink-block);color:var(--on-ink)}
 .ga-letter:hover{background:var(--vermilion);color:var(--on-accent)}
 .ga-teams{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;flex:1;min-width:0}
 .ga-team{display:inline-flex;align-items:center;gap:5px;min-width:0}

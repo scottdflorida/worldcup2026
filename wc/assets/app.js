@@ -875,8 +875,40 @@
     window.scrollTo(0,Math.max(0,y));
   }
 
+  // ---- Theme: AUTO → LIGHT → DARK cycle. data-theme is stamped synchronously by
+  // a tiny inline <head> script (no FOUC); this only wires the footer toggle, keeps
+  // its label in sync, and drives the address-bar theme-color for a manual (forced)
+  // choice. On AUTO we remove the override so the two media <meta theme-color>s win.
+  var THEME_KEY='wc26.theme', THEME_ORDER=['auto','light','dark'];
+  var THEME_LABEL={auto:'Auto',light:'Light',dark:'Dark'};
+  var THEME_TC={light:'#F4F2EC',dark:'#14120D'};
+  function themeMode(){try{var v=localStorage.getItem(THEME_KEY);if(v==='light'||v==='dark'||v==='auto')return v;}catch(e){}return 'auto';}
+  function themeColor(mode){
+    var m=document.getElementById('tc-dyn');
+    if(mode!=='light'&&mode!=='dark'){if(m&&m.parentNode)m.parentNode.removeChild(m);return;}
+    if(!m){m=document.createElement('meta');m.setAttribute('name','theme-color');m.id='tc-dyn';
+      document.head.insertBefore(m,document.head.firstChild);}   // first + media-less ⇒ always wins
+    m.setAttribute('content',THEME_TC[mode]);
+  }
+  function applyTheme(mode){
+    var el=document.documentElement;
+    if(mode==='light'||mode==='dark')el.setAttribute('data-theme',mode);else el.removeAttribute('data-theme');
+    themeColor(mode);
+    var lab=document.querySelector('#theme-btn [data-theme-label]');
+    if(lab)lab.textContent=THEME_LABEL[mode]||'Auto';
+  }
+  function wireTheme(){
+    applyTheme(themeMode());                 // sync label + theme-color (attr already set inline)
+    var btn=document.getElementById('theme-btn'); if(!btn)return;
+    btn.addEventListener('click',function(){
+      var next=THEME_ORDER[(THEME_ORDER.indexOf(themeMode())+1)%THEME_ORDER.length];
+      try{localStorage.setItem(THEME_KEY,next);}catch(e){}
+      applyTheme(next);
+    });
+  }
+
   document.addEventListener('DOMContentLoaded',function(){
-    wireTZ();apply();wireReveal();wireLive();wireBracketScroll();wireBracketObserver();
+    wireTheme();wireTZ();apply();wireReveal();wireLive();wireBracketScroll();wireBracketObserver();
     wireBracketGhosts();drawBracket();
     landOnActiveColumn();initFantasy();initBetting();wireCalFilter();landOnToday();
   });

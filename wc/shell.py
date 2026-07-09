@@ -40,7 +40,8 @@ def head_meta(title, desc, page):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{E(title)}</title>
 <meta name="description" content="{E(desc)}">
-<meta name="theme-color" content="#F4F2EC">
+<meta name="theme-color" content="#F4F2EC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14120D" media="(prefers-color-scheme: dark)">
 <link rel="icon" type="image/svg+xml" href="{FAVICON}">
 <link rel="apple-touch-icon" sizes="180x180" href="{APPLE_ICON}">
 <meta property="og:type" content="website">
@@ -109,13 +110,14 @@ def shell(title, active, body, ctx, desc=None, page="index.html", crumb=None):
 <html lang="en">
 <head>
 {head_meta(title, desc, page)}
+<script>(function(){{try{{var t=localStorage.getItem("wc26.theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t);}}catch(e){{}}}})();</script>
 <link rel="stylesheet" href="assets/style.css?v={_asset_ver()}">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-head">
   <div class="brand"><a href="index.html" aria-label="World Cup 2026 tracker — home">
-    <span class="wm-mark" aria-hidden="true"><svg viewBox="0 0 36 36" width="30" height="30"><rect width="36" height="36" rx="3" fill="var(--ink)"/><text x="18" y="25" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-weight="800" font-size="17" letter-spacing="-1" fill="var(--accent)">26</text></svg></span>
+    <span class="wm-mark" aria-hidden="true"><svg viewBox="0 0 36 36" width="30" height="30"><rect width="36" height="36" rx="3" fill="var(--ink-block)"/><text x="18" y="25" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-weight="800" font-size="17" letter-spacing="-1" fill="var(--accent)">26</text></svg></span>
     <span class="wm-text" data-no-i18n><span class="wm-l1">WORLD&nbsp;CUP</span><span class="wm-l2">TRACKER&nbsp;<span class="wm-yr">/26</span></span></span></a></div>
   <div class="head-right">
     <nav class="site-nav" aria-label="Primary">{nav}</nav>
@@ -157,6 +159,10 @@ def shell(title, active, body, ctx, desc=None, page="index.html", crumb=None):
       <option value="Asia/Tokyo">Tokyo · JST</option>
       <option value="Australia/Sydney">Sydney · AEST</option>
     </select>
+    <span class="foot-theme">
+      <span class="foot-tz-k" id="theme-lbl">THEME</span>
+      <button id="theme-btn" class="theme-btn" type="button" aria-labelledby="theme-lbl"><span data-theme-label aria-live="polite">Auto</span></button>
+    </span>
   </div>
   <p class="foot-fine">
     <span class="ff-seg">Data:</span> <a class="ff-lnk" href="https://github.com/openfootball/worldcup.json" target="_blank" rel="noopener">openfootball/worldcup.json</a> <span class="ff-seg">(public domain)</span><span class="ff-dot" aria-hidden="true">·</span><span class="ff-seg">Built with a zero-dependency Python engine</span><span class="ff-dot" aria-hidden="true">·</span><a class="ff-lnk" href="about.html">About this site</a><span class="ff-dot" aria-hidden="true">·</span><a class="ff-lnk" href="https://github.com/scottdflorida/worldcup2026" target="_blank" rel="noopener">GitHub</a>

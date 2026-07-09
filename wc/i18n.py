@@ -114,6 +114,10 @@ UI = {
     "Brazil · BRT": "Brasil · BRT",
     "Mexico City · MX": "Cidade do México · MX",
     "Tokyo · JST": "Tóquio · JST",
+    # footer theme cycle (AUTO → LIGHT → DARK); "Auto" reads the same in pt-BR
+    "THEME": "TEMA",
+    "Light": "Claro",
+    "Dark": "Escuro",
 
     # ---- status words / chips ----
     "Group stage": "Fase de grupos",
