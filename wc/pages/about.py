@@ -72,10 +72,11 @@ def page_about(ctx):
 {_sec("02", "The engine",
   "The site is a static-site generator written in pure Python — standard library "
   "only. No framework, no bundler, no third-party packages at build time, and "
-  "zero runtime dependencies. One render pass turns a single JSON feed into over "
+  "zero runtime dependencies. One render pass turns a JSON results feed (plus "
+  "cached blurbs, odds and squads) into over "
   "120 files: an HTML page for each of the 48 team hubs and 12 groups plus the "
   "home, bracket, fantasy, bets and calendar views; 49 subscribable .ics calendar "
-  "feeds; one stylesheet; the client script; and the SVG art. The code is small, "
+  "feeds; one stylesheet; the client scripts; and the SVG art. The code is small, "
   "focused modules — feed fetch and cache, standings math, bracket resolution, "
   "timezone handling, shared HTML-fragment builders, and one module per page. "
   "Nothing runs on a server to render a page. The output is flat files a CDN "

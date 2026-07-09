@@ -125,19 +125,20 @@ html[data-theme="dark"] .krl-trophy{filter:brightness(0) invert(1)}
 @media (prefers-color-scheme: dark){html:not([data-theme="light"]) .krl-trophy{filter:brightness(0) invert(1)}}
 /* text selection: the one accent, in both themes */
 ::selection{background:var(--vermilion);color:var(--on-accent)}
-/* print: a visitor who forced dark still prints on paper-white (browsers drop
-   backgrounds, so light-on-white body text would vanish) — restore the light ink
-   set for the forced-dark case. Auto-dark already prints light: the system query
-   above does not match print media. */
+/* print: always print with the light ink set (browsers drop backgrounds, so
+   light-on-white body text would vanish). Applied unconditionally: covers
+   forced-dark AND auto+system-dark (whether the system color-scheme query
+   matches print media is browser-dependent); a no-op for light users since
+   these are the light defaults. */
 @media print{
-  html[data-theme="dark"]{
+  html{
     --paper:#F4F2EC;--paper2:#ECEAE1;--paper3:#E3E0D5;--ink:#13110D;--ink2:#3A372F;--muted-c:#6A6458;
     --line:rgba(19,17,13,.16);--line2:rgba(19,17,13,.30);--hair:rgba(19,17,13,.09);
     --bg-rule:rgba(19,17,13,.055);--zebra:rgba(19,17,13,.04);--vermilion:#FF3B14;--accent-text:#BE2C0E;--on-accent:#FFF4F0;
     --ink-block:#13110D;--ink-block2:#3A372F;--on-ink:#F4F2EC;--c-bub:#B8B2A2;--c-out:#D8D4C7;
     --accent-rgb:255,59,20;--paper-rgb:244,242,236;--scrim:rgba(19,17,13,.55)
   }
-  html[data-theme="dark"] .krl-trophy{filter:none}
+  .krl-trophy{filter:none}
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -381,7 +382,7 @@ section:first-of-type{margin-top:var(--s4)}
 .next-ko{border:2px solid var(--ink);background:var(--paper2);margin-bottom:18px}
 .nk-head{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--ink-block);color:var(--on-ink);padding:7px 13px}
 .nk-k{font-family:var(--mono);font-size:.625rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
-.nk-rd{font-family:var(--mono);font-size:.625rem;font-weight:800;letter-spacing:.08em;color:var(--vermilion)}
+.nk-rd{font-family:var(--mono);font-size:.625rem;font-weight:800;letter-spacing:.08em;color:var(--accent-text)}
 .next-ko .match{padding:13px 15px}
 .next-ko .match.is-upcoming{border-left:0}
 /* Eliminated/champion campaign: results timeline above the past-tense road graph */
@@ -437,7 +438,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .r32{font-family:var(--mono);font-weight:800;font-size:.72rem}
 .badge,.th-badge{display:inline-flex;align-items:center;gap:5px;font-size:.625rem;border:1.5px solid var(--ink);padding:3px 8px;white-space:nowrap}
 .badge .bdot{width:6px;height:6px;border-radius:50%;background:currentColor}
-.badge.win,.th-badge.win{background:var(--vermilion);color:var(--on-accent);border-color:var(--vermilion)}
+.badge.win,.th-badge.win{background:var(--vermilion);color:var(--ink);border-color:var(--vermilion)}
 .badge.q,.th-badge.q{background:var(--ink-block);color:var(--on-ink);border-color:var(--ink)}
 .badge.bub,.th-badge.bub{background:transparent;color:var(--ink);border-color:var(--ink)}
 .badge.gone,.th-badge.gone{background:transparent;color:var(--muted);border-color:var(--line2)}
@@ -736,7 +737,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 /* W/L result tag — one consistent winner/loser signal across the whole site */
 .wl-tag{flex:none;display:inline-grid;place-items:center;width:15px;height:15px;margin-left:5px;border-radius:3px;
   font-family:var(--mono);font-weight:800;font-size:.625rem;line-height:1}
-.wl-tag.w{background:var(--vermilion);color:var(--on-accent)}
+.wl-tag.w{background:var(--vermilion);color:var(--ink)}
 .wl-tag.l{background:var(--ink-block);color:var(--on-ink)}
 .wl-tag.d{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
 /* badges that precede a name (right-hand side of a head-to-head row) gap right */
@@ -746,7 +747,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .champion-plinth{position:relative;text-align:center;padding:18px 14px 16px;border:2px solid var(--ink);background:var(--ink-block);color:var(--on-ink)}
 .champion-plinth::before{content:"";position:absolute;left:0;right:0;top:0;height:8px;background:var(--vermilion)}
 .cp-trophy{filter:invert(1)}
-.cp-lbl{font-size:.625rem;letter-spacing:.14em;color:var(--vermilion);margin:8px 0 8px}
+.cp-lbl{font-size:.625rem;letter-spacing:.14em;color:var(--accent-text);margin:8px 0 8px}
 .champ-name{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:1.05rem;color:var(--on-ink)}
 .champ-name .fl{font-size:1.3em}
 .champ-name.pending{font-family:var(--mono);font-weight:700;font-size:.8rem;color:rgba(244,242,236,.7);text-transform:uppercase;letter-spacing:.06em}
@@ -991,7 +992,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-detail:hover{color:var(--vermilion)}
 .bet-fl{font-size:1.25rem;line-height:1}
 .bet-nm{font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bet-od{font-family:var(--mono);font-weight:800;color:var(--vermilion)}
+.bet-od{font-family:var(--mono);font-weight:800;color:var(--accent-text)}
 /* decided matches: dimmed matchup (not selectable) + everyone's bets */
 .bet-decided{padding:10px 0;border-top:1px solid var(--line)}
 .bet-decided:first-of-type{border-top:0}
@@ -1010,7 +1011,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-db-who{font-weight:700}
 .bet-db-pick{color:var(--ink2)}
 .bet-db-amt{text-align:left;font-family:var(--mono);font-weight:800;white-space:nowrap}
-.bet-db-amt.won{color:var(--vermilion)}
+.bet-db-amt.won{color:var(--accent-text)}
 .bet-db-amt.lost{color:var(--muted)}
 .bet-dbets-none{margin-top:8px;font-size:.82rem}
 .bet-st{font-family:var(--mono);font-size:.625rem;font-weight:800;letter-spacing:.06em;padding:2px 6px;white-space:nowrap}
@@ -1026,9 +1027,9 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-lb-r{flex:none;display:inline-flex;align-items:center;justify-content:center;min-width:1.6em;height:1.6em;
   font-family:var(--mono);font-weight:800;font-size:.78rem;color:var(--muted)}
 .bet-lb-r.medal{border-radius:50%;color:#2a2206;font-size:.74rem}
-.bet-lb-r.r1{background:linear-gradient(150deg,#FCEBA4 4%,#E6B422 55%,#C9971A);box-shadow:inset 0 0 0 1.5px #B8860B,0 1px 2px rgba(0,0,0,.18)}
-.bet-lb-r.r2{background:linear-gradient(150deg,#F4F5F6 4%,#C8CDD2 55%,#AEB4BA);box-shadow:inset 0 0 0 1.5px #9AA0A6,0 1px 2px rgba(0,0,0,.15);color:#2B2F33}
-.bet-lb-r.r3{background:linear-gradient(150deg,#F1C896 4%,#CD8138 55%,#A9692C);box-shadow:inset 0 0 0 1.5px #9C5A23,0 1px 2px rgba(0,0,0,.18);color:#3A1D00}
+.bet-lb-r.r1{background:var(--vermilion);color:var(--ink);border:1.5px solid var(--ink)}
+.bet-lb-r.r2{background:var(--paper);color:var(--ink);border:1.5px solid var(--ink)}
+.bet-lb-r.r3{background:var(--paper);color:var(--muted);border:1.5px solid var(--muted)}
 .bet-form{padding:16px}
 .bet-form-team{font-size:1.05rem;margin-bottom:14px}
 .bet-payout{font-size:.82rem;margin:0 0 12px;min-height:1em}
@@ -1096,7 +1097,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .hero-now{margin:clamp(14px,2.5vw,22px) 0 0;font-family:var(--mono);font-weight:700;
   font-size:clamp(.7rem,.62rem + .4vw,.9rem);letter-spacing:.08em;text-transform:uppercase;
   color:var(--ink2);display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;line-height:1.45}
-.hn-rd{color:var(--vermilion);font-weight:800;letter-spacing:.14em}
+.hn-rd{color:var(--accent-text);font-weight:800;letter-spacing:.14em}
 .hn-sep{color:var(--line2)}
 .hn-fix{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--ink)}
 .hn-fix .hn-tm{font-weight:800}
