@@ -2,9 +2,9 @@
 graph, fixtures and squad."""
 from __future__ import annotations
 
-from .. import blurbs, bracket, data, squads, util
+from .. import blurbs, bracket, data, i18n, squads, util
 from ..components import (_ordinal, _round_short, group_decided, group_table,
-                          match_line, match_list, star, team_link)
+                          json_island, match_line, match_list, star, team_link)
 from ..flags import flag
 from ..shell import shell
 from ..times import E, kickoff_label
@@ -299,7 +299,14 @@ def _road_graph(roads, third_html, knocked):
 
 def _blurb_html(ctx, team):
     b = blurbs.blurb_for(ctx.blurbs, team)
-    return f'<p class="road-blurb">{E(b)}</p>' if b else ''
+    if not b:
+        return ''
+    # Ship ONLY this team's pt-BR blurb, as a JSON island the i18n runtime merges
+    # into its dict at init (kept out of the global i18n.js payload). No island when
+    # there's no fingerprint-matching translation → pt mode falls back to English.
+    pt = i18n.blurb_pt_for(team)
+    isl = json_island("wc-pt-blurb", pt) if pt else ''
+    return f'<p class="road-blurb">{E(b)}</p>{isl}'
 
 
 def _ics_row(team):

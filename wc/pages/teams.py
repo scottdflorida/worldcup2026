@@ -1,7 +1,7 @@
 """Searchable directory of all 48 nations, grouped, with your-teams rail."""
 from __future__ import annotations
 
-from ..components import team_card
+from ..components import team_card, teams_island
 from ..shell import shell
 from ..times import E
 
@@ -17,7 +17,6 @@ def page_teams(ctx):
             f'<span class="muted">{"Final" if info["complete"] else str(info["remaining"]) + " to play"}</span></div>'
             f'<div class="tcard-grid">{cards}</div></div>'
         )
-    src = "".join(team_card(ctx, t, rich=True) for t in ctx.teams)
     body = f"""
 <section class="teams-intro" aria-label="All teams">
   <h1>All 48 teams</h1>
@@ -26,7 +25,7 @@ def page_teams(ctx):
 <section id="your-teams-sec" class="your-teams-sec" data-reveal aria-label="Your teams">
   <div class="sec-head"><h2>Your teams</h2><span class="muted">Pin any team with ★ — next &amp; latest match, lit up everywhere</span></div>
   <div id="your-teams" class="tcard-grid yt-grid"></div>
-  <div id="team-src" hidden>{src}</div>
+  {teams_island(ctx)}
 </section>
 <section id="directory" aria-label="Team directory">
   <div class="search-wrap">

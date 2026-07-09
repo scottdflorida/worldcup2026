@@ -138,6 +138,10 @@ body{margin:0;background:var(--paper);color:var(--ink);overflow-x:hidden;-webkit
   /* baseline-grid newsprint motif: a faint horizontal ruling, no aurora/pitch */
   background-image:repeating-linear-gradient(180deg,transparent 0,transparent 31px,var(--bg-rule) 31px,var(--bg-rule) 32px);
   background-attachment:fixed}
+/* Mobile: a viewport-fixed background repaints the whole ruling on every scroll
+   frame (jank on touch). The 32px repeat tiles the page the same way when it
+   scrolls with content, so drop the fixed attachment on small screens. */
+@media(max-width:760px){body{background-attachment:scroll}}
 a{color:inherit;text-decoration:none}
 img{max-width:100%}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:nowrap;border:0;max-width:1px}

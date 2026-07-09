@@ -16,8 +16,8 @@ from __future__ import annotations
 
 from .. import bracket, config, data
 from ..components import (archive_band, bracket_rail, group_table, pulse_band,
-                          round_ribbon, scorebug, star_icon, team_card,
-                          team_link, _champion, _round_full, _slot_name)
+                          round_ribbon, scorebug, star_icon, team_link,
+                          teams_island, _champion, _round_full, _slot_name)
 from ..flags import flag
 from ..shell import shell
 from ..times import E, kickoff_label
@@ -105,12 +105,11 @@ def _hero_now(ctx, rd, nxt):
 
 
 def _your_teams(ctx, status=False):
-    src = "".join(team_card(ctx, t, rich=True, status=status) for t in ctx.teams)
     return f"""
 <section id="your-teams-sec" class="your-teams-sec" data-reveal aria-label="Your teams">
   <div class="sec-head"><h2>Your teams</h2><span class="muted">Pin any team with ★ — next &amp; latest match, lit up everywhere</span></div>
   <div id="your-teams" class="tcard-grid yt-grid"></div>
-  <div id="team-src" hidden>{src}</div>
+  {teams_island(ctx, status)}
 </section>
 """
 

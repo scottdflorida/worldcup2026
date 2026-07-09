@@ -4,6 +4,7 @@ Pulse band, team cards, and the ordinal/round-label helpers several pages share.
 """
 from __future__ import annotations
 
+import json
 from datetime import timedelta
 
 from . import bracket, config, data, util, venues
@@ -540,6 +541,98 @@ def team_card(ctx, team, rich=False, status=False):
         f'</a>{star_icon(team)}</div>'
         f'{fixtures}</div>'
     )
+
+
+# --------------------------------------------------------------------------
+# Watchlist JSON island. The "Your teams" rail only ever shows the handful of
+# teams a visitor has pinned, yet the home + directory pages used to ship all 48
+# rich cards pre-rendered in a hidden block for app.js to clone (~45% of the home
+# HTML). Instead we emit ONE compact island of each team's card *primitives*;
+# app.js reproduces team_card's exact markup from it (and uses it as the flag /
+# slug lookup for opponents). The extractors below mirror the render helpers above
+# field-for-field — a JS-rendered card must byte-match a server-rendered one.
+# --------------------------------------------------------------------------
+def _opp_data(opp):
+    """Compact opponent encoding mirroring ``_opp_inline``:
+    concrete nation -> its name (str); 1–2 live candidates -> the name list;
+    >2 candidates -> the count (int); none -> ``{"l": label}`` (muted placeholder)."""
+    if opp["team"]:
+        return opp["team"]
+    cands = sorted(opp.get("candidates") or [])
+    if 1 <= len(cands) <= 2:
+        return cands
+    if cands:
+        return len(cands)
+    return {"l": opp["label"]}
+
+
+def _ko_data(m):
+    """Kickoff primitives (day, plus time+utc when the feed carries a clock),
+    mirroring ``times.kickoff_label``. None when there is no usable day."""
+    day, time = _pt_parts(m)
+    if not day:
+        return None
+    d = {"d": day}
+    utc = _utc_iso(m)
+    if time and utc:
+        d["t"] = time
+        d["u"] = utc
+    return d
+
+
+def _tcard_data(ctx, team):
+    """The next/last-fixture primitives a rich card needs — the island form of
+    ``_tcard_fixtures``. app.js expands these back into identical markup."""
+    d = {}
+    nm = ctx.next_match(team)
+    if nm is not None:
+        nxt, opp, rd = nm
+        tag = nxt.get("group", "") if str(rd).startswith("Matchday") else _round_short(rd)
+        nx = {"k": _ko_data(nxt), "o": _opp_data(opp)}
+        if tag:
+            nx["td"] = tag
+        d["nx"] = nx
+    elif ctx.knocked_out(team):
+        d["ko"] = 1
+    _, recent = ctx.team_fixtures(team)
+    if recent is not None:
+        opp = _card_opponent(ctx, recent, team)
+        g1, g2 = data.final_score(recent)
+        ts, os_ = (g1, g2) if recent.get("team1") == team else (g2, g1)
+        res = "W" if ts > os_ else ("L" if ts < os_ else "D")
+        d["ls"] = {"r": res, "ts": ts, "os": os_, "o": _opp_data(opp)}
+    return d
+
+
+def json_island(el_id, obj):
+    """A deterministic ``<script type="application/json">`` data island. Keys are
+    sorted (byte-stable) and ``<`` is escaped so the payload can never break out of
+    the element (no ``</script>`` can appear)."""
+    js = json.dumps(obj, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    js = js.replace("<", "\\u003c")
+    return f'<script type="application/json" id="{el_id}">{js}</script>'
+
+
+def teams_island(ctx, status=False):
+    """The watchlist data island for a page. ``status`` picks the meta form the
+    rich cards use (live tournament status vs. group · rank · pts), matching the
+    ``status`` flag passed to ``team_card``."""
+    teams = {}
+    for t in ctx.teams:
+        pr, sec = util.accent(t)
+        d = {"f": flag(t), "s": util.slug(t), "a": pr, "a2": sec}
+        if status:
+            st_html, tone = _card_status(ctx, t)
+            if st_html:
+                d["st"] = {"t": tone, "h": st_html}
+        else:
+            proj = ctx.projections[t]
+            d["g"] = proj["group"]
+            d["r"] = proj["rank"]
+            d["p"] = proj["row"]["Pts"]
+        d.update(_tcard_data(ctx, t))
+        teams[t] = d
+    return json_island("wc-teams", {"mode": "status" if status else "group", "teams": teams})
 
 
 # The short round labels (R32/R16/QF/SF/F) come straight from the one config map;

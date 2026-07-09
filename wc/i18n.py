@@ -425,31 +425,27 @@ def _load_json(path):
         return {}
 
 
-def _blurbs_pt():
-    """pt-BR blurb translations keyed by the exact English blurb text.
+def blurb_pt_for(team):
+    """One team's pt-BR blurb translation as ``{english_text: pt_text}`` (or ``{}``).
 
-    Joins the English cache (blurbs.json) with the pt cache (blurbs.pt.json) by
-    team, and only emits a translation whose fingerprint still matches the live
-    English blurb — so a blurb regenerated since its last translation falls back
-    to English instead of showing a stale pt version."""
-    en = _load_json(config.BLURBS_PATH)
-    pt = _load_json(config.BLURBS_PT_PATH)
-    out = {}
-    for team, e in en.items():
-        p = pt.get(team)
-        if not p or p.get("fingerprint") != e.get("fingerprint"):
-            continue
-        en_text, pt_text = e.get("text"), p.get("text")
-        if en_text and pt_text:
-            out[en_text] = pt_text
-    return out
+    Team pages emit this as their own ``wc-pt-blurb`` JSON island, so ``i18n.js``
+    no longer ships every team's blurb (~60KB) on every page. Fingerprint-gated: a
+    blurb regenerated since its last translation falls back to English rather than
+    showing a stale pt version."""
+    en = _load_json(config.BLURBS_PATH).get(team)
+    pt = _load_json(config.BLURBS_PT_PATH).get(team)
+    if not en or not pt or pt.get("fingerprint") != en.get("fingerprint"):
+        return {}
+    en_text, pt_text = en.get("text"), pt.get("text")
+    return {en_text: pt_text} if (en_text and pt_text) else {}
 
 
 def _full_dict():
+    # Blurbs are NOT embedded here any more; each team page ships only its own
+    # translation as a wc-pt-blurb island that the runtime merges in at init.
     d = {}
     d.update(COUNTRIES)
     d.update(UI)
-    d.update(_blurbs_pt())
     return d
 
 
@@ -463,6 +459,15 @@ _RUNTIME = r"""/* World Cup 2026 — pt-BR localisation (generated from wc/i18n.
   var DICT = __DICT__;
   var C = __COUNTRIES__;
   for (var k in C) { if (!DICT.hasOwnProperty(k)) DICT[k] = C[k]; }
+
+  // Per-page team blurb: team pages ship ONLY their own paragraph translation as a
+  // JSON island instead of every team's blurb riding on every page. Merge it in
+  // before COLLAPSED is built so whole-paragraph lookups (exact + collapsed) hit.
+  try {
+    var _bl = document.getElementById("wc-pt-blurb");
+    if (_bl) { var _pb = JSON.parse(_bl.textContent);
+      for (var _bk in _pb) { if (!DICT.hasOwnProperty(_bk)) DICT[_bk] = _pb[_bk]; } }
+  } catch (e) {}
 
   // Whitespace-collapsed index, for multi-line / oddly-spaced source nodes.
   var COLLAPSED = {};

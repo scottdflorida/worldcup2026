@@ -6,7 +6,75 @@
   function get(){try{var v=JSON.parse(localStorage.getItem(KEY));if(Array.isArray(v))return v;}catch(e){}return [];}
   function save(a){try{localStorage.setItem(KEY,JSON.stringify(a));}catch(e){}}
   function toggle(t){var a=get();var i=a.indexOf(t);if(i>=0)a.splice(i,1);else a.push(t);save(a);apply();}
-  function esc(t){return (window.CSS&&CSS.escape)?CSS.escape(t):t.replace(/"/g,'\\"');}
+  // ---- Watchlist cards from the JSON island. The "Your teams" rail renders the
+  // handful of pinned teams from a compact <script id="wc-teams"> island (which
+  // also serves as the flag/slug lookup for opponents), reproducing the server's
+  // team_card markup EXACTLY — see wc/components.py team_card / _tcard_fixtures.
+  function he(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;');}
+  var ISL;
+  function island(){
+    if(ISL)return ISL;
+    var el=document.getElementById('wc-teams');ISL={mode:'group',teams:{}};
+    if(el){try{var v=JSON.parse(el.textContent);if(v&&v.teams)ISL=v;}catch(e){}}
+    return ISL;
+  }
+  function ordn(n){return ({1:'1st',2:'2nd',3:'3rd',4:'4th'})[n]||(n+'th');}
+  function teamLink(name,cls,isl){
+    var d=(isl.teams||{})[name]||{};
+    return '<a class="'+cls+'" data-team="'+he(name)+'" href="'+(d.s||'')+'.html">'+
+      '<span class="fl">'+(d.f||'')+'</span><span class="nm">'+he(name)+'</span></a>';
+  }
+  function oppInline(o,cls,isl){
+    if(typeof o==='string')return teamLink(o,cls,isl);
+    if(o&&o.length!=null&&typeof o!=='number')return [].map.call(o,function(c){return teamLink(c,'cand',isl);}).join(' / ');
+    if(typeof o==='number')return '<span class="tc-cands">'+o+' possible</span>';
+    return '<span class="muted">'+he(o&&o.l)+'</span>';
+  }
+  function koLabel(k){
+    if(!k)return '';
+    if(k.t&&k.u){
+      return '<span class="ko" data-utc="'+he(k.u)+'" data-tfmt="daytime">'+
+        '<span class="ko-day">'+he(k.d)+'</span> '+
+        '<span class="ko-time">'+he(k.t)+'<span class="ko-tz tz">PT</span></span></span>';
+    }
+    return '<span class="ko"><span class="ko-day">'+he(k.d)+'</span></span>';
+  }
+  function tcardFix(d,isl){
+    var rows=[];
+    if(d.nx){
+      var nx=d.nx,tag=nx.td?'<span class=tc-rd>'+he(nx.td)+'</span>':'';
+      rows.push('<div class="tc-fix tc-next"><span class="tc-k">Next</span>'+
+        '<span class="tc-line"><span class="tc-when">'+koLabel(nx.k)+'</span>'+
+        '<span class="tc-vs">v '+oppInline(nx.o,'tc-opp',isl)+'</span>'+tag+'</span></div>');
+    }else if(d.ko){
+      rows.push('<div class="tc-fix tc-out"><span class="tc-k out">Out</span>'+
+        '<span class="tc-line muted">Knocked out of the tournament</span></div>');
+    }
+    if(d.ls){
+      var ls=d.ls;
+      rows.push('<div class="tc-fix tc-last"><span class="tc-k">Last</span>'+
+        '<span class="tc-line"><span class="tc-res '+ls.r.toLowerCase()+'">'+ls.r+' '+ls.ts+'–'+ls.os+'</span>'+
+        '<span class="tc-vs">v '+oppInline(ls.o,'tc-opp',isl)+'</span></span></div>');
+    }
+    if(!rows.length)rows.push('<div class="tc-fix muted">No upcoming or recent match</div>');
+    return '<div class="tcard-fix">'+rows.join('')+'</div>';
+  }
+  function renderTeamCard(name,d,isl){
+    var meta;
+    if(isl.mode==='status'){
+      meta=d.st?'<span class="tcard-meta tcard-status '+d.st.t+'">'+d.st.h+'</span>':'';
+    }else{
+      meta='<span class="tcard-meta muted">'+he(d.g)+' · '+ordn(d.r)+' · '+d.p+' pts</span>';
+    }
+    var star='<button class="wl-ic" type="button" data-watch="'+he(name)+'" '+
+      'aria-pressed="false" aria-label="Watch '+he(name)+'" title="Watch '+he(name)+'"></button>';
+    return '<div class="tcard rich" data-team-card="'+he(name)+'" data-team="'+he(name)+'" '+
+      'style="--accent:'+d.a+';--accent2:'+d.a2+'">'+
+      '<div class="tcard-top"><a class="tcard-main" href="'+(d.s||'')+'.html">'+
+      '<span class="tcard-flag">'+(d.f||'')+'</span>'+
+      '<span class="tcard-body"><span class="tcard-name">'+he(name)+'</span>'+meta+'</span>'+
+      '</a>'+star+'</div>'+tcardFix(d,isl)+'</div>';
+  }
   function apply(){
     var w=get();
     var host=document.getElementById('your-teams');
@@ -23,10 +91,10 @@
           '<span class="yt-cta"><a href="teams.html">Browse all 48 teams →</a></span>'+
           '</div></div>';
       } else {
+        var isl=island();
         w.forEach(function(t){
-          var src=document.querySelector('#team-src [data-team-card="'+esc(t)+'"]')
-                ||document.querySelector('[data-team-card="'+esc(t)+'"]');
-          if(src)host.appendChild(src.cloneNode(true));
+          var d=isl.teams&&isl.teams[t];
+          if(d)host.insertAdjacentHTML('beforeend',renderTeamCard(t,d,isl));
         });
       }
     }
