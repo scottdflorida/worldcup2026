@@ -730,6 +730,25 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .cal-cands .cand .nm{font-weight:600;color:var(--ink2)}
 .cal-tbd{font-family:var(--mono);font-size:.62rem;color:var(--muted)}
 .cal-v{font-size:.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:0 0 0 1px}
+.cal-m[hidden]{display:none}
+/* Calendar sec-head tools: watchlist filter (segmented) + ICS subscribe. */
+.cal-sec .cal-tools{margin-left:auto;display:flex;align-items:center;gap:10px 12px;flex-wrap:wrap}
+.cal-filter{display:inline-flex;border:1.5px solid var(--ink)}
+.cal-fbtn{font-family:var(--mono);font-size:.58rem;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);background:var(--paper);border:0;
+  padding:5px 9px;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.cal-fbtn+.cal-fbtn{border-left:1.5px solid var(--ink)}
+.cal-fbtn.on{background:var(--ink);color:var(--paper)}
+.cal-fbtn:focus-visible{outline:2px solid var(--vermilion);outline-offset:2px}
+.cal-fbtn:disabled,.cal-fbtn.disabled{opacity:.4;cursor:not-allowed}
+.cal-fbtn .cf-star{color:var(--vermilion)}          /* the ★ pin accent */
+.cal-fbtn.on .cf-star{color:var(--paper)}
+/* Subscribe (.ics): a quiet mono chip — ink on hover, vermilion stays reserved. */
+.ics-sub{font-family:var(--mono);font-size:.58rem;font-weight:800;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);border:1.5px solid var(--line2);
+  padding:5px 9px;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.ics-sub:hover,.ics-sub:focus-visible{color:var(--ink);border-color:var(--ink)}
+.ics-row{display:flex;justify-content:flex-end;margin:-2px 0 14px}
 /* Phones: drop the 7-up grid for a single-column agenda (skip empty days). */
 @media(max-width:760px){
   .cal-dow-row{display:none}

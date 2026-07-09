@@ -144,11 +144,18 @@ def shell(title, active, body, ctx, desc=None, page="index.html", crumb=None):
   <div class="foot-tz">
     <label class="foot-tz-k" for="tz-select">Times shown in</label>
     <select id="tz-select" class="tz-select" aria-label="Display time zone">
+      <option value="auto" selected>Auto — device time</option>
       <option value="America/New_York">Eastern · ET</option>
       <option value="America/Chicago">Central · CT</option>
       <option value="America/Denver">Mountain · MT</option>
-      <option value="America/Los_Angeles" selected>Pacific · PT</option>
+      <option value="America/Los_Angeles">Pacific · PT</option>
+      <option value="UTC">UTC</option>
+      <option value="Europe/London">London · UK</option>
+      <option value="Europe/Paris">Paris / Berlin · CET</option>
       <option value="America/Sao_Paulo">Brazil · BRT</option>
+      <option value="America/Mexico_City">Mexico City · MX</option>
+      <option value="Asia/Tokyo">Tokyo · JST</option>
+      <option value="Australia/Sydney">Sydney · AEST</option>
     </select>
   </div>
   <p class="foot-fine">

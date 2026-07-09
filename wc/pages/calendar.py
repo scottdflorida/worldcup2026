@@ -24,8 +24,13 @@ def _calendar_weeks(ctx):
         return []
     days = sorted(by_day)
     first, last = days[0], days[-1]
-    start = first - timedelta(days=(first.weekday() + 1) % 7)   # back to Sunday
-    end = last + timedelta(days=(5 - last.weekday()) % 7)       # forward to Saturday
+    # Pad a day on each side BEFORE rounding to whole weeks: when the viewer's zone
+    # differs from Pacific, a near-midnight kickoff moves to the adjacent local day
+    # (client re-bucketing), and that day must have a cell to receive it. Max shift
+    # across every earth zone relative to Pacific is one day either way.
+    lo, hi = first - timedelta(days=1), last + timedelta(days=1)
+    start = lo - timedelta(days=(lo.weekday() + 1) % 7)         # back to Sunday
+    end = hi + timedelta(days=(5 - hi.weekday()) % 7)           # forward to Saturday
     weeks, cur = [], start
     while cur <= end:
         week = []
@@ -100,14 +105,26 @@ def page_calendar(ctx):
                     f'<span class="cal-dom">{d.day}</span>'
                     f'<span class="cal-mon">{d.strftime("%b")}</span></div>')
             body = "".join(_cal_match(ctx, m, by_num) for m in ms)
-            cells.append(f'<div class="{cls}">{head}<div class="cal-d-body">{body}</div></div>')
+            # data-date drives client-side re-bucketing into the viewer's zone.
+            cells.append(f'<div class="{cls}" data-date="{d.isoformat()}">'
+                         f'{head}<div class="cal-d-body">{body}</div></div>')
         week_html.append(f'<div class="cal-week">{"".join(cells)}</div>')
 
     body = f"""
 <section class="cal-intro" aria-label="Match calendar">
   <h1>Match calendar</h1>
-  <p class="muted">Every matchday in Pacific time — group stage to the Final.</p>
+  <p class="muted">Times shown in <b class="cal-tznote" data-tznote>Pacific · PT</b>.</p>
 </section>
+<div class="sec-head cal-sec">
+  <h2>Every matchday</h2>
+  <div class="cal-tools">
+    <div class="cal-filter" role="group" aria-label="Filter matches">
+      <button class="cal-fbtn on" type="button" data-calfilter="all" aria-pressed="true">All matches</button>
+      <button class="cal-fbtn" type="button" data-calfilter="watch" aria-pressed="false" title="Star teams to filter"><span class="cf-star" aria-hidden="true">★</span>Watchlist</button>
+    </div>
+    <a class="ics-sub" href="ics/all-matches.ics" title="Subscribe to every match (.ics)">SUBSCRIBE (.ics)</a>
+  </div>
+</div>
 <div class="cal-grid" aria-label="Tournament calendar">
   <div class="cal-dow-row" aria-hidden="true">{dow_head}</div>
   {"".join(week_html)}

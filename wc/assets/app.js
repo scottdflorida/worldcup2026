@@ -46,11 +46,33 @@
     applyTZ();  // re-render times (incl. the freshly cloned Your-teams cards)
   }
   // ---- time zone: re-render every [data-utc] time in the viewer's chosen zone ----
+  // Short zone tags shown beside every kickoff. Curated for the tournament
+  // audience; an arbitrary device zone (the "Auto" default) derives its tag from
+  // Intl instead.
   var TZS={'America/New_York':'ET','America/Chicago':'CT','America/Denver':'MT',
-           'America/Los_Angeles':'PT','America/Sao_Paulo':'BRT'};
-  var TZ_KEY='wc26.tz', TZ_DEFAULT='America/Los_Angeles';
-  function getTZ(){try{var v=localStorage.getItem(TZ_KEY);if(v&&TZS[v])return v;}catch(e){}return TZ_DEFAULT;}
+           'America/Los_Angeles':'PT','UTC':'UTC','Europe/London':'UK',
+           'Europe/Paris':'CET','America/Sao_Paulo':'BRT','America/Mexico_City':'MX',
+           'Asia/Tokyo':'JST','Australia/Sydney':'AEST'};
+  // Fuller descriptor for the calendar "Times shown in …" note — mirrors the
+  // footer dropdown labels so one pt-BR dictionary covers both.
+  var TZ_DESC={'America/New_York':'Eastern · ET','America/Chicago':'Central · CT',
+    'America/Denver':'Mountain · MT','America/Los_Angeles':'Pacific · PT','UTC':'UTC',
+    'Europe/London':'London · UK','Europe/Paris':'Paris / Berlin · CET',
+    'America/Sao_Paulo':'Brazil · BRT','America/Mexico_City':'Mexico City · MX',
+    'Asia/Tokyo':'Tokyo · JST','Australia/Sydney':'Sydney · AEST'};
+  var TZ_KEY='wc26.tz', TZ_AUTO='auto', PACIFIC='America/Los_Angeles';
+  function deviceTZ(){try{return Intl.DateTimeFormat().resolvedOptions().timeZone||PACIFIC;}catch(e){return PACIFIC;}}
+  // The stored CHOICE ('auto' or an IANA zone). A real stored zone wins over auto.
+  function tzChoice(){try{var v=localStorage.getItem(TZ_KEY);if(v)return v;}catch(e){}return TZ_AUTO;}
+  function effTZ(){var c=tzChoice();return (c&&c!==TZ_AUTO)?c:deviceTZ();}
   function setTZ(v){try{localStorage.setItem(TZ_KEY,v);}catch(e){}}
+  function tzTag(tz){
+    if(TZS[tz])return TZS[tz];
+    try{var ps=new Intl.DateTimeFormat('en-US',{timeZone:tz,timeZoneName:'short'}).formatToParts(new Date());
+      for(var i=0;i<ps.length;i++)if(ps[i].type==='timeZoneName')return ps[i].value;}catch(e){}
+    return '';
+  }
+  function tzDescriptor(tz){return TZ_DESC[tz]||(tz+' · '+tzTag(tz));}
   function tzParts(utc,tz){
     var d=new Date(utc);
     if(isNaN(d))return null;
@@ -59,7 +81,7 @@
     return {day:day,time:time};
   }
   function applyTZ(){
-    var tz=getTZ(), label=TZS[tz]||'';
+    var tz=effTZ(), label=tzTag(tz);
     document.querySelectorAll('[data-utc]').forEach(function(el){
       if(el.classList.contains('live-mid'))return;          // currently showing a live score
       var p=tzParts(el.getAttribute('data-utc'),tz); if(!p)return;
@@ -80,10 +102,13 @@
       var cc=(el.querySelector('.tz')||{}).className||'tz';   // 'time'
       el.innerHTML=p.time+'<span class="'+cc+'">'+label+'</span>';
     });
+    var note=document.querySelector('[data-tznote]');
+    if(note)note.textContent=tzDescriptor(tz);
+    refreshCalendar(tz);   // re-bucket the calendar's day cells into this zone
   }
   function wireTZ(){
     var sel=document.getElementById('tz-select'); if(!sel)return;
-    sel.value=getTZ();
+    sel.value=tzChoice();
     sel.addEventListener('change',function(){setTZ(sel.value);applyTZ();});
   }
   document.addEventListener('click',function(e){
@@ -777,6 +802,70 @@
     fetchBets(); load();
   }
 
+  // ---- Calendar: re-bucket day cells into the viewer's zone + watchlist filter --
+  // Day cells are bucketed in Pacific at build time; when the effective zone
+  // differs, a kickoff near midnight belongs under a different local day. We move
+  // each .cal-m under the cell whose date matches its kickoff in the effective
+  // zone (cells span the tournament ±1 day), keep each day time-ordered, retag
+  // "today" for that zone, and toggle empty-day styling. Idempotent: back in
+  // Pacific every match returns to its original cell.
+  var CAL_FKEY='wc26.calFilter';
+  function calFilter(){try{var v=localStorage.getItem(CAL_FKEY);if(v==='watch'||v==='all')return v;}catch(e){}return 'all';}
+  function setCalFilter(v){try{localStorage.setItem(CAL_FKEY,v);}catch(e){}}
+  function calISO(utc,tz){var d=new Date(utc);if(isNaN(d))return null;
+    try{return new Intl.DateTimeFormat('en-CA',{timeZone:tz,year:'numeric',month:'2-digit',day:'2-digit'}).format(d);}catch(e){return null;}}
+  function calUtc(cm){var u=cm.querySelector('[data-utc]');return u?(u.getAttribute('data-utc')||''):'';}
+  function refreshCalendar(tz){
+    var grid=document.querySelector('.cal-grid'); if(!grid)return;
+    tz=tz||effTZ();
+    var cells={};
+    grid.querySelectorAll('.cal-day').forEach(function(c){var d=c.getAttribute('data-date');if(d)cells[d]=c;});
+    // move each match under its day cell in the effective zone
+    grid.querySelectorAll('.cal-m').forEach(function(cm){
+      var u=calUtc(cm); if(!u)return;
+      var iso=calISO(u,tz); if(!iso)return;
+      var target=cells[iso]; if(!target)return;
+      var body=target.querySelector('.cal-d-body');
+      if(body&&cm.parentNode!==body)body.appendChild(cm);
+    });
+    // keep each day in kickoff order (ISO-UTC strings sort chronologically)
+    grid.querySelectorAll('.cal-d-body').forEach(function(body){
+      [].slice.call(body.children).sort(function(a,b){
+        var ua=calUtc(a),ub=calUtc(b);return ua<ub?-1:(ua>ub?1:0);
+      }).forEach(function(cm){body.appendChild(cm);});
+    });
+    // "today" recomputed in the effective zone
+    var todayISO=calISO(new Date().toISOString(),tz);
+    grid.querySelectorAll('.cal-day').forEach(function(c){
+      c.classList.toggle('today',c.getAttribute('data-date')===todayISO);});
+    applyCalFilter(grid);
+  }
+  function applyCalFilter(grid){
+    grid=grid||document.querySelector('.cal-grid'); if(!grid)return;
+    var w=get(), canWatch=w.length>0, mode=calFilter();
+    if(mode==='watch'&&!canWatch)mode='all';       // nothing starred yet → show all
+    grid.querySelectorAll('.cal-m').forEach(function(cm){
+      cm.hidden=!(mode==='all'||cm.classList.contains('has-watched'));
+    });
+    grid.querySelectorAll('.cal-day').forEach(function(c){
+      c.classList.toggle('empty',!c.querySelector('.cal-m:not([hidden])'));
+    });
+    var btns=document.querySelectorAll('.cal-filter [data-calfilter]');
+    for(var i=0;i<btns.length;i++){
+      var b=btns[i],v=b.getAttribute('data-calfilter'),on=v===mode;
+      b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false');
+      if(v==='watch'){b.disabled=!canWatch; b.classList.toggle('disabled',!canWatch);}
+    }
+  }
+  function wireCalFilter(){
+    var box=document.querySelector('.cal-filter'); if(!box)return;
+    box.addEventListener('click',function(e){
+      var b=e.target.closest&&e.target.closest('[data-calfilter]');
+      if(!b||b.disabled)return;
+      setCalFilter(b.getAttribute('data-calfilter')); refreshCalendar();
+    });
+  }
+
   // Calendar: jump to today on load (offset for the sticky header).
   function landOnToday(){
     var t=document.querySelector('.cal-day.today'); if(!t)return;
@@ -789,7 +878,7 @@
   document.addEventListener('DOMContentLoaded',function(){
     wireTZ();apply();wireReveal();wireLive();wireBracketScroll();wireBracketObserver();
     wireBracketGhosts();drawBracket();
-    landOnActiveColumn();initFantasy();initBetting();landOnToday();
+    landOnActiveColumn();initFantasy();initBetting();wireCalFilter();landOnToday();
   });
   window.addEventListener('load',landOnToday);
   window.addEventListener('load',drawBracket);

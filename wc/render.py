@@ -17,7 +17,7 @@ from __future__ import annotations
 import json
 import os
 
-from . import art, blurbs, bracket, config, data, i18n, pages, squads, standings, util
+from . import art, blurbs, bracket, config, data, i18n, ics, pages, squads, standings, util
 
 
 class Context:
@@ -166,6 +166,11 @@ def render_site(payload):
         files[f"group-{letter.lower()}.html"] = pages.page_group(ctx, letter)
     for team in ctx.teams:
         files[util.page_for(team)] = pages.page_team(ctx, team)
+    # Subscribable calendars: the full schedule + one feed per nation. These live
+    # under public/ics/ (write_site only clears *.html, so they persist/overwrite).
+    files["ics/all-matches.ics"] = ics.all_matches_ics(ctx)
+    for team in ctx.teams:
+        files[f"ics/{util.slug(team)}.ics"] = ics.team_ics(ctx, team)
     return files
 
 

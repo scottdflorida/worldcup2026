@@ -100,11 +100,16 @@ UI = {
     "Built with a zero-dependency Python engine":
         "Feito com um motor Python sem dependências",
     "Display time zone": "Fuso horário de exibição",
+    "Auto — device time": "Automático — fuso do dispositivo",
     "Eastern · ET": "Leste · ET",
     "Central · CT": "Central · CT",
     "Mountain · MT": "Montanha · MT",
     "Pacific · PT": "Pacífico · PT",
+    "London · UK": "Londres · UK",
+    "Paris / Berlin · CET": "Paris / Berlim · CET",
     "Brazil · BRT": "Brasil · BRT",
+    "Mexico City · MX": "Cidade do México · MX",
+    "Tokyo · JST": "Tóquio · JST",
 
     # ---- status words / chips ----
     "Group stage": "Fase de grupos",
@@ -250,6 +255,14 @@ UI = {
     # ---- calendar ----
     "Match calendar": "Calendário de jogos",
     "Tournament calendar": "Calendário do torneio",
+    "Every matchday": "Todas as rodadas",
+    "All matches": "Todos os jogos",
+    "Watchlist": "Favoritos",
+    "Filter matches": "Filtrar jogos",
+    "Star teams to filter": "Marque seleções para filtrar",
+    # ICS subscribe links (calendar sec-head + each team page road section)
+    "SUBSCRIBE (.ics)": "ASSINAR (.ics)",
+    "Subscribe to every match (.ics)": "Assinar todos os jogos (.ics)",
     "Every matchday in Pacific time — group stage to the Final.":
         "Todas as rodadas no horário do Pacífico — da fase de grupos à Final.",
     "Upcoming games": "Próximos jogos",
@@ -520,6 +533,9 @@ _RUNTIME = r"""/* World Cup 2026 — pt-BR localisation (generated from wc/i18n.
     // watchlist tooltip "Pin Brazil to your watchlist" -> "Fixar Brasil na sua lista"
     function (s) { var m = s.match(/^Pin (.+) to your watchlist$/);
       return m ? "Fixar " + pc(m[1]) + " na sua lista" : null; },
+    // per-team ICS subscribe title "Subscribe to Brazil fixtures"
+    function (s) { var m = s.match(/^Subscribe to (.+) fixtures$/);
+      return m ? "Assinar os jogos de " + pc(m[1]) : null; },
     // "potential futures — who Brazil could meet each round"
     function (s) { var m = s.match(/^potential futures — who (.+) could meet each round$/);
       return m ? "futuros possíveis — quem " + pc(m[1]) + " pode enfrentar a cada fase" : null; },

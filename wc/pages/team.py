@@ -302,6 +302,14 @@ def _blurb_html(ctx, team):
     return f'<p class="road-blurb">{E(b)}</p>' if b else ''
 
 
+def _ics_row(team):
+    """A quiet 'SUBSCRIBE (.ics)' link to this team's fixture feed, tucked under
+    the road section's header."""
+    href = f"ics/{util.slug(team)}.ics"
+    return (f'<div class="ics-row"><a class="ics-sub" href="{href}" '
+            f'title="Subscribe to {E(team)} fixtures">SUBSCRIBE (.ics)</a></div>')
+
+
 def _road_section(ctx, team, roads, third_html):
     """ALIVE team: the road AHEAD. Lead with the next fixture, then the projected
     path (candidate fans until each tie resolves). No results/standings here — the
@@ -311,6 +319,7 @@ def _road_section(ctx, team, roads, third_html):
     return f"""
 <section aria-label="Road to the final">
   <div class="sec-head"><h2>Road to the final</h2><span class="muted">potential futures — who {E(team)} could meet each round</span></div>
+  {_ics_row(team)}
   {_blurb_html(ctx, team)}
   {next_box}
   {_road_graph(roads, third_html, knocked=False)}
@@ -347,6 +356,7 @@ def _campaign_section(ctx, team, mine_played, roads, third_html, knocked, champ)
     return f"""
 <section aria-label="Their tournament">
   <div class="sec-head"><h2>Their tournament</h2><span class="muted">{sub}</span></div>
+  {_ics_row(team)}
   {_blurb_html(ctx, team)}
   <div class="camp-results"><h3 class="col-h">Results</h3>
     <div class="match-list">{match_list(mine_played, ctx, "None yet")}</div></div>
