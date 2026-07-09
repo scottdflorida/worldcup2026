@@ -1,8 +1,9 @@
 
 (function(){
   var KEY='wc26.watch';
-  var DEFAULT=Array.isArray(window.WC_DEFAULT_WATCH)?window.WC_DEFAULT_WATCH:[];
-  function get(){try{var v=JSON.parse(localStorage.getItem(KEY));if(Array.isArray(v))return v;}catch(e){}return DEFAULT.slice();}
+  // First visits start with an EMPTY watchlist (the "Your teams" empty-state
+  // teaches the ★ mechanic); no team is pre-seeded.
+  function get(){try{var v=JSON.parse(localStorage.getItem(KEY));if(Array.isArray(v))return v;}catch(e){}return [];}
   function save(a){try{localStorage.setItem(KEY,JSON.stringify(a));}catch(e){}}
   function toggle(t){var a=get();var i=a.indexOf(t);if(i>=0)a.splice(i,1);else a.push(t);save(a);apply();}
   function esc(t){return (window.CSS&&CSS.escape)?CSS.escape(t):t.replace(/"/g,'\\"');}

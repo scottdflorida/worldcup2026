@@ -340,8 +340,9 @@ def page_team(ctx, team):
 </section>
 {squad_section(ctx, team)}
 """
-    return shell(f"{team} — Road to the Final · World Cup 2026", "", body, ctx,
+    return shell(f"{team} — Road to the Final · World Cup 2026", "teams.html", body, ctx,
                  desc=(f"{team} at the 2026 World Cup: where they stand, what they need "
                        f"to advance, and their potential road to the final. Pin {team} "
                        f"with ★ to follow them everywhere."),
-                 page=util.page_for(team))
+                 page=util.page_for(team),
+                 crumb=[("Teams", "teams.html"), (team, None)])

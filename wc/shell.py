@@ -3,7 +3,6 @@
 """
 from __future__ import annotations
 
-import json
 from datetime import datetime, timedelta, timezone
 
 from . import config, i18n
@@ -62,14 +61,34 @@ def head_meta(title, desc, page):
 <meta name="twitter:image:alt" content="World Cup 2026 Tracker — the World Cup is live">"""
 
 
-def shell(title, active, body, ctx, desc=None, page="index.html"):
+def _breadcrumb(crumb):
+    """A slim wayfinding trail under the nav for pages that live one level below a
+    primary tab (team pages, group pages). `crumb` is a list of (label, href)
+    pairs; href=None marks the current page (rendered as text, aria-current)."""
+    if not crumb:
+        return ""
+    sep = '<span class="crumb-sep" aria-hidden="true">/</span>'
+    parts = []
+    for label, href in crumb:
+        if href:
+            parts.append(f'<a href="{href}">{E(label)}</a>')
+        else:
+            parts.append(f'<span class="crumb-cur" aria-current="page">{E(label)}</span>')
+    return (f'<nav class="crumb" aria-label="Breadcrumb">{sep.join(parts)}</nav>')
+
+
+def shell(title, active, body, ctx, desc=None, page="index.html", crumb=None):
     desc = desc or ("Live FIFA World Cup 2026 tracker — groups, standings, advance "
                     "odds, team road-to-the-final and a connected knockout bracket. "
                     "Pin your teams with ★.")
     nav_items = []
     for href, label in NAV:
+        # class "on" marks the active *section* (team pages light up TEAMS); but
+        # aria-current="page" only fires on the item that IS the current page, so
+        # a team/group page's true position is carried by the breadcrumb instead
+        # of falsely claiming Teams/Home is the current page.
         on = href == active
-        cur = ' aria-current="page"' if on else ''
+        cur = ' aria-current="page"' if href == page else ''
         nav_items.append(
             f'<a class="{"on" if on else ""}" href="{href}"{cur}>{E(label)}</a>'
         )
@@ -91,7 +110,6 @@ def shell(title, active, body, ctx, desc=None, page="index.html"):
 <head>
 {head_meta(title, desc, page)}
 <link rel="stylesheet" href="assets/style.css?v={_asset_ver()}">
-<script>window.WC_DEFAULT_WATCH={json.dumps(config.DEFAULT_WATCH)};</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -104,6 +122,7 @@ def shell(title, active, body, ctx, desc=None, page="index.html"):
     {i18n.TOGGLE_HTML}
   </div>
 </header>
+{_breadcrumb(crumb)}
 <main id="main">
 {body}
 </main>
@@ -132,6 +151,9 @@ def shell(title, active, body, ctx, desc=None, page="index.html"):
       <option value="America/Sao_Paulo">Brazil · BRT</option>
     </select>
   </div>
+  <p class="foot-fine">
+    <span class="ff-seg">Data:</span> <a class="ff-lnk" href="https://github.com/openfootball/worldcup.json" target="_blank" rel="noopener">openfootball/worldcup.json</a> <span class="ff-seg">(public domain)</span><span class="ff-dot" aria-hidden="true">·</span><span class="ff-seg">Built with a zero-dependency Python engine</span><span class="ff-dot" aria-hidden="true">·</span><a class="ff-lnk" href="https://github.com/scottdflorida/worldcup2026" target="_blank" rel="noopener">GitHub</a>
+  </p>
 </footer>
 <script src="assets/app.js?v={_asset_ver()}"></script>
 <script src="assets/i18n.js?v={_asset_ver()}"></script>

@@ -67,7 +67,7 @@ def page_home(ctx):
 
 {pulse_band(ctx)}
 
-<section class="groups-sec" data-reveal aria-label="Groups">
+<section id="groups" class="groups-sec" data-reveal aria-label="Groups">
   <div class="sec-head"><h2>The twelve groups</h2><span class="muted">Tap a group for fixtures &amp; scenarios</span></div>
   <div class="group-grid">{grid}</div>
 </section>

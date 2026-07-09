@@ -154,7 +154,9 @@ identity, odds, settlement — are in [`BETTING.md`](BETTING.md).
 
 ## Customize
 
-- **Default watchlist** (teams pinned on a first visit): `DEFAULT_WATCH` in `wc/config.py`.
+- **Default watchlist:** `DEFAULT_WATCH` in `wc/config.py`. Defaults to `[]`, so first
+  visits start with an empty watchlist and the "Your teams" empty-state teaches the ★
+  mechanic; add team names (e.g. `["USA", "Brazil"]`) to pre-seed a first-visit default.
 - **Team colors:** add entries to `TEAM_META` in `wc/config.py` (everyone else gets an auto color).
 - **Look & feel:** `wc/assets/style.css`.
 - **Data source:** `DATA_URL` in `wc/config.py`.

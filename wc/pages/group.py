@@ -44,4 +44,5 @@ def page_group(ctx, letter):
     return shell(f"Group {letter} — World Cup 2026", "", body, ctx,
                  desc=(f"Group {letter} at the 2026 World Cup: live standings, advance "
                        f"odds, finish scenarios, fixtures and scorers."),
-                 page=f"group-{letter.lower()}.html")
+                 page=f"group-{letter.lower()}.html",
+                 crumb=[("Groups", "index.html#groups"), (f"Group {letter}", None)])

@@ -26,10 +26,11 @@ ODDS_PATH         = str(DATA_DIR / "odds.json")
 SQUADS_PATH       = str(DATA_DIR / "squads.json")
 
 # The site is team-agnostic: every nation gets its own hub page and any visitor
-# can pin whichever teams they want to follow. This list is only the *default*
-# watchlist shown on a first visit (before the visitor picks their own); it is
-# stored client-side and fully overridable in the browser.
-DEFAULT_WATCH = ["USA", "Brazil"]
+# can pin whichever teams they want to follow. First visits start with an EMPTY
+# watchlist — the "Your teams" empty-state teaches the ★ mechanic instead of
+# pre-picking anyone. Set names here to seed a first-visit default (stored
+# client-side and fully overridable in the browser); [] means no default.
+DEFAULT_WATCH = []
 
 # Per-team display + accent metadata used by the renderer. Optional — any team
 # not listed here gets a deterministic auto-generated accent (see wc/util.py).

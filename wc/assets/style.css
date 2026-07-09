@@ -136,6 +136,16 @@ section:first-of-type{margin-top:var(--s4)}
 .lt-btn:hover{color:var(--ink);background:var(--paper2)}
 .lt-btn.on{color:var(--paper);background:var(--ink)}
 .lt-btn.on:hover{background:var(--ink)}
+/* Breadcrumb: a slim wayfinding trail under the nav on pages one level below a
+   primary tab (team pages, group pages). Mono, tiny, tracked all-caps. */
+.crumb{max-width:var(--maxw);margin:0 auto;padding:9px clamp(14px,4vw,28px);
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line)}
+.crumb a{color:var(--muted);transition:color .12s}
+.crumb a:hover{color:var(--ink)}
+.crumb .crumb-sep{color:var(--line)}
+.crumb .crumb-cur{color:var(--ink)}
 
 /* Live Wire signal (now-divider dot, bracket edge, footer dot) ------ */
 .wire{position:relative}
@@ -899,6 +909,13 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   background-repeat:no-repeat;background-position:right 9px center}
 .tz-select:hover{background-color:var(--paper2)}
 .tz-select:focus-visible{outline:2px solid var(--vermilion);outline-offset:2px}
+/* Fine-print attribution line: data source, engine, source link. */
+.foot-fine{margin-top:16px;font-family:var(--mono);font-size:.58rem;line-height:1.7;
+  letter-spacing:.02em;color:var(--muted)}
+.foot-fine .ff-lnk{color:var(--muted);text-decoration:underline;text-underline-offset:2px;
+  text-decoration-color:var(--line);transition:color .12s}
+.foot-fine .ff-lnk:hover{color:var(--ink);text-decoration-color:var(--ink)}
+.foot-fine .ff-dot{margin:0 7px;color:var(--line)}
 
 /* cols (team page fixtures) ----------------------------------------- */
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:var(--s5)}
@@ -972,9 +989,15 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   .pz{flex:1 1 100%;border-right:0;border-bottom:1px solid var(--line)}
   .now-divider{flex:1 1 100%;flex-direction:row;align-self:auto;padding:8px 0;gap:10px}
   .now-lbl{writing-mode:horizontal-tb;transform:none}
-  /* 4-item nav: collapse the brand to just the mark so the tabs fit */
+  /* collapse the brand to just the mark so the tabs fit */
   .wm-text{display:none}
   .site-nav a{padding:0 9px;font-size:.6rem;letter-spacing:.03em}
+  /* Nav wraps to two rows so every tab (incl. Calendar) is reachable without a
+     hidden horizontal scroll; the language toggle stays pinned to the right.
+     head-right grows into the row after the brand mark; the nav grows to fill
+     what's left of it and wraps, pushing EN/PT to the right edge. */
+  .head-right{flex:1 1 auto}
+  .site-nav{flex:1 1 auto;flex-wrap:wrap;overflow:visible}
 }
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important;scroll-behavior:auto!important}

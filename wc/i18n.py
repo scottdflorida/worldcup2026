@@ -94,6 +94,11 @@ UI = {
     "Live match-center · United States · Canada · Mexico":
         "Central de jogos ao vivo · Estados Unidos · Canadá · México",
     "Times shown in": "Horários em",
+    # fine-print attribution footer
+    "Data:": "Dados:",
+    "(public domain)": "(domínio público)",
+    "Built with a zero-dependency Python engine":
+        "Feito com um motor Python sem dependências",
     "Display time zone": "Fuso horário de exibição",
     "Eastern · ET": "Leste · ET",
     "Central · CT": "Central · CT",
