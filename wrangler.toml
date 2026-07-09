@@ -15,4 +15,6 @@ binding = "DB"
 database_name = "wc26-bets"
 # Fill in after `wrangler d1 create wc26-bets` (see scripts/setup-d1.md), or
 # copy it from the Cloudflare dashboard → Workers & Pages → D1 → wc26-bets.
+# Until it is filled in, local `/api/bets/*` calls under `wrangler pages dev`
+# will fail to resolve the DB binding — the static site works regardless.
 database_id = "<fill-in-from-dashboard-or-wrangler-d1-create>"

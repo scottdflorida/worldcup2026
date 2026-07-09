@@ -123,11 +123,12 @@ install, same zero-dependency story as the rest of the project).
 
 Two kinds of coverage live under `tests/`:
 
-- **Golden fixtures** — five synthetic tournament states (e.g. "mid group
-  stage," "knockouts partially resolved," "final decided") get rebuilt and
-  diffed against committed expected output, so a change that silently alters
-  standings math, bracket resolution, or rendered HTML for *any* tournament
-  state gets caught, not just today's real state.
+- **Golden fixtures** — five real tournament snapshots lifted from this repo's
+  own git history (early groups, the thirds race, groups complete, mid-knockout
+  with penalty shootouts, and the current state) get rebuilt and hash-compared
+  against committed manifests, so a change that silently alters standings math,
+  bracket resolution, or rendered HTML for *any* tournament state gets caught,
+  not just today's real state.
 - **Unit tests** for the pure-logic modules (tiebreakers, slot resolution,
   time formatting, etc).
 
