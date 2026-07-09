@@ -5,6 +5,9 @@ from pathlib import Path
 # Repo root + the data directory (where all cached feeds/blurbs/odds/squads
 # live). WC_DATA_DIR lets tests point the whole data layer at a temp copy; unset,
 # it resolves to <repo>/data, so a normal build is byte-identical.
+# Contract: WC_DATA_DIR is read ONCE, at import — set it in the environment
+# before the first `import wc.*` (as build.py and the golden harness's fresh
+# subprocesses do); it cannot be changed mid-process.
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = Path(os.environ.get("WC_DATA_DIR", str(ROOT / "data")))
 

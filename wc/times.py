@@ -51,7 +51,10 @@ def today_pt():
     unset, it is behavior-identical to the previous inline computation."""
     ov = os.environ.get("WC_TODAY")
     if ov:
-        return date.fromisoformat(ov)
+        try:
+            return date.fromisoformat(ov)
+        except ValueError:
+            raise SystemExit(f"WC_TODAY must be an ISO date (YYYY-MM-DD), got: {ov!r}")
     return (datetime.now(timezone.utc) + timedelta(hours=PT_OFFSET_HOURS)).date()
 
 
