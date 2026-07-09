@@ -1,0 +1,50 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//worldcup.sflorida.studio//WC2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:World Cup 2026 — Sweden
+NAME:World Cup 2026 — Sweden
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:wc26-g2026-06-14-sweden-tunisia@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260615T020000Z
+DTEND:20260615T033000Z
+SUMMARY:⚽ Sweden v Tunisia — Group F
+LOCATION:Estadio BBVA\, Guadalupe\, Nuevo León\, Mexico
+URL:https://worldcup.sflorida.studio/sweden.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-20-netherlands-sweden@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260620T170000Z
+DTEND:20260620T183000Z
+SUMMARY:⚽ Netherlands v Sweden — Group F
+LOCATION:NRG Stadium\, Houston\, Texas\, USA
+URL:https://worldcup.sflorida.studio/sweden.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-25-japan-sweden@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260625T230000Z
+DTEND:20260626T003000Z
+SUMMARY:⚽ Japan v Sweden — Group F
+LOCATION:AT&T Stadium\, Arlington\, Texas\, USA
+URL:https://worldcup.sflorida.studio/sweden.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-m77@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260630T210000Z
+DTEND:20260630T230000Z
+SUMMARY:⚽ France v Sweden — Round of 32
+LOCATION:MetLife Stadium\, East Rutherford\, New Jersey\, USA
+URL:https://worldcup.sflorida.studio/sweden.html
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR

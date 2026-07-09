@@ -136,6 +136,16 @@ section:first-of-type{margin-top:var(--s4)}
 .lt-btn:hover{color:var(--ink);background:var(--paper2)}
 .lt-btn.on{color:var(--paper);background:var(--ink)}
 .lt-btn.on:hover{background:var(--ink)}
+/* Breadcrumb: a slim wayfinding trail under the nav on pages one level below a
+   primary tab (team pages, group pages). Mono, tiny, tracked all-caps. */
+.crumb{max-width:var(--maxw);margin:0 auto;padding:9px clamp(14px,4vw,28px);
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line)}
+.crumb a{color:var(--muted);transition:color .12s}
+.crumb a:hover{color:var(--ink)}
+.crumb .crumb-sep{color:var(--line)}
+.crumb .crumb-cur{color:var(--ink)}
 
 /* Live Wire signal (now-divider dot, bracket edge, footer dot) ------ */
 .wire{position:relative}
@@ -289,6 +299,8 @@ section:first-of-type{margin-top:var(--s4)}
 .nk-rd{font-family:var(--mono);font-size:.6rem;font-weight:800;letter-spacing:.08em;color:var(--vermilion)}
 .next-ko .match{padding:13px 15px}
 .next-ko .match.is-upcoming{border-left:0}
+/* Eliminated/champion campaign: results timeline above the past-tense road graph */
+.camp-results{margin-bottom:18px}
 
 /* ============ TEAM LINKS / CHIPS ================================== */
 .team,.cand,.bteam{display:inline-flex;align-items:center;gap:6px;font-weight:700;padding:1px 4px;transition:background .12s,color .12s}
@@ -615,6 +627,24 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .km-g{margin-left:auto;font-family:var(--mono);font-weight:800;font-variant-numeric:tabular-nums;min-width:16px;text-align:right}
 .km-g.kloss{color:var(--muted)}.km-g.kwin{color:var(--ink)}
 .km-team .bteam.win,.km-team:has(.kwin) .bteam,.km-team.kw .bteam{color:var(--ink);font-weight:800}
+/* Odds chip on an UNDECIDED tie (price to win) — muted mono, right-aligned.
+   Never vermilion: it's a price, not the live/advancing signal. */
+.km-od{margin-left:auto;font-family:var(--mono);font-weight:800;font-size:.62rem;
+  font-variant-numeric:tabular-nums;color:var(--ink2);white-space:nowrap;flex:none}
+/* Fantasy ghost: the side the visitor picked to win (client-side overlay).
+   Muted, hollow, hard-edged — a prediction, distinct from the real result. */
+.km-ghost{margin-left:auto;flex:none;font-family:var(--mono);font-weight:800;font-size:.5rem;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+  border:1px solid var(--line2);padding:1px 4px;line-height:1.1;white-space:nowrap}
+.km-ghost.with-od{margin-left:0}            /* sits after an odds chip (flex gap only) */
+/* Bracket legends: the odds key + (when picks exist) the ghost key. */
+.odds-legend,.ghost-legend{display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;margin:0 0 14px}
+.odds-legend .ol-sep{color:var(--line2)}
+.odds-legend .ol-src{color:var(--ink2)}
+.ghost-legend .km-ghost{margin-left:0}
+.ghost-legend .gl-t{color:var(--muted)}
 /* W/L result tag — one consistent winner/loser signal across the whole site */
 .wl-tag{flex:none;display:inline-grid;place-items:center;width:15px;height:15px;margin-left:5px;border-radius:3px;
   font-family:var(--mono);font-weight:800;font-size:.58rem;line-height:1}
@@ -700,6 +730,25 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .cal-cands .cand .nm{font-weight:600;color:var(--ink2)}
 .cal-tbd{font-family:var(--mono);font-size:.62rem;color:var(--muted)}
 .cal-v{font-size:.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:0 0 0 1px}
+.cal-m[hidden]{display:none}
+/* Calendar sec-head tools: watchlist filter (segmented) + ICS subscribe. */
+.cal-sec .cal-tools{margin-left:auto;display:flex;align-items:center;gap:10px 12px;flex-wrap:wrap}
+.cal-filter{display:inline-flex;border:1.5px solid var(--ink)}
+.cal-fbtn{font-family:var(--mono);font-size:.58rem;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);background:var(--paper);border:0;
+  padding:5px 9px;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.cal-fbtn+.cal-fbtn{border-left:1.5px solid var(--ink)}
+.cal-fbtn.on{background:var(--ink);color:var(--paper)}
+.cal-fbtn:focus-visible{outline:2px solid var(--vermilion);outline-offset:2px}
+.cal-fbtn:disabled,.cal-fbtn.disabled{opacity:.4;cursor:not-allowed}
+.cal-fbtn .cf-star{color:var(--vermilion)}          /* the ★ pin accent */
+.cal-fbtn.on .cf-star{color:var(--paper)}
+/* Subscribe (.ics): a quiet mono chip — ink on hover, vermilion stays reserved. */
+.ics-sub{font-family:var(--mono);font-size:.58rem;font-weight:800;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);border:1.5px solid var(--line2);
+  padding:5px 9px;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.ics-sub:hover,.ics-sub:focus-visible{color:var(--ink);border-color:var(--ink)}
+.ics-row{display:flex;justify-content:flex-end;margin:-2px 0 14px}
 /* Phones: drop the 7-up grid for a single-column agenda (skip empty days). */
 @media(max-width:760px){
   .cal-dow-row{display:none}
@@ -783,8 +832,28 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   color:var(--muted);background:var(--paper);border:0;border-top:1.5px solid var(--line);padding:10px;cursor:pointer}
 .fb-modal-clear:hover{color:var(--ink);background:var(--paper2)}
 
+/* Quiet cross-links between the bracket / fantasy / betting trio. Muted at
+   rest (vermilion stays reserved for live/advancing); ink on hover. */
+.page-xlinks{display:flex;flex-wrap:wrap;gap:8px 18px;margin:12px 0 4px}
+.xlink{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-weight:800;
+  font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.xlink .xl-to{color:var(--ink2)}
+.xlink .arrow{color:var(--line2);transition:transform .15s,color .15s}
+.xlink:hover{color:var(--ink)}
+.xlink:hover .xl-to,.xlink:hover .arrow{color:var(--ink)}
+.xlink:hover .arrow{transform:translateX(3px)}
+
 /* Betting pool ----------------------------------------------------- */
 .bet-intro{margin-bottom:6px}
+/* Public (logged-out) face: read-only odds board + how-it-works. */
+.bet-board-sub{margin:-6px 0 12px}
+.bet-src{margin-left:8px;font-family:var(--mono);font-size:.54rem;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink2)}
+.bet-how-list{list-style:none;margin:0;padding:0}
+.bet-how-list li{position:relative;padding:7px 0 7px 18px;border-top:1px solid var(--line);
+  font-size:.9rem;color:var(--ink2)}
+.bet-how-list li:first-child{border-top:0}
+.bet-how-list li::before{content:"›";position:absolute;left:3px;color:var(--muted);font-weight:800}
 .bet-app{display:flex;flex-direction:column;gap:16px}
 .bet-bal{display:flex;flex-direction:column;gap:3px}
 .bet-bal-top{display:flex;align-items:baseline;gap:8px}
@@ -899,6 +968,13 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   background-repeat:no-repeat;background-position:right 9px center}
 .tz-select:hover{background-color:var(--paper2)}
 .tz-select:focus-visible{outline:2px solid var(--vermilion);outline-offset:2px}
+/* Fine-print attribution line: data source, engine, source link. */
+.foot-fine{margin-top:16px;font-family:var(--mono);font-size:.58rem;line-height:1.7;
+  letter-spacing:.02em;color:var(--muted)}
+.foot-fine .ff-lnk{color:var(--muted);text-decoration:underline;text-underline-offset:2px;
+  text-decoration-color:var(--line);transition:color .12s}
+.foot-fine .ff-lnk:hover{color:var(--ink);text-decoration-color:var(--ink)}
+.foot-fine .ff-dot{margin:0 7px;color:var(--line)}
 
 /* cols (team page fixtures) ----------------------------------------- */
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:var(--s5)}
@@ -918,6 +994,118 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .sq-age{margin-left:auto;font-family:var(--mono);font-size:var(--t-2xs);color:var(--muted);flex:none}
 .sq-p.is-start .sq-nm{font-weight:800}
 .sq-p.is-start .sq-num{color:var(--vermilion);font-weight:700}
+
+/* ============ PHASE-AWARE HOME (knockout / champion mode) ========= */
+/* Hero supporting line: CURRENT ROUND · FIXTURE · KICKOFF, mono/tracked-caps. */
+.hero-now{margin:clamp(14px,2.5vw,22px) 0 0;font-family:var(--mono);font-weight:700;
+  font-size:clamp(.7rem,.62rem + .4vw,.9rem);letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink2);display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;line-height:1.45}
+.hn-rd{color:var(--vermilion);font-weight:800;letter-spacing:.14em}
+.hn-sep{color:var(--line2)}
+.hn-fix{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--ink)}
+.hn-fix .hn-tm{font-weight:800}
+.hn-v{color:var(--muted);font-weight:700}
+.hn-ko{color:var(--ink2);font-weight:700}
+.hn-ko .ko-tz,.hn-ko .tz{color:var(--muted)}
+/* Champion hero variant (final decided). */
+.hero-champ .hero-title{display:flex;flex-wrap:wrap;align-items:center;gap:.1em .28em}
+.hc-flag{font-size:.9em;line-height:1}
+
+/* Next/live scorebug band — scaled .pz language; live poller lights it in place. */
+.ko-next{margin-top:var(--s7)}
+.scorebug{border:2px solid var(--ink);background:var(--paper);padding:clamp(16px,3vw,26px) clamp(16px,3.4vw,30px);position:relative}
+.scorebug.is-upcoming{background:var(--paper2)}
+.scorebug.has-watched{box-shadow:inset 6px 0 0 var(--sig)}
+.sb-head{display:flex;align-items:center;gap:10px;margin-bottom:clamp(12px,2.4vw,20px)}
+.sb-rd{font-family:var(--mono);font-weight:800;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
+.sb-date{margin-left:auto;font-family:var(--mono);font-weight:700;font-size:.7rem;color:var(--muted)}
+.sb-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:clamp(10px,3vw,32px)}
+.sb-team{display:flex;align-items:center;gap:10px;min-width:0;font-weight:800;color:var(--ink);
+  font-size:clamp(1.1rem,.95rem + 1.5vw,1.95rem);text-transform:uppercase;letter-spacing:-.02em;line-height:1.05}
+.sb-team.b{justify-content:flex-end;text-align:right}
+.sb-team .fl{font-size:1.45em;line-height:1;flex:none}
+.sb-team .nm{min-width:0;overflow-wrap:break-word;overflow:hidden;text-overflow:ellipsis}
+.sb-team.won .nm{color:var(--ink)}
+.sb-team.lost .nm{color:var(--muted)}
+.sb-team.watched .nm{color:var(--sig)}
+.sb-mid{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:3px}
+.sb-figure{font-family:var(--mono);font-weight:800;font-variant-numeric:tabular-nums;color:var(--ink);
+  font-size:clamp(1.5rem,1rem + 3vw,3rem);white-space:nowrap;line-height:1}
+.sb-figure .tz,.sb-figure .pz-tz{font-size:.38em;color:var(--ink2);font-weight:700;margin-left:.2ch}
+.sb-figure .sg{color:var(--muted)}.sb-figure .sg.win{color:var(--ink)}
+.sb-figure .sdash{color:var(--muted);margin:0 2px}
+.sb-pens{font-family:var(--mono);font-size:.6rem;color:var(--muted)}
+.sb-foot{margin-top:clamp(10px,2vw,16px);font-family:var(--mono);font-size:.66rem;color:var(--muted);letter-spacing:.04em}
+/* live: light the whole lockup with the single accent (poller toggles .is-live). */
+.scorebug.is-live{outline:3px solid var(--accent);outline-offset:-3px;background:var(--paper)}
+.scorebug.is-live .sb-figure{color:var(--accent)}
+.scorebug.is-livedone{outline:1px solid var(--line2);outline-offset:-1px}
+.ko-sched{margin-top:12px}
+
+/* Bracket rail — compact horizontal summary; reuses the bracket slot device. */
+.ko-rail-sec{margin-top:var(--s7)}
+.sec-link{margin-left:auto;font-family:var(--mono);font-weight:800;font-size:.66rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink);border-bottom:2px solid var(--vermilion);padding-bottom:2px;white-space:nowrap}
+.sec-link .arrow{color:var(--vermilion);display:inline-block;transition:transform .15s}
+.sec-link:hover .arrow{transform:translateX(3px)}
+.ko-rail-frame{border:2px solid var(--ink);background:var(--paper);overflow:hidden}
+.ko-rail{display:flex;gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;align-items:stretch}
+.krl-col{flex:0 0 auto;min-width:158px;border-right:1px solid var(--line);padding:12px 14px 14px;display:flex;flex-direction:column;gap:10px}
+.krl-col:last-child{border-right:0}
+.krl-col.krl-cur{background:var(--paper2)}
+.krl-h{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-weight:800;font-size:.62rem;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink);white-space:nowrap}
+.krl-cur .krl-h{color:var(--vermilion)}
+.krl-trophy{opacity:.85;flex:none}
+.krl-ties{display:flex;flex-direction:column;gap:8px}
+.krl-tie{border:1px solid var(--line2);background:var(--paper);padding:6px 8px;display:flex;flex-direction:column;gap:4px}
+.krl-tie.is-done{border-color:var(--line)}
+.krl-side{display:flex;align-items:center;gap:6px;font-size:.8rem;min-width:0}
+.krl-side .krl-tm{min-width:0;font-weight:700;padding:0}
+.krl-side .krl-tm .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:98px}
+.krl-side.kw .krl-tm{font-weight:800;color:var(--ink)}
+.krl-side.kl .krl-tm{color:var(--muted)}
+.krl-g{margin-left:auto;font-family:var(--mono);font-weight:800;font-variant-numeric:tabular-nums;color:var(--muted)}
+.krl-g.kw{color:var(--ink)}
+.krl-tm.tbd{font-family:var(--mono);font-size:.72rem;font-weight:600}
+.krl-cands{display:inline-flex;flex-wrap:wrap;align-items:center;gap:2px 5px;min-width:0}
+.krl-cands .krl-cand{font-weight:600;padding:0;font-size:.74rem;color:var(--ink2)}
+.krl-cands .krl-cand .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:72px}
+.krl-slash{color:var(--line2);margin:0 1px}
+.krl-cands.flags{gap:4px}
+.krl-fl{font-size:1.05em;line-height:1}
+.krl-fl.watched{box-shadow:inset 0 -2px 0 var(--sig)}
+.krl-champ{justify-content:flex-start}
+.krl-champ-tm{font-weight:800;text-transform:uppercase;font-size:.9rem;display:flex;align-items:center;gap:6px}
+.krl-champ-tm.pending{font-family:var(--mono);font-weight:700;text-transform:none;font-size:.76rem}
+
+/* Group-stage archive strip — one compact row per group (top two + best third). */
+.ko-archive{margin-top:var(--s7)}
+.ga-band{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:10px}
+.ga-row{display:flex;align-items:center;gap:12px;padding:9px 12px;border:2px solid var(--ink);background:var(--paper);transition:background .14s}
+.ga-row:hover{background:var(--paper2)}
+.ga-row.has-watched{box-shadow:inset 6px 0 0 var(--sig)}
+.ga-letter{flex:0 0 auto;width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:1.2rem;background:var(--ink);color:var(--paper)}
+.ga-letter:hover{background:var(--vermilion);color:var(--on-accent)}
+.ga-teams{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;flex:1;min-width:0}
+.ga-team{display:inline-flex;align-items:center;gap:5px;min-width:0}
+.ga-team .ga-tm{font-weight:700;min-width:0;padding:0}
+.ga-team .ga-tm .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px}
+.ga-pos{font-family:var(--mono);font-size:.56rem;font-weight:800;color:var(--muted);background:var(--paper3);
+  width:15px;height:15px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.ga-badge{font-family:var(--mono);font-size:.52rem;font-weight:800;letter-spacing:.06em;color:var(--ink);
+  border:1px solid var(--line2);padding:1px 4px;text-transform:uppercase;white-space:nowrap}
+.ga-link{flex:0 0 auto;margin-left:auto;color:var(--vermilion);font-weight:800}
+.ga-link .arrow{display:inline-block;transition:transform .15s}
+.ga-link:hover .arrow{transform:translateX(3px)}
+
+/* Status-aware watchlist meta (knockout/champion mode team cards). */
+.tcard-status{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--ink2);display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.tcard-status.out{color:var(--muted)}
+.tcard-status.champ{color:var(--vermilion);font-weight:800}
+.tcard-status .tcs-opp{font-weight:700;padding:0}
 
 /* ============ RESPONSIVE ========================================= */
 @media(max-width:880px){
@@ -970,11 +1158,24 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 @media(max-width:560px){
   .pulse-band{flex-wrap:wrap;overflow-x:visible}
   .pz{flex:1 1 100%;border-right:0;border-bottom:1px solid var(--line)}
+  /* Scorebug: shrink the broadcast type so nation names stay on one line beside
+     the central figure rather than breaking mid-word (FRA/NCE). */
+  .sb-row{gap:8px}
+  .sb-team{font-size:1rem;gap:6px}
+  .sb-team .fl{font-size:1.25em}
+  .sb-team .nm{overflow-wrap:normal;word-break:normal}
+  .sb-figure{font-size:1.5rem}
   .now-divider{flex:1 1 100%;flex-direction:row;align-self:auto;padding:8px 0;gap:10px}
   .now-lbl{writing-mode:horizontal-tb;transform:none}
-  /* 4-item nav: collapse the brand to just the mark so the tabs fit */
+  /* collapse the brand to just the mark so the tabs fit */
   .wm-text{display:none}
   .site-nav a{padding:0 9px;font-size:.6rem;letter-spacing:.03em}
+  /* Nav wraps to two rows so every tab (incl. Calendar) is reachable without a
+     hidden horizontal scroll; the language toggle stays pinned to the right.
+     head-right grows into the row after the brand mark; the nav grows to fill
+     what's left of it and wraps, pushing EN/PT to the right edge. */
+  .head-right{flex:1 1 auto}
+  .site-nav{flex:1 1 auto;flex-wrap:wrap;overflow:visible}
 }
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important;scroll-behavior:auto!important}

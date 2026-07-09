@@ -1,0 +1,60 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//worldcup.sflorida.studio//WC2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:World Cup 2026 — Colombia
+NAME:World Cup 2026 — Colombia
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:wc26-g2026-06-17-uzbekistan-colombia@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260618T020000Z
+DTEND:20260618T033000Z
+SUMMARY:⚽ Uzbekistan v Colombia — Group K
+LOCATION:Estadio Azteca\, Mexico City\, Mexico
+URL:https://worldcup.sflorida.studio/colombia.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-23-colombia-dr-congo@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260624T020000Z
+DTEND:20260624T033000Z
+SUMMARY:⚽ Colombia v DR Congo — Group K
+LOCATION:Estadio Akron\, Zapopan\, Jalisco\, Mexico
+URL:https://worldcup.sflorida.studio/colombia.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-27-colombia-portugal@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260627T233000Z
+DTEND:20260628T010000Z
+SUMMARY:⚽ Colombia v Portugal — Group K
+LOCATION:Hard Rock Stadium\, Miami Gardens\, Florida\, USA
+URL:https://worldcup.sflorida.studio/colombia.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-m87@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260704T013000Z
+DTEND:20260704T033000Z
+SUMMARY:⚽ Colombia v Ghana — Round of 32
+LOCATION:Arrowhead Stadium\, Kansas City\, Missouri\, USA
+URL:https://worldcup.sflorida.studio/colombia.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-m96@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260707T200000Z
+DTEND:20260707T220000Z
+SUMMARY:⚽ Switzerland v Colombia — Round of 16
+LOCATION:BC Place\, Vancouver\, British Columbia\, Canada
+URL:https://worldcup.sflorida.studio/colombia.html
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR

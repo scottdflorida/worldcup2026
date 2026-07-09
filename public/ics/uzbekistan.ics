@@ -1,0 +1,40 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//worldcup.sflorida.studio//WC2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:World Cup 2026 — Uzbekistan
+NAME:World Cup 2026 — Uzbekistan
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:wc26-g2026-06-17-uzbekistan-colombia@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260618T020000Z
+DTEND:20260618T033000Z
+SUMMARY:⚽ Uzbekistan v Colombia — Group K
+LOCATION:Estadio Azteca\, Mexico City\, Mexico
+URL:https://worldcup.sflorida.studio/uzbekistan.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-23-portugal-uzbekistan@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260623T170000Z
+DTEND:20260623T183000Z
+SUMMARY:⚽ Portugal v Uzbekistan — Group K
+LOCATION:NRG Stadium\, Houston\, Texas\, USA
+URL:https://worldcup.sflorida.studio/uzbekistan.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-27-dr-congo-uzbekistan@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260627T233000Z
+DTEND:20260628T010000Z
+SUMMARY:⚽ DR Congo v Uzbekistan — Group K
+LOCATION:Mercedes-Benz Stadium\, Atlanta\, Georgia\, USA
+URL:https://worldcup.sflorida.studio/uzbekistan.html
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR

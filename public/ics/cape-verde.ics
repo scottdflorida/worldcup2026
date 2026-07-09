@@ -1,0 +1,50 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//worldcup.sflorida.studio//WC2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:World Cup 2026 — Cape Verde
+NAME:World Cup 2026 — Cape Verde
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:wc26-g2026-06-15-spain-cape-verde@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260615T160000Z
+DTEND:20260615T173000Z
+SUMMARY:⚽ Spain v Cape Verde — Group H
+LOCATION:Mercedes-Benz Stadium\, Atlanta\, Georgia\, USA
+URL:https://worldcup.sflorida.studio/cape-verde.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-21-uruguay-cape-verde@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260621T220000Z
+DTEND:20260621T233000Z
+SUMMARY:⚽ Uruguay v Cape Verde — Group H
+LOCATION:Hard Rock Stadium\, Miami Gardens\, Florida\, USA
+URL:https://worldcup.sflorida.studio/cape-verde.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-26-cape-verde-saudi-arabia@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260627T000000Z
+DTEND:20260627T013000Z
+SUMMARY:⚽ Cape Verde v Saudi Arabia — Group H
+LOCATION:NRG Stadium\, Houston\, Texas\, USA
+URL:https://worldcup.sflorida.studio/cape-verde.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-m86@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260703T220000Z
+DTEND:20260704T000000Z
+SUMMARY:⚽ Argentina v Cape Verde — Round of 32
+LOCATION:Hard Rock Stadium\, Miami Gardens\, Florida\, USA
+URL:https://worldcup.sflorida.studio/cape-verde.html
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR

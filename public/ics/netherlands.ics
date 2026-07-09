@@ -1,0 +1,50 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//worldcup.sflorida.studio//WC2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:World Cup 2026 — Netherlands
+NAME:World Cup 2026 — Netherlands
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:wc26-g2026-06-14-netherlands-japan@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260614T200000Z
+DTEND:20260614T213000Z
+SUMMARY:⚽ Netherlands v Japan — Group F
+LOCATION:AT&T Stadium\, Arlington\, Texas\, USA
+URL:https://worldcup.sflorida.studio/netherlands.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-20-netherlands-sweden@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260620T170000Z
+DTEND:20260620T183000Z
+SUMMARY:⚽ Netherlands v Sweden — Group F
+LOCATION:NRG Stadium\, Houston\, Texas\, USA
+URL:https://worldcup.sflorida.studio/netherlands.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-25-tunisia-netherlands@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260625T230000Z
+DTEND:20260626T003000Z
+SUMMARY:⚽ Tunisia v Netherlands — Group F
+LOCATION:Arrowhead Stadium\, Kansas City\, Missouri\, USA
+URL:https://worldcup.sflorida.studio/netherlands.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-m75@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260630T010000Z
+DTEND:20260630T030000Z
+SUMMARY:⚽ Netherlands v Morocco — Round of 32
+LOCATION:Estadio BBVA\, Guadalupe\, Nuevo León\, Mexico
+URL:https://worldcup.sflorida.studio/netherlands.html
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR

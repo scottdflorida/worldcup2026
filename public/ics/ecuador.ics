@@ -1,0 +1,50 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//worldcup.sflorida.studio//WC2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:World Cup 2026 — Ecuador
+NAME:World Cup 2026 — Ecuador
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:wc26-g2026-06-14-ivory-coast-ecuador@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260614T230000Z
+DTEND:20260615T003000Z
+SUMMARY:⚽ Ivory Coast v Ecuador — Group E
+LOCATION:Lincoln Financial Field\, Philadelphia\, Pennsylvania\, USA
+URL:https://worldcup.sflorida.studio/ecuador.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-20-ecuador-curacao@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260621T000000Z
+DTEND:20260621T013000Z
+SUMMARY:⚽ Ecuador v Curaçao — Group E
+LOCATION:Arrowhead Stadium\, Kansas City\, Missouri\, USA
+URL:https://worldcup.sflorida.studio/ecuador.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-25-ecuador-germany@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260625T200000Z
+DTEND:20260625T213000Z
+SUMMARY:⚽ Ecuador v Germany — Group E
+LOCATION:MetLife Stadium\, East Rutherford\, New Jersey\, USA
+URL:https://worldcup.sflorida.studio/ecuador.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-m79@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260701T010000Z
+DTEND:20260701T030000Z
+SUMMARY:⚽ Mexico v Ecuador — Round of 32
+LOCATION:Estadio Azteca\, Mexico City\, Mexico
+URL:https://worldcup.sflorida.studio/ecuador.html
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR

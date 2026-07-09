@@ -1,0 +1,40 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//worldcup.sflorida.studio//WC2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:World Cup 2026 — Tunisia
+NAME:World Cup 2026 — Tunisia
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:wc26-g2026-06-14-sweden-tunisia@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260615T020000Z
+DTEND:20260615T033000Z
+SUMMARY:⚽ Sweden v Tunisia — Group F
+LOCATION:Estadio BBVA\, Guadalupe\, Nuevo León\, Mexico
+URL:https://worldcup.sflorida.studio/tunisia.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-20-tunisia-japan@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260621T040000Z
+DTEND:20260621T053000Z
+SUMMARY:⚽ Tunisia v Japan — Group F
+LOCATION:Estadio BBVA\, Guadalupe\, Nuevo León\, Mexico
+URL:https://worldcup.sflorida.studio/tunisia.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-25-tunisia-netherlands@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260625T230000Z
+DTEND:20260626T003000Z
+SUMMARY:⚽ Tunisia v Netherlands — Group F
+LOCATION:Arrowhead Stadium\, Kansas City\, Missouri\, USA
+URL:https://worldcup.sflorida.studio/tunisia.html
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR

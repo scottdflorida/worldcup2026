@@ -1,0 +1,50 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//worldcup.sflorida.studio//WC2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:World Cup 2026 — Ivory Coast
+NAME:World Cup 2026 — Ivory Coast
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:wc26-g2026-06-14-ivory-coast-ecuador@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260614T230000Z
+DTEND:20260615T003000Z
+SUMMARY:⚽ Ivory Coast v Ecuador — Group E
+LOCATION:Lincoln Financial Field\, Philadelphia\, Pennsylvania\, USA
+URL:https://worldcup.sflorida.studio/ivory-coast.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-20-germany-ivory-coast@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260620T200000Z
+DTEND:20260620T213000Z
+SUMMARY:⚽ Germany v Ivory Coast — Group E
+LOCATION:BMO Field\, Toronto\, Ontario\, Canada
+URL:https://worldcup.sflorida.studio/ivory-coast.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-25-curacao-ivory-coast@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260625T200000Z
+DTEND:20260625T213000Z
+SUMMARY:⚽ Curaçao v Ivory Coast — Group E
+LOCATION:Lincoln Financial Field\, Philadelphia\, Pennsylvania\, USA
+URL:https://worldcup.sflorida.studio/ivory-coast.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-m78@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260630T170000Z
+DTEND:20260630T190000Z
+SUMMARY:⚽ Ivory Coast v Norway — Round of 32
+LOCATION:AT&T Stadium\, Arlington\, Texas\, USA
+URL:https://worldcup.sflorida.studio/ivory-coast.html
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR

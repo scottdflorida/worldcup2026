@@ -1,8 +1,9 @@
 
 (function(){
   var KEY='wc26.watch';
-  var DEFAULT=Array.isArray(window.WC_DEFAULT_WATCH)?window.WC_DEFAULT_WATCH:[];
-  function get(){try{var v=JSON.parse(localStorage.getItem(KEY));if(Array.isArray(v))return v;}catch(e){}return DEFAULT.slice();}
+  // First visits start with an EMPTY watchlist (the "Your teams" empty-state
+  // teaches the ★ mechanic); no team is pre-seeded.
+  function get(){try{var v=JSON.parse(localStorage.getItem(KEY));if(Array.isArray(v))return v;}catch(e){}return [];}
   function save(a){try{localStorage.setItem(KEY,JSON.stringify(a));}catch(e){}}
   function toggle(t){var a=get();var i=a.indexOf(t);if(i>=0)a.splice(i,1);else a.push(t);save(a);apply();}
   function esc(t){return (window.CSS&&CSS.escape)?CSS.escape(t):t.replace(/"/g,'\\"');}
@@ -33,7 +34,7 @@
       var t=el.getAttribute('data-team');
       el.classList.toggle('watched', !!t && w.indexOf(t)>=0);
     });
-    document.querySelectorAll('.match,.km,.dist-row,.pz,.road-step,.tcard,.cal-m').forEach(function(el){
+    document.querySelectorAll('.match,.km,.dist-row,.pz,.road-step,.tcard,.cal-m,.scorebug,.ga-row').forEach(function(el){
       el.classList.toggle('has-watched',!!el.querySelector('.watched'));
     });
     document.querySelectorAll('[data-watch]').forEach(function(btn){
@@ -45,11 +46,33 @@
     applyTZ();  // re-render times (incl. the freshly cloned Your-teams cards)
   }
   // ---- time zone: re-render every [data-utc] time in the viewer's chosen zone ----
+  // Short zone tags shown beside every kickoff. Curated for the tournament
+  // audience; an arbitrary device zone (the "Auto" default) derives its tag from
+  // Intl instead.
   var TZS={'America/New_York':'ET','America/Chicago':'CT','America/Denver':'MT',
-           'America/Los_Angeles':'PT','America/Sao_Paulo':'BRT'};
-  var TZ_KEY='wc26.tz', TZ_DEFAULT='America/Los_Angeles';
-  function getTZ(){try{var v=localStorage.getItem(TZ_KEY);if(v&&TZS[v])return v;}catch(e){}return TZ_DEFAULT;}
+           'America/Los_Angeles':'PT','UTC':'UTC','Europe/London':'UK',
+           'Europe/Paris':'CET','America/Sao_Paulo':'BRT','America/Mexico_City':'MX',
+           'Asia/Tokyo':'JST','Australia/Sydney':'AEST'};
+  // Fuller descriptor for the calendar "Times shown in …" note — mirrors the
+  // footer dropdown labels so one pt-BR dictionary covers both.
+  var TZ_DESC={'America/New_York':'Eastern · ET','America/Chicago':'Central · CT',
+    'America/Denver':'Mountain · MT','America/Los_Angeles':'Pacific · PT','UTC':'UTC',
+    'Europe/London':'London · UK','Europe/Paris':'Paris / Berlin · CET',
+    'America/Sao_Paulo':'Brazil · BRT','America/Mexico_City':'Mexico City · MX',
+    'Asia/Tokyo':'Tokyo · JST','Australia/Sydney':'Sydney · AEST'};
+  var TZ_KEY='wc26.tz', TZ_AUTO='auto', PACIFIC='America/Los_Angeles';
+  function deviceTZ(){try{return Intl.DateTimeFormat().resolvedOptions().timeZone||PACIFIC;}catch(e){return PACIFIC;}}
+  // The stored CHOICE ('auto' or an IANA zone). A real stored zone wins over auto.
+  function tzChoice(){try{var v=localStorage.getItem(TZ_KEY);if(v)return v;}catch(e){}return TZ_AUTO;}
+  function effTZ(){var c=tzChoice();return (c&&c!==TZ_AUTO)?c:deviceTZ();}
   function setTZ(v){try{localStorage.setItem(TZ_KEY,v);}catch(e){}}
+  function tzTag(tz){
+    if(TZS[tz])return TZS[tz];
+    try{var ps=new Intl.DateTimeFormat('en-US',{timeZone:tz,timeZoneName:'short'}).formatToParts(new Date());
+      for(var i=0;i<ps.length;i++)if(ps[i].type==='timeZoneName')return ps[i].value;}catch(e){}
+    return '';
+  }
+  function tzDescriptor(tz){return TZ_DESC[tz]||(tz+' · '+tzTag(tz));}
   function tzParts(utc,tz){
     var d=new Date(utc);
     if(isNaN(d))return null;
@@ -58,7 +81,7 @@
     return {day:day,time:time};
   }
   function applyTZ(){
-    var tz=getTZ(), label=TZS[tz]||'';
+    var tz=effTZ(), label=tzTag(tz);
     document.querySelectorAll('[data-utc]').forEach(function(el){
       if(el.classList.contains('live-mid'))return;          // currently showing a live score
       var p=tzParts(el.getAttribute('data-utc'),tz); if(!p)return;
@@ -79,10 +102,13 @@
       var cc=(el.querySelector('.tz')||{}).className||'tz';   // 'time'
       el.innerHTML=p.time+'<span class="'+cc+'">'+label+'</span>';
     });
+    var note=document.querySelector('[data-tznote]');
+    if(note)note.textContent=tzDescriptor(tz);
+    refreshCalendar(tz);   // re-bucket the calendar's day cells into this zone
   }
   function wireTZ(){
     var sel=document.getElementById('tz-select'); if(!sel)return;
-    sel.value=getTZ();
+    sel.value=tzChoice();
     sel.addEventListener('change',function(){setTZ(sel.value);applyTZ();});
   }
   document.addEventListener('click',function(e){
@@ -217,6 +243,49 @@
     if(typeof ResizeObserver==='undefined')return;
     var ro=new ResizeObserver(scheduleDraw);
     tree.querySelectorAll('.km,.champion-plinth').forEach(function(el){ro.observe(el);});
+  }
+
+  // ---- Fantasy ghosts on the REAL bracket. If the visitor has made fantasy
+  // picks (wc26.fantasy, shared with the fantasy page), mark the side they
+  // picked to win each still-UNDECIDED tie with a small, muted, hard-edged
+  // "PICK" tag. Pure progressive enhancement: no picks -> zero markup change;
+  // decided ties are left to the real (vermilion) result, never ghosted; a
+  // pick that isn't a resolved side yet (feeders still open) gets no marker.
+  // Muted ink, never vermilion — vermilion means live/real here.
+  function wireBracketGhosts(){
+    var tree=document.querySelector('.kbracket'); if(!tree)return;
+    var picks={};
+    try{var v=JSON.parse(localStorage.getItem('wc26.fantasy'));if(v&&typeof v==='object')picks=v;}catch(e){}
+    if(!Object.keys(picks).length)return;                 // no picks: leave untouched
+    var shown=0;
+    tree.querySelectorAll('.km[data-mnum]').forEach(function(km){
+      if(km.classList.contains('km-done'))return;         // decided: real result wins
+      var pick=picks[km.getAttribute('data-mnum')]; if(!pick)return;
+      var sides=km.querySelectorAll('.km-team:not(.is-candidate)'); // resolved sides only
+      for(var i=0;i<sides.length;i++){
+        var a=sides[i].querySelector('.bteam');
+        if(a&&a.getAttribute('data-team')===pick){
+          if(!sides[i].querySelector('.km-ghost')){
+            var tag=document.createElement('span');
+            tag.className='km-ghost'+(sides[i].querySelector('.km-od')?' with-od':'');
+            tag.setAttribute('title','Your fantasy pick');
+            tag.textContent='PICK';
+            sides[i].appendChild(tag); shown++;
+          }
+          break;
+        }
+      }
+    });
+    if(shown){                                            // legend only when present
+      var intro=document.querySelector('.bracket-intro');
+      if(intro&&!intro.querySelector('.ghost-legend')){
+        var lg=document.createElement('p');
+        lg.className='ghost-legend muted';
+        lg.innerHTML='<span class="km-ghost" aria-hidden="true">PICK</span>'+
+          '<span class="gl-t">Your fantasy pick</span>';
+        intro.appendChild(lg);
+      }
+    }
   }
 
 
@@ -468,6 +537,10 @@
   function initBetting(){
     var app=document.getElementById('bet-app'); if(!app)return;
     var state=null, joining=false, leaveArmed=false;
+    // Public (logged-out) face: a read-only odds board + how-it-works, rendered
+    // from the STATIC bets-data.json so it works even on a D1-unbound / backend-
+    // less deploy. `loaded` guards the async race between the state call and this.
+    var betsData=null, loaded=false;
     var showBets=true; try{showBets=localStorage.getItem('wc26.betshow')!=='0';}catch(e){}
     function setShowBets(v){showBets=v;try{localStorage.setItem('wc26.betshow',v?'1':'0');}catch(e){}render();}
     // memberships of multiple pools live on this device; the active pool's token
@@ -487,23 +560,73 @@
     function matchById(num){var a=(state.matches||[]);for(var i=0;i<a.length;i++)if(a[i].num===num)return a[i];return null;}
     function showErr(id,msg){var e=document.getElementById(id);if(e){e.textContent=msg;e.hidden=false;}}
     var NETERR='Network error — nothing was changed. Try again.';
+    function fetchBets(){   // static odds feed for the public face; no D1 needed
+      fetch('/bets-data.json',{headers:{accept:'application/json'}})
+        .then(function(r){return r.ok?r.json():null;})
+        .then(function(d){betsData=d;if(loaded)render();})   // fill in once state is known
+        .catch(function(){betsData=null;});
+    }
     function load(){
       leaveArmed=false;
       api('state').then(function(s){
-        state=s;
+        loaded=true; state=s;
         if(s.joined&&s.token&&s.pool){upsertPool({code:s.pool.code,name:s.me.name,token:s.token});}
         else if(!s.joined&&mem.active){dropPool(mem.active);if(mem.active){load();return;}}  // stale token
         render();
-      }).catch(function(){app.innerHTML='<div class="bet-card"><p class="muted">Could not reach the betting service.</p></div>';});
+      }).catch(function(){loaded=true;state=null;render();});   // no backend -> public landing
+    }
+    // ---- public face: odds board + how-it-works (shown before/without a pool) --
+    function oddsBoard(){
+      var F=(betsData&&betsData.flags)||{}, U=(betsData&&betsData.urls)||{},
+          SRC={live:'Live market',model:'Model'};
+      var open=((betsData&&betsData.matches)||[]).filter(function(m){return !m.decided;})
+        .sort(function(a,b){return (a.kickoff||'').localeCompare(b.kickoff||'');});
+      function side(team,odds){
+        var inner='<span class="bet-fl">'+(F[team]||'')+'</span><span class="bet-nm">'+he(team)+
+          '</span><span class="bet-od">'+(+odds).toFixed(2)+'</span>';
+        var u=U[team];
+        return u?'<a class="bet-dteam" href="'+u+'">'+inner+'</a>':'<div class="bet-dteam">'+inner+'</div>';
+      }
+      var rows=open.length?open.map(function(m){
+        var when=m.kickoff?' · <span class="ko" data-utc="'+m.kickoff+'" data-tfmt="daytime"><span class="ko-day"></span> <span class="ko-time"><span class="ko-tz tz"></span></span></span>':'';
+        var src=SRC[m.oddsSrc]?'<span class="bet-src">'+SRC[m.oddsSrc]+'</span>':'';
+        return '<div class="bet-game"><div class="bet-g-rd">'+he(m.round)+when+src+'</div>'+
+          '<div class="bet-g-row">'+side(m.team1,m.odds1)+side(m.team2,m.odds2)+'</div></div>';
+      }).join(''):'<p class="muted">No matches are open for betting right now — check back when the next ties are set.</p>';
+      return '<div class="bet-card bet-board"><h2>Odds board</h2>'+
+        '<p class="bet-board-sub muted">Chance to win each tie</p>'+rows+'</div>';
+    }
+    function howItWorks(){
+      var items=['Play money — join a pool and everyone starts with $100.',
+        'Bet any amount on who wins each knockout tie.',
+        'Odds are locked in the moment you place a bet.',
+        'Bets settle automatically at full time.',
+        'You can\'t back both sides of the same tie.',
+        'Reach $0 and you\'re out.'];
+      return '<div class="bet-card bet-how"><h2>How it works</h2><ul class="bet-how-list">'+
+        items.map(function(t){return '<li>'+t+'</li>';}).join('')+'</ul></div>';
+    }
+    // betsData present (fetch OK) -> board + how-it-works; else '' (join-only degrade)
+    function publicFace(){return betsData?(oddsBoard()+howItWorks()):'';}
+    function noticeCard(msg){return '<div class="bet-card"><p class="muted">'+msg+'</p></div>';}
+    function renderLanding(){   // not configured (D1 unbound) or no backend reached
+      var msg=(state&&state.configured===false)
+        ?'The betting pool is not set up on the server yet.'
+        :'Could not reach the betting service.';
+      app.innerHTML=publicFace()+noticeCard(msg);
+      applyTZ();
     }
     function render(){
-      if(!state||state.configured===false){app.innerHTML='<div class="bet-card"><p class="muted">The betting pool is not set up on the server yet.</p></div>';return;}
+      if(!state||state.configured===false){renderLanding();return;}
       if(joining||!state.joined){renderJoin();return;}
       renderPool();
     }
     function renderJoin(){
       var canCancel=mem.pools.length>0;
-      app.innerHTML='<div class="bet-card bet-join"><h2>'+(canCancel?'Join another pool':'Join a pool')+'</h2>'+
+      // First-time landing (logged out, not mid "join another"): lead with the
+      // public odds board + how-it-works, then the join card.
+      var pre=(!state.joined&&!joining)?publicFace():'';
+      app.innerHTML=pre+'<div class="bet-card bet-join"><h2>'+(canCancel?'Join another pool':'Join a pool')+'</h2>'+
         '<p class="muted">Pick a display name and a pool code. Share the code so everyone is in the same pool. A new code starts a new pool. Already joined? Enter the same name and code to pick up where you left off — even on a new device.</p>'+
         '<label class="bet-l">Display name<input id="bet-name" maxlength="24" autocomplete="off"></label>'+
         '<label class="bet-l">Pool code<input id="bet-code" maxlength="24" autocomplete="off" placeholder="friends26"></label>'+
@@ -521,6 +644,7 @@
       };
       var cc=document.getElementById('bet-join-cancel');
       if(cc)cc.onclick=function(){joining=false;render();};
+      applyTZ();   // format any odds-board kickoff times in the viewer's zone
     }
     function betsList(bh){
       var F=state.flags||{};
@@ -673,9 +797,73 @@
       };
       if(modal)modal.hidden=false;
     }
-    window.__betRender=function(s){state=s;render();};   // test seam
+    window.__betRender=function(s){loaded=true;state=s;render();};   // test seam
     window.__betReload=function(){mem={active:null,pools:[]};try{var v=JSON.parse(localStorage.getItem('wc26.bets'));if(v&&v.pools)mem=v;}catch(e){}joining=false;leaveArmed=false;load();};
-    load();
+    fetchBets(); load();
+  }
+
+  // ---- Calendar: re-bucket day cells into the viewer's zone + watchlist filter --
+  // Day cells are bucketed in Pacific at build time; when the effective zone
+  // differs, a kickoff near midnight belongs under a different local day. We move
+  // each .cal-m under the cell whose date matches its kickoff in the effective
+  // zone (cells span the tournament ±1 day), keep each day time-ordered, retag
+  // "today" for that zone, and toggle empty-day styling. Idempotent: back in
+  // Pacific every match returns to its original cell.
+  var CAL_FKEY='wc26.calFilter';
+  function calFilter(){try{var v=localStorage.getItem(CAL_FKEY);if(v==='watch'||v==='all')return v;}catch(e){}return 'all';}
+  function setCalFilter(v){try{localStorage.setItem(CAL_FKEY,v);}catch(e){}}
+  function calISO(utc,tz){var d=new Date(utc);if(isNaN(d))return null;
+    try{return new Intl.DateTimeFormat('en-CA',{timeZone:tz,year:'numeric',month:'2-digit',day:'2-digit'}).format(d);}catch(e){return null;}}
+  function calUtc(cm){var u=cm.querySelector('[data-utc]');return u?(u.getAttribute('data-utc')||''):'';}
+  function refreshCalendar(tz){
+    var grid=document.querySelector('.cal-grid'); if(!grid)return;
+    tz=tz||effTZ();
+    var cells={};
+    grid.querySelectorAll('.cal-day').forEach(function(c){var d=c.getAttribute('data-date');if(d)cells[d]=c;});
+    // move each match under its day cell in the effective zone
+    grid.querySelectorAll('.cal-m').forEach(function(cm){
+      var u=calUtc(cm); if(!u)return;
+      var iso=calISO(u,tz); if(!iso)return;
+      var target=cells[iso]; if(!target)return;
+      var body=target.querySelector('.cal-d-body');
+      if(body&&cm.parentNode!==body)body.appendChild(cm);
+    });
+    // keep each day in kickoff order (ISO-UTC strings sort chronologically)
+    grid.querySelectorAll('.cal-d-body').forEach(function(body){
+      [].slice.call(body.children).sort(function(a,b){
+        var ua=calUtc(a),ub=calUtc(b);return ua<ub?-1:(ua>ub?1:0);
+      }).forEach(function(cm){body.appendChild(cm);});
+    });
+    // "today" recomputed in the effective zone
+    var todayISO=calISO(new Date().toISOString(),tz);
+    grid.querySelectorAll('.cal-day').forEach(function(c){
+      c.classList.toggle('today',c.getAttribute('data-date')===todayISO);});
+    applyCalFilter(grid);
+  }
+  function applyCalFilter(grid){
+    grid=grid||document.querySelector('.cal-grid'); if(!grid)return;
+    var w=get(), canWatch=w.length>0, mode=calFilter();
+    if(mode==='watch'&&!canWatch)mode='all';       // nothing starred yet → show all
+    grid.querySelectorAll('.cal-m').forEach(function(cm){
+      cm.hidden=!(mode==='all'||cm.classList.contains('has-watched'));
+    });
+    grid.querySelectorAll('.cal-day').forEach(function(c){
+      c.classList.toggle('empty',!c.querySelector('.cal-m:not([hidden])'));
+    });
+    var btns=document.querySelectorAll('.cal-filter [data-calfilter]');
+    for(var i=0;i<btns.length;i++){
+      var b=btns[i],v=b.getAttribute('data-calfilter'),on=v===mode;
+      b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false');
+      if(v==='watch'){b.disabled=!canWatch; b.classList.toggle('disabled',!canWatch);}
+    }
+  }
+  function wireCalFilter(){
+    var box=document.querySelector('.cal-filter'); if(!box)return;
+    box.addEventListener('click',function(e){
+      var b=e.target.closest&&e.target.closest('[data-calfilter]');
+      if(!b||b.disabled)return;
+      setCalFilter(b.getAttribute('data-calfilter')); refreshCalendar();
+    });
   }
 
   // Calendar: jump to today on load (offset for the sticky header).
@@ -688,8 +876,9 @@
   }
 
   document.addEventListener('DOMContentLoaded',function(){
-    wireTZ();apply();wireReveal();wireLive();wireBracketScroll();wireBracketObserver();drawBracket();
-    landOnActiveColumn();initFantasy();initBetting();landOnToday();
+    wireTZ();apply();wireReveal();wireLive();wireBracketScroll();wireBracketObserver();
+    wireBracketGhosts();drawBracket();
+    landOnActiveColumn();initFantasy();initBetting();wireCalFilter();landOnToday();
   });
   window.addEventListener('load',landOnToday);
   window.addEventListener('load',drawBracket);

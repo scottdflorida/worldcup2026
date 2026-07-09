@@ -1,0 +1,60 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//worldcup.sflorida.studio//WC2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:World Cup 2026 — Mexico
+NAME:World Cup 2026 — Mexico
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:wc26-g2026-06-11-mexico-south-africa@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260611T190000Z
+DTEND:20260611T203000Z
+SUMMARY:⚽ Mexico v South Africa — Group A
+LOCATION:Estadio Azteca\, Mexico City\, Mexico
+URL:https://worldcup.sflorida.studio/mexico.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-18-mexico-south-korea@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260619T010000Z
+DTEND:20260619T023000Z
+SUMMARY:⚽ Mexico v South Korea — Group A
+LOCATION:Estadio Akron\, Zapopan\, Jalisco\, Mexico
+URL:https://worldcup.sflorida.studio/mexico.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-24-czech-republic-mexico@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260625T010000Z
+DTEND:20260625T023000Z
+SUMMARY:⚽ Czech Republic v Mexico — Group A
+LOCATION:Estadio Azteca\, Mexico City\, Mexico
+URL:https://worldcup.sflorida.studio/mexico.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-m79@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260701T010000Z
+DTEND:20260701T030000Z
+SUMMARY:⚽ Mexico v Ecuador — Round of 32
+LOCATION:Estadio Azteca\, Mexico City\, Mexico
+URL:https://worldcup.sflorida.studio/mexico.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-m92@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260706T000000Z
+DTEND:20260706T020000Z
+SUMMARY:⚽ Mexico v England — Round of 16
+LOCATION:Estadio Azteca\, Mexico City\, Mexico
+URL:https://worldcup.sflorida.studio/mexico.html
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR

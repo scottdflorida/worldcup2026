@@ -1,0 +1,60 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//worldcup.sflorida.studio//WC2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:World Cup 2026 — Brazil
+NAME:World Cup 2026 — Brazil
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:wc26-g2026-06-13-brazil-morocco@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260613T220000Z
+DTEND:20260613T233000Z
+SUMMARY:⚽ Brazil v Morocco — Group C
+LOCATION:MetLife Stadium\, East Rutherford\, New Jersey\, USA
+URL:https://worldcup.sflorida.studio/brazil.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-19-brazil-haiti@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260620T003000Z
+DTEND:20260620T020000Z
+SUMMARY:⚽ Brazil v Haiti — Group C
+LOCATION:Lincoln Financial Field\, Philadelphia\, Pennsylvania\, USA
+URL:https://worldcup.sflorida.studio/brazil.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-24-scotland-brazil@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260624T220000Z
+DTEND:20260624T233000Z
+SUMMARY:⚽ Scotland v Brazil — Group C
+LOCATION:Hard Rock Stadium\, Miami Gardens\, Florida\, USA
+URL:https://worldcup.sflorida.studio/brazil.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-m76@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260629T170000Z
+DTEND:20260629T190000Z
+SUMMARY:⚽ Brazil v Japan — Round of 32
+LOCATION:NRG Stadium\, Houston\, Texas\, USA
+URL:https://worldcup.sflorida.studio/brazil.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-m91@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260705T200000Z
+DTEND:20260705T220000Z
+SUMMARY:⚽ Brazil v Norway — Round of 16
+LOCATION:MetLife Stadium\, East Rutherford\, New Jersey\, USA
+URL:https://worldcup.sflorida.studio/brazil.html
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR

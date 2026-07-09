@@ -88,6 +88,7 @@ UI = {
     "Calendar": "Calendário",
     "Skip to content": "Pular para o conteúdo",
     "Primary": "Principal",
+    "Breadcrumb": "Trilha de navegação",
     "World Cup 2026 tracker — home": "Painel da Copa do Mundo 2026 — início",
     "STAGE": "FASE",
     "UPDATED": "ATUALIZADO",
@@ -185,6 +186,9 @@ UI = {
     "Next up": "A seguir",
     "The bracket": "A chave",
     "Full bracket": "Chave completa",
+    # phase-aware home: champion-mode hero + settled group-stage archive band
+    "Champions": "Campeões",
+    "Group stage — final": "Fase de grupos — final",
     "Standings": "Classificação",
     "Scenarios": "Cenários",
     "Wins group": "Vence o grupo",
@@ -240,6 +244,7 @@ UI = {
     # bracket odds chips + fantasy ghosts (S4). "Live market"/"Model" are the
     # odds-source labels, shared with the public betting odds board.
     "Chance to win each tie": "Chance de vencer cada confronto",
+    "Odds key": "Legenda de odds",
     "Live market": "Mercado ao vivo",
     "Model": "Modelo",
     "Live market & model": "Mercado ao vivo e modelo",
@@ -251,6 +256,7 @@ UI = {
     "See the real tree": "Ver a chave real",
     "Make your picks": "Faça seus palpites",
     "Back your calls": "Aposte nos seus palpites",
+    "Related pages": "Páginas relacionadas",
 
     # ---- calendar ----
     "Match calendar": "Calendário de jogos",
@@ -365,6 +371,11 @@ UI = {
     "Forwards": "Atacantes",
     "current squad by position": "elenco atual por posição",
     "bold": "negrito",
+    "Fixtures": "Jogos",
+    # match-list empty states (results / remaining games / completed lists)
+    "None": "Nenhum",
+    "None yet": "Nenhum ainda",
+    "None played yet": "Nenhum disputado ainda",
     "Road to the final": "Caminho até a final",
     # status-driven team-page sections (S3)
     "Next match": "Próximo jogo",
@@ -510,6 +521,9 @@ _RUNTIME = r"""/* World Cup 2026 — pt-BR localisation (generated from wc/i18n.
     // "Group A standings" -> "Classificação do Grupo A"
     function (s) { var m = s.match(/^Group ([A-L]) standings$/);
       return m ? "Classificação do Grupo " + m[1] : null; },
+    // "Group A table" (archive-band ga-link aria-label) -> "Tabela do Grupo A"
+    function (s) { var m = s.match(/^Group ([A-L]) table$/);
+      return m ? "Tabela do Grupo " + m[1] : null; },
     // "Group A winners" -> "1º do Grupo A"  /  "Group A runners-up" -> "2º do Grupo A"
     function (s) { var m = s.match(/^Group ([A-L]) winners$/);
       return m ? "1º do Grupo " + m[1] : null; },

@@ -1,0 +1,50 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//worldcup.sflorida.studio//WC2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:World Cup 2026 — Ghana
+NAME:World Cup 2026 — Ghana
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:wc26-g2026-06-17-ghana-panama@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260617T230000Z
+DTEND:20260618T003000Z
+SUMMARY:⚽ Ghana v Panama — Group L
+LOCATION:BMO Field\, Toronto\, Ontario\, Canada
+URL:https://worldcup.sflorida.studio/ghana.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-23-england-ghana@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260623T200000Z
+DTEND:20260623T213000Z
+SUMMARY:⚽ England v Ghana — Group L
+LOCATION:Gillette Stadium\, Foxborough\, Massachusetts\, USA
+URL:https://worldcup.sflorida.studio/ghana.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-27-croatia-ghana@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260627T210000Z
+DTEND:20260627T223000Z
+SUMMARY:⚽ Croatia v Ghana — Group L
+LOCATION:Lincoln Financial Field\, Philadelphia\, Pennsylvania\, USA
+URL:https://worldcup.sflorida.studio/ghana.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-m87@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260704T013000Z
+DTEND:20260704T033000Z
+SUMMARY:⚽ Colombia v Ghana — Round of 32
+LOCATION:Arrowhead Stadium\, Kansas City\, Missouri\, USA
+URL:https://worldcup.sflorida.studio/ghana.html
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,50 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//worldcup.sflorida.studio//WC2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:World Cup 2026 — South Africa
+NAME:World Cup 2026 — South Africa
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:wc26-g2026-06-11-mexico-south-africa@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260611T190000Z
+DTEND:20260611T203000Z
+SUMMARY:⚽ Mexico v South Africa — Group A
+LOCATION:Estadio Azteca\, Mexico City\, Mexico
+URL:https://worldcup.sflorida.studio/south-africa.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-18-czech-republic-south-africa@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260618T160000Z
+DTEND:20260618T173000Z
+SUMMARY:⚽ Czech Republic v South Africa — Group A
+LOCATION:Mercedes-Benz Stadium\, Atlanta\, Georgia\, USA
+URL:https://worldcup.sflorida.studio/south-africa.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-24-south-africa-south-korea@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260625T010000Z
+DTEND:20260625T023000Z
+SUMMARY:⚽ South Africa v South Korea — Group A
+LOCATION:Estadio BBVA\, Guadalupe\, Nuevo León\, Mexico
+URL:https://worldcup.sflorida.studio/south-africa.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-m73@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260628T190000Z
+DTEND:20260628T210000Z
+SUMMARY:⚽ South Africa v Canada — Round of 32
+LOCATION:SoFi Stadium\, Inglewood\, California\, USA
+URL:https://worldcup.sflorida.studio/south-africa.html
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR

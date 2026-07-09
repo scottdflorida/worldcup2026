@@ -1,0 +1,40 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//worldcup.sflorida.studio//WC2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:World Cup 2026 — South Korea
+NAME:World Cup 2026 — South Korea
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:wc26-g2026-06-11-south-korea-czech-republic@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260612T020000Z
+DTEND:20260612T033000Z
+SUMMARY:⚽ South Korea v Czech Republic — Group A
+LOCATION:Estadio Akron\, Zapopan\, Jalisco\, Mexico
+URL:https://worldcup.sflorida.studio/south-korea.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-18-mexico-south-korea@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260619T010000Z
+DTEND:20260619T023000Z
+SUMMARY:⚽ Mexico v South Korea — Group A
+LOCATION:Estadio Akron\, Zapopan\, Jalisco\, Mexico
+URL:https://worldcup.sflorida.studio/south-korea.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-24-south-africa-south-korea@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260625T010000Z
+DTEND:20260625T023000Z
+SUMMARY:⚽ South Africa v South Korea — Group A
+LOCATION:Estadio BBVA\, Guadalupe\, Nuevo León\, Mexico
+URL:https://worldcup.sflorida.studio/south-korea.html
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR

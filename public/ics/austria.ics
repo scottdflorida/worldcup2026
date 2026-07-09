@@ -1,0 +1,50 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//worldcup.sflorida.studio//WC2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:World Cup 2026 — Austria
+NAME:World Cup 2026 — Austria
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:wc26-g2026-06-16-austria-jordan@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260617T040000Z
+DTEND:20260617T053000Z
+SUMMARY:⚽ Austria v Jordan — Group J
+LOCATION:Levi's Stadium\, Santa Clara\, California\, USA
+URL:https://worldcup.sflorida.studio/austria.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-22-argentina-austria@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260622T170000Z
+DTEND:20260622T183000Z
+SUMMARY:⚽ Argentina v Austria — Group J
+LOCATION:AT&T Stadium\, Arlington\, Texas\, USA
+URL:https://worldcup.sflorida.studio/austria.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-27-algeria-austria@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260628T020000Z
+DTEND:20260628T033000Z
+SUMMARY:⚽ Algeria v Austria — Group J
+LOCATION:Arrowhead Stadium\, Kansas City\, Missouri\, USA
+URL:https://worldcup.sflorida.studio/austria.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-m84@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260702T190000Z
+DTEND:20260702T210000Z
+SUMMARY:⚽ Spain v Austria — Round of 32
+LOCATION:SoFi Stadium\, Inglewood\, California\, USA
+URL:https://worldcup.sflorida.studio/austria.html
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR

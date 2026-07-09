@@ -1,0 +1,50 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//worldcup.sflorida.studio//WC2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:World Cup 2026 — Algeria
+NAME:World Cup 2026 — Algeria
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:wc26-g2026-06-16-argentina-algeria@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260617T010000Z
+DTEND:20260617T023000Z
+SUMMARY:⚽ Argentina v Algeria — Group J
+LOCATION:Arrowhead Stadium\, Kansas City\, Missouri\, USA
+URL:https://worldcup.sflorida.studio/algeria.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-22-jordan-algeria@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260623T030000Z
+DTEND:20260623T043000Z
+SUMMARY:⚽ Jordan v Algeria — Group J
+LOCATION:Levi's Stadium\, Santa Clara\, California\, USA
+URL:https://worldcup.sflorida.studio/algeria.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-27-algeria-austria@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260628T020000Z
+DTEND:20260628T033000Z
+SUMMARY:⚽ Algeria v Austria — Group J
+LOCATION:Arrowhead Stadium\, Kansas City\, Missouri\, USA
+URL:https://worldcup.sflorida.studio/algeria.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-m85@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260703T030000Z
+DTEND:20260703T050000Z
+SUMMARY:⚽ Switzerland v Algeria — Round of 32
+LOCATION:BC Place\, Vancouver\, British Columbia\, Canada
+URL:https://worldcup.sflorida.studio/algeria.html
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR

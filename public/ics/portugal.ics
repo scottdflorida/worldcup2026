@@ -1,0 +1,60 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//worldcup.sflorida.studio//WC2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:World Cup 2026 — Portugal
+NAME:World Cup 2026 — Portugal
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:wc26-g2026-06-17-portugal-dr-congo@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260617T170000Z
+DTEND:20260617T183000Z
+SUMMARY:⚽ Portugal v DR Congo — Group K
+LOCATION:NRG Stadium\, Houston\, Texas\, USA
+URL:https://worldcup.sflorida.studio/portugal.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-23-portugal-uzbekistan@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260623T170000Z
+DTEND:20260623T183000Z
+SUMMARY:⚽ Portugal v Uzbekistan — Group K
+LOCATION:NRG Stadium\, Houston\, Texas\, USA
+URL:https://worldcup.sflorida.studio/portugal.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-27-colombia-portugal@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260627T233000Z
+DTEND:20260628T010000Z
+SUMMARY:⚽ Colombia v Portugal — Group K
+LOCATION:Hard Rock Stadium\, Miami Gardens\, Florida\, USA
+URL:https://worldcup.sflorida.studio/portugal.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-m83@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260702T230000Z
+DTEND:20260703T010000Z
+SUMMARY:⚽ Portugal v Croatia — Round of 32
+LOCATION:BMO Field\, Toronto\, Ontario\, Canada
+URL:https://worldcup.sflorida.studio/portugal.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-m93@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260706T190000Z
+DTEND:20260706T210000Z
+SUMMARY:⚽ Portugal v Spain — Round of 16
+LOCATION:AT&T Stadium\, Arlington\, Texas\, USA
+URL:https://worldcup.sflorida.studio/portugal.html
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR

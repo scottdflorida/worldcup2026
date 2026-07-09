@@ -1,0 +1,50 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//worldcup.sflorida.studio//WC2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:World Cup 2026 — Senegal
+NAME:World Cup 2026 — Senegal
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:wc26-g2026-06-16-france-senegal@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260616T190000Z
+DTEND:20260616T203000Z
+SUMMARY:⚽ France v Senegal — Group I
+LOCATION:MetLife Stadium\, East Rutherford\, New Jersey\, USA
+URL:https://worldcup.sflorida.studio/senegal.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-22-norway-senegal@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260623T000000Z
+DTEND:20260623T013000Z
+SUMMARY:⚽ Norway v Senegal — Group I
+LOCATION:MetLife Stadium\, East Rutherford\, New Jersey\, USA
+URL:https://worldcup.sflorida.studio/senegal.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-26-senegal-iraq@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260626T190000Z
+DTEND:20260626T203000Z
+SUMMARY:⚽ Senegal v Iraq — Group I
+LOCATION:BMO Field\, Toronto\, Ontario\, Canada
+URL:https://worldcup.sflorida.studio/senegal.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-m82@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260701T200000Z
+DTEND:20260701T220000Z
+SUMMARY:⚽ Belgium v Senegal — Round of 32
+LOCATION:Lumen Field\, Seattle\, Washington\, USA
+URL:https://worldcup.sflorida.studio/senegal.html
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR

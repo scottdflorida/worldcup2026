@@ -1,0 +1,70 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//worldcup.sflorida.studio//WC2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:World Cup 2026 — Belgium
+NAME:World Cup 2026 — Belgium
+REFRESH-INTERVAL;VALUE=DURATION:PT6H
+X-PUBLISHED-TTL:PT6H
+BEGIN:VEVENT
+UID:wc26-g2026-06-15-belgium-egypt@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260615T190000Z
+DTEND:20260615T203000Z
+SUMMARY:⚽ Belgium v Egypt — Group G
+LOCATION:Lumen Field\, Seattle\, Washington\, USA
+URL:https://worldcup.sflorida.studio/belgium.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-21-belgium-iran@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260621T190000Z
+DTEND:20260621T203000Z
+SUMMARY:⚽ Belgium v Iran — Group G
+LOCATION:SoFi Stadium\, Inglewood\, California\, USA
+URL:https://worldcup.sflorida.studio/belgium.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-g2026-06-26-new-zealand-belgium@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260627T030000Z
+DTEND:20260627T043000Z
+SUMMARY:⚽ New Zealand v Belgium — Group G
+LOCATION:BC Place\, Vancouver\, British Columbia\, Canada
+URL:https://worldcup.sflorida.studio/belgium.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-m82@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260701T200000Z
+DTEND:20260701T220000Z
+SUMMARY:⚽ Belgium v Senegal — Round of 32
+LOCATION:Lumen Field\, Seattle\, Washington\, USA
+URL:https://worldcup.sflorida.studio/belgium.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-m94@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260707T000000Z
+DTEND:20260707T020000Z
+SUMMARY:⚽ USA v Belgium — Round of 16
+LOCATION:Lumen Field\, Seattle\, Washington\, USA
+URL:https://worldcup.sflorida.studio/belgium.html
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:wc26-m98@worldcup.sflorida.studio
+DTSTAMP:20260708T113404Z
+DTSTART:20260710T190000Z
+DTEND:20260710T210000Z
+SUMMARY:⚽ Spain v Belgium — Quarter-final
+LOCATION:SoFi Stadium\, Inglewood\, California\, USA
+URL:https://worldcup.sflorida.studio/belgium.html
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR

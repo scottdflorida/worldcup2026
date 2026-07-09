@@ -24,8 +24,7 @@
 <meta name="twitter:description" content="A play-money World Cup knockout betting pool with friends — $100 to start, bet on match winners at model odds, and climb the leaderboard.">
 <meta name="twitter:image" content="https://worldcup.sflorida.studio/assets/og.png">
 <meta name="twitter:image:alt" content="World Cup 2026 Tracker — the World Cup is live">
-<link rel="stylesheet" href="assets/style.css?v=86a1ad6157">
-<script>window.WC_DEFAULT_WATCH=["USA", "Brazil"];</script>
+<link rel="stylesheet" href="assets/style.css?v=cc2e3fbe89">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -38,12 +37,14 @@
     <div class="lang-toggle" data-no-i18n role="group" aria-label="Language / Idioma"><button type="button" class="lt-btn on" data-lang="en" aria-pressed="true">EN</button><button type="button" class="lt-btn" data-lang="pt" aria-pressed="false">PT</button></div>
   </div>
 </header>
+
 <main id="main">
 
 <section class="bet-intro" aria-label="Betting pool">
   <div class="fb-head"><h1>Betting pool</h1></div>
   <p class="muted">Play money. Everyone starts with $100, bet any amount on who wins each
   knockout match, payouts at the listed odds. Hit $0 and you're out.</p>
+  <div class="page-xlinks" aria-label="Related pages"><a class="xlink" href="bracket.html"><span class="xl-do">See the real tree</span><span class="arrow" aria-hidden="true">→</span><span class="xl-to">Bracket</span></a><a class="xlink" href="fantasy.html"><span class="xl-do">Make your picks</span><span class="arrow" aria-hidden="true">→</span><span class="xl-to">Fantasy</span></a></div>
 </section>
 <div id="bet-app" class="bet-app" aria-live="polite">
   <p class="muted bet-loading">Loading…</p>
@@ -76,15 +77,25 @@
   <div class="foot-tz">
     <label class="foot-tz-k" for="tz-select">Times shown in</label>
     <select id="tz-select" class="tz-select" aria-label="Display time zone">
+      <option value="auto" selected>Auto — device time</option>
       <option value="America/New_York">Eastern · ET</option>
       <option value="America/Chicago">Central · CT</option>
       <option value="America/Denver">Mountain · MT</option>
-      <option value="America/Los_Angeles" selected>Pacific · PT</option>
+      <option value="America/Los_Angeles">Pacific · PT</option>
+      <option value="UTC">UTC</option>
+      <option value="Europe/London">London · UK</option>
+      <option value="Europe/Paris">Paris / Berlin · CET</option>
       <option value="America/Sao_Paulo">Brazil · BRT</option>
+      <option value="America/Mexico_City">Mexico City · MX</option>
+      <option value="Asia/Tokyo">Tokyo · JST</option>
+      <option value="Australia/Sydney">Sydney · AEST</option>
     </select>
   </div>
+  <p class="foot-fine">
+    <span class="ff-seg">Data:</span> <a class="ff-lnk" href="https://github.com/openfootball/worldcup.json" target="_blank" rel="noopener">openfootball/worldcup.json</a> <span class="ff-seg">(public domain)</span><span class="ff-dot" aria-hidden="true">·</span><span class="ff-seg">Built with a zero-dependency Python engine</span><span class="ff-dot" aria-hidden="true">·</span><a class="ff-lnk" href="https://github.com/scottdflorida/worldcup2026" target="_blank" rel="noopener">GitHub</a>
+  </p>
 </footer>
-<script src="assets/app.js?v=86a1ad6157"></script>
-<script src="assets/i18n.js?v=86a1ad6157"></script>
+<script src="assets/app.js?v=cc2e3fbe89"></script>
+<script src="assets/i18n.js?v=cc2e3fbe89"></script>
 </body>
 </html>

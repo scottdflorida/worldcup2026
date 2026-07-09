@@ -24,8 +24,7 @@
 <meta name="twitter:description" content="Browse and search all 48 nations at the 2026 World Cup. Open any team&#x27;s hub for standings, advance odds and road to the final.">
 <meta name="twitter:image" content="https://worldcup.sflorida.studio/assets/og.png">
 <meta name="twitter:image:alt" content="World Cup 2026 Tracker — the World Cup is live">
-<link rel="stylesheet" href="assets/style.css?v=86a1ad6157">
-<script>window.WC_DEFAULT_WATCH=["USA", "Brazil"];</script>
+<link rel="stylesheet" href="assets/style.css?v=cc2e3fbe89">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -38,6 +37,7 @@
     <div class="lang-toggle" data-no-i18n role="group" aria-label="Language / Idioma"><button type="button" class="lt-btn on" data-lang="en" aria-pressed="true">EN</button><button type="button" class="lt-btn" data-lang="pt" aria-pressed="false">PT</button></div>
   </div>
 </header>
+
 <main id="main">
 
 <section class="teams-intro" aria-label="All teams">
@@ -77,15 +77,25 @@
   <div class="foot-tz">
     <label class="foot-tz-k" for="tz-select">Times shown in</label>
     <select id="tz-select" class="tz-select" aria-label="Display time zone">
+      <option value="auto" selected>Auto — device time</option>
       <option value="America/New_York">Eastern · ET</option>
       <option value="America/Chicago">Central · CT</option>
       <option value="America/Denver">Mountain · MT</option>
-      <option value="America/Los_Angeles" selected>Pacific · PT</option>
+      <option value="America/Los_Angeles">Pacific · PT</option>
+      <option value="UTC">UTC</option>
+      <option value="Europe/London">London · UK</option>
+      <option value="Europe/Paris">Paris / Berlin · CET</option>
       <option value="America/Sao_Paulo">Brazil · BRT</option>
+      <option value="America/Mexico_City">Mexico City · MX</option>
+      <option value="Asia/Tokyo">Tokyo · JST</option>
+      <option value="Australia/Sydney">Sydney · AEST</option>
     </select>
   </div>
+  <p class="foot-fine">
+    <span class="ff-seg">Data:</span> <a class="ff-lnk" href="https://github.com/openfootball/worldcup.json" target="_blank" rel="noopener">openfootball/worldcup.json</a> <span class="ff-seg">(public domain)</span><span class="ff-dot" aria-hidden="true">·</span><span class="ff-seg">Built with a zero-dependency Python engine</span><span class="ff-dot" aria-hidden="true">·</span><a class="ff-lnk" href="https://github.com/scottdflorida/worldcup2026" target="_blank" rel="noopener">GitHub</a>
+  </p>
 </footer>
-<script src="assets/app.js?v=86a1ad6157"></script>
-<script src="assets/i18n.js?v=86a1ad6157"></script>
+<script src="assets/app.js?v=cc2e3fbe89"></script>
+<script src="assets/i18n.js?v=cc2e3fbe89"></script>
 </body>
 </html>
