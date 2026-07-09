@@ -125,6 +125,12 @@ UI = {
     "Eight third-placed teams advance to the Round of 32.":
         "Os oito melhores terceiros colocados avançam para a Rodada de 32.",
     "Status": "Situação",
+    # decided-group OUTCOME column (a record, not a forecast)
+    "Outcome": "Desfecho",
+    "Group winner": "1º do grupo",
+    "Runner-up": "2º do grupo",
+    "Best third": "Melhor terceiro",
+    "how each team finished": "como cada seleção terminou",
     "Team": "Seleção",
     "GF": "GP",
     "GA": "GC",
@@ -316,6 +322,14 @@ UI = {
     "current squad by position": "elenco atual por posição",
     "bold": "negrito",
     "Road to the final": "Caminho até a final",
+    # status-driven team-page sections (S3)
+    "Next match": "Próximo jogo",
+    "their run so far": "a campanha até aqui",
+    "how their World Cup unfolded": "como foi a campanha na Copa",
+    "the run to the title": "a caminhada até o título",
+    "how the group finished": "como o grupo terminou",
+    "Knocked out — the road ended in the group stage this time.":
+        "Eliminado — o caminho terminou na fase de grupos desta vez.",
     # ---- team hero: live tournament status ----
     "Their tournament": "A campanha",
     "opponent TBD": "adversário a definir",

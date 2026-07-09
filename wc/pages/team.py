@@ -3,8 +3,8 @@ graph, fixtures and squad."""
 from __future__ import annotations
 
 from .. import blurbs, bracket, data, squads, util
-from ..components import (_ordinal, _round_short, group_table, match_line,
-                          match_list, star, team_link)
+from ..components import (_ordinal, _round_short, group_decided, group_table,
+                          match_line, match_list, star, team_link)
 from ..flags import flag
 from ..shell import shell
 from ..times import E, kickoff_label
@@ -236,80 +236,11 @@ def squad_section(ctx, team):
         '</section>')
 
 
-def page_team(ctx, team):
-    proj = ctx.projections[team]
-    info = ctx.analyses[proj["group"]]
-    pr, sec = util.accent(team)
-    g = proj["group_letter"]
-    ranks = set(proj["possible_ranks"])
-    cur = proj["rank"]
-
-    ko_match = bracket.find_ko_match(ctx.matches, team)
-    knocked = ctx.knocked_out(team)
-    roads = []
-    third_html = ""
-    next_ko_m = None
-    if ko_match is not None:
-        # The draw is set: trace the one real road forward from the confirmed slot.
-        entry = f"{cur}{g}" if cur in (1, 2) else None
-        roads.append(road_branch(team, g, ctx, entry, _ko_entry_heading(proj, cur),
-                                 entered=True))
-        # The next match to play along that road — the first round not yet
-        # contested. For a team that already won a round (e.g. through to the
-        # Round of 16) this is the upcoming game, even if its opponent is still
-        # being decided.
-        by_num = ctx.by_num
-        for step in (bracket.project_path(team, ctx.matches, ctx.analyses, g, entry) or []):
-            mm = by_num.get(step["num"])
-            if mm is not None and not data.has_result(mm):
-                next_ko_m = mm
-                break
-    elif not knocked:
-        # Group still in progress: show each finish's hypothetical branch.
-        if 1 in ranks:
-            roads.append(road_branch(team, g, ctx, f"1{g}",
-                         "Win the group", entered=(cur == 1)))
-        if 2 in ranks:
-            roads.append(road_branch(team, g, ctx, f"2{g}",
-                         "Finish runner-up", entered=(cur == 2)))
-        third_html = _third_road(ctx, proj) if 3 in ranks else ""
-    roads = [r for r in roads if r]
-
-    group_results = [m for m in ctx.matches if m.get("group") == proj["group"]]
-    gr_played = [m for m in group_results if data.has_result(m)]
-    gr_upcoming = [m for m in group_results if not data.has_result(m)]
-
-    next_ko = ""
-    if next_ko_m is not None:
-        next_ko = (
-            '<div class="next-ko" data-reveal>'
-            '<div class="nk-head"><span class="nk-k">Next knockout match</span>'
-            f'<span class="nk-rd">{E(_round_short(next_ko_m.get("round","")))}</span></div>'
-            f'{match_line(next_ko_m, ctx)}</div>'
-        )
-
-    # A single confirmed road (or a lone possible finish) shouldn't leave the
-    # second grid column empty — collapse to one column so there's no layout hole.
-    solo = len(roads) == 1 and not third_html
-    if roads or third_html:
-        road_body = (next_ko + f'<div class="roads{" solo" if solo else ""}">'
-                     f'{"".join(roads)}{third_html}</div>')
-    elif knocked:
-        road_body = '<p class="muted">Knocked out — the road ends in the group stage this time.</p>'
-    else:
-        road_body = '<p class="muted">No knockout path yet — the bracket opens once the group stage ends.</p>'
-
-    kicker, status_detail, tone = _hero_status(ctx, team, proj)
+def _team_hero(team, proj, g, pr, sec, kicker, status_detail, tone):
+    """The status-toned team hero (rebuilt in Phase 0) — kept intact here."""
     tone_cls = f" {tone}" if tone else ""
     status_line = f'<p class="th-status">{status_detail}</p>' if status_detail else ""
-    # A team whose run is over gets its road section retitled to past tense — it is
-    # a completed campaign, not a set of potential futures.
-    done = tone in ("out", "champ")
-    road_h2 = "Their tournament" if done else "Road to the final"
-    road_sub = ("" if done
-                else f'<span class="muted">potential futures — who {E(team)} could meet each round</span>')
-
-    body = f"""
+    return f"""
 <section class="team-hero{tone_cls}" data-team="{E(team)}" style="--accent:{pr};--accent2:{sec}">
   <div class="th-inner">
     <div class="th-flag" aria-hidden="true">{flag(team)}</div>
@@ -322,24 +253,165 @@ def page_team(ctx, team):
     <div class="th-watch">{star(team, "Watch")}</div>
   </div>
 </section>
+"""
 
+
+def _standings_section(ctx, info, proj):
+    """Group standings. Once the group is decided this is history: the table shows
+    the qualification outcome (group_table), so the caption drops the odds framing."""
+    sub = ("how the group finished" if group_decided(info)
+           else "your team highlighted · advance odds as a tally")
+    return f"""
 <section aria-label="Group standings">
-  <div class="sec-head"><h2>{E(proj['group'])} standings</h2><span class="muted">your team highlighted · advance odds as a tally</span></div>
+  <div class="sec-head"><h2>{E(proj['group'])} standings</h2><span class="muted">{sub}</span></div>
   {group_table(info, solo=True, advance=ctx.advance, knocked=ctx.knocked)}
 </section>
-
-<section aria-label="{road_h2}">
-  <div class="sec-head"><h2>{road_h2}</h2>{road_sub}</div>
-  {f'<p class="road-blurb">{E(blurbs.blurb_for(ctx.blurbs, team))}</p>' if blurbs.blurb_for(ctx.blurbs, team) else ''}
-  {road_body}
-</section>
-
-<section class="cols" aria-label="Fixtures">
-  <div><h2 class="col-h">Results</h2><div class="match-list">{match_list(gr_played, ctx, "None yet")}</div></div>
-  <div><h2 class="col-h">Remaining group games</h2><div class="match-list">{match_list(gr_upcoming, ctx, "Group complete")}</div></div>
-</section>
-{squad_section(ctx, team)}
 """
+
+
+def _next_fixture(ctx, m):
+    """The next scheduled fixture promoted as a prominent bar — kickoff, venue and
+    the opponent (or its live candidate set). Reuses match_line so it stays
+    live-wired and cross-page consistent (same round codes, v/vs separators)."""
+    rd = m.get("round", "")
+    # Knockout ties get their short code in the accent slot; group games already
+    # carry their group + matchday inside the match line, so leave it bare.
+    rd_lbl = "" if str(rd).startswith("Matchday") else _round_short(rd)
+    rd_chip = f'<span class="nk-rd">{E(rd_lbl)}</span>' if rd_lbl else ""
+    return (
+        '<div class="next-ko" data-reveal>'
+        f'<div class="nk-head"><span class="nk-k">Next match</span>{rd_chip}</div>'
+        f'{match_line(m, ctx)}</div>'
+    )
+
+
+def _road_graph(roads, third_html, knocked):
+    """The road graph body: the projected/played branches, or a terse note when a
+    team has no bracket path. Collapses to one column for a lone road (no hole)."""
+    solo = len(roads) == 1 and not third_html
+    if roads or third_html:
+        return (f'<div class="roads{" solo" if solo else ""}">'
+                f'{"".join(roads)}{third_html}</div>')
+    if knocked:
+        return '<p class="muted">Knocked out — the road ended in the group stage this time.</p>'
+    return '<p class="muted">No knockout path yet — the bracket opens once the group stage ends.</p>'
+
+
+def _blurb_html(ctx, team):
+    b = blurbs.blurb_for(ctx.blurbs, team)
+    return f'<p class="road-blurb">{E(b)}</p>' if b else ''
+
+
+def _road_section(ctx, team, roads, third_html):
+    """ALIVE team: the road AHEAD. Lead with the next fixture, then the projected
+    path (candidate fans until each tie resolves). No results/standings here — the
+    campaign so far follows below."""
+    nm = ctx.next_match(team)
+    next_box = _next_fixture(ctx, nm[0]) if nm is not None else ""
+    return f"""
+<section aria-label="Road to the final">
+  <div class="sec-head"><h2>Road to the final</h2><span class="muted">potential futures — who {E(team)} could meet each round</span></div>
+  {_blurb_html(ctx, team)}
+  {next_box}
+  {_road_graph(roads, third_html, knocked=False)}
+</section>
+"""
+
+
+def _results_section(ctx, mine_played, gr_upcoming):
+    """ALIVE team: results so far (group + knockout together). While the group is
+    still running, the remaining group games sit alongside; once it's done there is
+    no empty second column."""
+    results = (f'<div class="match-list">{match_list(mine_played, ctx, "None yet")}</div>')
+    if gr_upcoming:
+        return (
+            '<section class="cols" aria-label="Fixtures">'
+            f'<div><h2 class="col-h">Results</h2>{results}</div>'
+            '<div><h2 class="col-h">Remaining group games</h2>'
+            f'<div class="match-list">{match_list(gr_upcoming, ctx)}</div></div>'
+            '</section>'
+        )
+    return (
+        '<section aria-label="Results">'
+        '<div class="sec-head"><h2>Results</h2><span class="muted">their run so far</span></div>'
+        f'{results}</section>'
+    )
+
+
+def _campaign_section(ctx, team, mine_played, roads, third_html, knocked, champ):
+    """ELIMINATED (or CHAMPION) team: the finished campaign. The full results
+    timeline — group games through the decisive knockout match — comes first, then
+    the road graph in past-tense form. No 'potential futures', no empty
+    remaining-games column (see usa.html)."""
+    sub = "the run to the title" if champ else "how their World Cup unfolded"
+    return f"""
+<section aria-label="Their tournament">
+  <div class="sec-head"><h2>Their tournament</h2><span class="muted">{sub}</span></div>
+  {_blurb_html(ctx, team)}
+  <div class="camp-results"><h3 class="col-h">Results</h3>
+    <div class="match-list">{match_list(mine_played, ctx, "None yet")}</div></div>
+  {_road_graph(roads, third_html, knocked)}
+</section>
+"""
+
+
+def page_team(ctx, team):
+    proj = ctx.projections[team]
+    info = ctx.analyses[proj["group"]]
+    pr, sec = util.accent(team)
+    g = proj["group_letter"]
+    ranks = set(proj["possible_ranks"])
+    cur = proj["rank"]
+
+    ko_match = bracket.find_ko_match(ctx.matches, team)
+    knocked = ctx.knocked_out(team)
+    roads = []
+    third_html = ""
+    if ko_match is not None:
+        # The draw is set: trace the one real road (played rounds + future fans).
+        entry = f"{cur}{g}" if cur in (1, 2) else None
+        roads.append(road_branch(team, g, ctx, entry, _ko_entry_heading(proj, cur),
+                                 entered=True))
+    elif not knocked:
+        # Group still in progress: show each finish's hypothetical branch.
+        if 1 in ranks:
+            roads.append(road_branch(team, g, ctx, f"1{g}",
+                         "Win the group", entered=(cur == 1)))
+        if 2 in ranks:
+            roads.append(road_branch(team, g, ctx, f"2{g}",
+                         "Finish runner-up", entered=(cur == 2)))
+        third_html = _third_road(ctx, proj) if 3 in ranks else ""
+    roads = [r for r in roads if r]
+
+    # Full match timeline for this team across group + knockout play (by name),
+    # chronological — group games first, ending on the most recent (or fatal) tie.
+    mine = [m for m in ctx.sorted_matches() if team in (m.get("team1"), m.get("team2"))]
+    mine_played = [m for m in mine if data.has_result(m)]
+    # Remaining GROUP games only; the next knockout tie is featured in the road.
+    gr_upcoming = [m for m in mine if not data.has_result(m)
+                   and str(m.get("round", "")).startswith("Matchday")]
+
+    # The hero status drives the whole page's SECTION ORDER, not just the header.
+    kicker, status_detail, tone = _hero_status(ctx, team, proj)
+    done = tone in ("out", "champ")        # a finished campaign (eliminated or won)
+    champ = tone == "champ"
+
+    hero = _team_hero(team, proj, g, pr, sec, kicker, status_detail, tone)
+    standings = _standings_section(ctx, info, proj)
+    squad = squad_section(ctx, team)
+
+    if done:
+        # ELIMINATED: campaign (results incl. the fatal tie, then the past road),
+        # then the group standings as history, then the squad. CHAMPION rides the
+        # same order — the road simply ends in the Final win (trivial, commented).
+        body = hero + _campaign_section(ctx, team, mine_played, roads, third_html,
+                                        knocked, champ) + standings + squad
+    else:
+        # ALIVE: lead with the road ahead (next fixture + projected path), then the
+        # results so far, then the group standings (history now), then the squad.
+        body = (hero + _road_section(ctx, team, roads, third_html)
+                + _results_section(ctx, mine_played, gr_upcoming) + standings + squad)
+
     return shell(f"{team} — Road to the Final · World Cup 2026", "teams.html", body, ctx,
                  desc=(f"{team} at the 2026 World Cup: where they stand, what they need "
                        f"to advance, and their potential road to the final. Pin {team} "

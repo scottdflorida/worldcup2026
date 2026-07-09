@@ -2,7 +2,8 @@
 from __future__ import annotations
 
 from .. import data
-from ..components import dist_section, group_table, match_list, team_link
+from ..components import (dist_section, group_decided, group_table, match_list,
+                         team_link)
 from ..shell import shell
 from ..times import E
 
@@ -16,6 +17,28 @@ def page_group(ctx, letter):
     upcoming = [m for m in ms if not data.has_result(m)]
     chips = " ".join(team_link(row["team"]) for row in info["table"])
     state = "Final standings" if info["complete"] else f'{info["remaining"]} games to play'
+
+    # A decided group reads as a record: the table shows the qualification OUTCOME
+    # (see group_table), so the standings caption drops the "advance odds" framing
+    # and the forward-looking Scenarios distribution is retired as noise.
+    decided = group_decided(info)
+    stand_sub = ("how each team finished" if decided
+                 else "live table · advance odds as a tally")
+
+    # Scenarios only while the group is LIVE — once every game is played the finish
+    # distribution is a foregone conclusion (all 100/0), so it is dropped.
+    scenarios = "" if info["complete"] else f"""
+<section aria-label="Scenarios">
+  <div class="sec-head"><h2>Scenarios</h2><span class="muted">how the remaining games could finish the table</span></div>
+  {dist_section(info, ctx.advance)}
+</section>
+"""
+    # "Coming up" only when there is something to come — a finished group would
+    # otherwise print an empty "Group complete" panel.
+    coming = "" if not upcoming else f"""
+<section aria-label="Upcoming games"><div class="sec-head"><h2>Coming up</h2></div>
+  <div class="match-list">{match_list(upcoming, ctx)}</div></section>
+"""
     body = f"""
 <section class="group-banner">
   <div class="gb-letter">{E(letter)}</div>
@@ -26,18 +49,11 @@ def page_group(ctx, letter):
 </section>
 
 <section aria-label="Standings">
-  <div class="sec-head"><h2>Standings</h2><span class="muted">live table · advance odds as a tally</span></div>
+  <div class="sec-head"><h2>Standings</h2><span class="muted">{stand_sub}</span></div>
   {group_table(info, solo=True, advance=ctx.advance, knocked=ctx.knocked)}
 </section>
-
-<section aria-label="Scenarios">
-  <div class="sec-head"><h2>Scenarios</h2><span class="muted">how the remaining games could finish the table</span></div>
-  {dist_section(info, ctx.advance)}
-</section>
-
-<section aria-label="Upcoming games"><div class="sec-head"><h2>Coming up</h2></div>
-  <div class="match-list">{match_list(upcoming, ctx, "Group complete")}</div></section>
-
+{scenarios}
+{coming}
 <section aria-label="Completed games"><div class="sec-head"><h2>Results</h2></div>
   <div class="match-list">{match_list(completed, ctx, "None played yet")}</div></section>
 """

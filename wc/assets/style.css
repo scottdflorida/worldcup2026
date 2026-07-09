@@ -299,6 +299,8 @@ section:first-of-type{margin-top:var(--s4)}
 .nk-rd{font-family:var(--mono);font-size:.6rem;font-weight:800;letter-spacing:.08em;color:var(--vermilion)}
 .next-ko .match{padding:13px 15px}
 .next-ko .match.is-upcoming{border-left:0}
+/* Eliminated/champion campaign: results timeline above the past-tense road graph */
+.camp-results{margin-bottom:18px}
 
 /* ============ TEAM LINKS / CHIPS ================================== */
 .team,.cand,.bteam{display:inline-flex;align-items:center;gap:6px;font-weight:700;padding:1px 4px;transition:background .12s,color .12s}

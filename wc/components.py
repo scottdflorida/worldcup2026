@@ -55,6 +55,29 @@ def status_badge(st, group_complete=False):
     return ''
 
 
+def group_decided(info):
+    """A group whose qualification OUTCOME is fully known — complete AND the
+    cross-group best-third allocation resolved (``_wire_knockout`` stamps an
+    ``advanced`` flag on each status once the Round-of-32 draw is set). A group
+    that has merely finished its own games mid-tournament is NOT decided yet: its
+    third-placed side's fate still rides on the other groups, so the KO-odds
+    forecast stays until then."""
+    return info["complete"] and any("advanced" in st for st in info["status"].values())
+
+
+def _outcome_badge(rank, advanced):
+    """The settled qualification result for one row of a decided group — a record,
+    not a forecast. Winner / runner-up / best-third all advanced (✓); everyone
+    else is Out (✕). Reuses the shared .badge device (shape + text, never hue-only)."""
+    if not advanced:
+        return '<span class="badge gone"><span class="bx" aria-hidden="true">✕</span>Out</span>'
+    if rank == 1:
+        return '<span class="badge win"><span class="bdot" aria-hidden="true"></span>Group winner</span>'
+    if rank == 2:
+        return '<span class="badge q"><span class="bcheck" aria-hidden="true">✓</span>Runner-up</span>'
+    return '<span class="badge q"><span class="bcheck" aria-hidden="true">✓</span>Best third</span>'
+
+
 def group_table(info, link_header=False, solo=False, advance=None, knocked=None):
     """Render a group standings table.
 
@@ -62,13 +85,25 @@ def group_table(info, link_header=False, solo=False, advance=None, knocked=None)
     link_header=True -> the group title links to its detail page (home grid)
     advance    -> if given, inject a compact advance-odds Tally cell (P reach KO),
                   so standings read as a glanceable data graphic, not a flat table.
+                  Dropped once the group is DECIDED (the forecast would be all
+                  100/0) in favour of the settled Outcome column.
     knocked    -> set of teams confirmed out (group finished, didn't make the
                   bracket); drives the "Knocked out" marker and drops the qualify
                   rail now that the table is settled.
+
+    A decided group reads as a RECORD: the KO-odds forecast and the live Status
+    badge column collapse into one Outcome column (Group winner / Runner-up /
+    Best third → advanced, or Out). While the group is live, the tally + Status
+    stay exactly as before.
     """
     letter = info["group"].split()[-1]
-    show_odds = advance is not None
     knocked = knocked or set()
+    decided = group_decided(info)
+    show_odds = advance is not None and not decided
+    show_outcome = decided
+    # A live standalone table keeps the forward-looking Status badges; a decided
+    # one consolidates every signal into the single Outcome column instead.
+    show_status = solo and not decided
     rows = []
     for i, row in enumerate(info["table"], 1):
         t = row["team"]
@@ -90,9 +125,11 @@ def group_table(info, link_header=False, solo=False, advance=None, knocked=None)
         else:
             cls = ""
         out_chip = ('<span class="ko-out" title="Knocked out">OUT</span>'
-                    if out and not solo else "")
+                    if out and not solo and not show_outcome else "")
         status_cell = (f'<td class="st">{status_badge(st, info["complete"])}</td>'
-                       if solo else "")
+                       if show_status else "")
+        outcome_cell = (f'<td class="st oc">{_outcome_badge(i, st.get("advanced", False))}</td>'
+                        if show_outcome else "")
         odds_cell = ""
         if show_odds:
             adv = advance.get(t, 0) * 100
@@ -112,12 +149,13 @@ def group_table(info, link_header=False, solo=False, advance=None, knocked=None)
             f'<td>{row["P"]}</td><td>{row["W"]}</td><td>{row["D"]}</td><td>{row["L"]}</td>'
             f'<td class="hide-s">{row["GF"]}</td><td class="hide-s">{row["GA"]}</td>'
             f'<td class="gd">{row["GD"]:+d}</td><td class="pts">{row["Pts"]}</td>'
-            f'{odds_cell}{status_cell}</tr>'
+            f'{odds_cell}{outcome_cell}{status_cell}</tr>'
         )
     state = "Final" if info["complete"] else f'{info["remaining"]} to play'
     head = (f'<a class="group-link" href="group-{letter.lower()}.html"><h3>{E(info["group"])} '
             f'<span class="arrow" aria-hidden="true">→</span></h3></a>') if link_header else f'<h3>{E(info["group"])}</h3>'
-    status_th = "<th>Status</th>" if solo else ""
+    status_th = "<th>Status</th>" if show_status else ""
+    outcome_th = "<th>Outcome</th>" if show_outcome else ""
     odds_th = '<th class="odds-h">KO&nbsp;odds</th>' if show_odds else ""
     return (
         f'<div class="card group-card{" solo" if solo else ""}{" has-odds" if show_odds else ""}">'
@@ -125,7 +163,7 @@ def group_table(info, link_header=False, solo=False, advance=None, knocked=None)
         f'<table class="standings"><thead><tr>'
         f'<th>#</th><th aria-label="Watch"></th><th class="tm">Team</th>'
         f'<th>P</th><th>W</th><th>D</th><th>L</th>'
-        f'<th class="hide-s">GF</th><th class="hide-s">GA</th><th>GD</th><th>Pts</th>{odds_th}{status_th}'
+        f'<th class="hide-s">GF</th><th class="hide-s">GA</th><th>GD</th><th>Pts</th>{odds_th}{outcome_th}{status_th}'
         f'</tr></thead><tbody>{"".join(rows)}</tbody></table></div>'
     )
 
