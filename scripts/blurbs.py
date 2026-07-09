@@ -9,8 +9,11 @@
   python3 scripts/blurbs.py USA --dry-run    # just print the prompt, no API call
   python3 scripts/blurbs.py --stale          # only teams whose fingerprint moved
                                              #   (this is what the daily job runs)
+  python3 scripts/blurbs.py --pt             # translate stale/missing pt-BR blurbs
+  python3 scripts/blurbs.py --pt --force     # re-translate every pt-BR blurb
 
-Needs ANTHROPIC_API_KEY in the environment. Writes data/blurbs.json.
+Needs ANTHROPIC_API_KEY in the environment. Writes data/blurbs.json (or, with
+--pt, data/blurbs.pt.json from the cached English blurbs).
 Add --live to refresh the feed first instead of using the cached data.
 """
 import os
@@ -29,6 +32,9 @@ def main(argv):
     teams_arg = [a for a in argv if not a.startswith("--")]
     dry_run = "--dry-run" in flags
     force = "--force" in flags
+
+    if "--pt" in flags:
+        return _run_pt(force=force)
 
     payload = data.refresh() if "--live" in flags else data.load_cache()
     ctx = render.Context(payload)
@@ -65,6 +71,21 @@ def main(argv):
 
     blurbs.save_cache(cache, BLURBS_PATH)
     print(f"\n[blurbs] {changed} generated/updated, {len(cache)} cached → {BLURBS_PATH}")
+    return 0
+
+
+def _run_pt(*, force):
+    """Translate the cached English blurbs into pt-BR (data/blurbs.pt.json).
+
+    Without --force, only blurbs whose English fingerprint moved (or whose
+    translation is missing / from an older translation-prompt version) are
+    re-translated; --force re-translates every team."""
+    client = _client()
+    en_path = os.path.join(ROOT, blurbs.BLURBS_PATH)
+    pt_path = os.path.join(ROOT, blurbs.BLURBS_PT_PATH)
+    changed = blurbs.refresh_pt(force=force, en_path=en_path, pt_path=pt_path,
+                                client=client)
+    print(f"[blurbs.pt] {changed} translated → {pt_path}")
     return 0
 
 
