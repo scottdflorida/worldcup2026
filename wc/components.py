@@ -155,16 +155,16 @@ def group_table(info, link_header=False, solo=False, advance=None, knocked=None)
     state = "Final" if info["complete"] else f'{info["remaining"]} to play'
     head = (f'<a class="group-link" href="group-{letter.lower()}.html"><h3>{E(info["group"])} '
             f'<span class="arrow" aria-hidden="true">→</span></h3></a>') if link_header else f'<h3>{E(info["group"])}</h3>'
-    status_th = "<th>Status</th>" if show_status else ""
-    outcome_th = "<th>Outcome</th>" if show_outcome else ""
-    odds_th = '<th class="odds-h">KO&nbsp;odds</th>' if show_odds else ""
+    status_th = '<th scope="col">Status</th>' if show_status else ""
+    outcome_th = '<th scope="col">Outcome</th>' if show_outcome else ""
+    odds_th = '<th scope="col" class="odds-h">KO&nbsp;odds</th>' if show_odds else ""
     return (
         f'<div class="card group-card{" solo" if solo else ""}{" has-odds" if show_odds else ""}">'
         f'<div class="group-head">{head}<span class="muted">{state}</span></div>'
         f'<table class="standings"><thead><tr>'
-        f'<th>#</th><th aria-label="Watch"></th><th class="tm">Team</th>'
-        f'<th>P</th><th>W</th><th>D</th><th>L</th>'
-        f'<th class="hide-s">GF</th><th class="hide-s">GA</th><th>GD</th><th>Pts</th>{odds_th}{outcome_th}{status_th}'
+        f'<th scope="col">#</th><th scope="col" aria-label="Watch"></th><th scope="col" class="tm">Team</th>'
+        f'<th scope="col">P</th><th scope="col">W</th><th scope="col">D</th><th scope="col">L</th>'
+        f'<th scope="col" class="hide-s">GF</th><th scope="col" class="hide-s">GA</th><th scope="col">GD</th><th scope="col">Pts</th>{odds_th}{outcome_th}{status_th}'
         f'</tr></thead><tbody>{"".join(rows)}</tbody></table></div>'
     )
 

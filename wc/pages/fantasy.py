@@ -70,13 +70,24 @@ def fantasy_data(ctx):
     return {"matches": matches, "order": order, "flags": {t: flag(t) for t in sorted(teams)}}
 
 
+# Short round key -> the full round name used in a pick slot's aria-label, so a
+# screen reader announces WHICH tie (and app.js upgrades it with the two side
+# names once they are known). Each value already has pt-BR coverage in wc/i18n.py.
+_FB_RND_FULL = {"R32": "Round of 32", "R16": "Round of 16", "QF": "Quarter-final",
+                "SF": "Semi-final", "F": "Final"}
+
+
 def _fb_box(num, e):
     """One winner-slot box for a match (every round, including the R32) — empty
     until the client fills it; shows the locked winner for a settled tie."""
     champ = " fb-champ" if e["round"] == "F" else ""
     locked = " fb-locked" if e.get("winner") else ""
+    rnd = "Third-place match" if e.get("third") else _FB_RND_FULL.get(e["round"], "")
+    # Distinct per-tie label (was an identical "Pick winner" on every slot); app.js
+    # names the two sides in it once each is resolved. i18n via a RULES pattern.
+    label = f"Pick winner — {rnd}" if rnd else "Pick winner"
     return (f'<div class="fb-node fb-pick fb-empty{champ}{locked}" data-m="{num}" data-round="{e["round"]}">'
-            '<button class="fb-slot" type="button" aria-label="Pick winner">'
+            f'<button class="fb-slot" type="button" aria-label="{E(label)}">'
             '<span class="fb-fl"></span></button></div>')
 
 

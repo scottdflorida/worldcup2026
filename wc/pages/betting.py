@@ -125,9 +125,14 @@ def page_betting(ctx):
   knockout match, payouts at the listed odds. Hit $0 and you're out.</p>
   {cross_links("betting")}
 </section>
-<div id="bet-app" class="bet-app" aria-live="polite">
+<div id="bet-app" class="bet-app">
   <p class="muted bet-loading">Loading…</p>
 </div>
+<!-- Scoped SR live region: the app container is NOT live (every click rebuilds
+     it, which would re-announce the whole page). Only meaningful updates —
+     balance changes, bet placed/updated/removed, join/leave, errors — are
+     pushed here by app.js's announce(). -->
+<p id="bet-live" class="sr-only" aria-live="polite" aria-atomic="true"></p>
 <div class="fb-modal" id="bet-modal" hidden>
   <div class="fb-modal-back" data-bet-close></div>
   <div class="fb-modal-panel" role="dialog" aria-modal="true" aria-label="Place a bet">

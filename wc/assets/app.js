@@ -499,6 +499,42 @@
     updateEdges();
   }
 
+  // ---- Shared modal accessibility. Both dialogs (the fantasy pick modal and the
+  // betting modal) route their show/hide through this: focus the first control on
+  // open, trap Tab / Shift-Tab inside the panel, close on Escape, and restore
+  // focus to whatever opened the dialog when it closes. One helper, two callers.
+  function focusable(root){
+    return [].slice.call(root.querySelectorAll(
+      'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
+    )).filter(function(el){return el.offsetWidth||el.offsetHeight||el.getClientRects().length;});
+  }
+  function modalA11y(modal){
+    var opener=null;
+    function onKey(e){
+      if(e.key==='Escape'){e.preventDefault();m.close();return;}
+      if(e.key!=='Tab')return;
+      var f=focusable(modal); if(!f.length){e.preventDefault();return;}
+      var first=f[0],last=f[f.length-1],a=document.activeElement;
+      if(e.shiftKey){if(a===first||!modal.contains(a)){e.preventDefault();last.focus();}}
+      else{if(a===last||!modal.contains(a)){e.preventDefault();first.focus();}}
+    }
+    var m={
+      open:function(from){
+        opener=from||document.activeElement;
+        modal.hidden=false;
+        var f=focusable(modal); if(f[0])f[0].focus();
+        modal.addEventListener('keydown',onKey);
+      },
+      close:function(){
+        modal.removeEventListener('keydown',onKey);
+        modal.hidden=true;
+        if(opener&&opener.focus)opener.focus();
+        opener=null;
+      }
+    };
+    return m;
+  }
+
   // ---- Fantasy bracket: a flags-only pick-the-winner knockout tree ----
   function initFantasy(){
     var root=document.querySelector('.fb'); if(!root||!window.FB_DATA)return;
@@ -526,13 +562,32 @@
         });
       });
     }
+    // Per-tie pick-slot label: name the two sides + round instead of an identical
+    // "Pick winner" on every box. The two sides are this match's feeder occupants
+    // (or, for the R32 / bronze, its two entrants); unknown until resolved.
+    var RND_FULL={R32:'Round of 32',R16:'Round of 16',QF:'Quarter-final',SF:'Semi-final',F:'Final'};
+    function sidesOf(num){
+      var m=M[num]; if(!m)return [];
+      if(m.round==='R32'||m.third)return (m.entrants||[]).map(function(e){return e.team||null;});
+      return (m.feeders||[]).map(function(f){return occupant(f);});
+    }
+    function slotLabel(num){
+      var m=M[num]; if(!m)return 'Pick winner';
+      var rnd=m.third?'Third-place match':(RND_FULL[m.round]||'');
+      var s=sidesOf(num),a=s[0],b=s[1];
+      if(a&&b)return 'Pick winner: '+a+' v '+b+(rnd?' — '+rnd:'');
+      return 'Pick winner'+(rnd?' — '+rnd:'');
+    }
     function render(){
       prune();
       root.querySelectorAll('.fb-node').forEach(function(node){
-        var occ=occupant(node.getAttribute('data-m')),fl=node.querySelector('.fb-fl');
+        var num=node.getAttribute('data-m');
+        var occ=occupant(num),fl=node.querySelector('.fb-fl');
         if(fl)fl.textContent=occ?(FLAGS[occ]||''):'';
         node.classList.toggle('fb-filled',!!occ);
         node.classList.toggle('fb-empty',!occ);
+        var btn=node.querySelector('.fb-slot');
+        if(btn)btn.setAttribute('aria-label',slotLabel(num));
       });
       // outer flag layer: once an R32 is decided, dim the team that didn't advance
       root.querySelectorAll('.fb-ent[data-r32]').forEach(function(el){
@@ -544,7 +599,7 @@
     // every match is one box: tap it to pick the winner (settled ties are locked)
     root.addEventListener('click',function(e){
       var pk=e.target.closest('.fb-pick');
-      if(pk&&!pk.classList.contains('fb-locked'))openModal(pk.getAttribute('data-m'));
+      if(pk&&!pk.classList.contains('fb-locked'))openModal(pk.getAttribute('data-m'),pk.querySelector('.fb-slot'));
     });
     // modal picker for later rounds
     var modal=document.getElementById('fb-modal'),
@@ -552,8 +607,9 @@
     // lift the modal out of <main> (its own stacking context) so it paints above
     // the footer instead of behind it
     if(modal&&modal.parentNode!==document.body)document.body.appendChild(modal);
+    var fbModal=modalA11y(modal);   // focus trap + Escape + focus restore
     function he(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-    function openModal(num){
+    function openModal(num,from){
       cur=num;var opts=feasible(num);
       if(!opts.length)return;
       grid.innerHTML=opts.map(function(t){
@@ -561,16 +617,15 @@
           '<span class="fb-opt-fl">'+(FLAGS[t]||'')+'</span>'+
           '<span class="fb-opt-nm">'+he(t)+'</span></button>';
       }).join('');
-      modal.hidden=false;
+      fbModal.open(from);   // reveal + move focus into the dialog
     }
-    function closeModal(){modal.hidden=true;cur=null;}
+    function closeModal(){fbModal.close();cur=null;}
     modal.addEventListener('click',function(e){
       if(e.target.closest('[data-fb-close]')){closeModal();return;}
       if(e.target.closest('[data-fb-clear]')){if(cur)delete picks[cur];closeModal();render();return;}
       var o=e.target.closest('.fb-opt');
       if(o&&cur){picks[cur]=o.getAttribute('data-team');closeModal();render();}
     });
-    document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!modal.hidden)closeModal();});
     var reset=document.getElementById('fb-reset');
     if(reset)reset.addEventListener('click',function(){picks={};render();});
     // right-angle connectors from each pair of feeders into the game they feed
@@ -626,7 +681,17 @@
     function he(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
     function money(n){return '$'+(Math.round(n*100)/100).toFixed(2);}
     function matchById(num){var a=(state.matches||[]);for(var i=0;i<a.length;i++)if(a[i].num===num)return a[i];return null;}
-    function showErr(id,msg){var e=document.getElementById(id);if(e){e.textContent=msg;e.hidden=false;}}
+    // Scoped SR live region (#bet-live, visually hidden). The app container is no
+    // longer aria-live, so a click that rebuilds it no longer re-announces the
+    // whole page; only meaningful updates flow through announce(). Clearing first,
+    // then setting on a tick, makes even an identical repeat re-announce.
+    var _lastBalKey=null, _lastBal=null;
+    function announce(msg){
+      var r=document.getElementById('bet-live'); if(!r||!msg)return;
+      r.textContent='';
+      setTimeout(function(){r.textContent=msg;},50);
+    }
+    function showErr(id,msg){var e=document.getElementById(id);if(e){e.textContent=msg;e.hidden=false;}announce(msg);}
     var NETERR='Network error — nothing was changed. Try again.';
     function fetchBets(){   // static odds feed for the public face; no D1 needed
       fetch('/bets-data.json',{headers:{accept:'application/json'}})
@@ -706,7 +771,7 @@
         var code=(document.getElementById('bet-code').value||'').trim();
         if(!name||!code){showErr('bet-join-err','Enter a name and a code.');return;}
         api('join',{method:'POST',body:JSON.stringify({name:name,code:code})}).then(function(r){
-          if(r.ok){joining=false;upsertPool({code:r.code,name:r.name,token:r.token});load();}
+          if(r.ok){announce('Joined the pool.');joining=false;upsertPool({code:r.code,name:r.name,token:r.token});load();}
           else showErr('bet-join-err','Could not join.');
         }).catch(function(){showErr('bet-join-err',NETERR);});
       };
@@ -734,6 +799,12 @@
     }
     function renderPool(){
       var me=state.me,F=state.flags||{};
+      // Announce a portfolio change (a bet settling for/against you) via the SR
+      // live region — only when it actually changed within the SAME pool, so a
+      // pool switch or the first load never fires it.
+      if(_lastBalKey===state.pool.code&&_lastBal!=null&&me.total!==_lastBal)
+        announce('New balance: '+money(me.total));
+      _lastBalKey=state.pool.code;_lastBal=me.total;
       var openM=(state.matches||[]).filter(function(m){return m.open;});
       var games=openM.length?openM.map(function(m){
         var when=m.kickoff?' · <span class="ko" data-utc="'+m.kickoff+'" data-tfmt="daytime"><span class="ko-day"></span> <span class="ko-time"><span class="ko-tz tz"></span></span></span>':'';
@@ -794,22 +865,22 @@
       [].forEach.call(app.querySelectorAll('.bet-pick'),function(btn){btn.onclick=function(){
         var num=+btn.getAttribute('data-bet');
         var existing=(state.myBets||[]).filter(function(b){return b.match_num===num&&b.status==='open';})[0];
-        if(existing)openEdit(existing.id); else openBet(num,btn.getAttribute('data-team'));
+        if(existing)openEdit(existing.id,btn); else openBet(num,btn.getAttribute('data-team'),btn);
       };});
       [].forEach.call(app.querySelectorAll('.bet-pool[data-pool]'),function(b){b.onclick=function(){var c=b.getAttribute('data-pool');if(c!==mem.active){mem.active=c;saveMem();leaveArmed=false;load();}};});
       var addB=document.getElementById('bet-pool-add'); if(addB)addB.onclick=function(){joining=true;render();};
       var lv=document.getElementById('bet-leave'); if(lv)lv.onclick=function(){leaveArmed=true;render();};
-      var ly=document.getElementById('bet-leave-yes'); if(ly)ly.onclick=function(){api('leave',{method:'POST'}).then(function(){dropPool(mem.active);leaveArmed=false;if(mem.active)load();else{state={configured:true,joined:false};render();}});};
+      var ly=document.getElementById('bet-leave-yes'); if(ly)ly.onclick=function(){api('leave',{method:'POST'}).then(function(){announce('Left the pool.');dropPool(mem.active);leaveArmed=false;if(mem.active)load();else{state={configured:true,joined:false};render();}});};
       var ln=document.getElementById('bet-leave-no'); if(ln)ln.onclick=function(){leaveArmed=false;render();};
       var cb=document.getElementById('bet-show'); if(cb)cb.onchange=function(){setShowBets(cb.checked);};
       applyTZ();   // format the kickoff times in the viewer's chosen zone
     }
     var modal=document.getElementById('bet-modal'),form=document.getElementById('bet-form');
     if(modal&&modal.parentNode!==document.body)document.body.appendChild(modal);
-    function closeBet(){if(modal)modal.hidden=true;}
+    var betModal=modal?modalA11y(modal):null;   // focus trap + Escape + focus restore
+    function closeBet(){if(betModal)betModal.close();}
     if(modal)modal.addEventListener('click',function(e){if(e.target.closest('[data-bet-close]'))closeBet();});
-    document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal&&!modal.hidden)closeBet();});
-    function openBet(num,team){
+    function openBet(num,team,opener){
       var m=matchById(num); if(!m)return;
       var F=state.flags||{},odds=team===m.team1?m.odds1:m.odds2,bal=state.me.cash;
       document.getElementById('bet-modal-k').textContent='Bet on '+team;
@@ -824,12 +895,12 @@
         if(s<=0){showErr('bet-place-err','Enter a stake.');return;}
         if(s>bal){showErr('bet-place-err','That is more than your balance.');return;}
         api('place',{method:'POST',body:JSON.stringify({match:num,pick:team,stake:s})}).then(function(r){
-          if(r.ok){closeBet();load();}else showErr('bet-place-err',r.error==='closed'?'Betting on this match is closed.':r.error==='insufficient'?'Not enough balance.':r.error==='both_sides'?'You already backed the other side of this match.':'Could not place bet.');
+          if(r.ok){announce('Bet placed.');closeBet();load();}else showErr('bet-place-err',r.error==='closed'?'Betting on this match is closed.':r.error==='insufficient'?'Not enough balance.':r.error==='both_sides'?'You already backed the other side of this match.':'Could not place bet.');
         }).catch(function(){showErr('bet-place-err',NETERR);});
       };
-      if(modal)modal.hidden=false;
+      if(betModal)betModal.open(opener);
     }
-    function openEdit(id){
+    function openEdit(id,opener){
       var b=null; (state.myBets||[]).forEach(function(x){if(x.id===id)b=x;}); if(!b)return;
       var m=matchById(b.match_num); if(!m||!m.open)return;
       var F=state.flags||{},sel=b.pick,avail=state.me.cash+b.stake;
@@ -855,15 +926,15 @@
         if(s<=0){showErr('bet-place-err','Enter a stake.');return;}
         if(s>avail){showErr('bet-place-err','That is more than you have.');return;}
         api('update',{method:'POST',body:JSON.stringify({id:id,pick:sel,stake:s})}).then(function(r){
-          if(r.ok){closeBet();load();}else showErr('bet-place-err',r.error==='both_sides'?'You already backed the other side here.':r.error==='closed'?'This match has kicked off.':r.error==='insufficient'?'More than you have.':'Could not update.');
+          if(r.ok){announce('Bet updated.');closeBet();load();}else showErr('bet-place-err',r.error==='both_sides'?'You already backed the other side here.':r.error==='closed'?'This match has kicked off.':r.error==='insufficient'?'More than you have.':'Could not update.');
         }).catch(function(){showErr('bet-place-err',NETERR);});
       };
       document.getElementById('bet-remove').onclick=function(){
         api('cancel',{method:'POST',body:JSON.stringify({id:id})}).then(function(r){
-          if(r.ok){closeBet();load();}else showErr('bet-place-err',r.error==='closed'?'This match has kicked off.':'Could not remove.');
+          if(r.ok){announce('Bet removed.');closeBet();load();}else showErr('bet-place-err',r.error==='closed'?'This match has kicked off.':'Could not remove.');
         }).catch(function(){showErr('bet-place-err',NETERR);});
       };
-      if(modal)modal.hidden=false;
+      if(betModal)betModal.open(opener);
     }
     window.__betRender=function(s){loaded=true;state=s;render();};   // test seam
     window.__betReload=function(){mem={active:null,pools:[]};try{var v=JSON.parse(localStorage.getItem('wc26.bets'));if(v&&v.pools)mem=v;}catch(e){}joining=false;leaveArmed=false;load();};

@@ -372,6 +372,13 @@ UI = {
     "Reach $0 and you're out.": "Zerou o saldo, está fora.",
     "No matches are open for betting right now — check back when the next ties are set.":
         "Nenhum jogo está aberto para apostas agora — volte quando os próximos confrontos forem definidos.",
+    # scoped SR live-region confirmations (S4 a11y): app.js pushes these to
+    # #bet-live after each action; the balance line goes through a RULES pattern.
+    "Bet placed.": "Aposta feita.",
+    "Bet updated.": "Aposta atualizada.",
+    "Bet removed.": "Aposta removida.",
+    "Joined the pool.": "Entrou no bolão.",
+    "Left the pool.": "Saiu do bolão.",
 
     # ---- team page ----
     "Squad": "Elenco",
@@ -580,6 +587,16 @@ _RUNTIME = r"""/* World Cup 2026 — pt-BR localisation (generated from wc/i18n.
     // leaderboard subline "cash $100 · in play $50" -> "saldo $100 · em jogo $50"
     function (s) { var m = s.match(/^cash (.+) · in play (.+)$/);
       return m ? "saldo " + m[1] + " · em jogo " + m[2] : null; },
+    // scoped SR live-region balance update "New balance: $95.00" (S4 a11y)
+    function (s) { var m = s.match(/^New balance: (.+)$/);
+      return m ? "Novo saldo: " + m[1] : null; },
+    // fantasy pick-slot aria-labels (S4): "Pick winner: France v Morocco — Quarter-final"
+    // (app.js names the two sides once resolved); round via the DICT above.
+    function (s) { var m = s.match(/^Pick winner: (.+) v (.+) — (.+)$/);
+      return m ? "Escolher vencedor: " + pc(m[1]) + " x " + pc(m[2]) + " — " + (DICT[m[3]] || m[3]) : null; },
+    // "Pick winner — Quarter-final" (the two sides not resolved yet)
+    function (s) { var m = s.match(/^Pick winner — (.+)$/);
+      return m ? "Escolher vencedor — " + (DICT[m[1]] || m[1]) : null; },
     // bracket slot labels
     function (s) { var m = s.match(/^Winner M(\d+)$/); return m ? "Vencedor M" + m[1] : null; },
     function (s) { var m = s.match(/^Loser M(\d+)$/);  return m ? "Perdedor M" + m[1] : null; },
