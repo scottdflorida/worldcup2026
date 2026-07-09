@@ -1,0 +1,33 @@
+{
+  "background_color": "#F4F2EC",
+  "description": "Live FIFA World Cup 2026 tracker — groups, standings, a connected knockout bracket and a play-money pool, in English and Brazilian Portuguese.",
+  "dir": "ltr",
+  "display": "standalone",
+  "icons": [
+    {
+      "purpose": "any",
+      "sizes": "192x192",
+      "src": "/assets/icon-192.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "any",
+      "sizes": "512x512",
+      "src": "/assets/icon-512.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "any",
+      "sizes": "180x180",
+      "src": "/assets/apple-touch-icon.png",
+      "type": "image/png"
+    }
+  ],
+  "lang": "en",
+  "name": "World Cup /26",
+  "orientation": "portrait",
+  "scope": "/",
+  "short_name": "WC26",
+  "start_url": "/",
+  "theme_color": "#F4F2EC"
+}

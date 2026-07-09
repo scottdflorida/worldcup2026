@@ -169,7 +169,7 @@ def page_about(ctx):
       <div class="ab-cl-row"><dt>Editorial</dt><dd>Road-to-the-final blurbs and their pt-BR
         translations written by Claude (Anthropic), cached and fingerprinted.</dd></div>
       <div class="ab-cl-row"><dt>Type &amp; art</dt><dd>System neo-grotesque and monospace
-        faces; original SVG marks; a self-hosted flag webfont is the only asset fetched over
+        faces; original SVG marks; a self-hosted flag webfont is the only font fetched over
         the wire, so Windows renders flag emoji instead of two-letter codes.</dd></div>
       <div class="ab-cl-row"><dt>Design</dt><dd>&ldquo;Broadcast Ink&rdquo; — newsprint paper,
         near-black ink, one vermilion accent, tracked mono labels, hard edges.</dd></div>

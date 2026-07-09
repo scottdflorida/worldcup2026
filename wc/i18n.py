@@ -153,6 +153,9 @@ UI = {
     "Final standings": "Classificação final",
     "Group standings": "Classificação do grupo",
     "Knocked out of the tournament": "Eliminado do torneio",
+    # rich "Your teams" card fallback (server team_card + client render) when a
+    # pinned team has neither a next nor a recent fixture
+    "No upcoming or recent match": "Nenhum jogo próximo ou recente",
     "Through as a best third": "Classificado como um dos melhores terceiros",
     "on the bubble": "na bolha",
     "3rd hope": "vaga de 3º",

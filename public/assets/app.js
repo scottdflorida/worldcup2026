@@ -6,7 +6,75 @@
   function get(){try{var v=JSON.parse(localStorage.getItem(KEY));if(Array.isArray(v))return v;}catch(e){}return [];}
   function save(a){try{localStorage.setItem(KEY,JSON.stringify(a));}catch(e){}}
   function toggle(t){var a=get();var i=a.indexOf(t);if(i>=0)a.splice(i,1);else a.push(t);save(a);apply();}
-  function esc(t){return (window.CSS&&CSS.escape)?CSS.escape(t):t.replace(/"/g,'\\"');}
+  // ---- Watchlist cards from the JSON island. The "Your teams" rail renders the
+  // handful of pinned teams from a compact <script id="wc-teams"> island (which
+  // also serves as the flag/slug lookup for opponents), reproducing the server's
+  // team_card markup EXACTLY — see wc/components.py team_card / _tcard_fixtures.
+  function he(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;');}
+  var ISL;
+  function island(){
+    if(ISL)return ISL;
+    var el=document.getElementById('wc-teams');ISL={mode:'group',teams:{}};
+    if(el){try{var v=JSON.parse(el.textContent);if(v&&v.teams)ISL=v;}catch(e){}}
+    return ISL;
+  }
+  function ordn(n){return ({1:'1st',2:'2nd',3:'3rd',4:'4th'})[n]||(n+'th');}
+  function teamLink(name,cls,isl){
+    var d=(isl.teams||{})[name]||{};
+    return '<a class="'+cls+'" data-team="'+he(name)+'" href="'+(d.s||'')+'.html">'+
+      '<span class="fl">'+(d.f||'')+'</span><span class="nm">'+he(name)+'</span></a>';
+  }
+  function oppInline(o,cls,isl){
+    if(typeof o==='string')return teamLink(o,cls,isl);
+    if(o&&o.length!=null&&typeof o!=='number')return [].map.call(o,function(c){return teamLink(c,'cand',isl);}).join(' / ');
+    if(typeof o==='number')return '<span class="tc-cands">'+o+' possible</span>';
+    return '<span class="muted">'+he(o&&o.l)+'</span>';
+  }
+  function koLabel(k){
+    if(!k)return '';
+    if(k.t&&k.u){
+      return '<span class="ko" data-utc="'+he(k.u)+'" data-tfmt="daytime">'+
+        '<span class="ko-day">'+he(k.d)+'</span> '+
+        '<span class="ko-time">'+he(k.t)+'<span class="ko-tz tz">PT</span></span></span>';
+    }
+    return '<span class="ko"><span class="ko-day">'+he(k.d)+'</span></span>';
+  }
+  function tcardFix(d,isl){
+    var rows=[];
+    if(d.nx){
+      var nx=d.nx,tag=nx.td?'<span class=tc-rd>'+he(nx.td)+'</span>':'';
+      rows.push('<div class="tc-fix tc-next"><span class="tc-k">Next</span>'+
+        '<span class="tc-line"><span class="tc-when">'+koLabel(nx.k)+'</span>'+
+        '<span class="tc-vs">v '+oppInline(nx.o,'tc-opp',isl)+'</span>'+tag+'</span></div>');
+    }else if(d.ko){
+      rows.push('<div class="tc-fix tc-out"><span class="tc-k out">Out</span>'+
+        '<span class="tc-line muted">Knocked out of the tournament</span></div>');
+    }
+    if(d.ls){
+      var ls=d.ls;
+      rows.push('<div class="tc-fix tc-last"><span class="tc-k">Last</span>'+
+        '<span class="tc-line"><span class="tc-res '+ls.r.toLowerCase()+'">'+ls.r+' '+ls.ts+'–'+ls.os+'</span>'+
+        '<span class="tc-vs">v '+oppInline(ls.o,'tc-opp',isl)+'</span></span></div>');
+    }
+    if(!rows.length)rows.push('<div class="tc-fix muted">No upcoming or recent match</div>');
+    return '<div class="tcard-fix">'+rows.join('')+'</div>';
+  }
+  function renderTeamCard(name,d,isl){
+    var meta;
+    if(isl.mode==='status'){
+      meta=d.st?'<span class="tcard-meta tcard-status '+d.st.t+'">'+d.st.h+'</span>':'';
+    }else{
+      meta='<span class="tcard-meta muted">'+he(d.g)+' · '+ordn(d.r)+' · '+d.p+' pts</span>';
+    }
+    var star='<button class="wl-ic" type="button" data-watch="'+he(name)+'" '+
+      'aria-pressed="false" aria-label="Watch '+he(name)+'" title="Watch '+he(name)+'"></button>';
+    return '<div class="tcard rich" data-team-card="'+he(name)+'" data-team="'+he(name)+'" '+
+      'style="--accent:'+d.a+';--accent2:'+d.a2+'">'+
+      '<div class="tcard-top"><a class="tcard-main" href="'+(d.s||'')+'.html">'+
+      '<span class="tcard-flag">'+(d.f||'')+'</span>'+
+      '<span class="tcard-body"><span class="tcard-name">'+he(name)+'</span>'+meta+'</span>'+
+      '</a>'+star+'</div>'+tcardFix(d,isl)+'</div>';
+  }
   function apply(){
     var w=get();
     var host=document.getElementById('your-teams');
@@ -23,10 +91,10 @@
           '<span class="yt-cta"><a href="teams.html">Browse all 48 teams →</a></span>'+
           '</div></div>';
       } else {
+        var isl=island();
         w.forEach(function(t){
-          var src=document.querySelector('#team-src [data-team-card="'+esc(t)+'"]')
-                ||document.querySelector('[data-team-card="'+esc(t)+'"]');
-          if(src)host.appendChild(src.cloneNode(true));
+          var d=isl.teams&&isl.teams[t];
+          if(d)host.insertAdjacentHTML('beforeend',renderTeamCard(t,d,isl));
         });
       }
     }
@@ -431,6 +499,42 @@
     updateEdges();
   }
 
+  // ---- Shared modal accessibility. Both dialogs (the fantasy pick modal and the
+  // betting modal) route their show/hide through this: focus the first control on
+  // open, trap Tab / Shift-Tab inside the panel, close on Escape, and restore
+  // focus to whatever opened the dialog when it closes. One helper, two callers.
+  function focusable(root){
+    return [].slice.call(root.querySelectorAll(
+      'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
+    )).filter(function(el){return el.offsetWidth||el.offsetHeight||el.getClientRects().length;});
+  }
+  function modalA11y(modal){
+    var opener=null;
+    function onKey(e){
+      if(e.key==='Escape'){e.preventDefault();m.close();return;}
+      if(e.key!=='Tab')return;
+      var f=focusable(modal); if(!f.length){e.preventDefault();return;}
+      var first=f[0],last=f[f.length-1],a=document.activeElement;
+      if(e.shiftKey){if(a===first||!modal.contains(a)){e.preventDefault();last.focus();}}
+      else{if(a===last||!modal.contains(a)){e.preventDefault();first.focus();}}
+    }
+    var m={
+      open:function(from){
+        opener=from||document.activeElement;
+        modal.hidden=false;
+        var f=focusable(modal); if(f[0])f[0].focus();
+        modal.addEventListener('keydown',onKey);
+      },
+      close:function(){
+        modal.removeEventListener('keydown',onKey);
+        modal.hidden=true;
+        if(opener&&opener.focus)opener.focus();
+        opener=null;
+      }
+    };
+    return m;
+  }
+
   // ---- Fantasy bracket: a flags-only pick-the-winner knockout tree ----
   function initFantasy(){
     var root=document.querySelector('.fb'); if(!root||!window.FB_DATA)return;
@@ -458,13 +562,32 @@
         });
       });
     }
+    // Per-tie pick-slot label: name the two sides + round instead of an identical
+    // "Pick winner" on every box. The two sides are this match's feeder occupants
+    // (or, for the R32 / bronze, its two entrants); unknown until resolved.
+    var RND_FULL={R32:'Round of 32',R16:'Round of 16',QF:'Quarter-final',SF:'Semi-final',F:'Final'};
+    function sidesOf(num){
+      var m=M[num]; if(!m)return [];
+      if(m.round==='R32'||m.third)return (m.entrants||[]).map(function(e){return e.team||null;});
+      return (m.feeders||[]).map(function(f){return occupant(f);});
+    }
+    function slotLabel(num){
+      var m=M[num]; if(!m)return 'Pick winner';
+      var rnd=m.third?'Third-place match':(RND_FULL[m.round]||'');
+      var s=sidesOf(num),a=s[0],b=s[1];
+      if(a&&b)return 'Pick winner: '+a+' v '+b+(rnd?' — '+rnd:'');
+      return 'Pick winner'+(rnd?' — '+rnd:'');
+    }
     function render(){
       prune();
       root.querySelectorAll('.fb-node').forEach(function(node){
-        var occ=occupant(node.getAttribute('data-m')),fl=node.querySelector('.fb-fl');
+        var num=node.getAttribute('data-m');
+        var occ=occupant(num),fl=node.querySelector('.fb-fl');
         if(fl)fl.textContent=occ?(FLAGS[occ]||''):'';
         node.classList.toggle('fb-filled',!!occ);
         node.classList.toggle('fb-empty',!occ);
+        var btn=node.querySelector('.fb-slot');
+        if(btn)btn.setAttribute('aria-label',slotLabel(num));
       });
       // outer flag layer: once an R32 is decided, dim the team that didn't advance
       root.querySelectorAll('.fb-ent[data-r32]').forEach(function(el){
@@ -476,7 +599,7 @@
     // every match is one box: tap it to pick the winner (settled ties are locked)
     root.addEventListener('click',function(e){
       var pk=e.target.closest('.fb-pick');
-      if(pk&&!pk.classList.contains('fb-locked'))openModal(pk.getAttribute('data-m'));
+      if(pk&&!pk.classList.contains('fb-locked'))openModal(pk.getAttribute('data-m'),pk.querySelector('.fb-slot'));
     });
     // modal picker for later rounds
     var modal=document.getElementById('fb-modal'),
@@ -484,8 +607,9 @@
     // lift the modal out of <main> (its own stacking context) so it paints above
     // the footer instead of behind it
     if(modal&&modal.parentNode!==document.body)document.body.appendChild(modal);
+    var fbModal=modalA11y(modal);   // focus trap + Escape + focus restore
     function he(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-    function openModal(num){
+    function openModal(num,from){
       cur=num;var opts=feasible(num);
       if(!opts.length)return;
       grid.innerHTML=opts.map(function(t){
@@ -493,16 +617,15 @@
           '<span class="fb-opt-fl">'+(FLAGS[t]||'')+'</span>'+
           '<span class="fb-opt-nm">'+he(t)+'</span></button>';
       }).join('');
-      modal.hidden=false;
+      fbModal.open(from);   // reveal + move focus into the dialog
     }
-    function closeModal(){modal.hidden=true;cur=null;}
+    function closeModal(){fbModal.close();cur=null;}
     modal.addEventListener('click',function(e){
       if(e.target.closest('[data-fb-close]')){closeModal();return;}
       if(e.target.closest('[data-fb-clear]')){if(cur)delete picks[cur];closeModal();render();return;}
       var o=e.target.closest('.fb-opt');
       if(o&&cur){picks[cur]=o.getAttribute('data-team');closeModal();render();}
     });
-    document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!modal.hidden)closeModal();});
     var reset=document.getElementById('fb-reset');
     if(reset)reset.addEventListener('click',function(){picks={};render();});
     // right-angle connectors from each pair of feeders into the game they feed
@@ -558,7 +681,17 @@
     function he(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
     function money(n){return '$'+(Math.round(n*100)/100).toFixed(2);}
     function matchById(num){var a=(state.matches||[]);for(var i=0;i<a.length;i++)if(a[i].num===num)return a[i];return null;}
-    function showErr(id,msg){var e=document.getElementById(id);if(e){e.textContent=msg;e.hidden=false;}}
+    // Scoped SR live region (#bet-live, visually hidden). The app container is no
+    // longer aria-live, so a click that rebuilds it no longer re-announces the
+    // whole page; only meaningful updates flow through announce(). Clearing first,
+    // then setting on a tick, makes even an identical repeat re-announce.
+    var _lastBalKey=null, _lastBal=null;
+    function announce(msg){
+      var r=document.getElementById('bet-live'); if(!r||!msg)return;
+      r.textContent='';
+      setTimeout(function(){r.textContent=msg;},50);
+    }
+    function showErr(id,msg){var e=document.getElementById(id);if(e){e.textContent=msg;e.hidden=false;}announce(msg);}
     var NETERR='Network error — nothing was changed. Try again.';
     function fetchBets(){   // static odds feed for the public face; no D1 needed
       fetch('/bets-data.json',{headers:{accept:'application/json'}})
@@ -638,7 +771,7 @@
         var code=(document.getElementById('bet-code').value||'').trim();
         if(!name||!code){showErr('bet-join-err','Enter a name and a code.');return;}
         api('join',{method:'POST',body:JSON.stringify({name:name,code:code})}).then(function(r){
-          if(r.ok){joining=false;upsertPool({code:r.code,name:r.name,token:r.token});load();}
+          if(r.ok){announce('Joined the pool.');joining=false;upsertPool({code:r.code,name:r.name,token:r.token});load();}
           else showErr('bet-join-err','Could not join.');
         }).catch(function(){showErr('bet-join-err',NETERR);});
       };
@@ -666,6 +799,12 @@
     }
     function renderPool(){
       var me=state.me,F=state.flags||{};
+      // Announce a portfolio change (a bet settling for/against you) via the SR
+      // live region — only when it actually changed within the SAME pool, so a
+      // pool switch or the first load never fires it.
+      if(_lastBalKey===state.pool.code&&_lastBal!=null&&me.total!==_lastBal)
+        announce('New balance: '+money(me.total));
+      _lastBalKey=state.pool.code;_lastBal=me.total;
       var openM=(state.matches||[]).filter(function(m){return m.open;});
       var games=openM.length?openM.map(function(m){
         var when=m.kickoff?' · <span class="ko" data-utc="'+m.kickoff+'" data-tfmt="daytime"><span class="ko-day"></span> <span class="ko-time"><span class="ko-tz tz"></span></span></span>':'';
@@ -726,22 +865,22 @@
       [].forEach.call(app.querySelectorAll('.bet-pick'),function(btn){btn.onclick=function(){
         var num=+btn.getAttribute('data-bet');
         var existing=(state.myBets||[]).filter(function(b){return b.match_num===num&&b.status==='open';})[0];
-        if(existing)openEdit(existing.id); else openBet(num,btn.getAttribute('data-team'));
+        if(existing)openEdit(existing.id,btn); else openBet(num,btn.getAttribute('data-team'),btn);
       };});
       [].forEach.call(app.querySelectorAll('.bet-pool[data-pool]'),function(b){b.onclick=function(){var c=b.getAttribute('data-pool');if(c!==mem.active){mem.active=c;saveMem();leaveArmed=false;load();}};});
       var addB=document.getElementById('bet-pool-add'); if(addB)addB.onclick=function(){joining=true;render();};
       var lv=document.getElementById('bet-leave'); if(lv)lv.onclick=function(){leaveArmed=true;render();};
-      var ly=document.getElementById('bet-leave-yes'); if(ly)ly.onclick=function(){api('leave',{method:'POST'}).then(function(){dropPool(mem.active);leaveArmed=false;if(mem.active)load();else{state={configured:true,joined:false};render();}});};
+      var ly=document.getElementById('bet-leave-yes'); if(ly)ly.onclick=function(){api('leave',{method:'POST'}).then(function(){announce('Left the pool.');dropPool(mem.active);leaveArmed=false;if(mem.active)load();else{state={configured:true,joined:false};render();}});};
       var ln=document.getElementById('bet-leave-no'); if(ln)ln.onclick=function(){leaveArmed=false;render();};
       var cb=document.getElementById('bet-show'); if(cb)cb.onchange=function(){setShowBets(cb.checked);};
       applyTZ();   // format the kickoff times in the viewer's chosen zone
     }
     var modal=document.getElementById('bet-modal'),form=document.getElementById('bet-form');
     if(modal&&modal.parentNode!==document.body)document.body.appendChild(modal);
-    function closeBet(){if(modal)modal.hidden=true;}
+    var betModal=modal?modalA11y(modal):null;   // focus trap + Escape + focus restore
+    function closeBet(){if(betModal)betModal.close();}
     if(modal)modal.addEventListener('click',function(e){if(e.target.closest('[data-bet-close]'))closeBet();});
-    document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal&&!modal.hidden)closeBet();});
-    function openBet(num,team){
+    function openBet(num,team,opener){
       var m=matchById(num); if(!m)return;
       var F=state.flags||{},odds=team===m.team1?m.odds1:m.odds2,bal=state.me.cash;
       document.getElementById('bet-modal-k').textContent='Bet on '+team;
@@ -756,12 +895,12 @@
         if(s<=0){showErr('bet-place-err','Enter a stake.');return;}
         if(s>bal){showErr('bet-place-err','That is more than your balance.');return;}
         api('place',{method:'POST',body:JSON.stringify({match:num,pick:team,stake:s})}).then(function(r){
-          if(r.ok){closeBet();load();}else showErr('bet-place-err',r.error==='closed'?'Betting on this match is closed.':r.error==='insufficient'?'Not enough balance.':r.error==='both_sides'?'You already backed the other side of this match.':'Could not place bet.');
+          if(r.ok){announce('Bet placed.');closeBet();load();}else showErr('bet-place-err',r.error==='closed'?'Betting on this match is closed.':r.error==='insufficient'?'Not enough balance.':r.error==='both_sides'?'You already backed the other side of this match.':'Could not place bet.');
         }).catch(function(){showErr('bet-place-err',NETERR);});
       };
-      if(modal)modal.hidden=false;
+      if(betModal)betModal.open(opener);
     }
-    function openEdit(id){
+    function openEdit(id,opener){
       var b=null; (state.myBets||[]).forEach(function(x){if(x.id===id)b=x;}); if(!b)return;
       var m=matchById(b.match_num); if(!m||!m.open)return;
       var F=state.flags||{},sel=b.pick,avail=state.me.cash+b.stake;
@@ -787,15 +926,15 @@
         if(s<=0){showErr('bet-place-err','Enter a stake.');return;}
         if(s>avail){showErr('bet-place-err','That is more than you have.');return;}
         api('update',{method:'POST',body:JSON.stringify({id:id,pick:sel,stake:s})}).then(function(r){
-          if(r.ok){closeBet();load();}else showErr('bet-place-err',r.error==='both_sides'?'You already backed the other side here.':r.error==='closed'?'This match has kicked off.':r.error==='insufficient'?'More than you have.':'Could not update.');
+          if(r.ok){announce('Bet updated.');closeBet();load();}else showErr('bet-place-err',r.error==='both_sides'?'You already backed the other side here.':r.error==='closed'?'This match has kicked off.':r.error==='insufficient'?'More than you have.':'Could not update.');
         }).catch(function(){showErr('bet-place-err',NETERR);});
       };
       document.getElementById('bet-remove').onclick=function(){
         api('cancel',{method:'POST',body:JSON.stringify({id:id})}).then(function(r){
-          if(r.ok){closeBet();load();}else showErr('bet-place-err',r.error==='closed'?'This match has kicked off.':'Could not remove.');
+          if(r.ok){announce('Bet removed.');closeBet();load();}else showErr('bet-place-err',r.error==='closed'?'This match has kicked off.':'Could not remove.');
         }).catch(function(){showErr('bet-place-err',NETERR);});
       };
-      if(modal)modal.hidden=false;
+      if(betModal)betModal.open(opener);
     }
     window.__betRender=function(s){loaded=true;state=s;render();};   // test seam
     window.__betReload=function(){mem={active:null,pools:[]};try{var v=JSON.parse(localStorage.getItem('wc26.bets'));if(v&&v.pools)mem=v;}catch(e){}joining=false;leaveArmed=false;load();};
@@ -875,12 +1014,53 @@
     window.scrollTo(0,Math.max(0,y));
   }
 
+  // ---- Theme: AUTO → LIGHT → DARK cycle. data-theme is stamped synchronously by
+  // a tiny inline <head> script (no FOUC); this only wires the footer toggle, keeps
+  // its label in sync, and drives the address-bar theme-color for a manual (forced)
+  // choice. On AUTO we remove the override so the two media <meta theme-color>s win.
+  var THEME_KEY='wc26.theme', THEME_ORDER=['auto','light','dark'];
+  var THEME_LABEL={auto:'Auto',light:'Light',dark:'Dark'};
+  var THEME_TC={light:'#F4F2EC',dark:'#14120D'};
+  function themeMode(){try{var v=localStorage.getItem(THEME_KEY);if(v==='light'||v==='dark'||v==='auto')return v;}catch(e){}return 'auto';}
+  function themeColor(mode){
+    var m=document.getElementById('tc-dyn');
+    if(mode!=='light'&&mode!=='dark'){if(m&&m.parentNode)m.parentNode.removeChild(m);return;}
+    if(!m){m=document.createElement('meta');m.setAttribute('name','theme-color');m.id='tc-dyn';
+      document.head.insertBefore(m,document.head.firstChild);}   // first + media-less ⇒ always wins
+    m.setAttribute('content',THEME_TC[mode]);
+  }
+  function applyTheme(mode){
+    var el=document.documentElement;
+    if(mode==='light'||mode==='dark')el.setAttribute('data-theme',mode);else el.removeAttribute('data-theme');
+    themeColor(mode);
+    var lab=document.querySelector('#theme-btn [data-theme-label]');
+    if(lab)lab.textContent=THEME_LABEL[mode]||'Auto';
+  }
+  function wireTheme(){
+    applyTheme(themeMode());                 // sync label + theme-color (attr already set inline)
+    var btn=document.getElementById('theme-btn'); if(!btn)return;
+    btn.addEventListener('click',function(){
+      var next=THEME_ORDER[(THEME_ORDER.indexOf(themeMode())+1)%THEME_ORDER.length];
+      try{localStorage.setItem(THEME_KEY,next);}catch(e){}
+      applyTheme(next);
+    });
+  }
+
   document.addEventListener('DOMContentLoaded',function(){
-    wireTZ();apply();wireReveal();wireLive();wireBracketScroll();wireBracketObserver();
+    wireTheme();wireTZ();apply();wireReveal();wireLive();wireBracketScroll();wireBracketObserver();
     wireBracketGhosts();drawBracket();
     landOnActiveColumn();initFantasy();initBetting();wireCalFilter();landOnToday();
   });
   window.addEventListener('load',landOnToday);
   window.addEventListener('load',drawBracket);
   window.addEventListener('resize',scheduleDraw);
+
+  // Service worker (PWA): precaches the shell + offline core (home/calendar/
+  // bracket), serves hashed /assets/ cache-first and HTML documents network-first
+  // so a live deploy always wins. Registered after load, feature-detected.
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',function(){
+      navigator.serviceWorker.register('/sw.js').catch(function(){});
+    });
+  }
 })();

@@ -5,14 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Match Calendar — World Cup 2026</title>
 <meta name="description" content="Day-by-day fixture calendar for the 2026 World Cup in Pacific time — kickoffs, results, and the teams (or still-possible teams) for every match.">
-<meta name="theme-color" content="#F4F2EC">
+<link rel="canonical" href="https://worldcup.sflorida.studio/calendar">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#F4F2EC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14120D" media="(prefers-color-scheme: dark)">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="World Cup 2026 Tracker">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
 <meta property="og:title" content="Match Calendar — World Cup 2026">
 <meta property="og:description" content="Day-by-day fixture calendar for the 2026 World Cup in Pacific time — kickoffs, results, and the teams (or still-possible teams) for every match.">
-<meta property="og:url" content="https://worldcup.sflorida.studio/calendar.html">
+<meta property="og:url" content="https://worldcup.sflorida.studio/calendar">
 <meta property="og:image" content="https://worldcup.sflorida.studio/assets/og.png">
 <meta property="og:image:secure_url" content="https://worldcup.sflorida.studio/assets/og.png">
 <meta property="og:image:type" content="image/png">
@@ -24,13 +29,15 @@
 <meta name="twitter:description" content="Day-by-day fixture calendar for the 2026 World Cup in Pacific time — kickoffs, results, and the teams (or still-possible teams) for every match.">
 <meta name="twitter:image" content="https://worldcup.sflorida.studio/assets/og.png">
 <meta name="twitter:image:alt" content="World Cup 2026 Tracker — the World Cup is live">
-<link rel="stylesheet" href="assets/style.css?v=34dbdc2996">
+<script>(function(){try{var t=localStorage.getItem("wc26.theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="preload" href="assets/TwemojiCountryFlags.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/style.css?v=96a43ee342">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-head">
   <div class="brand"><a href="index.html" aria-label="World Cup 2026 tracker — home">
-    <span class="wm-mark" aria-hidden="true"><svg viewBox="0 0 36 36" width="30" height="30"><rect width="36" height="36" rx="3" fill="var(--ink)"/><text x="18" y="25" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-weight="800" font-size="17" letter-spacing="-1" fill="var(--accent)">26</text></svg></span>
+    <span class="wm-mark" aria-hidden="true"><svg viewBox="0 0 36 36" width="30" height="30"><rect width="36" height="36" rx="3" fill="var(--ink-block)"/><text x="18" y="25" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-weight="800" font-size="17" letter-spacing="-1" fill="var(--accent)">26</text></svg></span>
     <span class="wm-text" data-no-i18n><span class="wm-l1">WORLD&nbsp;CUP</span><span class="wm-l2">TRACKER&nbsp;<span class="wm-yr">/26</span></span></span></a></div>
   <div class="head-right">
     <nav class="site-nav" aria-label="Primary"><a class="" href="index.html">Home</a><a class="" href="teams.html">Teams</a><a class="" href="bracket.html">Bracket</a><a class="" href="fantasy.html">Fantasy</a><a class="" href="betting.html">Bets</a><a class="on" href="calendar.html" aria-current="page">Calendar</a></nav>
@@ -91,12 +98,16 @@
       <option value="Asia/Tokyo">Tokyo · JST</option>
       <option value="Australia/Sydney">Sydney · AEST</option>
     </select>
+    <span class="foot-theme">
+      <span class="foot-tz-k" id="theme-lbl">THEME</span>
+      <button id="theme-btn" class="theme-btn" type="button" aria-labelledby="theme-lbl"><span data-theme-label aria-live="polite">Auto</span></button>
+    </span>
   </div>
   <p class="foot-fine">
-    <span class="ff-seg">Data:</span> <a class="ff-lnk" href="https://github.com/openfootball/worldcup.json" target="_blank" rel="noopener">openfootball/worldcup.json</a> <span class="ff-seg">(public domain)</span><span class="ff-dot" aria-hidden="true">·</span><span class="ff-seg">Built with a zero-dependency Python engine</span><span class="ff-dot" aria-hidden="true">·</span><a class="ff-lnk" href="https://github.com/scottdflorida/worldcup2026" target="_blank" rel="noopener">GitHub</a>
+    <span class="ff-seg">Data:</span> <a class="ff-lnk" href="https://github.com/openfootball/worldcup.json" target="_blank" rel="noopener">openfootball/worldcup.json</a> <span class="ff-seg">(public domain)</span><span class="ff-dot" aria-hidden="true">·</span><span class="ff-seg">Built with a zero-dependency Python engine</span><span class="ff-dot" aria-hidden="true">·</span><a class="ff-lnk" href="about.html">About this site</a><span class="ff-dot" aria-hidden="true">·</span><a class="ff-lnk" href="https://github.com/scottdflorida/worldcup2026" target="_blank" rel="noopener">GitHub</a>
   </p>
 </footer>
-<script src="assets/app.js?v=34dbdc2996"></script>
-<script src="assets/i18n.js?v=34dbdc2996"></script>
+<script defer src="assets/app.js?v=96a43ee342"></script>
+<script defer src="assets/i18n.js?v=96a43ee342"></script>
 </body>
 </html>
