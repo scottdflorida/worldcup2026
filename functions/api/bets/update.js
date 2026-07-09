@@ -24,7 +24,8 @@ export async function onRequestPost({ request, env }) {
   const m = (data.matches || []).find((x) => x.num === bet.match_num);
   if (!m) return json({ ok: false, error: "no_match" });
   const ko = m.kickoff ? Date.parse(m.kickoff) : null;
-  if (m.decided || (ko !== null && ko <= Date.now())) return json({ ok: false, error: "closed" });
+  // winner/null-kickoff closed too — see cancel.js for the stale-cache rationale.
+  if (m.decided || m.winner || ko === null || ko <= Date.now()) return json({ ok: false, error: "closed" });
   if (pick !== m.team1 && pick !== m.team2) return json({ ok: false, error: "bad_pick" });
   if (!(stake > 0)) return json({ ok: false, error: "bad_stake" });
   const others = (await env.DB.prepare(
@@ -40,6 +41,15 @@ export async function onRequestPost({ request, env }) {
   // the SAFE direction first (never favouring overspend). The bet flip is guarded
   // on status='open' so we never mutate a bet a concurrent settle/cancel just took.
   const delta = round2(stake - bet.stake);
+  // The flip is a compare-and-swap: guarded not just on status='open' but on the
+  // exact (stake, odds, pick) the delta above was computed from. A concurrent
+  // /update that already changed the row makes this claim 0 rows — without the
+  // pin, two concurrent updates both apply their deltas against the same stale
+  // read and stack refunds/charges (money created or destroyed).
+  const CAS =
+    "UPDATE bets SET pick=?, odds=?, stake=? WHERE id=? AND player_id=? AND status='open'" +
+    " AND stake=? AND odds=? AND pick=?";
+  const casBind = [pick, odds, stake, id, me.id, bet.stake, bet.odds, bet.pick];
   if (delta > 0) {
     // Net debit: charge the extra first, guarded on affordability (this is the real
     // double-spend defense — the read-check above is just a fast early reject).
@@ -47,23 +57,19 @@ export async function onRequestPost({ request, env }) {
       "UPDATE players SET balance=balance-? WHERE id=? AND balance>=?-1e-9")
       .bind(delta, me.id, delta).run();
     if (!debit.meta || debit.meta.changes !== 1) return json({ ok: false, error: "insufficient" });
-    const flip = await env.DB.prepare(
-      "UPDATE bets SET pick=?, odds=?, stake=? WHERE id=? AND player_id=? AND status='open'")
-      .bind(pick, odds, stake, id, me.id).run();
+    const flip = await env.DB.prepare(CAS).bind(...casBind).run();
     if (!flip.meta || flip.meta.changes !== 1) {
-      // The bet was settled/cancelled between our read and the flip: compensate by
-      // refunding the extra charge so it isn't stranded on a bet we didn't modify.
+      // The bet was settled/cancelled/updated between our read and the flip:
+      // compensate by refunding the extra charge so it isn't stranded.
       await env.DB.prepare("UPDATE players SET balance=balance+? WHERE id=?").bind(delta, me.id).run();
-      return json({ ok: false, error: "no_bet" });
+      return json({ ok: false, error: "conflict" });
     }
   } else {
     // Net refund (or unchanged stake): flip the bet first, and credit the refund
-    // ONLY if we actually claimed an open bet — so a concurrent settle/cancel can't
-    // trigger a phantom refund. A refund can never fail on affordability.
-    const flip = await env.DB.prepare(
-      "UPDATE bets SET pick=?, odds=?, stake=? WHERE id=? AND player_id=? AND status='open'")
-      .bind(pick, odds, stake, id, me.id).run();
-    if (!flip.meta || flip.meta.changes !== 1) return json({ ok: false, error: "no_bet" });
+    // ONLY if we actually claimed the row we read — so a concurrent settle/cancel/
+    // update can't trigger a phantom or stacked refund.
+    const flip = await env.DB.prepare(CAS).bind(...casBind).run();
+    if (!flip.meta || flip.meta.changes !== 1) return json({ ok: false, error: "conflict" });
     const refund = round2(bet.stake - stake);
     if (refund > 0) await env.DB.prepare("UPDATE players SET balance=balance+? WHERE id=?").bind(refund, me.id).run();
   }

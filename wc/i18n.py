@@ -147,6 +147,8 @@ UI = {
     "Last": "Último",
     "Grp": "Gru",
     "vs": "x",
+    # bare separator used by pulse/calendar/team-hero/bronze match lockups
+    "v": "x",
 
     # ---- home ----
     # Hero headline, set across styled spans: "THE 2026 / WORLD CUP / IS [LIVE]"
@@ -228,6 +230,7 @@ UI = {
     # third-place / bronze final: stage label, fantasy pick label, short round tag
     "Third-place match": "Disputa de terceiro lugar",
     "Third place": "Terceiro lugar",
+    "BRONZE": "3º LUGAR",
     "3rd": "3º",
 
     # ---- group pages ----

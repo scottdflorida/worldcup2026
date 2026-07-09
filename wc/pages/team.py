@@ -328,7 +328,7 @@ def page_team(ctx, team):
   {group_table(info, solo=True, advance=ctx.advance, knocked=ctx.knocked)}
 </section>
 
-<section aria-label="Road to the final">
+<section aria-label="{road_h2}">
   <div class="sec-head"><h2>{road_h2}</h2>{road_sub}</div>
   {f'<p class="road-blurb">{E(blurbs.blurb_for(ctx.blurbs, team))}</p>' if blurbs.blurb_for(ctx.blurbs, team) else ''}
   {road_body}

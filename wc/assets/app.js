@@ -294,12 +294,13 @@
     // that becomes visible re-arms us. A busy flag prevents overlapping fetches
     // (e.g. a visibility poll landing on top of a scheduled one).
     var WINDOW=2*3600, LEAD=60, LIVE_EVERY=30000;
-    var timer=null, busy=false;
+    var timer=null, busy=false, lastAny=false;   // lastAny: last successful poll saw a live match
     function nextWait(){                     // ms until the next poll, or null to stop
       var now=Date.now()/1000, best=null;
       for(var i=0;i<stamps.length;i++){if(stamps[i]>now&&(best===null||stamps[i]<best))best=stamps[i];}
-      if(best===null||best-now>WINDOW)return null;   // nothing upcoming, or too far out
-      var w=(best-LEAD-now)*1000;
+      if(best===null)return null;            // nothing upcoming at all
+      if(best-now>WINDOW)return (best-now-WINDOW)*1000; // far out: sleep until the window opens
+      var w=(best-LEAD-now)*1000;            // (so a tab left open all day still wakes for kickoff)
       return w>LIVE_EVERY?w:LIVE_EVERY;      // near/inside the lead window, keep the 30s cadence
     }
     function schedule(anyLive){
@@ -324,8 +325,12 @@
            if(m.state==='in')any=true;
            list.forEach(function(el){paint(el,m);});
          });
+         lastAny=any;
          schedule(any);
-       }).catch(function(){busy=false;});    // any error → silent stop; static content stands
+       }).catch(function(){busy=false;schedule(lastAny);});
+       // error → retry on the last known cadence: keep 30s while a match was live
+       // (kickoff stamps are past by then, so schedule(false) would go dormant
+       // mid-match); otherwise nextWait bounds it and stops when nothing upcoming.
     }
     document.addEventListener('visibilitychange',function(){
       if(document.visibilityState==='visible')poll();});

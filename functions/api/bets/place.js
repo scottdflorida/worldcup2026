@@ -20,7 +20,8 @@ export async function onRequestPost({ request, env }) {
   const m = (data.matches || []).find((x) => x.num === matchNum);
   if (!m) return json({ ok: false, error: "no_match" });
   const ko = m.kickoff ? Date.parse(m.kickoff) : null;
-  if (m.decided || (ko !== null && ko <= Date.now())) return json({ ok: false, error: "closed" });
+  // winner/null-kickoff closed too — see cancel.js for the stale-cache rationale.
+  if (m.decided || m.winner || ko === null || ko <= Date.now()) return json({ ok: false, error: "closed" });
   if (pick !== m.team1 && pick !== m.team2) return json({ ok: false, error: "bad_pick" });
   if (!(stake > 0)) return json({ ok: false, error: "bad_stake" });
   if (stake > me.balance + 1e-9) return json({ ok: false, error: "insufficient" });
