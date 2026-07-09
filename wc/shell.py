@@ -159,7 +159,7 @@ def shell(title, active, body, ctx, desc=None, page="index.html", crumb=None):
     </select>
   </div>
   <p class="foot-fine">
-    <span class="ff-seg">Data:</span> <a class="ff-lnk" href="https://github.com/openfootball/worldcup.json" target="_blank" rel="noopener">openfootball/worldcup.json</a> <span class="ff-seg">(public domain)</span><span class="ff-dot" aria-hidden="true">·</span><span class="ff-seg">Built with a zero-dependency Python engine</span><span class="ff-dot" aria-hidden="true">·</span><a class="ff-lnk" href="https://github.com/scottdflorida/worldcup2026" target="_blank" rel="noopener">GitHub</a>
+    <span class="ff-seg">Data:</span> <a class="ff-lnk" href="https://github.com/openfootball/worldcup.json" target="_blank" rel="noopener">openfootball/worldcup.json</a> <span class="ff-seg">(public domain)</span><span class="ff-dot" aria-hidden="true">·</span><span class="ff-seg">Built with a zero-dependency Python engine</span><span class="ff-dot" aria-hidden="true">·</span><a class="ff-lnk" href="about.html">About this site</a><span class="ff-dot" aria-hidden="true">·</span><a class="ff-lnk" href="https://github.com/scottdflorida/worldcup2026" target="_blank" rel="noopener">GitHub</a>
   </p>
 </footer>
 <script src="assets/app.js?v={_asset_ver()}"></script>

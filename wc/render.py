@@ -153,6 +153,7 @@ def render_site(payload):
         "betting.html": pages.page_betting(ctx),
         "bets-data.json": json.dumps(pages.betting_data(ctx), ensure_ascii=False, separators=(",", ":")),
         "calendar.html": pages.page_calendar(ctx),
+        "about.html": pages.page_about(ctx),
         "assets/style.css": art.STYLE,
         "assets/app.js": art.APP_JS,
         "assets/i18n.js": i18n.build_js(),

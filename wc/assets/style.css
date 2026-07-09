@@ -1186,3 +1186,55 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   .ht-live::before{transform:scaleX(1)!important}
   [data-reveal]{opacity:1!important;transform:none!important}
 }
+
+/* ===================================================================
+   ABOUT / COLOPHON  —  a single measured column (~70ch) of prose with
+   mono section overlines (reusing .sec-head + its vermilion bar) and one
+   signature touch: the bracket slot grammar set as a mono specimen block.
+   No new hues — ink on paper, the one inherited vermilion accent.
+   =================================================================== */
+.about{max-width:72ch;margin:0 auto}
+.ab-hero{border-bottom:3px solid var(--ink);padding-bottom:var(--s5);margin-bottom:var(--s7)}
+.ab-over{font-family:var(--mono);font-weight:700;text-transform:uppercase;letter-spacing:.22em;
+  font-size:.7rem;color:var(--vermilion);margin:0 0 var(--s3)}
+.ab-title{font-size:var(--t-3xl);margin:0 0 var(--s4)}
+.ab-lede{font-size:var(--t-lg);line-height:1.5;color:var(--ink2);max-width:58ch;
+  text-transform:none;font-weight:400;margin:0}
+.ab-sec{margin:0 0 var(--s7)}
+.ab-sec .sec-head.ab-head{margin-bottom:var(--s4)}
+.ab-sec p{font-size:1.02rem;line-height:1.64;color:var(--ink2);margin:0 0 var(--s3);max-width:68ch}
+.ab-sec p:last-child{margin-bottom:0}
+.ab-sec p b,.ab-sec p strong{color:var(--ink);font-weight:700}
+.ab-sec p i{font-style:italic}
+.ab-sec sup{font-size:.7em;vertical-align:super;line-height:0}
+.ab-sec p code,.ab-cl code{font-family:var(--mono);font-size:.85em;font-weight:700;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);padding:.02em .34em;border-radius:var(--r-sm);
+  white-space:nowrap}
+
+/* the signature block: slot-grammar tokens as a mono ledger */
+.ab-specimen{margin:var(--s5) 0 0;border:2px solid var(--ink);background:var(--paper2)}
+.ab-spec-cap{font-family:var(--mono);font-weight:700;text-transform:uppercase;letter-spacing:.14em;
+  font-size:.62rem;color:var(--muted);padding:9px 14px;border-bottom:1px solid var(--line);
+  background:var(--paper);margin:0}
+.ab-tok{display:grid;grid-template-columns:minmax(0,7.5rem) 1fr;align-items:baseline;gap:var(--s4);
+  padding:11px 14px;border-bottom:1px solid var(--hair)}
+.ab-tok:last-child{border-bottom:0}
+.ab-tok-k{font-family:var(--mono);font-weight:800;font-size:1rem;color:var(--ink);
+  letter-spacing:.02em;white-space:nowrap}
+.ab-tok-v{font-size:.92rem;color:var(--ink2);line-height:1.4}
+
+/* colophon definition list */
+.ab-cl{margin:0}
+.ab-cl-row{display:grid;grid-template-columns:minmax(0,8.5rem) 1fr;gap:var(--s4);
+  padding:12px 0;border-top:1px solid var(--line)}
+.ab-cl-row:first-child{border-top:2px solid var(--ink)}
+.ab-cl dt{font-family:var(--mono);font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  font-size:.66rem;color:var(--muted);padding-top:.2em}
+.ab-cl dd{margin:0;font-size:.98rem;line-height:1.55;color:var(--ink2)}
+.ab-lnk,.ab-cl a{color:var(--ink);text-decoration:underline;text-underline-offset:2px;
+  text-decoration-thickness:1px;text-decoration-color:var(--line2)}
+.ab-lnk:hover,.ab-cl a:hover{text-decoration-color:var(--vermilion)}
+@media(max-width:560px){
+  .ab-tok,.ab-cl-row{grid-template-columns:1fr;gap:2px}
+  .ab-title{font-size:var(--t-2xl)}
+}

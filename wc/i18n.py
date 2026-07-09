@@ -100,6 +100,9 @@ UI = {
     "(public domain)": "(domínio público)",
     "Built with a zero-dependency Python engine":
         "Feito com um motor Python sem dependências",
+    # footer link + /about breadcrumb (the long-form About body stays English,
+    # wrapped in data-no-i18n; only this chrome string is localised)
+    "About this site": "Sobre o site",
     "Display time zone": "Fuso horário de exibição",
     "Auto — device time": "Automático — fuso do dispositivo",
     "Eastern · ET": "Leste · ET",
