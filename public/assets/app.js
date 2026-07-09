@@ -241,14 +241,19 @@
     s=(s||'').normalize('NFKD').toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]/g,'');
     var A={bosniaandherzegovina:'bosnia',bosniaherzegovina:'bosnia',czechrepublic:'czech',
       czechia:'czech',drcongo:'congodr',congodr:'congodr',turkey:'turkey',turkiye:'turkey',
-      usa:'usa',unitedstates:'usa'};
+      usa:'usa',unitedstates:'usa',
+      // ESPN spellings → the site's canonical token for the same nation
+      korearepublic:'southkorea',southkorea:'southkorea',
+      caboverde:'capeverde',capeverde:'capeverde',
+      cotedivoire:'ivorycoast',ivorycoast:'ivorycoast',
+      iriran:'iran',iran:'iran'};
     return A[s]||s;
   }
   function livePair(a,b){var x=liveCanon(a),y=liveCanon(b);return x<y?x+'~'+y:y+'~'+x;}
   function wireLive(){
     var nodes=document.querySelectorAll('[data-live]');
     if(!nodes.length)return;
-    var idx={};
+    var idx={}, stamps=[];
     nodes.forEach(function(el){
       var names=[];
       el.querySelectorAll('[data-team]').forEach(function(t){
@@ -256,6 +261,8 @@
       if(names.length<2)return;
       var k=livePair(names[0],names[1]);
       (idx[k]=idx[k]||[]).push(el);
+      var ts=parseInt(el.getAttribute('data-ts'),10);   // kickoff instant, epoch seconds
+      if(!isNaN(ts))stamps.push(ts);
     });
     if(!Object.keys(idx).length)return;
     function paint(el,m){
@@ -281,13 +288,34 @@
         else{tag.textContent='FT';tag.className+=' done';}
       }
     }
-    var timer=null;
-    function schedule(any){clearTimeout(timer);
-      if(any&&document.visibilityState!=='hidden')timer=setTimeout(poll,30000);}
+    // Scheduler: while anything is in play, poll every 30s. Otherwise, if the
+    // earliest upcoming kickoff is within WINDOW, wake ~LEAD before it and start
+    // polling; if the next kickoff is further out (or there is none), stop — a tab
+    // that becomes visible re-arms us. A busy flag prevents overlapping fetches
+    // (e.g. a visibility poll landing on top of a scheduled one).
+    var WINDOW=2*3600, LEAD=60, LIVE_EVERY=30000;
+    var timer=null, busy=false;
+    function nextWait(){                     // ms until the next poll, or null to stop
+      var now=Date.now()/1000, best=null;
+      for(var i=0;i<stamps.length;i++){if(stamps[i]>now&&(best===null||stamps[i]<best))best=stamps[i];}
+      if(best===null||best-now>WINDOW)return null;   // nothing upcoming, or too far out
+      var w=(best-LEAD-now)*1000;
+      return w>LIVE_EVERY?w:LIVE_EVERY;      // near/inside the lead window, keep the 30s cadence
+    }
+    function schedule(anyLive){
+      clearTimeout(timer);timer=null;
+      if(document.visibilityState==='hidden')return;   // paused; re-armed on visibility
+      if(anyLive){timer=setTimeout(poll,LIVE_EVERY);return;}
+      var w=nextWait();
+      if(w!==null)timer=setTimeout(poll,w);
+    }
     function poll(){
+      if(busy)return;                        // an in-flight fetch is already running
+      busy=true;
       fetch('/api/live',{headers:{accept:'application/json'}})
        .then(function(r){return r.ok?r.json():null;})
        .then(function(d){
+         busy=false;
          if(!d||!d.ok||!d.matches){schedule(false);return;}
          var any=false;
          d.matches.forEach(function(m){
@@ -297,7 +325,7 @@
            list.forEach(function(el){paint(el,m);});
          });
          schedule(any);
-       }).catch(function(){schedule(false);});
+       }).catch(function(){busy=false;});    // any error → silent stop; static content stands
     }
     document.addEventListener('visibilitychange',function(){
       if(document.visibilityState==='visible')poll();});
@@ -382,12 +410,12 @@
     // lift the modal out of <main> (its own stacking context) so it paints above
     // the footer instead of behind it
     if(modal&&modal.parentNode!==document.body)document.body.appendChild(modal);
-    function he(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+    function he(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
     function openModal(num){
       cur=num;var opts=feasible(num);
       if(!opts.length)return;
       grid.innerHTML=opts.map(function(t){
-        return '<button class="fb-opt" type="button" data-team="'+he(t).replace(/"/g,'&quot;')+'">'+
+        return '<button class="fb-opt" type="button" data-team="'+he(t)+'">'+
           '<span class="fb-opt-fl">'+(FLAGS[t]||'')+'</span>'+
           '<span class="fb-opt-nm">'+he(t)+'</span></button>';
       }).join('');
@@ -449,10 +477,11 @@
       var t=activeTok();if(t)h['X-Bet-Token']=t;
       return fetch('/api/bets/'+path,Object.assign({},opts,{headers:h})).then(function(r){return r.json();});
     }
-    function he(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+    function he(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
     function money(n){return '$'+(Math.round(n*100)/100).toFixed(2);}
     function matchById(num){var a=(state.matches||[]);for(var i=0;i<a.length;i++)if(a[i].num===num)return a[i];return null;}
     function showErr(id,msg){var e=document.getElementById(id);if(e){e.textContent=msg;e.hidden=false;}}
+    var NETERR='Network error — nothing was changed. Try again.';
     function load(){
       leaveArmed=false;
       api('state').then(function(s){
@@ -483,7 +512,7 @@
         api('join',{method:'POST',body:JSON.stringify({name:name,code:code})}).then(function(r){
           if(r.ok){joining=false;upsertPool({code:r.code,name:r.name,token:r.token});load();}
           else showErr('bet-join-err','Could not join.');
-        });
+        }).catch(function(){showErr('bet-join-err',NETERR);});
       };
       var cc=document.getElementById('bet-join-cancel');
       if(cc)cc.onclick=function(){joining=false;render();};
@@ -599,7 +628,7 @@
         if(s>bal){showErr('bet-place-err','That is more than your balance.');return;}
         api('place',{method:'POST',body:JSON.stringify({match:num,pick:team,stake:s})}).then(function(r){
           if(r.ok){closeBet();load();}else showErr('bet-place-err',r.error==='closed'?'Betting on this match is closed.':r.error==='insufficient'?'Not enough balance.':r.error==='both_sides'?'You already backed the other side of this match.':'Could not place bet.');
-        });
+        }).catch(function(){showErr('bet-place-err',NETERR);});
       };
       if(modal)modal.hidden=false;
     }
@@ -630,12 +659,12 @@
         if(s>avail){showErr('bet-place-err','That is more than you have.');return;}
         api('update',{method:'POST',body:JSON.stringify({id:id,pick:sel,stake:s})}).then(function(r){
           if(r.ok){closeBet();load();}else showErr('bet-place-err',r.error==='both_sides'?'You already backed the other side here.':r.error==='closed'?'This match has kicked off.':r.error==='insufficient'?'More than you have.':'Could not update.');
-        });
+        }).catch(function(){showErr('bet-place-err',NETERR);});
       };
       document.getElementById('bet-remove').onclick=function(){
         api('cancel',{method:'POST',body:JSON.stringify({id:id})}).then(function(r){
           if(r.ok){closeBet();load();}else showErr('bet-place-err',r.error==='closed'?'This match has kicked off.':'Could not remove.');
-        });
+        }).catch(function(){showErr('bet-place-err',NETERR);});
       };
       if(modal)modal.hidden=false;
     }

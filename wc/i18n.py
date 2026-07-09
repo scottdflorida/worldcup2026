@@ -208,6 +208,9 @@ UI = {
     "Current round:": "Rodada atual:",
     "World Champion": "Campeão Mundial",
     "Champion T.B.D.": "Campeão a definir",
+    # bare "to be determined" placeholders (bronze card, calendar, pulse, fantasy)
+    "T.B.D.": "A definir",
+    "TBD": "A definir",
     "KO\xa0odds": "Chance\xa0KO",
     "Close": "Fechar",
     "; the figure on the right is the chance of reaching the knockouts. The group is decided — these reflect the live knockout picture.":
@@ -267,6 +270,8 @@ UI = {
     "Could not remove.": "Não foi possível remover.",
     "Could not reach the betting service.":
         "Não foi possível conectar ao serviço de apostas.",
+    "Network error — nothing was changed. Try again.":
+        "Erro de rede — nada foi alterado. Tente novamente.",
     "The betting pool is not set up on the server yet.":
         "O bolão ainda não foi configurado no servidor.",
     "Enter a name and a code.": "Informe um nome e um código.",
@@ -396,6 +401,9 @@ _RUNTIME = r"""/* World Cup 2026 — pt-BR localisation (generated from wc/i18n.
     // "2–3 pens" -> "2–3 pênaltis"
     function (s) { var m = s.match(/^(\d+[–-]\d+) pens$/);
       return m ? m[1] + " pênaltis" : null; },
+    // parenthesised form "(2–3 pens)" -> "(2–3 pênaltis)" (results rows, team hero)
+    function (s) { var m = s.match(/^\((\d+[–-]\d+) pens\)$/);
+      return m ? "(" + m[1] + " pênaltis)" : null; },
     // "Watch Brazil" -> "Seguir Brasil"
     function (s) { var m = s.match(/^Watch (.+)$/);
       return m ? "Seguir " + pc(m[1]) : null; },
