@@ -232,6 +232,20 @@ UI = {
     "Close": "Fechar",
     "; the figure on the right is the chance of reaching the knockouts. The group is decided — these reflect the live knockout picture.":
         "; o número à direita é a chance de chegar ao mata-mata. O grupo está definido — estes refletem o quadro atual do mata-mata.",
+    # bracket odds chips + fantasy ghosts (S4). "Live market"/"Model" are the
+    # odds-source labels, shared with the public betting odds board.
+    "Chance to win each tie": "Chance de vencer cada confronto",
+    "Live market": "Mercado ao vivo",
+    "Model": "Modelo",
+    "Live market & model": "Mercado ao vivo e modelo",
+    "PICK": "PALPITE",
+    "Your fantasy pick": "Seu palpite do fantasy",
+    # quiet cross-links between the bracket / fantasy / betting trio (S4). The
+    # destination noun after the arrow (Fantasy / Bets / Bracket) is already in
+    # this dict via the nav entries.
+    "See the real tree": "Ver a chave real",
+    "Make your picks": "Faça seus palpites",
+    "Back your calls": "Aposte nos seus palpites",
 
     # ---- calendar ----
     "Match calendar": "Calendário de jogos",
@@ -312,6 +326,23 @@ UI = {
         "Dinheiro de mentira. Todo mundo começa com $100, aposte qualquer valor em "
         "quem vence cada jogo do mata-mata, com pagamento pelas odds listadas. "
         "Zerou, está fora.",
+    # public (logged-out) betting face: the read-only odds board + how-it-works
+    # block rendered by app.js before anyone joins a pool (S4).
+    "Odds board": "Quadro de odds",
+    "How it works": "Como funciona",
+    "Play money — join a pool and everyone starts with $100.":
+        "Dinheiro de mentira — entre num bolão e todo mundo começa com $100.",
+    "Bet any amount on who wins each knockout tie.":
+        "Aposte qualquer valor em quem vence cada confronto do mata-mata.",
+    "Odds are locked in the moment you place a bet.":
+        "As odds ficam travadas no momento em que você aposta.",
+    "Bets settle automatically at full time.":
+        "As apostas são liquidadas automaticamente no fim do jogo.",
+    "You can't back both sides of the same tie.":
+        "Você não pode apostar nos dois lados do mesmo confronto.",
+    "Reach $0 and you're out.": "Zerou o saldo, está fora.",
+    "No matches are open for betting right now — check back when the next ties are set.":
+        "Nenhum jogo está aberto para apostas agora — volte quando os próximos confrontos forem definidos.",
 
     # ---- team page ----
     "Squad": "Elenco",

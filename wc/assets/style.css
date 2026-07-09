@@ -627,6 +627,24 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .km-g{margin-left:auto;font-family:var(--mono);font-weight:800;font-variant-numeric:tabular-nums;min-width:16px;text-align:right}
 .km-g.kloss{color:var(--muted)}.km-g.kwin{color:var(--ink)}
 .km-team .bteam.win,.km-team:has(.kwin) .bteam,.km-team.kw .bteam{color:var(--ink);font-weight:800}
+/* Odds chip on an UNDECIDED tie (price to win) — muted mono, right-aligned.
+   Never vermilion: it's a price, not the live/advancing signal. */
+.km-od{margin-left:auto;font-family:var(--mono);font-weight:800;font-size:.62rem;
+  font-variant-numeric:tabular-nums;color:var(--ink2);white-space:nowrap;flex:none}
+/* Fantasy ghost: the side the visitor picked to win (client-side overlay).
+   Muted, hollow, hard-edged — a prediction, distinct from the real result. */
+.km-ghost{margin-left:auto;flex:none;font-family:var(--mono);font-weight:800;font-size:.5rem;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+  border:1px solid var(--line2);padding:1px 4px;line-height:1.1;white-space:nowrap}
+.km-ghost.with-od{margin-left:0}            /* sits after an odds chip (flex gap only) */
+/* Bracket legends: the odds key + (when picks exist) the ghost key. */
+.odds-legend,.ghost-legend{display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;margin:0 0 14px}
+.odds-legend .ol-sep{color:var(--line2)}
+.odds-legend .ol-src{color:var(--ink2)}
+.ghost-legend .km-ghost{margin-left:0}
+.ghost-legend .gl-t{color:var(--muted)}
 /* W/L result tag — one consistent winner/loser signal across the whole site */
 .wl-tag{flex:none;display:inline-grid;place-items:center;width:15px;height:15px;margin-left:5px;border-radius:3px;
   font-family:var(--mono);font-weight:800;font-size:.58rem;line-height:1}
@@ -795,8 +813,28 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   color:var(--muted);background:var(--paper);border:0;border-top:1.5px solid var(--line);padding:10px;cursor:pointer}
 .fb-modal-clear:hover{color:var(--ink);background:var(--paper2)}
 
+/* Quiet cross-links between the bracket / fantasy / betting trio. Muted at
+   rest (vermilion stays reserved for live/advancing); ink on hover. */
+.page-xlinks{display:flex;flex-wrap:wrap;gap:8px 18px;margin:12px 0 4px}
+.xlink{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-weight:800;
+  font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.xlink .xl-to{color:var(--ink2)}
+.xlink .arrow{color:var(--line2);transition:transform .15s,color .15s}
+.xlink:hover{color:var(--ink)}
+.xlink:hover .xl-to,.xlink:hover .arrow{color:var(--ink)}
+.xlink:hover .arrow{transform:translateX(3px)}
+
 /* Betting pool ----------------------------------------------------- */
 .bet-intro{margin-bottom:6px}
+/* Public (logged-out) face: read-only odds board + how-it-works. */
+.bet-board-sub{margin:-6px 0 12px}
+.bet-src{margin-left:8px;font-family:var(--mono);font-size:.54rem;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink2)}
+.bet-how-list{list-style:none;margin:0;padding:0}
+.bet-how-list li{position:relative;padding:7px 0 7px 18px;border-top:1px solid var(--line);
+  font-size:.9rem;color:var(--ink2)}
+.bet-how-list li:first-child{border-top:0}
+.bet-how-list li::before{content:"›";position:absolute;left:3px;color:var(--muted);font-weight:800}
 .bet-app{display:flex;flex-direction:column;gap:16px}
 .bet-bal{display:flex;flex-direction:column;gap:3px}
 .bet-bal-top{display:flex;align-items:baseline;gap:8px}

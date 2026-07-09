@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 
 from .. import bracket, config, data
+from . import betting
 from ..components import _FB_RND
 from ..flags import flag
 from ..shell import shell
@@ -148,6 +149,7 @@ def page_fantasy(ctx):
   <div class="fb-head"><h1>Fantasy bracket</h1>
     <button id="fb-reset" class="fb-reset" type="button">Reset</button></div>
   <p class="muted">Tap to pick a winner in every undecided tie — settled results are locked. Saved on this device.</p>
+  {betting.cross_links("fantasy")}
 </section>
 <div class="fb-wrap" aria-label="Knockout bracket">
   <div class="fb">

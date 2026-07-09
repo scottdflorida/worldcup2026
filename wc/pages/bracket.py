@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from .. import config, data
+from . import betting
 from ..components import side_result, team_link, wl_badge
 from ..flags import flag
 from ..shell import shell
@@ -11,13 +12,31 @@ from ..times import E, _epoch, kickoff_label
 # (short label, full round name) per main knockout round, straight from config.
 _BRACKET_RAIL = [(config.KO_SHORT[r], r) for r in config.KO_ROUNDS]
 
+# Odds-source labels (shared with the public betting odds board via i18n).
+_ODDS_SRC_TITLE = {"live": "Live market", "model": "Model"}
 
-def _km_cell(r, ci):
+
+def _odds_src_phrase(srcs):
+    """The odds-source word(s) for the bracket legend, given the set of sources
+    actually shown on the tree."""
+    if srcs == {"live"}:
+        return "Live market"
+    if srcs == {"model"}:
+        return "Model"
+    return "Live market & model"
+
+
+def _km_cell(r, ci, odds, shown_srcs):
     """One fixed-size match box: a kickoff line and two team rows. No match
     numbers, no 'winner of M…' — unresolved sides fan to their candidate nations
-    (the connectors carry the structure)."""
+    (the connectors carry the structure).
+
+    For an UNDECIDED tie whose two sides are both known, each side carries a small
+    mono price chip (`odds[num]`, same source `betting_data` uses). Decided ties
+    show the score + W/L instead — no odds."""
     sides = []
     any_candidate = False
+    od = odds.get(r["num"]) if not r["played"] else None
     for key in ("team1", "team2"):
         res = r[key]
         resolved = bool(res["team"])
@@ -37,9 +56,15 @@ def _km_cell(r, ci):
                 g += f'<span class="km-pen{" kwin" if is_win else ""}">({pv})</span>'
             # A plain W/L tag — the clearest at-a-glance read of who advanced.
             wl = wl_badge(code)
+        chip = ""
+        if od and resolved and res["team"] in od["o"]:
+            src = od["src"]
+            shown_srcs.add(src)
+            chip = (f'<span class="km-od" title="{E(_ODDS_SRC_TITLE[src])}">'
+                    f'{od["o"][res["team"]]:.2f}</span>')
         side_cls = "km-team" + ("" if resolved else " is-candidate") + \
                    ((" kw" if is_win else " kl") if r["played"] else "")
-        sides.append(f'<div class="{side_cls}">{_bracket_side(res)}{g}{wl}</div>')
+        sides.append(f'<div class="{side_cls}">{_bracket_side(res)}{g}{wl}{chip}</div>')
     km_cls = "km" + (" km-live" if any_candidate and ci == 0 else "") + \
              (" km-done" if r["played"] else "")
     when = kickoff_label(r) or '<span class="ko"><span class="ko-day">TBD</span></span>'
@@ -121,11 +146,13 @@ def page_bracket(ctx):
     rounds = [(rd, rows) for rd, rows in ctx.bracket if rd != "Match for third place"]
     bronze_row = next((rows[0] for rd, rows in ctx.bracket
                        if rd == "Match for third place" and rows), None)
+    odds = betting.odds_by_num(ctx)      # {num: {o, src}} for undecided, set ties
+    shown_srcs = set()                   # sources actually rendered → legend
     n_round = len(rounds)
     cols = []
     for ci, (rd, rows) in enumerate(rounds):
         is_final = rd == "Final"
-        cells = "".join(_km_cell(r, ci) for r in rows)
+        cells = "".join(_km_cell(r, ci, odds, shown_srcs) for r in rows)
         if is_final:
             final_row = rows[0] if rows else None
             if final_row and final_row["played"] and final_row.get("winner"):
@@ -163,15 +190,25 @@ def page_bracket(ctx):
         f'<span class="brn-item{" on" if i == active else ""}" data-rd="{i}">{E(short)}</span>'
         for i, (short, _) in enumerate(_BRACKET_RAIL))
 
+    odds_legend = ""
+    if shown_srcs:
+        odds_legend = (
+            '<p class="odds-legend muted" aria-label="Odds key">'
+            '<span class="ol-t">Chance to win each tie</span>'
+            '<span class="ol-sep" aria-hidden="true">·</span>'
+            f'<span class="ol-src">{E(_odds_src_phrase(shown_srcs))}</span></p>')
+
     body = f"""
 <section class="bracket-intro" aria-label="Knockout bracket">
   <h1>Knockout bracket</h1>
   <p class="muted">Round of 32 → Final as one connected tree. Pin teams with ★ to mark their path.</p>
+  {betting.cross_links("bracket")}
   <div class="bracket-rail" aria-label="Bracket rounds">
     <span class="brn-label">Current round:</span>
     <div class="bracket-rail-nav">{rail_items}</div>
   </div>
 </section>
+{odds_legend}
 <div class="bracket-frame at-start" data-bracket>
   <span class="bz-edge-l" aria-hidden="true"></span>
   <span class="bz-edge-r" aria-hidden="true"></span>

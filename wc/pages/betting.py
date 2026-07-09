@@ -76,12 +76,54 @@ def betting_data(ctx):
             "urls": {t: util.page_for(t) for t in teams}, "stage": ctx.stage()}
 
 
+def odds_by_num(ctx):
+    """Build-time odds lookup for the bracket page: ``{num: {"o": {team: price},
+    "src": "live"|"model"}}`` for every not-yet-decided knockout tie whose two
+    sides are known. Reuses ``betting_data`` so the bracket, the betting page and
+    ``bets-data.json`` all price a tie identically."""
+    out = {}
+    for m in betting_data(ctx)["matches"]:
+        if m["decided"]:
+            continue
+        out[m["num"]] = {"o": {m["team1"]: m["odds1"], m["team2"]: m["odds2"]},
+                         "src": m["oddsSrc"]}
+    return out
+
+
+# Quiet cross-links tying the bracket / fantasy / betting trio together: an
+# action phrase + the destination noun (which the i18n nav entries already
+# translate). Each page renders links to the OTHER two, in the same slot.
+_XLINK = {
+    "bracket": ("See the real tree", "Bracket", "bracket.html"),
+    "fantasy": ("Make your picks", "Fantasy", "fantasy.html"),
+    "betting": ("Back your calls", "Bets", "betting.html"),
+}
+
+
+def cross_links(current):
+    """The two cross-links shown on a bracket-trio page (all keys but `current`,
+    in bracket → fantasy → betting order)."""
+    from ..times import E
+    items = []
+    for key in ("bracket", "fantasy", "betting"):
+        if key == current:
+            continue
+        phrase, noun, href = _XLINK[key]
+        items.append(
+            f'<a class="xlink" href="{href}">'
+            f'<span class="xl-do">{E(phrase)}</span>'
+            f'<span class="arrow" aria-hidden="true">→</span>'
+            f'<span class="xl-to">{E(noun)}</span></a>')
+    return f'<div class="page-xlinks" aria-label="Related pages">{"".join(items)}</div>'
+
+
 def page_betting(ctx):
-    body = """
+    body = f"""
 <section class="bet-intro" aria-label="Betting pool">
   <div class="fb-head"><h1>Betting pool</h1></div>
   <p class="muted">Play money. Everyone starts with $100, bet any amount on who wins each
   knockout match, payouts at the listed odds. Hit $0 and you're out.</p>
+  {cross_links("betting")}
 </section>
 <div id="bet-app" class="bet-app" aria-live="polite">
   <p class="muted bet-loading">Loading…</p>

@@ -220,6 +220,49 @@
     tree.querySelectorAll('.km,.champion-plinth').forEach(function(el){ro.observe(el);});
   }
 
+  // ---- Fantasy ghosts on the REAL bracket. If the visitor has made fantasy
+  // picks (wc26.fantasy, shared with the fantasy page), mark the side they
+  // picked to win each still-UNDECIDED tie with a small, muted, hard-edged
+  // "PICK" tag. Pure progressive enhancement: no picks -> zero markup change;
+  // decided ties are left to the real (vermilion) result, never ghosted; a
+  // pick that isn't a resolved side yet (feeders still open) gets no marker.
+  // Muted ink, never vermilion — vermilion means live/real here.
+  function wireBracketGhosts(){
+    var tree=document.querySelector('.kbracket'); if(!tree)return;
+    var picks={};
+    try{var v=JSON.parse(localStorage.getItem('wc26.fantasy'));if(v&&typeof v==='object')picks=v;}catch(e){}
+    if(!Object.keys(picks).length)return;                 // no picks: leave untouched
+    var shown=0;
+    tree.querySelectorAll('.km[data-mnum]').forEach(function(km){
+      if(km.classList.contains('km-done'))return;         // decided: real result wins
+      var pick=picks[km.getAttribute('data-mnum')]; if(!pick)return;
+      var sides=km.querySelectorAll('.km-team:not(.is-candidate)'); // resolved sides only
+      for(var i=0;i<sides.length;i++){
+        var a=sides[i].querySelector('.bteam');
+        if(a&&a.getAttribute('data-team')===pick){
+          if(!sides[i].querySelector('.km-ghost')){
+            var tag=document.createElement('span');
+            tag.className='km-ghost'+(sides[i].querySelector('.km-od')?' with-od':'');
+            tag.setAttribute('title','Your fantasy pick');
+            tag.textContent='PICK';
+            sides[i].appendChild(tag); shown++;
+          }
+          break;
+        }
+      }
+    });
+    if(shown){                                            // legend only when present
+      var intro=document.querySelector('.bracket-intro');
+      if(intro&&!intro.querySelector('.ghost-legend')){
+        var lg=document.createElement('p');
+        lg.className='ghost-legend muted';
+        lg.innerHTML='<span class="km-ghost" aria-hidden="true">PICK</span>'+
+          '<span class="gl-t">Your fantasy pick</span>';
+        intro.appendChild(lg);
+      }
+    }
+  }
+
 
   // Entrance motion: progressive enhancement only. Content is visible by default
   // (CSS). We opt the page into a CSS-only fade-up — which always ENDS visible —
@@ -469,6 +512,10 @@
   function initBetting(){
     var app=document.getElementById('bet-app'); if(!app)return;
     var state=null, joining=false, leaveArmed=false;
+    // Public (logged-out) face: a read-only odds board + how-it-works, rendered
+    // from the STATIC bets-data.json so it works even on a D1-unbound / backend-
+    // less deploy. `loaded` guards the async race between the state call and this.
+    var betsData=null, loaded=false;
     var showBets=true; try{showBets=localStorage.getItem('wc26.betshow')!=='0';}catch(e){}
     function setShowBets(v){showBets=v;try{localStorage.setItem('wc26.betshow',v?'1':'0');}catch(e){}render();}
     // memberships of multiple pools live on this device; the active pool's token
@@ -488,23 +535,73 @@
     function matchById(num){var a=(state.matches||[]);for(var i=0;i<a.length;i++)if(a[i].num===num)return a[i];return null;}
     function showErr(id,msg){var e=document.getElementById(id);if(e){e.textContent=msg;e.hidden=false;}}
     var NETERR='Network error — nothing was changed. Try again.';
+    function fetchBets(){   // static odds feed for the public face; no D1 needed
+      fetch('/bets-data.json',{headers:{accept:'application/json'}})
+        .then(function(r){return r.ok?r.json():null;})
+        .then(function(d){betsData=d;if(loaded)render();})   // fill in once state is known
+        .catch(function(){betsData=null;});
+    }
     function load(){
       leaveArmed=false;
       api('state').then(function(s){
-        state=s;
+        loaded=true; state=s;
         if(s.joined&&s.token&&s.pool){upsertPool({code:s.pool.code,name:s.me.name,token:s.token});}
         else if(!s.joined&&mem.active){dropPool(mem.active);if(mem.active){load();return;}}  // stale token
         render();
-      }).catch(function(){app.innerHTML='<div class="bet-card"><p class="muted">Could not reach the betting service.</p></div>';});
+      }).catch(function(){loaded=true;state=null;render();});   // no backend -> public landing
+    }
+    // ---- public face: odds board + how-it-works (shown before/without a pool) --
+    function oddsBoard(){
+      var F=(betsData&&betsData.flags)||{}, U=(betsData&&betsData.urls)||{},
+          SRC={live:'Live market',model:'Model'};
+      var open=((betsData&&betsData.matches)||[]).filter(function(m){return !m.decided;})
+        .sort(function(a,b){return (a.kickoff||'').localeCompare(b.kickoff||'');});
+      function side(team,odds){
+        var inner='<span class="bet-fl">'+(F[team]||'')+'</span><span class="bet-nm">'+he(team)+
+          '</span><span class="bet-od">'+(+odds).toFixed(2)+'</span>';
+        var u=U[team];
+        return u?'<a class="bet-dteam" href="'+u+'">'+inner+'</a>':'<div class="bet-dteam">'+inner+'</div>';
+      }
+      var rows=open.length?open.map(function(m){
+        var when=m.kickoff?' · <span class="ko" data-utc="'+m.kickoff+'" data-tfmt="daytime"><span class="ko-day"></span> <span class="ko-time"><span class="ko-tz tz"></span></span></span>':'';
+        var src=SRC[m.oddsSrc]?'<span class="bet-src">'+SRC[m.oddsSrc]+'</span>':'';
+        return '<div class="bet-game"><div class="bet-g-rd">'+he(m.round)+when+src+'</div>'+
+          '<div class="bet-g-row">'+side(m.team1,m.odds1)+side(m.team2,m.odds2)+'</div></div>';
+      }).join(''):'<p class="muted">No matches are open for betting right now — check back when the next ties are set.</p>';
+      return '<div class="bet-card bet-board"><h2>Odds board</h2>'+
+        '<p class="bet-board-sub muted">Chance to win each tie</p>'+rows+'</div>';
+    }
+    function howItWorks(){
+      var items=['Play money — join a pool and everyone starts with $100.',
+        'Bet any amount on who wins each knockout tie.',
+        'Odds are locked in the moment you place a bet.',
+        'Bets settle automatically at full time.',
+        'You can\'t back both sides of the same tie.',
+        'Reach $0 and you\'re out.'];
+      return '<div class="bet-card bet-how"><h2>How it works</h2><ul class="bet-how-list">'+
+        items.map(function(t){return '<li>'+t+'</li>';}).join('')+'</ul></div>';
+    }
+    // betsData present (fetch OK) -> board + how-it-works; else '' (join-only degrade)
+    function publicFace(){return betsData?(oddsBoard()+howItWorks()):'';}
+    function noticeCard(msg){return '<div class="bet-card"><p class="muted">'+msg+'</p></div>';}
+    function renderLanding(){   // not configured (D1 unbound) or no backend reached
+      var msg=(state&&state.configured===false)
+        ?'The betting pool is not set up on the server yet.'
+        :'Could not reach the betting service.';
+      app.innerHTML=publicFace()+noticeCard(msg);
+      applyTZ();
     }
     function render(){
-      if(!state||state.configured===false){app.innerHTML='<div class="bet-card"><p class="muted">The betting pool is not set up on the server yet.</p></div>';return;}
+      if(!state||state.configured===false){renderLanding();return;}
       if(joining||!state.joined){renderJoin();return;}
       renderPool();
     }
     function renderJoin(){
       var canCancel=mem.pools.length>0;
-      app.innerHTML='<div class="bet-card bet-join"><h2>'+(canCancel?'Join another pool':'Join a pool')+'</h2>'+
+      // First-time landing (logged out, not mid "join another"): lead with the
+      // public odds board + how-it-works, then the join card.
+      var pre=(!state.joined&&!joining)?publicFace():'';
+      app.innerHTML=pre+'<div class="bet-card bet-join"><h2>'+(canCancel?'Join another pool':'Join a pool')+'</h2>'+
         '<p class="muted">Pick a display name and a pool code. Share the code so everyone is in the same pool. A new code starts a new pool. Already joined? Enter the same name and code to pick up where you left off — even on a new device.</p>'+
         '<label class="bet-l">Display name<input id="bet-name" maxlength="24" autocomplete="off"></label>'+
         '<label class="bet-l">Pool code<input id="bet-code" maxlength="24" autocomplete="off" placeholder="friends26"></label>'+
@@ -522,6 +619,7 @@
       };
       var cc=document.getElementById('bet-join-cancel');
       if(cc)cc.onclick=function(){joining=false;render();};
+      applyTZ();   // format any odds-board kickoff times in the viewer's zone
     }
     function betsList(bh){
       var F=state.flags||{};
@@ -674,9 +772,9 @@
       };
       if(modal)modal.hidden=false;
     }
-    window.__betRender=function(s){state=s;render();};   // test seam
+    window.__betRender=function(s){loaded=true;state=s;render();};   // test seam
     window.__betReload=function(){mem={active:null,pools:[]};try{var v=JSON.parse(localStorage.getItem('wc26.bets'));if(v&&v.pools)mem=v;}catch(e){}joining=false;leaveArmed=false;load();};
-    load();
+    fetchBets(); load();
   }
 
   // Calendar: jump to today on load (offset for the sticky header).
@@ -689,7 +787,8 @@
   }
 
   document.addEventListener('DOMContentLoaded',function(){
-    wireTZ();apply();wireReveal();wireLive();wireBracketScroll();wireBracketObserver();drawBracket();
+    wireTZ();apply();wireReveal();wireLive();wireBracketScroll();wireBracketObserver();
+    wireBracketGhosts();drawBracket();
     landOnActiveColumn();initFantasy();initBetting();landOnToday();
   });
   window.addEventListener('load',landOnToday);
