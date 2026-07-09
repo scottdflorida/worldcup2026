@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-08T13:32:01.631787+00:00",
+ "fetched_at": "2026-07-09T13:54:02.182302+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -989,7 +989,7 @@
      "starter": false
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Dennis Hadzikadunic",
      "num": "3",
      "pos": "D",
@@ -6391,7 +6391,7 @@
      "starter": true
     },
     {
-     "age": 35,
+     "age": 36,
      "name": "Boualem Khoukhi",
      "num": "16",
      "pos": "D",
