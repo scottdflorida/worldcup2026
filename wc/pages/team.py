@@ -20,36 +20,80 @@ def _ko_entry_heading(proj, cur):
     return "Through as a best third"
 
 
-def _one_line_outlook(proj):
-    st = proj["status"]
-    g = proj["group"]
-    if st["won_group"]:
-        return f'Through to the Round of 32 as {E(g)} winners.'
-    if st["clinched_top2"]:
-        return f'Qualified for the Round of 32 from {E(g)}.'
-    if st.get("eliminated"):
-        return f'Out of contention in {E(g)}.'
-    if proj["rank"] <= 2 and not proj["group_complete"]:
-        return f'Currently {_ordinal(proj["rank"])} in {E(g)} — inside the top two.'
-    if proj["rank"] == 3:
-        return f'3rd in {E(g)} — chasing a best-third-place spot.'
-    return f'{_ordinal(proj["rank"])} in {E(g)} — work to do.'
+_SEP = '<span class="ths-sep">·</span>'
 
 
-def _outlook_badge(proj):
-    """Status badge for the team hero — text + icon, never hue-alone."""
-    st = proj["status"]
-    if st["won_group"]:
-        return '<span class="th-badge win"><span class="bdot" aria-hidden="true"></span>Group winners</span>'
-    if st["clinched_top2"]:
-        return '<span class="th-badge q"><span class="bcheck" aria-hidden="true">✓</span>Qualified</span>'
-    if st.get("eliminated"):
-        return '<span class="th-badge gone"><span class="bx" aria-hidden="true">✕</span>Eliminated</span>'
-    if proj["rank"] <= 2 and not proj["group_complete"]:
-        return '<span class="th-badge q"><span class="bcheck" aria-hidden="true">↑</span>In the top two</span>'
-    if proj["rank"] == 3:
-        return '<span class="th-badge bub"><span class="btri" aria-hidden="true">◆</span>On the bubble</span>'
-    return '<span class="th-badge work"><span class="btri" aria-hidden="true">●</span>Work to do</span>'
+def _hero_opp(opp):
+    """Opponent fragment for the hero status: a resolved nation, its ≤2 live
+    candidate opponents, or a terse 'opponent TBD' when the slot is wide open."""
+    if opp["team"]:
+        return f'v {team_link(opp["team"], "ths-opp")}'
+    cands = sorted(opp.get("candidates") or [])
+    if 1 <= len(cands) <= 2:
+        return "v " + " / ".join(team_link(c, "cand") for c in cands)
+    return '<span class="ths-tbd">opponent TBD</span>'
+
+
+def _hero_status(ctx, team, proj):
+    """The team hero's leading status line — the CURRENT tournament state, driven
+    by the live bracket, never the frozen group framing.
+
+    Returns (kicker, detail_html, tone):
+      kicker  -> eyebrow word/round (uppercased by CSS; emitted in i18n dict form
+                 so pt-BR translates it).
+      detail  -> the HTML status detail (may be "").
+      tone    -> 'alive' | 'out' | 'champ' | '' (drives the hero treatment).
+    """
+    # Champion / runners-up: the Final has been decided.
+    final_m = next((m for m in ctx.matches if m.get("round") == "Final"), None)
+    if final_m is not None and data.has_result(final_m):
+        if bracket.match_winner(final_m) == team:
+            return ("World champions",
+                    '<span class="ths-txt">Winners of the 2026 World Cup</span>', "champ")
+        if bracket.match_loser(final_m) == team:
+            return ("Runners-up", '<span class="ths-txt">Lost in the final</span>', "out")
+
+    # Alive, with a scheduled next match (group or knockout).
+    nm = ctx.next_match(team)
+    if nm is not None:
+        m, opp, rd = nm
+        is_group = str(rd).startswith("Matchday")
+        # A team that has finished its group games but whose group isn't settled
+        # yet only projects SPECULATIVELY into the Round of 32 — don't invent
+        # knockout text before the bracket is real; fall back to group framing.
+        if not is_group and not proj["group_complete"]:
+            return ("Group stage", "", "alive")
+        parts = [_hero_opp(opp)]
+        ko = kickoff_label(m)
+        if ko:
+            parts.append(f'<span class="ths-when">{ko}</span>')
+        kicker = "Group stage" if is_group else rd
+        return (kicker, f' {_SEP} '.join(parts), "alive")
+
+    # No next match -> the run is over. Group-stage exit?
+    if ctx.knocked_out(team):
+        return ("Knocked out",
+                '<span class="ths-txt">Out in the group stage</span>', "out")
+
+    # Otherwise knocked out in the knockouts — surface the losing game.
+    _, recent = ctx.team_fixtures(team)
+    if recent is not None:
+        rd_short = _round_short(recent.get("round", ""))
+        g1, g2 = data.final_score(recent)
+        home = recent.get("team1") == team
+        our, their = (g1, g2) if home else (g2, g1)
+        opp_name = recent.get("team2") if home else recent.get("team1")
+        opp_link = team_link(opp_name, "ths-opp") if opp_name else "TBD"
+        pens = (recent.get("score") or {}).get("p")
+        pen_html = ""
+        if pens:
+            pt_, po_ = (pens[0], pens[1]) if home else (pens[1], pens[0])
+            pen_html = f' <span class="ths-pens">({pt_}–{po_} pens)</span>'
+        detail = (f'<span class="ths-rd">{E(rd_short)}</span> {_SEP} '
+                  f'<span class="ths-score">{our}–{their}</span>{pen_html} v {opp_link}')
+        return ("Knocked out", detail, "out")
+
+    return ("", "", "")
 
 
 def road_branch(team, group_letter, ctx, entry_slot, heading, entered=False):
@@ -244,22 +288,36 @@ def page_team(ctx, team):
             f'{match_line(next_ko_m, ctx)}</div>'
         )
 
+    # A single confirmed road (or a lone possible finish) shouldn't leave the
+    # second grid column empty — collapse to one column so there's no layout hole.
+    solo = len(roads) == 1 and not third_html
     if roads or third_html:
-        road_body = next_ko + f'<div class="roads">{"".join(roads)}{third_html}</div>'
+        road_body = (next_ko + f'<div class="roads{" solo" if solo else ""}">'
+                     f'{"".join(roads)}{third_html}</div>')
     elif knocked:
         road_body = '<p class="muted">Knocked out — the road ends in the group stage this time.</p>'
     else:
         road_body = '<p class="muted">No knockout path yet — the bracket opens once the group stage ends.</p>'
 
+    kicker, status_detail, tone = _hero_status(ctx, team, proj)
+    tone_cls = f" {tone}" if tone else ""
+    status_line = f'<p class="th-status">{status_detail}</p>' if status_detail else ""
+    # A team whose run is over gets its road section retitled to past tense — it is
+    # a completed campaign, not a set of potential futures.
+    done = tone in ("out", "champ")
+    road_h2 = "Their tournament" if done else "Road to the final"
+    road_sub = ("" if done
+                else f'<span class="muted">potential futures — who {E(team)} could meet each round</span>')
+
     body = f"""
-<section class="team-hero" data-team="{E(team)}" style="--accent:{pr};--accent2:{sec}">
+<section class="team-hero{tone_cls}" data-team="{E(team)}" style="--accent:{pr};--accent2:{sec}">
   <div class="th-inner">
     <div class="th-flag" aria-hidden="true">{flag(team)}</div>
     <div class="th-main">
-      <div class="th-eyebrow">{E(proj['group'])}</div>
+      <div class="th-eyebrow">{E(kicker)}</div>
       <h1>{E(team)}</h1>
+      {status_line}
       <p class="th-line"><a class="th-grp" href="group-{g.lower()}.html">{E(proj['group'])}</a> · {_ordinal(proj['rank'])} place · {proj['row']['Pts']} pts ({proj['row']['W']}W {proj['row']['D']}D {proj['row']['L']}L)</p>
-      <div class="th-outlook">{_outlook_badge(proj)}<span class="th-outline">{_one_line_outlook(proj)}</span></div>
     </div>
     <div class="th-watch">{star(team, "Watch")}</div>
   </div>
@@ -271,7 +329,7 @@ def page_team(ctx, team):
 </section>
 
 <section aria-label="Road to the final">
-  <div class="sec-head"><h2>Road to the final</h2><span class="muted">potential futures — who {E(team)} could meet each round</span></div>
+  <div class="sec-head"><h2>{road_h2}</h2>{road_sub}</div>
   {f'<p class="road-blurb">{E(blurbs.blurb_for(ctx.blurbs, team))}</p>' if blurbs.blurb_for(ctx.blurbs, team) else ''}
   {road_body}
 </section>
