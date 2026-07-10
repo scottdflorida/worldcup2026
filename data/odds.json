@@ -1,21 +1,17 @@
 {
- "fetched_at": "2026-07-09T13:53:45.680638+00:00",
+ "fetched_at": "2026-07-10T13:37:01.553557+00:00",
  "pairs": {
   "Argentina|Switzerland": {
    "Argentina": 1.38,
-   "Switzerland": 3.15
+   "Switzerland": 3.17
   },
   "Belgium|Spain": {
-   "Belgium": 3.21,
-   "Spain": 1.37
+   "Belgium": 3.34,
+   "Spain": 1.35
   },
   "England|Norway": {
-   "England": 1.5,
+   "England": 1.49,
    "Norway": 2.68
-  },
-  "France|Morocco": {
-   "France": 1.32,
-   "Morocco": 3.55
   }
  }
 }

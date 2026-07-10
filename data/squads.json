@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-09T13:54:02.182302+00:00",
+ "fetched_at": "2026-07-10T13:37:09.248671+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -3167,7 +3167,7 @@
    ]
   },
   "France": {
-   "as_of": "France at Paraguay",
+   "as_of": "Morocco at France",
    "players": [
     {
      "age": 31,
@@ -3324,9 +3324,9 @@
      "starter": true
     },
     {
-     "age": 23,
-     "name": "Bradley Barcola",
-     "num": "12",
+     "age": 21,
+     "name": "Désiré Doué",
+     "num": "20",
      "pos": "F",
      "starter": true
     },
@@ -3338,9 +3338,9 @@
      "starter": false
     },
     {
-     "age": 21,
-     "name": "Désiré Doué",
-     "num": "20",
+     "age": 23,
+     "name": "Bradley Barcola",
+     "num": "12",
      "pos": "F",
      "starter": false
     },
@@ -5037,7 +5037,7 @@
    ]
   },
   "Morocco": {
-   "as_of": "Morocco at Canada",
+   "as_of": "Morocco at France",
    "players": [
     {
      "age": 35,
@@ -5082,9 +5082,9 @@
      "starter": true
     },
     {
-     "age": 23,
-     "name": "Redouane Halhal",
-     "num": "25",
+     "age": 24,
+     "name": "Anass Salah-Eddine",
+     "num": "26",
      "pos": "D",
      "starter": true
     },
@@ -5117,9 +5117,9 @@
      "starter": false
     },
     {
-     "age": 24,
-     "name": "Anass Salah-Eddine",
-     "num": "26",
+     "age": 23,
+     "name": "Redouane Halhal",
+     "num": "25",
      "pos": "D",
      "starter": false
     },
@@ -5145,13 +5145,6 @@
      "starter": true
     },
     {
-     "age": 25,
-     "name": "Ismael Saibari",
-     "num": "11",
-     "pos": "M",
-     "starter": true
-    },
-    {
      "age": 22,
      "name": "Bilal El Khannouss",
      "num": "23",
@@ -5173,6 +5166,13 @@
      "starter": false
     },
     {
+     "age": 25,
+     "name": "Ismael Saibari",
+     "num": "11",
+     "pos": "M",
+     "starter": false
+    },
+    {
      "age": 20,
      "name": "Samir El Mourabet",
      "num": "15",
@@ -5184,7 +5184,7 @@
      "name": "Chemsdine Talbi",
      "num": "7",
      "pos": "F",
-     "starter": false
+     "starter": true
     },
     {
      "age": 30,
