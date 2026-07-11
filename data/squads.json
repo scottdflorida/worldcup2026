@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-10T13:37:09.248671+00:00",
+ "fetched_at": "2026-07-11T13:28:54.044789+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -608,7 +608,7 @@
      "starter": false
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Philipp Lienhart",
      "num": "15",
      "pos": "D",
@@ -736,7 +736,7 @@
    ]
   },
   "Belgium": {
-   "as_of": "Belgium at United States",
+   "as_of": "Belgium at Spain",
    "players": [
     {
      "age": 34,
@@ -830,9 +830,16 @@
      "starter": false
     },
     {
-     "age": 29,
-     "name": "Youri Tielemans",
-     "num": "8",
+     "age": 35,
+     "name": "Kevin De Bruyne",
+     "num": "7",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Hans Vanaken",
+     "num": "20",
      "pos": "M",
      "starter": true
     },
@@ -844,23 +851,16 @@
      "starter": true
     },
     {
-     "age": 24,
-     "name": "Amadou Onana",
-     "num": "24",
-     "pos": "M",
-     "starter": true
-    },
-    {
-     "age": 35,
-     "name": "Kevin De Bruyne",
-     "num": "7",
+     "age": 29,
+     "name": "Youri Tielemans",
+     "num": "8",
      "pos": "M",
      "starter": false
     },
     {
-     "age": 33,
-     "name": "Hans Vanaken",
-     "num": "20",
+     "age": 24,
+     "name": "Amadou Onana",
+     "num": "24",
      "pos": "M",
      "starter": false
     },
@@ -872,9 +872,9 @@
      "starter": true
     },
     {
-     "age": 28,
-     "name": "Dodi Lukébakio",
-     "num": "14",
+     "age": 24,
+     "name": "Jérémy Doku",
+     "num": "11",
      "pos": "F",
      "starter": true
     },
@@ -893,9 +893,9 @@
      "starter": false
     },
     {
-     "age": 24,
-     "name": "Jérémy Doku",
-     "num": "11",
+     "age": 28,
+     "name": "Dodi Lukébakio",
+     "num": "14",
      "pos": "F",
      "starter": false
     },
@@ -3565,7 +3565,7 @@
      "starter": false
     },
     {
-     "age": 27,
+     "age": 25,
      "name": "Gideon Mensah",
      "num": "14",
      "pos": "D",
@@ -4404,7 +4404,7 @@
      "starter": false
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Amad Diallo",
      "num": "15",
      "pos": "M",
@@ -5526,13 +5526,6 @@
      "starter": true
     },
     {
-     "age": 24,
-     "name": "Matthew Garbett",
-     "num": "7",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 30,
      "name": "Alex Rufer",
      "num": "14",
@@ -5566,6 +5559,13 @@
      "num": "11",
      "pos": "F",
      "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Matthew Garbett",
+     "num": "7",
+     "pos": "F",
+     "starter": false
     },
     {
      "age": 36,
@@ -6087,7 +6087,7 @@
      "starter": false
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Damián Bobadilla",
      "num": "16",
      "pos": "M",
@@ -6884,7 +6884,7 @@
      "starter": false
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Ross Stewart",
      "num": "14",
      "pos": "F",
@@ -7468,7 +7468,7 @@
    ]
   },
   "Spain": {
-   "as_of": "Spain at Portugal",
+   "as_of": "Belgium at Spain",
    "players": [
     {
      "age": 29,
@@ -7541,6 +7541,13 @@
      "starter": false
     },
     {
+     "age": 30,
+     "name": "Fabián Ruiz",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
      "age": 28,
      "name": "Dani Olmo",
      "num": "10",
@@ -7562,13 +7569,6 @@
      "starter": true
     },
     {
-     "age": 23,
-     "name": "Pedri",
-     "num": "20",
-     "pos": "M",
-     "starter": true
-    },
-    {
      "age": 31,
      "name": "Marcos Llorente",
      "num": "5",
@@ -7579,13 +7579,6 @@
      "age": 30,
      "name": "Mikel Merino",
      "num": "6",
-     "pos": "M",
-     "starter": false
-    },
-    {
-     "age": 30,
-     "name": "Fabián Ruiz",
-     "num": "8",
      "pos": "M",
      "starter": false
     },
@@ -7607,6 +7600,13 @@
      "age": 27,
      "name": "Martín Zubimendi",
      "num": "18",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Pedri",
+     "num": "20",
      "pos": "M",
      "starter": false
     },
@@ -7658,7 +7658,7 @@
    "as_of": "Sweden at France",
    "players": [
     {
-     "age": 27,
+     "age": 28,
      "name": "Jacob Widell Zetterström",
      "num": "1",
      "pos": "G",
