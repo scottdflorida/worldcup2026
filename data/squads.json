@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-12T13:28:59.441108+00:00",
+ "fetched_at": "2026-07-13T13:39:42.179072+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -2249,7 +2249,7 @@
      "starter": false
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Lukás Hornícek",
      "num": "23",
      "pos": "G",
@@ -3025,7 +3025,7 @@
      "starter": true
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Marc Guéhi",
      "num": "6",
      "pos": "D",
@@ -3558,7 +3558,7 @@
      "starter": false
     },
     {
-     "age": 33,
+     "age": 34,
      "name": "Benjamin Asare",
      "num": "16",
      "pos": "G",
@@ -4743,7 +4743,7 @@
      "starter": false
     },
     {
-     "age": 20,
+     "age": 21,
      "name": "Mohammad Abughoush",
      "num": "18",
      "pos": "D",
@@ -4867,7 +4867,7 @@
      "starter": false
     },
     {
-     "age": 40,
+     "age": 41,
      "name": "Guillermo Ochoa",
      "num": "13",
      "pos": "G",
@@ -6877,7 +6877,7 @@
      "starter": false
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Ché Adams",
      "num": "10",
      "pos": "F",
@@ -7611,7 +7611,7 @@
      "starter": false
     },
     {
-     "age": 18,
+     "age": 19,
      "name": "Lamine Yamal",
      "num": "19",
      "pos": "F",
@@ -7639,7 +7639,7 @@
      "starter": false
     },
     {
-     "age": 22,
+     "age": 23,
      "name": "Víctor Muñoz",
      "num": "25",
      "pos": "F",
@@ -8207,7 +8207,7 @@
      "starter": false
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Sebastian Tounekti",
      "num": "26",
      "pos": "F",
