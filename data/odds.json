@@ -1,13 +1,9 @@
 {
- "fetched_at": "2026-07-14T13:30:36.645156+00:00",
+ "fetched_at": "2026-07-15T13:30:27.116266+00:00",
  "pairs": {
   "Argentina|England": {
-   "Argentina": 2.0,
-   "England": 1.84
-  },
-  "France|Spain": {
-   "France": 1.74,
-   "Spain": 2.14
+   "Argentina": 1.98,
+   "England": 1.87
   }
  }
 }
