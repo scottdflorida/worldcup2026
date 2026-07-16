@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-15T13:30:41.247927+00:00",
+ "fetched_at": "2026-07-16T13:31:21.298471+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -189,7 +189,7 @@
    ]
   },
   "Argentina": {
-   "as_of": "Switzerland at Argentina",
+   "as_of": "Argentina at England",
    "players": [
     {
      "age": 33,
@@ -242,6 +242,13 @@
     },
     {
      "age": 29,
+     "name": "Marcos Senesi",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 29,
      "name": "Gonzalo Montiel",
      "num": "4",
      "pos": "D",
@@ -269,13 +276,6 @@
      "starter": true
     },
     {
-     "age": 32,
-     "name": "Rodrigo De Paul",
-     "num": "7",
-     "pos": "M",
-     "starter": true
-    },
-    {
      "age": 27,
      "name": "Alexis Mac Allister",
      "num": "20",
@@ -288,6 +288,13 @@
      "num": "24",
      "pos": "M",
      "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Rodrigo De Paul",
+     "num": "7",
+     "pos": "M",
+     "starter": false
     },
     {
      "age": 21,
@@ -339,16 +346,16 @@
      "starter": true
     },
     {
-     "age": 28,
-     "name": "Nico González",
-     "num": "15",
-     "pos": "F",
-     "starter": false
-    },
-    {
      "age": 23,
      "name": "Giuliano Simeone",
      "num": "17",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Nico González",
+     "num": "15",
      "pos": "F",
      "starter": false
     },
@@ -1723,13 +1730,6 @@
      "starter": true
     },
     {
-     "age": 34,
-     "name": "Santiago Arias",
-     "num": "4",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 31,
      "name": "Yerry Mina",
      "num": "13",
@@ -1779,6 +1779,13 @@
      "starter": true
     },
     {
+     "age": 31,
+     "name": "Santiago Arias",
+     "num": "4",
+     "pos": "M",
+     "starter": false
+    },
+    {
      "age": 25,
      "name": "Kevin Castaño",
      "num": "5",
@@ -1796,6 +1803,13 @@
      "age": 28,
      "name": "Jorge Carrascal",
      "num": "8",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Jhon Córdoba",
+     "num": "9",
      "pos": "M",
      "starter": false
     },
@@ -1833,13 +1847,6 @@
      "num": "25",
      "pos": "F",
      "starter": true
-    },
-    {
-     "age": 33,
-     "name": "Jhon Córdoba",
-     "num": "9",
-     "pos": "F",
-     "starter": false
     },
     {
      "age": 27,
@@ -2980,7 +2987,7 @@
    ]
   },
   "England": {
-   "as_of": "England at Norway",
+   "as_of": "Argentina at England",
    "players": [
     {
      "age": 32,
@@ -3004,20 +3011,6 @@
      "starter": false
     },
     {
-     "age": 28,
-     "name": "Ezri Konsa",
-     "num": "2",
-     "pos": "D",
-     "starter": true
-    },
-    {
-     "age": 21,
-     "name": "Nico O'Reilly",
-     "num": "3",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 32,
      "name": "John Stones",
      "num": "5",
@@ -3032,6 +3025,34 @@
      "starter": true
     },
     {
+     "age": 26,
+     "name": "Reece James",
+     "num": "24",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Djed Spence",
+     "num": "25",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Ezri Konsa",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Nico O'Reilly",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 27,
      "name": "Trevoh Chalobah",
      "num": "12",
@@ -3042,20 +3063,6 @@
      "age": 34,
      "name": "Dan Burn",
      "num": "15",
-     "pos": "D",
-     "starter": false
-    },
-    {
-     "age": 26,
-     "name": "Reece James",
-     "num": "24",
-     "pos": "D",
-     "starter": false
-    },
-    {
-     "age": 25,
-     "name": "Djed Spence",
-     "num": "25",
      "pos": "D",
      "starter": false
     },
@@ -3116,16 +3123,16 @@
      "starter": true
     },
     {
-     "age": 25,
-     "name": "Anthony Gordon",
-     "num": "18",
+     "age": 23,
+     "name": "Morgan Rogers",
+     "num": "17",
      "pos": "F",
      "starter": true
     },
     {
-     "age": 24,
-     "name": "Noni Madueke",
-     "num": "20",
+     "age": 25,
+     "name": "Anthony Gordon",
+     "num": "18",
      "pos": "F",
      "starter": true
     },
@@ -3144,16 +3151,16 @@
      "starter": false
     },
     {
-     "age": 23,
-     "name": "Morgan Rogers",
-     "num": "17",
+     "age": 30,
+     "name": "Ollie Watkins",
+     "num": "19",
      "pos": "F",
      "starter": false
     },
     {
-     "age": 30,
-     "name": "Ollie Watkins",
-     "num": "19",
+     "age": 24,
+     "name": "Noni Madueke",
+     "num": "20",
      "pos": "F",
      "starter": false
     },
@@ -4916,13 +4923,6 @@
      "starter": false
     },
     {
-     "age": 19,
-     "name": "Brian Gutiérrez",
-     "num": "26",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 26,
      "name": "Érik Lira",
      "num": "6",
@@ -4982,6 +4982,13 @@
      "age": 30,
      "name": "Luis Chávez",
      "num": "24",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Brian Gutiérrez",
+     "num": "26",
      "pos": "M",
      "starter": false
     },
@@ -5526,6 +5533,13 @@
      "starter": true
     },
     {
+     "age": 24,
+     "name": "Matthew Garbett",
+     "num": "7",
+     "pos": "M",
+     "starter": false
+    },
+    {
      "age": 30,
      "name": "Alex Rufer",
      "num": "14",
@@ -5536,6 +5550,13 @@
      "age": 27,
      "name": "Callum McCowatt",
      "num": "20",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Jesse Randall",
+     "num": "21",
      "pos": "M",
      "starter": false
     },
@@ -5561,13 +5582,6 @@
      "starter": true
     },
     {
-     "age": 24,
-     "name": "Matthew Garbett",
-     "num": "7",
-     "pos": "F",
-     "starter": false
-    },
-    {
      "age": 36,
      "name": "Kosta Barbarouses",
      "num": "17",
@@ -5585,13 +5599,6 @@
      "age": 23,
      "name": "Ben Old",
      "num": "19",
-     "pos": "F",
-     "starter": false
-    },
-    {
-     "age": 23,
-     "name": "Jesse Randall",
-     "num": "21",
      "pos": "F",
      "starter": false
     }
@@ -5664,7 +5671,7 @@
      "starter": false
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Marcus Holmgren Pedersen",
      "num": "16",
      "pos": "D",
@@ -5809,7 +5816,7 @@
      "starter": false
     },
     {
-     "age": 27,
+     "age": 25,
      "name": "José Córdoba",
      "num": "3",
      "pos": "D",
@@ -5893,7 +5900,7 @@
      "starter": true
     },
     {
-     "age": 22,
+     "age": 27,
      "name": "Tomás Rodríguez",
      "num": "9",
      "pos": "M",
