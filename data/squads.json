@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-16T13:31:21.298471+00:00",
+ "fetched_at": "2026-07-17T13:30:15.724091+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1003,7 +1003,7 @@
      "starter": false
     },
     {
-     "age": 19,
+     "age": 20,
      "name": "Nidal Celik",
      "num": "24",
      "pos": "D",
@@ -1730,6 +1730,13 @@
      "starter": true
     },
     {
+     "age": 34,
+     "name": "Santiago Arias",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 31,
      "name": "Yerry Mina",
      "num": "13",
@@ -1777,13 +1784,6 @@
      "num": "16",
      "pos": "M",
      "starter": true
-    },
-    {
-     "age": 31,
-     "name": "Santiago Arias",
-     "num": "4",
-     "pos": "M",
-     "starter": false
     },
     {
      "age": 25,
@@ -2672,6 +2672,13 @@
      "starter": false
     },
     {
+     "age": 20,
+     "name": "Kevin Rodríguez",
+     "num": "11",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 28,
      "name": "Ángelo Preciado",
      "num": "17",
@@ -2766,13 +2773,6 @@
      "age": 22,
      "name": "Anthony Valencia",
      "num": "8",
-     "pos": "F",
-     "starter": false
-    },
-    {
-     "age": 26,
-     "name": "Kevin Rodríguez",
-     "num": "11",
      "pos": "F",
      "starter": false
     },
@@ -4923,6 +4923,13 @@
      "starter": false
     },
     {
+     "age": 19,
+     "name": "Brian Gutiérrez",
+     "num": "26",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 26,
      "name": "Érik Lira",
      "num": "6",
@@ -4982,13 +4989,6 @@
      "age": 30,
      "name": "Luis Chávez",
      "num": "24",
-     "pos": "M",
-     "starter": false
-    },
-    {
-     "age": 23,
-     "name": "Brian Gutiérrez",
-     "num": "26",
      "pos": "M",
      "starter": false
     },
@@ -7693,7 +7693,7 @@
      "starter": true
     },
     {
-     "age": 31,
+     "age": 32,
      "name": "Victor Lindelöf",
      "num": "3",
      "pos": "D",
@@ -8095,7 +8095,7 @@
      "starter": false
     },
     {
-     "age": 21,
+     "age": 22,
      "name": "Adem Arous",
      "num": "5",
      "pos": "D",
