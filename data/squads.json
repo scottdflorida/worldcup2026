@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-18T13:28:29.373276+00:00",
+ "fetched_at": "2026-07-19T13:28:55.083887+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -2987,19 +2987,19 @@
    ]
   },
   "England": {
-   "as_of": "Argentina at England",
+   "as_of": "England at France",
    "players": [
-    {
-     "age": 32,
-     "name": "Jordan Pickford",
-     "num": "1",
-     "pos": "G",
-     "starter": true
-    },
     {
      "age": 29,
      "name": "Dean Henderson",
      "num": "13",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Jordan Pickford",
+     "num": "1",
      "pos": "G",
      "starter": false
     },
@@ -3011,9 +3011,9 @@
      "starter": false
     },
     {
-     "age": 32,
-     "name": "John Stones",
-     "num": "5",
+     "age": 28,
+     "name": "Ezri Konsa",
+     "num": "2",
      "pos": "D",
      "starter": true
     },
@@ -3025,13 +3025,6 @@
      "starter": true
     },
     {
-     "age": 26,
-     "name": "Reece James",
-     "num": "24",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 25,
      "name": "Djed Spence",
      "num": "25",
@@ -3039,16 +3032,23 @@
      "starter": true
     },
     {
-     "age": 28,
-     "name": "Ezri Konsa",
-     "num": "2",
+     "age": 23,
+     "name": "Jarell Quansah",
+     "num": "26",
      "pos": "D",
-     "starter": false
+     "starter": true
     },
     {
      "age": 21,
      "name": "Nico O'Reilly",
      "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "John Stones",
+     "num": "5",
      "pos": "D",
      "starter": false
     },
@@ -3067,9 +3067,9 @@
      "starter": false
     },
     {
-     "age": 23,
-     "name": "Jarell Quansah",
-     "num": "26",
+     "age": 26,
+     "name": "Reece James",
+     "num": "24",
      "pos": "D",
      "starter": false
     },
@@ -3081,18 +3081,25 @@
      "starter": true
     },
     {
+     "age": 28,
+     "name": "Eberechi Eze",
+     "num": "21",
+     "pos": "M",
+     "starter": true
+    },
+    {
      "age": 23,
      "name": "Elliot Anderson",
      "num": "8",
      "pos": "M",
-     "starter": true
+     "starter": false
     },
     {
      "age": 23,
      "name": "Jude Bellingham",
      "num": "10",
      "pos": "M",
-     "starter": true
+     "starter": false
     },
     {
      "age": 36,
@@ -3109,16 +3116,16 @@
      "starter": false
     },
     {
-     "age": 28,
-     "name": "Eberechi Eze",
-     "num": "21",
-     "pos": "M",
-     "starter": false
+     "age": 24,
+     "name": "Bukayo Saka",
+     "num": "7",
+     "pos": "F",
+     "starter": true
     },
     {
-     "age": 32,
-     "name": "Harry Kane",
-     "num": "9",
+     "age": 28,
+     "name": "Marcus Rashford",
+     "num": "11",
      "pos": "F",
      "starter": true
     },
@@ -3130,23 +3137,23 @@
      "starter": true
     },
     {
-     "age": 25,
-     "name": "Anthony Gordon",
-     "num": "18",
+     "age": 30,
+     "name": "Ivan Toney",
+     "num": "22",
      "pos": "F",
      "starter": true
     },
     {
-     "age": 24,
-     "name": "Bukayo Saka",
-     "num": "7",
+     "age": 32,
+     "name": "Harry Kane",
+     "num": "9",
      "pos": "F",
      "starter": false
     },
     {
-     "age": 28,
-     "name": "Marcus Rashford",
-     "num": "11",
+     "age": 25,
+     "name": "Anthony Gordon",
+     "num": "18",
      "pos": "F",
      "starter": false
     },
@@ -3163,18 +3170,11 @@
      "num": "20",
      "pos": "F",
      "starter": false
-    },
-    {
-     "age": 30,
-     "name": "Ivan Toney",
-     "num": "22",
-     "pos": "F",
-     "starter": false
     }
    ]
   },
   "France": {
-   "as_of": "Spain at France",
+   "as_of": "England at France",
    "players": [
     {
      "age": 31,
@@ -3198,51 +3198,58 @@
      "starter": false
     },
     {
-     "age": 32,
-     "name": "Lucas Digne",
-     "num": "3",
-     "pos": "D",
-     "starter": true
-    },
-    {
-     "age": 27,
-     "name": "Dayot Upamecano",
-     "num": "4",
-     "pos": "D",
-     "starter": true
-    },
-    {
-     "age": 27,
-     "name": "Jules Koundé",
-     "num": "5",
-     "pos": "D",
-     "starter": true
-    },
-    {
-     "age": 25,
-     "name": "William Saliba",
-     "num": "17",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 23,
      "name": "Malo Gusto",
      "num": "2",
      "pos": "D",
-     "starter": false
+     "starter": true
     },
     {
      "age": 27,
      "name": "Ibrahima Konaté",
      "num": "15",
      "pos": "D",
-     "starter": false
+     "starter": true
     },
     {
      "age": 28,
      "name": "Theo Hernández",
      "num": "19",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Maxence Lacroix",
+     "num": "26",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Lucas Digne",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Dayot Upamecano",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Jules Koundé",
+     "num": "5",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "William Saliba",
+     "num": "17",
      "pos": "D",
      "starter": false
     },
@@ -3252,20 +3259,6 @@
      "num": "21",
      "pos": "D",
      "starter": false
-    },
-    {
-     "age": 26,
-     "name": "Maxence Lacroix",
-     "num": "26",
-     "pos": "D",
-     "starter": false
-    },
-    {
-     "age": 26,
-     "name": "Aurélien Tchouaméni",
-     "num": "8",
-     "pos": "M",
-     "starter": true
     },
     {
      "age": 24,
@@ -3282,9 +3275,30 @@
      "starter": true
     },
     {
+     "age": 20,
+     "name": "Warren Zaïre-Emery",
+     "num": "18",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Rayan Cherki",
+     "num": "24",
+     "pos": "M",
+     "starter": true
+    },
+    {
      "age": 25,
      "name": "Manu Koné",
      "num": "6",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Aurélien Tchouaméni",
+     "num": "8",
      "pos": "M",
      "starter": false
     },
@@ -3296,32 +3310,11 @@
      "starter": false
     },
     {
-     "age": 20,
-     "name": "Warren Zaïre-Emery",
-     "num": "18",
-     "pos": "M",
-     "starter": false
-    },
-    {
-     "age": 22,
-     "name": "Rayan Cherki",
-     "num": "24",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 24,
      "name": "Maghnes Akliouche",
      "num": "25",
      "pos": "M",
      "starter": false
-    },
-    {
-     "age": 29,
-     "name": "Ousmane Dembélé",
-     "num": "7",
-     "pos": "F",
-     "starter": true
     },
     {
      "age": 27,
@@ -3331,11 +3324,18 @@
      "starter": true
     },
     {
-     "age": 23,
-     "name": "Bradley Barcola",
-     "num": "12",
+     "age": 21,
+     "name": "Désiré Doué",
+     "num": "20",
      "pos": "F",
      "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Ousmane Dembélé",
+     "num": "7",
+     "pos": "F",
+     "starter": false
     },
     {
      "age": 28,
@@ -3345,9 +3345,9 @@
      "starter": false
     },
     {
-     "age": 21,
-     "name": "Désiré Doué",
-     "num": "20",
+     "age": 23,
+     "name": "Bradley Barcola",
+     "num": "12",
      "pos": "F",
      "starter": false
     },
@@ -3518,7 +3518,7 @@
      "starter": true
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Deniz Undav",
      "num": "26",
      "pos": "F",
@@ -4397,7 +4397,7 @@
      "starter": true
     },
     {
-     "age": 34,
+     "age": 35,
      "name": "Jean Michaël Seri",
      "num": "4",
      "pos": "M",
@@ -7880,7 +7880,7 @@
      "starter": true
     },
     {
-     "age": 30,
+     "age": 31,
      "name": "Manuel Akanji",
      "num": "5",
      "pos": "D",
