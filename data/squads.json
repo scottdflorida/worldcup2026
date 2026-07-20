@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-19T13:28:55.083887+00:00",
+ "fetched_at": "2026-07-20T13:32:34.455311+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -189,7 +189,7 @@
    ]
   },
   "Argentina": {
-   "as_of": "Argentina at England",
+   "as_of": "Argentina at Spain",
    "players": [
     {
      "age": 33,
@@ -220,6 +220,13 @@
      "starter": true
     },
     {
+     "age": 29,
+     "name": "Gonzalo Montiel",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 28,
      "name": "Lisandro Martínez",
      "num": "6",
@@ -234,23 +241,9 @@
      "starter": true
     },
     {
-     "age": 28,
-     "name": "Nahuel Molina",
-     "num": "26",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 29,
      "name": "Marcos Senesi",
      "num": "2",
-     "pos": "D",
-     "starter": false
-    },
-    {
-     "age": 29,
-     "name": "Gonzalo Montiel",
-     "num": "4",
      "pos": "D",
      "starter": false
     },
@@ -269,9 +262,16 @@
      "starter": false
     },
     {
+     "age": 28,
+     "name": "Nahuel Molina",
+     "num": "26",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 32,
-     "name": "Leandro Paredes",
-     "num": "5",
+     "name": "Rodrigo De Paul",
+     "num": "7",
      "pos": "M",
      "starter": true
     },
@@ -291,8 +291,8 @@
     },
     {
      "age": 32,
-     "name": "Rodrigo De Paul",
-     "num": "7",
+     "name": "Leandro Paredes",
+     "num": "5",
      "pos": "M",
      "starter": false
     },
@@ -346,16 +346,16 @@
      "starter": true
     },
     {
-     "age": 23,
-     "name": "Giuliano Simeone",
-     "num": "17",
+     "age": 28,
+     "name": "Nico González",
+     "num": "15",
      "pos": "F",
      "starter": true
     },
     {
-     "age": 28,
-     "name": "Nico González",
-     "num": "15",
+     "age": 23,
+     "name": "Giuliano Simeone",
+     "num": "17",
      "pos": "F",
      "starter": false
     },
@@ -3226,7 +3226,7 @@
      "starter": true
     },
     {
-     "age": 32,
+     "age": 33,
      "name": "Lucas Digne",
      "num": "3",
      "pos": "D",
@@ -3406,7 +3406,7 @@
      "starter": true
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Waldemar Anton",
      "num": "3",
      "pos": "D",
@@ -6045,7 +6045,7 @@
      "starter": false
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "José Canale",
      "num": "13",
      "pos": "D",
@@ -7475,7 +7475,7 @@
    ]
   },
   "Spain": {
-   "as_of": "Spain at France",
+   "as_of": "Argentina at Spain",
    "players": [
     {
      "age": 29,
@@ -7562,7 +7562,7 @@
      "starter": true
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Álex Baena",
      "num": "15",
      "pos": "M",
