@@ -853,7 +853,9 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
   .cal-day{border-width:0 0 1.5px 0;min-height:0;border-bottom:1.5px solid var(--line)}
   .cal-day.empty{display:none}
   .cal-day.today{border:2px solid var(--vermilion)}
-  .cal-d-head{position:sticky}
+  .cal-d-head{position:sticky;justify-content:center;text-align:center;gap:8px;padding:8px 0 10px}
+  .cal-dom{font-size:1.75rem;line-height:1}
+  .cal-dow,.cal-mon{font-size:.72rem}
   /* lay the day's matches two across instead of a single stacked column */
   .cal-d-body{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;align-items:start}
 }
@@ -1036,9 +1038,9 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .bet-lb-r{flex:none;display:inline-flex;align-items:center;justify-content:center;min-width:1.6em;height:1.6em;
   font-family:var(--mono);font-weight:800;font-size:.78rem;color:var(--muted)}
 .bet-lb-r.medal{border-radius:50%;color:#2a2206;font-size:.74rem}
-.bet-lb-r.r1{background:var(--vermilion);color:var(--ink);border:1.5px solid var(--ink)}
-.bet-lb-r.r2{background:var(--paper);color:var(--ink);border:1.5px solid var(--ink)}
-.bet-lb-r.r3{background:var(--paper);color:var(--muted);border:1.5px solid var(--muted)}
+.bet-lb-r.r1{background:#E3B23C;color:#171512;border:1.5px solid #6F5310}
+.bet-lb-r.r2{background:#C9CDD2;color:#171512;border:1.5px solid #737980}
+.bet-lb-r.r3{background:#C98F52;color:#171512;border:1.5px solid #70451F}
 .bet-form{padding:16px}
 .bet-form-team{font-size:1.05rem;margin-bottom:14px}
 .bet-payout{font-size:.82rem;margin:0 0 12px;min-height:1em}
@@ -1199,6 +1201,28 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 .krl-champ{justify-content:flex-start}
 .krl-champ-tm{font-weight:800;text-transform:uppercase;font-size:.9rem;display:flex;align-items:center;gap:6px}
 .krl-champ-tm.pending{font-family:var(--mono);font-weight:700;text-transform:none;font-size:.76rem}
+/* Completed tournament: keep each medal beside the result that awarded it. */
+.ko-rail.krl-complete{display:grid;grid-template-columns:1fr 1fr;overflow:visible}
+.krl-complete .krl-medal-col{min-width:0;padding:16px 18px 18px;gap:14px}
+.krl-complete .krl-medal-col:last-child{border-right:0}
+.krl-award{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 16px;
+  border:2px solid var(--ink);background:var(--ink-block);color:var(--on-ink)}
+.krl-award-title .krl-trophy{filter:brightness(0) invert(1)}
+.krl-award-bronze{background:#C98F52;color:#171512;border-color:#70451F}
+.krl-award-k{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:.625rem;
+  font-weight:800;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.krl-award-tm{display:inline-flex;align-items:center;gap:7px;font-weight:800;text-transform:uppercase;min-width:0}
+.krl-award-tm .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.krl-result{display:flex;flex-direction:column;gap:6px}
+.krl-result-k{font-family:var(--mono);font-size:.575rem;font-weight:800;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted)}
+.krl-complete .krl-tie{padding:9px 11px}
+.krl-complete .krl-side .krl-tm .nm{max-width:none}
+@media(max-width:640px){
+  .ko-rail.krl-complete{grid-template-columns:1fr}
+  .krl-complete .krl-medal-col{border-right:0;border-bottom:1px solid var(--line)}
+  .krl-complete .krl-medal-col:last-child{border-bottom:0}
+}
 
 /* Group-stage archive strip — one compact row per group (top two + best third). */
 .ko-archive{margin-top:var(--s7)}
@@ -1235,7 +1259,7 @@ table.standings{width:100%;border-collapse:collapse;font-size:.85rem}
 /* Status-aware watchlist meta (knockout/champion mode team cards). */
 .tcard-status{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.05em;
   color:var(--ink2);display:flex;align-items:center;gap:5px;flex-wrap:wrap}
-.tcard-status.out{color:var(--muted)}
+.tcard-status.out,.tcard-status.placed{color:var(--ink);font-weight:800}
 .tcard-status.champ{color:var(--vermilion);font-weight:800}
 .tcard-status .tcs-opp{font-weight:700;padding:0}
 

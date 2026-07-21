@@ -25,7 +25,7 @@ def page_teams(ctx):
 <section id="your-teams-sec" class="your-teams-sec" data-reveal aria-label="Your teams">
   <div class="sec-head"><h2>Your teams</h2><span class="muted">Pin any team with ★ — next &amp; latest match, lit up everywhere</span></div>
   <div id="your-teams" class="tcard-grid yt-grid"></div>
-  {teams_island(ctx)}
+  {teams_island(ctx, status=ctx.stage() != "Group stage")}
 </section>
 <section id="directory" aria-label="Team directory">
   <div class="search-wrap">

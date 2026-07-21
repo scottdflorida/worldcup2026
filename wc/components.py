@@ -479,15 +479,22 @@ def _card_status(ctx, team):
     """Tournament-status meta for a watchlist card (knockout / champion mode),
     mirroring the team-hero language so a pinned team reads the same everywhere:
       alive  -> the round it is playing next (e.g. "Quarter-final")
-      out    -> "Out · <round> · v <opponent>" (group stage or the game it lost)
-      champ  -> "World champions" / "Runners-up"
-    Returns (inner_html, tone) with tone in {'alive','out','champ',''}."""
+      out    -> the round where the run ended (e.g. "Out in R16")
+      placed -> the final placement once the medal matches are complete
+    Returns (inner_html, tone) with tone in {'alive','out','placed','champ',''}."""
     final_m = next((m for m in ctx.matches if m.get("round") == "Final"), None)
     if final_m is not None and data.has_result(final_m):
         if bracket.match_winner(final_m) == team:
             return ("<span>World champions</span>", "champ")
         if bracket.match_loser(final_m) == team:
             return ("<span>Runners-up</span>", "out")
+    bronze_m = next((m for m in ctx.matches
+                     if m.get("round") == "Match for third place"), None)
+    if bronze_m is not None and data.has_result(bronze_m):
+        if bracket.match_winner(bronze_m) == team:
+            return ("<span>Third place</span>", "placed")
+        if bracket.match_loser(bronze_m) == team:
+            return ("<span>Fourth place</span>", "placed")
     nm = ctx.next_match(team)
     if nm is not None:
         m, _opp, rd = nm
@@ -499,18 +506,11 @@ def _card_status(ctx, team):
             return ("<span>Group stage</span>", "alive")
         return (f'<span>{E(_round_full(rd))}</span>', "alive")
     if ctx.knocked_out(team):
-        return ('<span>Out</span> · <span>group stage</span>', "out")
+        return ('<span>Out in group stage</span>', "out")
     _, recent = ctx.team_fixtures(team)
     if recent is not None:
         rd_short = _round_short(recent.get("round", ""))
-        opp = recent.get("team2") if recent.get("team1") == team else recent.get("team1")
-        # This meta sits INSIDE the card's .tcard-main <a>, so the opponent must be
-        # a plain chip (data-team keeps the watched glow) — a nested <a> is invalid
-        # and the browser drops it, losing the opponent.
-        opp_html = (f'<span class="team tcs-opp" data-team="{E(opp)}">'
-                    f'<span class="fl">{flag(opp)}</span><span class="nm">{E(opp)}</span></span>'
-                    if opp else "TBD")
-        return (f'<span>Out</span> · <span>{E(rd_short)}</span> · v {opp_html}', "out")
+        return (f'<span>Out in {E(rd_short)}</span>', "out")
     return ("", "")
 
 
@@ -788,6 +788,48 @@ def bracket_rail(ctx, current_round):
     main = [(rd, rows) for rd, rows in ctx.bracket if rd in config.KO_ROUNDS]
     if not main:
         return ""
+    champ = _champion(ctx)
+    bronze = next((r for rd, rows in ctx.bracket if rd == "Match for third place"
+                   for r in rows), None)
+
+    # Once the tournament is complete, the live-path tree has done its job. Pair
+    # each medal with the match that awarded it: the Final result and champion in
+    # one block, the third-place result and bronze winner in another. This avoids
+    # visually grouping the champion with the unrelated bronze match.
+    final = next((r for rd, rows in main if rd == "Final" for r in rows), None)
+    if champ and final is not None and final["played"]:
+        final_tie = (f'<div class="krl-tie is-done">'
+                     f'{_rail_side(final, "team1")}{_rail_side(final, "team2")}</div>')
+        final_col = (
+            '<div class="krl-col krl-medal-col krl-title-col">'
+            '<div class="krl-h">Final</div>'
+            '<div class="krl-award krl-award-title">'
+            '<span class="krl-award-k"><img class="krl-trophy" src="assets/trophy.svg" alt="" '
+            'width="14" height="14" aria-hidden="true">World Champion</span>'
+            f'{team_link(champ, "krl-award-tm")}</div>'
+            f'<div class="krl-result"><div class="krl-result-k">Final result</div>{final_tie}</div></div>'
+        )
+        bronze_col = ""
+        if bronze is not None:
+            bz_winner = bronze["winner"] if bronze["played"] else None
+            bz_tie = (f'<div class="krl-tie krl-bronze{" is-done" if bronze["played"] else ""}">'
+                      f'{_rail_side(bronze, "team1")}{_rail_side(bronze, "team2")}</div>')
+            award = (team_link(bz_winner, "krl-award-tm") if bz_winner else
+                     '<span class="krl-award-tm pending muted">T.B.D.</span>')
+            bronze_col = (
+                '<div class="krl-col krl-medal-col krl-bronze-col">'
+                '<div class="krl-h">Third-place match</div>'
+                f'<div class="krl-award krl-award-bronze"><span class="krl-award-k">Bronze</span>{award}</div>'
+                f'<div class="krl-result"><div class="krl-result-k">Third-place result</div>{bz_tie}</div></div>'
+            )
+        return f"""
+<section class="ko-rail-sec" data-reveal aria-label="Bracket">
+  <div class="sec-head"><h2>The bracket</h2>
+    <a class="sec-link" href="bracket.html">Full bracket <span class="arrow" aria-hidden="true">→</span></a></div>
+  <div class="ko-rail-frame"><div class="ko-rail krl-complete">{final_col}{bronze_col}</div></div>
+</section>
+"""
+
     # Anchor on the current MAIN round (the bronze match rides with the Final).
     anchor = current_round if current_round in config.KO_ROUNDS else "Final"
     start = next((i for i, (rd, _) in enumerate(main) if rd == anchor), 0)
@@ -806,13 +848,10 @@ def bracket_rail(ctx, current_round):
         cur = " krl-cur" if rd == anchor else ""
         cols.append(f'<div class="krl-col{cur}"><div class="krl-h">{E(config.KO_SHORT[rd])}</div>'
                     f'<div class="krl-ties">{ties}</div></div>')
-    champ = _champion(ctx)
     if champ:
         cap = (f'<div class="krl-champ-tm">{team_link(champ, "krl-tm")}</div>')
     else:
         cap = '<div class="krl-champ-tm pending muted">Champion T.B.D.</div>'
-    bronze = next((r for rd, rows in ctx.bracket if rd == "Match for third place"
-                   for r in rows), None)
     bz = ""
     if bronze is not None:
         bz = (f'<div class="krl-tie krl-bronze{" is-done" if bronze["played"] else ""}">'

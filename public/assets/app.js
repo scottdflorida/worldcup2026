@@ -81,6 +81,10 @@
     if(host){
       host.innerHTML='';
       if(!w.length){
+        var onTeamsPage=!!document.getElementById('directory');
+        var browseLink=onTeamsPage
+          ? '<a href="#directory">Browse all 48 teams ↓</a>'
+          : '<a href="teams.html">Browse all 48 teams →</a>';
         host.innerHTML='<div class="yt-empty">'+
           '<span class="yt-star" aria-hidden="true">★</span>'+
           '<div class="yt-empty-body">'+
@@ -88,7 +92,7 @@
           '<b class="yt-h">PIN A TEAM.</b>'+
           '<span class="yt-p">Tap the <span class="yt-inline">★</span> beside any nation — on a group, a team page, or the bracket — '+
           'and it locks in here, marked in vermilion across the whole site.</span>'+
-          '<span class="yt-cta"><a href="teams.html">Browse all 48 teams →</a></span>'+
+          '<span class="yt-cta">'+browseLink+'</span>'+
           '</div></div>';
       } else {
         var isl=island();

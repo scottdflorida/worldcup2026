@@ -63,12 +63,17 @@ def _hero_progress(ctx):
     n_played = sum(1 for m in ctx.matches if data.has_result(m))
     n_total = len(ctx.matches)
     pct = (n_played / n_total * 100) if n_total else 0
+    # The end tick carries a paper-coloured halo so it remains legible over a
+    # partially filled meter. At 100% that halo reads as an unfilled sliver, so
+    # the completed state drops the now-redundant tick and lets amber reach the
+    # inner right edge cleanly.
+    end_tick = ('' if pct >= 100 else
+                '\n        <span class="tally-tick" style="left:100%" aria-hidden="true"></span>')
     return f"""<div class="hero-foot">
     <div class="hero-prog">
       <div class="hp-head"><span class="hp-k">TOURNAMENT&nbsp;PROGRESS</span><span class="hp-pct">{round(pct)}<span class="hp-of">%</span></span></div>
       <div class="tally hero-tally" role="img" aria-label="{n_played} of {n_total} matches played">
-        <span class="tally-fill" data-pct="{pct:.2f}" style="width:{pct:.3f}%"></span>
-        <span class="tally-tick" style="left:100%" aria-hidden="true"></span>
+        <span class="tally-fill" data-pct="{pct:.2f}" style="width:{pct:.3f}%"></span>{end_tick}
       </div>
       <div class="hp-scale"><span>{n_played} of {n_total} matches played</span></div>
     </div>

@@ -294,6 +294,10 @@ UI = {
     # third-place / bronze final: stage label, fantasy pick label, short round tag
     "Third-place match": "Disputa de terceiro lugar",
     "Third place": "Terceiro lugar",
+    "Fourth place": "Quarto lugar",
+    "Bronze": "Bronze",
+    "Final result": "Resultado da final",
+    "Third-place result": "Resultado do terceiro lugar",
     "BRONZE": "3º LUGAR",
     # groups-mode team-page third-place road (pre-existing gap caught in review)
     "Sneak through as a best third": "Passar como um dos melhores terceiros",
@@ -419,6 +423,11 @@ UI = {
     "Winners of the 2026 World Cup": "Campeões da Copa do Mundo 2026",
     "Lost in the final": "Perdeu na final",
     "Out in the group stage": "Eliminado na fase de grupos",
+    "Out in group stage": "Eliminado na fase de grupos",
+    "Out in R32": "Eliminado na Rodada de 32",
+    "Out in R16": "Eliminado nas oitavas de final",
+    "Out in QF": "Eliminado nas quartas de final",
+    "Out in SF": "Eliminado nas semifinais",
     "Results": "Resultados",
     "Remaining group games": "Jogos restantes do grupo",
     "Next knockout match": "Próximo jogo do mata-mata",
