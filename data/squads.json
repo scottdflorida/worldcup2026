@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-20T13:32:34.455311+00:00",
+ "fetched_at": "2026-07-21T13:30:47.959801+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1281,7 +1281,7 @@
      "starter": false
     },
     {
-     "age": 19,
+     "age": 20,
      "name": "Endrick",
      "num": "19",
      "pos": "F",
@@ -2770,7 +2770,7 @@
      "starter": true
     },
     {
-     "age": 22,
+     "age": 23,
      "name": "Anthony Valencia",
      "num": "8",
      "pos": "F",
@@ -5769,7 +5769,7 @@
      "starter": true
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Erling Haaland",
      "num": "9",
      "pos": "F",
@@ -6620,7 +6620,7 @@
      "starter": false
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Jehad Thakri",
      "num": "25",
      "pos": "D",
@@ -7230,7 +7230,7 @@
      "starter": false
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Kamogelo Sebelebele",
      "num": "25",
      "pos": "M",
