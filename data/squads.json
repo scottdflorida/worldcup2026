@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-21T13:30:47.959801+00:00",
+ "fetched_at": "2026-07-22T13:31:15.749441+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -325,13 +325,6 @@
      "starter": false
     },
     {
-     "age": 21,
-     "name": "Nico Paz",
-     "num": "18",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 26,
      "name": "Julián Álvarez",
      "num": "9",
@@ -356,6 +349,13 @@
      "age": 23,
      "name": "Giuliano Simeone",
      "num": "17",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Nico Paz",
+     "num": "18",
      "pos": "F",
      "starter": false
     },
@@ -2008,7 +2008,7 @@
      "starter": false
     },
     {
-     "age": 34,
+     "age": 35,
      "name": "Ante Budimir",
      "num": "11",
      "pos": "F",
@@ -5491,6 +5491,13 @@
      "starter": false
     },
     {
+     "age": 27,
+     "name": "Callan Elliot",
+     "num": "24",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 36,
      "name": "Tommy Smith",
      "num": "26",
@@ -5548,20 +5555,6 @@
     },
     {
      "age": 23,
-     "name": "Jesse Randall",
-     "num": "21",
-     "pos": "M",
-     "starter": false
-    },
-    {
-     "age": 27,
-     "name": "Callan Elliot",
-     "num": "24",
-     "pos": "M",
-     "starter": false
-    },
-    {
-     "age": 23,
      "name": "Lachlan Bayliss",
      "num": "25",
      "pos": "M",
@@ -5599,6 +5592,13 @@
      "age": 23,
      "name": "Ben Old",
      "num": "19",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Jesse Randall",
+     "num": "21",
      "pos": "F",
      "starter": false
     }
@@ -5816,13 +5816,6 @@
      "starter": false
     },
     {
-     "age": 25,
-     "name": "José Córdoba",
-     "num": "3",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 31,
      "name": "Fidel Escobar",
      "num": "4",
@@ -5900,13 +5893,6 @@
      "starter": true
     },
     {
-     "age": 27,
-     "name": "Tomás Rodríguez",
-     "num": "9",
-     "pos": "M",
-     "starter": true
-    },
-    {
      "age": 32,
      "name": "Édgar Yoel Bárcenas",
      "num": "11",
@@ -5933,6 +5919,20 @@
      "num": "20",
      "pos": "M",
      "starter": false
+    },
+    {
+     "age": 27,
+     "name": "José Córdoba",
+     "num": "3",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Tomás Rodríguez",
+     "num": "9",
+     "pos": "F",
+     "starter": true
     },
     {
      "age": 29,
@@ -7125,7 +7125,7 @@
      "starter": false
     },
     {
-     "age": 30,
+     "age": 31,
      "name": "Aubrey Modiba",
      "num": "6",
      "pos": "D",
@@ -7520,7 +7520,7 @@
      "starter": true
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Marc Cucurella",
      "num": "24",
      "pos": "D",
@@ -7798,13 +7798,6 @@
      "starter": false
     },
     {
-     "age": 28,
-     "name": "Taha Ali",
-     "num": "26",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 26,
      "name": "Alexander Isak",
      "num": "9",
@@ -7843,6 +7836,13 @@
      "age": 29,
      "name": "Gustaf Nilsson",
      "num": "25",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 28,
+     "name": "Taha Ali",
+     "num": "26",
      "pos": "F",
      "starter": false
     }
@@ -8691,7 +8691,7 @@
      "starter": true
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Federico Valverde",
      "num": "8",
      "pos": "M",
