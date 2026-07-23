@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-22T13:31:15.749441+00:00",
+ "fetched_at": "2026-07-23T13:31:47.375425+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -297,7 +297,7 @@
      "starter": false
     },
     {
-     "age": 21,
+     "age": 22,
      "name": "Valentín Barco",
      "num": "8",
      "pos": "M",
@@ -1730,13 +1730,6 @@
      "starter": true
     },
     {
-     "age": 34,
-     "name": "Santiago Arias",
-     "num": "4",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 31,
      "name": "Yerry Mina",
      "num": "13",
@@ -1772,7 +1765,7 @@
      "starter": true
     },
     {
-     "age": 22,
+     "age": 23,
      "name": "Gustavo Puerta",
      "num": "14",
      "pos": "M",
@@ -1784,6 +1777,13 @@
      "num": "16",
      "pos": "M",
      "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Santiago Arias",
+     "num": "4",
+     "pos": "M",
+     "starter": false
     },
     {
      "age": 25,
@@ -2284,7 +2284,7 @@
      "starter": true
     },
     {
-     "age": 27,
+     "age": 34,
      "name": "Ladislav Krejcí",
      "num": "7",
      "pos": "D",
@@ -2707,13 +2707,6 @@
      "starter": true
     },
     {
-     "age": 23,
-     "name": "Nilson Angulo",
-     "num": "20",
-     "pos": "M",
-     "starter": true
-    },
-    {
      "age": 27,
      "name": "Alan Franco",
      "num": "21",
@@ -2766,6 +2759,13 @@
      "age": 25,
      "name": "Gonzalo Plata",
      "num": "19",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 23,
+     "name": "Nilson Angulo",
+     "num": "20",
      "pos": "F",
      "starter": true
     },
@@ -5318,13 +5318,6 @@
      "starter": true
     },
     {
-     "age": 24,
-     "name": "Crysencio Summerville",
-     "num": "24",
-     "pos": "M",
-     "starter": true
-    },
-    {
      "age": 35,
      "name": "Marten de Roon",
      "num": "3",
@@ -5377,6 +5370,13 @@
      "age": 24,
      "name": "Brian Brobbey",
      "num": "19",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Crysencio Summerville",
+     "num": "24",
      "pos": "F",
      "starter": true
     },
@@ -8829,7 +8829,7 @@
      "starter": true
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Sherzod Nasrullaev",
      "num": "13",
      "pos": "D",
