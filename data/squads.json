@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-23T13:31:47.375425+00:00",
+ "fetched_at": "2026-07-24T13:30:29.202641+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -519,13 +519,6 @@
      "starter": false
     },
     {
-     "age": 25,
-     "name": "Nishan Velupillay",
-     "num": "23",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 21,
      "name": "Paul Okon-Engstler",
      "num": "24",
@@ -550,6 +543,13 @@
      "age": 22,
      "name": "Mohamed Toure",
      "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Nishan Velupillay",
+     "num": "23",
      "pos": "F",
      "starter": false
     },
@@ -1730,6 +1730,13 @@
      "starter": true
     },
     {
+     "age": 34,
+     "name": "Santiago Arias",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 31,
      "name": "Yerry Mina",
      "num": "13",
@@ -1777,13 +1784,6 @@
      "num": "16",
      "pos": "M",
      "starter": true
-    },
-    {
-     "age": 31,
-     "name": "Santiago Arias",
-     "num": "4",
-     "pos": "M",
-     "starter": false
     },
     {
      "age": 25,
@@ -2436,7 +2436,7 @@
      "starter": true
     },
     {
-     "age": 26,
+     "age": 27,
      "name": "Timothy Fayulu",
      "num": "16",
      "pos": "G",
@@ -3081,6 +3081,13 @@
      "starter": true
     },
     {
+     "age": 23,
+     "name": "Morgan Rogers",
+     "num": "17",
+     "pos": "M",
+     "starter": true
+    },
+    {
      "age": 28,
      "name": "Eberechi Eze",
      "num": "21",
@@ -3126,13 +3133,6 @@
      "age": 28,
      "name": "Marcus Rashford",
      "num": "11",
-     "pos": "F",
-     "starter": true
-    },
-    {
-     "age": 23,
-     "name": "Morgan Rogers",
-     "num": "17",
      "pos": "F",
      "starter": true
     },
@@ -4044,7 +4044,7 @@
      "starter": false
     },
     {
-     "age": 32,
+     "age": 33,
      "name": "Roozbeh Cheshmi",
      "num": "15",
      "pos": "M",
@@ -4411,13 +4411,6 @@
      "starter": false
     },
     {
-     "age": 24,
-     "name": "Amad Diallo",
-     "num": "15",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 25,
      "name": "Parfait Guiagon",
      "num": "25",
@@ -4463,6 +4456,13 @@
      "age": 22,
      "name": "Oumar Diakité",
      "num": "14",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Amad Diallo",
+     "num": "15",
      "pos": "F",
      "starter": false
     },
@@ -5318,6 +5318,13 @@
      "starter": true
     },
     {
+     "age": 24,
+     "name": "Crysencio Summerville",
+     "num": "24",
+     "pos": "M",
+     "starter": true
+    },
+    {
      "age": 35,
      "name": "Marten de Roon",
      "num": "3",
@@ -5370,13 +5377,6 @@
      "age": 24,
      "name": "Brian Brobbey",
      "num": "19",
-     "pos": "F",
-     "starter": true
-    },
-    {
-     "age": 24,
-     "name": "Crysencio Summerville",
-     "num": "24",
      "pos": "F",
      "starter": true
     },
@@ -5554,7 +5554,7 @@
      "starter": false
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Lachlan Bayliss",
      "num": "25",
      "pos": "M",
@@ -7001,13 +7001,6 @@
      "starter": true
     },
     {
-     "age": 26,
-     "name": "Iliman Ndiaye",
-     "num": "13",
-     "pos": "M",
-     "starter": true
-    },
-    {
      "age": 27,
      "name": "Krépin Diatta",
      "num": "15",
@@ -7053,6 +7046,13 @@
      "age": 34,
      "name": "Sadio Mané",
      "num": "10",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Iliman Ndiaye",
+     "num": "13",
      "pos": "F",
      "starter": true
     },
@@ -8885,7 +8885,7 @@
      "starter": true
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Dostonbek Khamdamov",
      "num": "17",
      "pos": "M",
