@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-26T13:29:09.992361+00:00",
+ "fetched_at": "2026-07-27T13:47:31.011527+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -2929,6 +2929,13 @@
      "starter": false
     },
     {
+     "age": 30,
+     "name": "Zizo",
+     "num": "25",
+     "pos": "M",
+     "starter": false
+    },
+    {
      "age": 34,
      "name": "Mohamed Salah",
      "num": "10",
@@ -2974,13 +2981,6 @@
      "age": 27,
      "name": "Omar Marmoush",
      "num": "22",
-     "pos": "F",
-     "starter": false
-    },
-    {
-     "age": 30,
-     "name": "Zizo",
-     "num": "25",
      "pos": "F",
      "starter": false
     }
@@ -4210,7 +4210,7 @@
      "starter": true
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Amir Al-Ammari",
      "num": "16",
      "pos": "M",
@@ -5823,13 +5823,6 @@
      "starter": true
     },
     {
-     "age": 27,
-     "name": "Andrés Andrade",
-     "num": "16",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 30,
      "name": "Amir Murillo",
      "num": "23",
@@ -5910,6 +5903,13 @@
      "age": 26,
      "name": "Carlos Harvey",
      "num": "14",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 37,
+     "name": "Andrés Andrade",
+     "num": "16",
      "pos": "M",
      "starter": true
     },
