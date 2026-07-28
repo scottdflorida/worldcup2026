@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-27T13:47:31.011527+00:00",
+ "fetched_at": "2026-07-28T13:31:58.363927+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -132,13 +132,6 @@
     },
     {
      "age": 23,
-     "name": "Adil Boulbina",
-     "num": "20",
-     "pos": "M",
-     "starter": false
-    },
-    {
-     "age": 23,
      "name": "Yassine Titraoui",
      "num": "24",
      "pos": "M",
@@ -176,6 +169,13 @@
      "age": 26,
      "name": "Mohamed Amoura",
      "num": "18",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Adil Boulbina",
+     "num": "20",
      "pos": "F",
      "starter": false
     },
@@ -3144,7 +3144,7 @@
      "starter": true
     },
     {
-     "age": 32,
+     "age": 33,
      "name": "Harry Kane",
      "num": "9",
      "pos": "F",
@@ -4493,7 +4493,7 @@
      "starter": true
     },
     {
-     "age": 26,
+     "age": 27,
      "name": "Keisuke Osako",
      "num": "12",
      "pos": "G",
@@ -4619,7 +4619,7 @@
      "starter": true
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Keito Nakamura",
      "num": "13",
      "pos": "F",
@@ -7333,7 +7333,7 @@
      "starter": true
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Lee Tae-Seok",
      "num": "13",
      "pos": "D",
@@ -8554,13 +8554,6 @@
     },
     {
      "age": 25,
-     "name": "Max Arfsten",
-     "num": "18",
-     "pos": "M",
-     "starter": false
-    },
-    {
-     "age": 25,
      "name": "Folarin Balogun",
      "num": "20",
      "pos": "F",
@@ -8570,6 +8563,13 @@
      "age": 23,
      "name": "Ricardo Pepi",
      "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Max Arfsten",
+     "num": "18",
      "pos": "F",
      "starter": false
     },
