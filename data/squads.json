@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-28T13:31:58.363927+00:00",
+ "fetched_at": "2026-07-29T13:33:03.647896+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -2672,13 +2672,6 @@
      "starter": false
     },
     {
-     "age": 20,
-     "name": "Kevin Rodríguez",
-     "num": "11",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 28,
      "name": "Ángelo Preciado",
      "num": "17",
@@ -2773,6 +2766,13 @@
      "age": 23,
      "name": "Anthony Valencia",
      "num": "8",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Kevin Rodríguez",
+     "num": "11",
      "pos": "F",
      "starter": false
     },
@@ -3843,7 +3843,7 @@
      "starter": false
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Dominique Simon",
      "num": "25",
      "pos": "M",
@@ -3913,8 +3913,8 @@
      "starter": false
     },
     {
-     "age": 27,
-     "name": "Frantz Pierrot",
+     "age": 31,
+     "name": "Frantzdy Pierrot",
      "num": "20",
      "pos": "F",
      "starter": false
@@ -4037,13 +4037,6 @@
      "starter": true
     },
     {
-     "age": 32,
-     "name": "Alireza Jahanbakhsh",
-     "num": "7",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 33,
      "name": "Roozbeh Cheshmi",
      "num": "15",
@@ -4070,6 +4063,13 @@
      "num": "9",
      "pos": "F",
      "starter": true
+    },
+    {
+     "age": 32,
+     "name": "Alireza Jahanbakhsh",
+     "num": "7",
+     "pos": "F",
+     "starter": false
     },
     {
      "age": 27,
@@ -5332,7 +5332,7 @@
      "starter": false
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Tijjani Reijnders",
      "num": "14",
      "pos": "M",
@@ -5823,6 +5823,13 @@
      "starter": true
     },
     {
+     "age": 27,
+     "name": "Andrés Andrade",
+     "num": "16",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 30,
      "name": "Amir Murillo",
      "num": "23",
@@ -5903,13 +5910,6 @@
      "age": 26,
      "name": "Carlos Harvey",
      "num": "14",
-     "pos": "M",
-     "starter": true
-    },
-    {
-     "age": 37,
-     "name": "Andrés Andrade",
-     "num": "16",
      "pos": "M",
      "starter": true
     },
@@ -6197,7 +6197,7 @@
      "starter": true
     },
     {
-     "age": 22,
+     "age": 23,
      "name": "Renato Veiga",
      "num": "13",
      "pos": "D",
@@ -6952,13 +6952,6 @@
      "starter": true
     },
     {
-     "age": 20,
-     "name": "Mamadou Sarr",
-     "num": "2",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 35,
      "name": "Kalidou Koulibaly",
      "num": "3",
@@ -7062,6 +7055,13 @@
      "num": "18",
      "pos": "F",
      "starter": true
+    },
+    {
+     "age": 20,
+     "name": "Mamadou Sarr",
+     "num": "2",
+     "pos": "F",
+     "starter": false
     },
     {
      "age": 20,
@@ -7410,7 +7410,7 @@
      "starter": false
     },
     {
-     "age": 22,
+     "age": 23,
      "name": "Jens Castrop",
      "num": "23",
      "pos": "M",
