@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-29T13:33:03.647896+00:00",
+ "fetched_at": "2026-07-30T13:31:54.520040+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -442,7 +442,7 @@
      "starter": false
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Jacob Italiano",
      "num": "4",
      "pos": "D",
@@ -2284,7 +2284,7 @@
      "starter": true
     },
     {
-     "age": 34,
+     "age": 27,
      "name": "Ladislav Krejcí",
      "num": "7",
      "pos": "D",
@@ -2922,7 +2922,7 @@
      "starter": false
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Mahmoud Saber",
      "num": "21",
      "pos": "M",
@@ -3572,7 +3572,7 @@
      "starter": false
     },
     {
-     "age": 28,
+     "age": 25,
      "name": "Gideon Mensah",
      "num": "14",
      "pos": "D",
@@ -3843,6 +3843,13 @@
      "starter": false
     },
     {
+     "age": 27,
+     "name": "Yassin Fortuné",
+     "num": "19",
+     "pos": "M",
+     "starter": false
+    },
+    {
      "age": 26,
      "name": "Dominique Simon",
      "num": "25",
@@ -3902,13 +3909,6 @@
      "age": 25,
      "name": "Louicius Deedson",
      "num": "11",
-     "pos": "F",
-     "starter": false
-    },
-    {
-     "age": 27,
-     "name": "Yassin Fortuné",
-     "num": "19",
      "pos": "F",
      "starter": false
     },
@@ -5622,7 +5622,7 @@
      "starter": false
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Egil Selvik",
      "num": "13",
      "pos": "G",
@@ -5816,6 +5816,13 @@
      "starter": false
     },
     {
+     "age": 25,
+     "name": "José Córdoba",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 31,
      "name": "Fidel Escobar",
      "num": "4",
@@ -5893,13 +5900,6 @@
      "starter": true
     },
     {
-     "age": 24,
-     "name": "Tomás Rodríguez",
-     "num": "9",
-     "pos": "M",
-     "starter": true
-    },
-    {
      "age": 32,
      "name": "Édgar Yoel Bárcenas",
      "num": "11",
@@ -5929,8 +5929,8 @@
     },
     {
      "age": 27,
-     "name": "José Córdoba",
-     "num": "3",
+     "name": "Tomás Rodríguez",
+     "num": "9",
      "pos": "F",
      "starter": true
     },
@@ -6952,6 +6952,13 @@
      "starter": true
     },
     {
+     "age": 20,
+     "name": "Mamadou Sarr",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 35,
      "name": "Kalidou Koulibaly",
      "num": "3",
@@ -7055,13 +7062,6 @@
      "num": "18",
      "pos": "F",
      "starter": true
-    },
-    {
-     "age": 20,
-     "name": "Mamadou Sarr",
-     "num": "2",
-     "pos": "F",
-     "starter": false
     },
     {
      "age": 20,
@@ -7971,7 +7971,7 @@
      "starter": false
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Ardon Jashari",
      "num": "14",
      "pos": "M",
@@ -8920,6 +8920,13 @@
      "starter": false
     },
     {
+     "age": 25,
+     "name": "Oston Urunov",
+     "num": "11",
+     "pos": "M",
+     "starter": false
+    },
+    {
      "age": 28,
      "name": "Abdulla Abdullaev",
      "num": "18",
@@ -8946,13 +8953,6 @@
      "num": "14",
      "pos": "F",
      "starter": true
-    },
-    {
-     "age": 25,
-     "name": "Oston Urunov",
-     "num": "11",
-     "pos": "F",
-     "starter": false
     },
     {
      "age": 28,
