@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-30T13:31:54.520040+00:00",
+ "fetched_at": "2026-07-31T13:31:42.510383+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -760,7 +760,7 @@
      "starter": false
     },
     {
-     "age": 20,
+     "age": 21,
      "name": "Mike Penders",
      "num": "13",
      "pos": "G",
@@ -3843,13 +3843,6 @@
      "starter": false
     },
     {
-     "age": 27,
-     "name": "Yassin Fortuné",
-     "num": "19",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 26,
      "name": "Dominique Simon",
      "num": "25",
@@ -3909,6 +3902,13 @@
      "age": 25,
      "name": "Louicius Deedson",
      "num": "11",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Yassin Fortuné",
+     "num": "19",
      "pos": "F",
      "starter": false
     },
@@ -5830,13 +5830,6 @@
      "starter": true
     },
     {
-     "age": 27,
-     "name": "Andrés Andrade",
-     "num": "16",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 30,
      "name": "Amir Murillo",
      "num": "23",
@@ -5910,6 +5903,13 @@
      "age": 26,
      "name": "Carlos Harvey",
      "num": "14",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 37,
+     "name": "Andrés Andrade",
+     "num": "16",
      "pos": "M",
      "starter": true
     },
@@ -6017,8 +6017,8 @@
      "starter": true
     },
     {
-     "age": null,
-     "name": "Juan Cáceres",
+     "age": 26,
+     "name": "Juan Jose Cáceres",
      "num": "4",
      "pos": "D",
      "starter": true
@@ -7915,7 +7915,7 @@
      "starter": false
     },
     {
-     "age": 22,
+     "age": 23,
      "name": "Aurèle Amenda",
      "num": "24",
      "pos": "D",
@@ -8130,6 +8130,13 @@
      "starter": true
     },
     {
+     "age": 22,
+     "name": "Ismaël Gharbi",
+     "num": "11",
+     "pos": "M",
+     "starter": true
+    },
+    {
      "age": 32,
      "name": "Rani Khedira",
      "num": "13",
@@ -8175,13 +8182,6 @@
      "age": 29,
      "name": "Hazem Mastouri",
      "num": "9",
-     "pos": "F",
-     "starter": true
-    },
-    {
-     "age": 22,
-     "name": "Ismaël Gharbi",
-     "num": "11",
      "pos": "F",
      "starter": true
     },
