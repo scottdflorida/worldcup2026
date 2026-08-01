@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-07-31T13:31:42.510383+00:00",
+ "fetched_at": "2026-08-01T13:29:08.808572+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1807,13 +1807,6 @@
      "starter": false
     },
     {
-     "age": 26,
-     "name": "Jhon Córdoba",
-     "num": "9",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 27,
      "name": "Juan Portilla",
      "num": "15",
@@ -1847,6 +1840,13 @@
      "num": "25",
      "pos": "F",
      "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Jhon Córdoba",
+     "num": "9",
+     "pos": "F",
+     "starter": false
     },
     {
      "age": 27,
@@ -2429,7 +2429,7 @@
    "as_of": "Congo DR at England",
    "players": [
     {
-     "age": 31,
+     "age": 32,
      "name": "Lionel Mpasi",
      "num": "1",
      "pos": "G",
@@ -2672,6 +2672,13 @@
      "starter": false
     },
     {
+     "age": 20,
+     "name": "Kevin Rodríguez",
+     "num": "11",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 28,
      "name": "Ángelo Preciado",
      "num": "17",
@@ -2766,13 +2773,6 @@
      "age": 23,
      "name": "Anthony Valencia",
      "num": "8",
-     "pos": "F",
-     "starter": false
-    },
-    {
-     "age": 26,
-     "name": "Kevin Rodríguez",
-     "num": "11",
      "pos": "F",
      "starter": false
     },
@@ -2901,7 +2901,7 @@
      "starter": true
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Marawan Attia",
      "num": "19",
      "pos": "M",
@@ -4923,13 +4923,6 @@
      "starter": false
     },
     {
-     "age": 19,
-     "name": "Brian Gutiérrez",
-     "num": "26",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 26,
      "name": "Érik Lira",
      "num": "6",
@@ -4989,6 +4982,13 @@
      "age": 30,
      "name": "Luis Chávez",
      "num": "24",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Brian Gutiérrez",
+     "num": "26",
      "pos": "M",
      "starter": false
     },
@@ -5830,6 +5830,13 @@
      "starter": true
     },
     {
+     "age": 27,
+     "name": "Andrés Andrade",
+     "num": "16",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 30,
      "name": "Amir Murillo",
      "num": "23",
@@ -5903,13 +5910,6 @@
      "age": 26,
      "name": "Carlos Harvey",
      "num": "14",
-     "pos": "M",
-     "starter": true
-    },
-    {
-     "age": 37,
-     "name": "Andrés Andrade",
-     "num": "16",
      "pos": "M",
      "starter": true
     },
@@ -7361,7 +7361,7 @@
      "starter": false
     },
     {
-     "age": 30,
+     "age": 31,
      "name": "Kim Moon-Hwan",
      "num": "15",
      "pos": "D",
