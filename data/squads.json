@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-08-01T13:29:08.808572+00:00",
+ "fetched_at": "2026-08-02T13:29:29.058267+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -2672,13 +2672,6 @@
      "starter": false
     },
     {
-     "age": 20,
-     "name": "Kevin Rodríguez",
-     "num": "11",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 28,
      "name": "Ángelo Preciado",
      "num": "17",
@@ -2773,6 +2766,13 @@
      "age": 23,
      "name": "Anthony Valencia",
      "num": "8",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Kevin Rodríguez",
+     "num": "11",
      "pos": "F",
      "starter": false
     },
