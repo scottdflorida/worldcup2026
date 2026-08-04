@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-08-03T13:50:28.058578+00:00",
+ "fetched_at": "2026-08-04T13:32:59.240689+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1807,13 +1807,6 @@
      "starter": false
     },
     {
-     "age": 26,
-     "name": "Jhon Córdoba",
-     "num": "9",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 27,
      "name": "Juan Portilla",
      "num": "15",
@@ -1847,6 +1840,13 @@
      "num": "25",
      "pos": "F",
      "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Jhon Córdoba",
+     "num": "9",
+     "pos": "F",
+     "starter": false
     },
     {
      "age": 27,
@@ -2679,7 +2679,7 @@
      "starter": false
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Jackson Porozo",
      "num": "25",
      "pos": "D",
@@ -3913,8 +3913,8 @@
      "starter": false
     },
     {
-     "age": 27,
-     "name": "Frantz Pierrot",
+     "age": 31,
+     "name": "Frantzdy Pierrot",
      "num": "20",
      "pos": "F",
      "starter": false
@@ -4923,6 +4923,13 @@
      "starter": false
     },
     {
+     "age": 19,
+     "name": "Brian Gutiérrez",
+     "num": "26",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 26,
      "name": "Érik Lira",
      "num": "6",
@@ -4982,13 +4989,6 @@
      "age": 30,
      "name": "Luis Chávez",
      "num": "24",
-     "pos": "M",
-     "starter": false
-    },
-    {
-     "age": 23,
-     "name": "Brian Gutiérrez",
-     "num": "26",
      "pos": "M",
      "starter": false
     },
@@ -5816,13 +5816,6 @@
      "starter": false
     },
     {
-     "age": 25,
-     "name": "José Córdoba",
-     "num": "3",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 31,
      "name": "Fidel Escobar",
      "num": "4",
@@ -5926,6 +5919,13 @@
      "num": "20",
      "pos": "M",
      "starter": false
+    },
+    {
+     "age": 27,
+     "name": "José Córdoba",
+     "num": "3",
+     "pos": "F",
+     "starter": true
     },
     {
      "age": 27,
