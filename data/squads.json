@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-08-04T13:32:59.240689+00:00",
+ "fetched_at": "2026-08-05T13:31:58.312989+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -2090,13 +2090,6 @@
      "starter": true
     },
     {
-     "age": 22,
-     "name": "Livano Comenencia",
-     "num": "8",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 27,
      "name": "Armando Obispo",
      "num": "18",
@@ -2132,6 +2125,13 @@
      "starter": false
     },
     {
+     "age": 22,
+     "name": "Ar'jany Martha",
+     "num": "15",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 29,
      "name": "Riechedly Bazoer",
      "num": "23",
@@ -2142,6 +2142,13 @@
      "age": 28,
      "name": "Juninho Bacuna",
      "num": "7",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Livano Comenencia",
+     "num": "8",
      "pos": "M",
      "starter": true
     },
@@ -2170,13 +2177,6 @@
      "age": 23,
      "name": "Tyrese Noslin",
      "num": "13",
-     "pos": "M",
-     "starter": false
-    },
-    {
-     "age": 22,
-     "name": "Ar'jany Martha",
-     "num": "15",
      "pos": "M",
      "starter": false
     },
@@ -2714,7 +2714,7 @@
      "starter": true
     },
     {
-     "age": 26,
+     "age": 27,
      "name": "Jordy Alcívar",
      "num": "5",
      "pos": "M",
@@ -4577,7 +4577,7 @@
      "starter": true
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Daichi Kamada",
      "num": "15",
      "pos": "M",
@@ -4972,7 +4972,7 @@
      "starter": false
     },
     {
-     "age": 20,
+     "age": 21,
      "name": "Obed Vargas",
      "num": "18",
      "pos": "M",
@@ -5816,6 +5816,13 @@
      "starter": false
     },
     {
+     "age": 25,
+     "name": "José Córdoba",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 31,
      "name": "Fidel Escobar",
      "num": "4",
@@ -5919,13 +5926,6 @@
      "num": "20",
      "pos": "M",
      "starter": false
-    },
-    {
-     "age": 27,
-     "name": "José Córdoba",
-     "num": "3",
-     "pos": "F",
-     "starter": true
     },
     {
      "age": 27,
@@ -7590,7 +7590,7 @@
      "starter": false
     },
     {
-     "age": 21,
+     "age": 22,
      "name": "Gavi",
      "num": "9",
      "pos": "M",
@@ -7985,7 +7985,7 @@
      "starter": false
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Rubén Vargas",
      "num": "17",
      "pos": "M",
