@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-08-07T14:04:35.581383+00:00",
+ "fetched_at": "2026-08-08T13:37:40.579619+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -2354,7 +2354,7 @@
      "starter": true
     },
     {
-     "age": 35,
+     "age": 36,
      "name": "Vladimír Darida",
      "num": "8",
      "pos": "M",
@@ -2464,7 +2464,7 @@
      "starter": true
     },
     {
-     "age": 31,
+     "age": 32,
      "name": "Chancel Mbemba",
      "num": "22",
      "pos": "D",
@@ -2492,7 +2492,7 @@
      "starter": false
     },
     {
-     "age": 31,
+     "age": 32,
      "name": "Joris Kayembe",
      "num": "12",
      "pos": "D",
@@ -3427,7 +3427,7 @@
      "starter": false
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Malick Thiaw",
      "num": "24",
      "pos": "D",
@@ -3572,7 +3572,7 @@
      "starter": false
     },
     {
-     "age": 25,
+     "age": 28,
      "name": "Gideon Mensah",
      "num": "14",
      "pos": "D",
@@ -4654,7 +4654,7 @@
      "starter": false
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Koki Ogawa",
      "num": "19",
      "pos": "F",
@@ -5533,13 +5533,6 @@
      "starter": true
     },
     {
-     "age": 24,
-     "name": "Matthew Garbett",
-     "num": "7",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 30,
      "name": "Alex Rufer",
      "num": "14",
@@ -5573,6 +5566,13 @@
      "num": "11",
      "pos": "F",
      "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Matthew Garbett",
+     "num": "7",
+     "pos": "F",
+     "starter": false
     },
     {
      "age": 36,
@@ -8448,7 +8448,7 @@
      "starter": true
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Antonee Robinson",
      "num": "5",
      "pos": "D",
