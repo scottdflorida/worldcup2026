@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-08-08T13:37:40.579619+00:00",
+ "fetched_at": "2026-08-09T13:40:21.894049+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -3025,7 +3025,7 @@
      "starter": true
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Djed Spence",
      "num": "25",
      "pos": "D",
@@ -3836,7 +3836,7 @@
      "starter": true
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Carl Sainté",
      "num": "6",
      "pos": "M",
@@ -5533,6 +5533,13 @@
      "starter": true
     },
     {
+     "age": 24,
+     "name": "Matthew Garbett",
+     "num": "7",
+     "pos": "M",
+     "starter": false
+    },
+    {
      "age": 30,
      "name": "Alex Rufer",
      "num": "14",
@@ -5566,13 +5573,6 @@
      "num": "11",
      "pos": "F",
      "starter": true
-    },
-    {
-     "age": 24,
-     "name": "Matthew Garbett",
-     "num": "7",
-     "pos": "F",
-     "starter": false
     },
     {
      "age": 36,
@@ -5900,13 +5900,6 @@
      "starter": true
     },
     {
-     "age": 22,
-     "name": "Tomás Rodríguez",
-     "num": "9",
-     "pos": "M",
-     "starter": true
-    },
-    {
      "age": 32,
      "name": "Édgar Yoel Bárcenas",
      "num": "11",
@@ -5933,6 +5926,13 @@
      "num": "20",
      "pos": "M",
      "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Tomás Rodríguez",
+     "num": "9",
+     "pos": "F",
+     "starter": true
     },
     {
      "age": 29,
@@ -8462,7 +8462,7 @@
      "starter": true
     },
     {
-     "age": 21,
+     "age": 22,
      "name": "Alex Freeman",
      "num": "16",
      "pos": "D",
