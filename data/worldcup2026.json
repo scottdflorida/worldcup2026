@@ -270,12 +270,12 @@
      "minute": "74"
     },
     {
-     "name": "Johan Manzambi",
-     "minute": "90"
-    },
-    {
      "name": "Rubén Vargas",
      "minute": "84"
+    },
+    {
+     "name": "Johan Manzambi",
+     "minute": "90"
     },
     {
      "name": "Granit Xhaka",
@@ -837,10 +837,6 @@
      "penalty": true
     },
     {
-     "name": "Kai Havertz",
-     "minute": "88"
-    },
-    {
      "name": "Jamal Musiala",
      "minute": "47"
     },
@@ -851,6 +847,10 @@
     {
      "name": "Deniz Undav",
      "minute": "78"
+    },
+    {
+     "name": "Kai Havertz",
+     "minute": "88"
     }
    ],
    "goals2": [
@@ -1068,10 +1068,6 @@
      "minute": "7"
     },
     {
-     "name": "Yasin Ayari",
-     "minute": "90+6"
-    },
-    {
      "name": "Alexander Isak",
      "minute": "30"
     },
@@ -1082,6 +1078,10 @@
     {
      "name": "Mattias Svanberg",
      "minute": "84"
+    },
+    {
+     "name": "Yasin Ayari",
+     "minute": "90+6"
     }
    ],
    "goals2": [
@@ -1167,12 +1167,12 @@
      "minute": "31"
     },
     {
-     "name": "Ayase Ueda",
-     "minute": "83"
-    },
-    {
      "name": "Junya Ito",
      "minute": "69"
+    },
+    {
+     "name": "Ayase Ueda",
+     "minute": "83"
     }
    ],
    "group": "Group F",
@@ -1651,12 +1651,12 @@
      "minute": "66"
     },
     {
-     "name": "Kylian Mbappé",
-     "minute": "90+6"
-    },
-    {
      "name": "Bradley Barcola",
      "minute": "82"
+    },
+    {
+     "name": "Kylian Mbappé",
+     "minute": "90+6"
     }
    ],
    "goals2": [
@@ -2193,12 +2193,12 @@
      "minute": "6"
     },
     {
-     "name": "Cristiano Ronaldo",
-     "minute": "39"
-    },
-    {
      "name": "Nuno Mendes",
      "minute": "17"
+    },
+    {
+     "name": "Cristiano Ronaldo",
+     "minute": "39"
     },
     {
      "name": "Abduvohid Nematov",
@@ -2645,12 +2645,12 @@
      "minute": "45"
     },
     {
-     "name": "Kylian Mbappé",
-     "minute": "74"
-    },
-    {
      "name": "Bradley Barcola",
      "minute": "53"
+    },
+    {
+     "name": "Kylian Mbappé",
+     "minute": "74"
     }
    ],
    "goals2": [],
@@ -2893,12 +2893,12 @@
      "minute": "36"
     },
     {
-     "name": "Mikel Oyarzabal",
-     "minute": "89"
-    },
-    {
      "name": "Pedro Porro",
      "minute": "66"
+    },
+    {
+     "name": "Mikel Oyarzabal",
+     "minute": "89"
     }
    ],
    "goals2": [],
