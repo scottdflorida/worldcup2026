@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-08-11T14:11:20.844773+00:00",
+ "fetched_at": "2026-08-12T14:12:56.375620+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1060,6 +1060,13 @@
     },
     {
      "age": 21,
+     "name": "Esmir Bajraktarevic",
+     "num": "20",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 21,
      "name": "Ermin Mahmic",
      "num": "26",
      "pos": "M",
@@ -1090,13 +1097,6 @@
      "age": 22,
      "name": "Samed Bazdar",
      "num": "9",
-     "pos": "F",
-     "starter": false
-    },
-    {
-     "age": 21,
-     "name": "Esmir Bajraktarevic",
-     "num": "20",
      "pos": "F",
      "starter": false
     },
@@ -2513,7 +2513,7 @@
      "starter": true
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Samuel Moutoussamy",
      "num": "8",
      "pos": "M",
@@ -2672,13 +2672,6 @@
      "starter": false
     },
     {
-     "age": 20,
-     "name": "Kevin Rodríguez",
-     "num": "11",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 28,
      "name": "Ángelo Preciado",
      "num": "17",
@@ -2773,6 +2766,13 @@
      "age": 23,
      "name": "Anthony Valencia",
      "num": "8",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Kevin Rodríguez",
+     "num": "11",
      "pos": "F",
      "starter": false
     },
@@ -5421,7 +5421,7 @@
    "as_of": "Belgium at New Zealand",
    "players": [
     {
-     "age": 32,
+     "age": 33,
      "name": "Max Crocombe",
      "num": "1",
      "pos": "G",
@@ -8469,7 +8469,7 @@
      "starter": true
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Auston Trusty",
      "num": "6",
      "pos": "D",
@@ -8740,7 +8740,7 @@
      "starter": false
     },
     {
-     "age": 26,
+     "age": 27,
      "name": "Rodrigo Zalazar",
      "num": "26",
      "pos": "M",
