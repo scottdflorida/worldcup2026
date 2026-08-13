@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-08-12T14:12:56.375620+00:00",
+ "fetched_at": "2026-08-13T14:14:22.309040+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1060,13 +1060,6 @@
     },
     {
      "age": 21,
-     "name": "Esmir Bajraktarevic",
-     "num": "20",
-     "pos": "M",
-     "starter": false
-    },
-    {
-     "age": 21,
      "name": "Ermin Mahmic",
      "num": "26",
      "pos": "M",
@@ -1097,6 +1090,13 @@
      "age": 22,
      "name": "Samed Bazdar",
      "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Esmir Bajraktarevic",
+     "num": "20",
      "pos": "F",
      "starter": false
     },
@@ -1536,7 +1536,7 @@
      "starter": true
     },
     {
-     "age": 31,
+     "age": 32,
      "name": "Steven Moreira",
      "num": "22",
      "pos": "D",
@@ -1613,6 +1613,13 @@
      "starter": false
     },
     {
+     "age": 32,
+     "name": "Willy Semedo",
+     "num": "17",
+     "pos": "M",
+     "starter": false
+    },
+    {
      "age": 25,
      "name": "Telmo Arcanjo",
      "num": "18",
@@ -1651,13 +1658,6 @@
      "age": 35,
      "name": "Garry Rodrigues",
      "num": "11",
-     "pos": "F",
-     "starter": false
-    },
-    {
-     "age": 32,
-     "name": "Willy Semedo",
-     "num": "17",
      "pos": "F",
      "starter": false
     },
@@ -1730,6 +1730,13 @@
      "starter": true
     },
     {
+     "age": 34,
+     "name": "Santiago Arias",
+     "num": "4",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 31,
      "name": "Yerry Mina",
      "num": "13",
@@ -1779,13 +1786,6 @@
      "starter": true
     },
     {
-     "age": 31,
-     "name": "Santiago Arias",
-     "num": "4",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 25,
      "name": "Kevin Castaño",
      "num": "5",
@@ -1803,13 +1803,6 @@
      "age": 28,
      "name": "Jorge Carrascal",
      "num": "8",
-     "pos": "M",
-     "starter": false
-    },
-    {
-     "age": 26,
-     "name": "Jhon Córdoba",
-     "num": "9",
      "pos": "M",
      "starter": false
     },
@@ -1847,6 +1840,13 @@
      "num": "25",
      "pos": "F",
      "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Jhon Córdoba",
+     "num": "9",
+     "pos": "F",
+     "starter": false
     },
     {
      "age": 27,
@@ -2125,6 +2125,13 @@
      "starter": false
     },
     {
+     "age": 23,
+     "name": "Tyrese Noslin",
+     "num": "13",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 22,
      "name": "Ar'jany Martha",
      "num": "15",
@@ -2170,13 +2177,6 @@
      "age": 26,
      "name": "Godfried Roemeratoe",
      "num": "6",
-     "pos": "M",
-     "starter": false
-    },
-    {
-     "age": 23,
-     "name": "Tyrese Noslin",
-     "num": "13",
      "pos": "M",
      "starter": false
     },
@@ -2604,7 +2604,7 @@
      "starter": false
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Simon Banza",
      "num": "23",
      "pos": "F",
@@ -4736,6 +4736,13 @@
      "starter": false
     },
     {
+     "age": 24,
+     "name": "Amer Jamous",
+     "num": "6",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 25,
      "name": "Mohammad Abualnadi",
      "num": "16",
@@ -4783,13 +4790,6 @@
      "num": "21",
      "pos": "M",
      "starter": true
-    },
-    {
-     "age": 24,
-     "name": "Amer Jamous",
-     "num": "6",
-     "pos": "M",
-     "starter": false
     },
     {
      "age": 33,
@@ -4923,13 +4923,6 @@
      "starter": false
     },
     {
-     "age": 19,
-     "name": "Brian Gutiérrez",
-     "num": "26",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 26,
      "name": "Érik Lira",
      "num": "6",
@@ -4989,6 +4982,13 @@
      "age": 30,
      "name": "Luis Chávez",
      "num": "24",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Brian Gutiérrez",
+     "num": "26",
      "pos": "M",
      "starter": false
     },
@@ -5589,7 +5589,7 @@
      "starter": false
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Ben Old",
      "num": "19",
      "pos": "F",
@@ -5900,6 +5900,13 @@
      "starter": true
     },
     {
+     "age": 22,
+     "name": "Tomás Rodríguez",
+     "num": "9",
+     "pos": "M",
+     "starter": true
+    },
+    {
      "age": 32,
      "name": "Édgar Yoel Bárcenas",
      "num": "11",
@@ -5926,13 +5933,6 @@
      "num": "20",
      "pos": "M",
      "starter": false
-    },
-    {
-     "age": 27,
-     "name": "Tomás Rodríguez",
-     "num": "9",
-     "pos": "F",
-     "starter": true
     },
     {
      "age": 29,
@@ -8483,6 +8483,13 @@
      "starter": false
     },
     {
+     "age": 25,
+     "name": "Max Arfsten",
+     "num": "18",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 27,
      "name": "Mark McKenzie",
      "num": "22",
@@ -8563,13 +8570,6 @@
      "age": 23,
      "name": "Ricardo Pepi",
      "num": "9",
-     "pos": "F",
-     "starter": false
-    },
-    {
-     "age": 25,
-     "name": "Max Arfsten",
-     "num": "18",
      "pos": "F",
      "starter": false
     },
