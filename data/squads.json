@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-08-13T14:14:22.309040+00:00",
+ "fetched_at": "2026-08-14T14:07:49.600360+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -2499,6 +2499,13 @@
      "starter": false
     },
     {
+     "age": 29,
+     "name": "Charles Pickel",
+     "num": "18",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 28,
      "name": "Gédéon Kalulu",
      "num": "24",
@@ -2537,13 +2544,6 @@
      "age": 31,
      "name": "Aaron Tshibola",
      "num": "15",
-     "pos": "M",
-     "starter": false
-    },
-    {
-     "age": 29,
-     "name": "Charles Pickel",
-     "num": "18",
      "pos": "M",
      "starter": false
     },
@@ -2672,6 +2672,13 @@
      "starter": false
     },
     {
+     "age": 20,
+     "name": "Kevin Rodríguez",
+     "num": "11",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 28,
      "name": "Ángelo Preciado",
      "num": "17",
@@ -2766,13 +2773,6 @@
      "age": 23,
      "name": "Anthony Valencia",
      "num": "8",
-     "pos": "F",
-     "starter": false
-    },
-    {
-     "age": 26,
-     "name": "Kevin Rodríguez",
-     "num": "11",
      "pos": "F",
      "starter": false
     },
@@ -6157,7 +6157,7 @@
      "starter": false
     },
     {
-     "age": 26,
+     "age": 27,
      "name": "Isidro Pitta",
      "num": "25",
      "pos": "F",
