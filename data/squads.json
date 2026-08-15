@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-08-14T14:07:49.600360+00:00",
+ "fetched_at": "2026-08-15T13:22:30.879024+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1807,6 +1807,13 @@
      "starter": false
     },
     {
+     "age": 26,
+     "name": "Jhon Córdoba",
+     "num": "9",
+     "pos": "M",
+     "starter": false
+    },
+    {
      "age": 27,
      "name": "Juan Portilla",
      "num": "15",
@@ -1840,13 +1847,6 @@
      "num": "25",
      "pos": "F",
      "starter": true
-    },
-    {
-     "age": 33,
-     "name": "Jhon Córdoba",
-     "num": "9",
-     "pos": "F",
-     "starter": false
     },
     {
      "age": 27,
@@ -3913,8 +3913,8 @@
      "starter": false
     },
     {
-     "age": 31,
-     "name": "Frantzdy Pierrot",
+     "age": 27,
+     "name": "Frantz Pierrot",
      "num": "20",
      "pos": "F",
      "starter": false
@@ -4902,7 +4902,7 @@
      "starter": true
     },
     {
-     "age": 31,
+     "age": 32,
      "name": "Jesús Gallardo",
      "num": "23",
      "pos": "D",
@@ -6440,7 +6440,7 @@
      "starter": false
     },
     {
-     "age": 22,
+     "age": 23,
      "name": "Al-Hashmi Al-Hussain",
      "num": "25",
      "pos": "D",
