@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-08-15T13:22:30.879024+00:00",
+ "fetched_at": "2026-08-16T13:23:28.295964+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -865,7 +865,7 @@
      "starter": false
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Amadou Onana",
      "num": "24",
      "pos": "M",
@@ -947,7 +947,7 @@
      "starter": false
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Martin Zlomislic",
      "num": "22",
      "pos": "G",
@@ -2672,13 +2672,6 @@
      "starter": false
     },
     {
-     "age": 20,
-     "name": "Kevin Rodríguez",
-     "num": "11",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 28,
      "name": "Ángelo Preciado",
      "num": "17",
@@ -2773,6 +2766,13 @@
      "age": 23,
      "name": "Anthony Valencia",
      "num": "8",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Kevin Rodríguez",
+     "num": "11",
      "pos": "F",
      "starter": false
     },
@@ -3913,8 +3913,8 @@
      "starter": false
     },
     {
-     "age": 27,
-     "name": "Frantz Pierrot",
+     "age": 31,
+     "name": "Frantzdy Pierrot",
      "num": "20",
      "pos": "F",
      "starter": false
@@ -4140,7 +4140,7 @@
      "starter": true
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Akam Hashim",
      "num": "5",
      "pos": "D",
@@ -5900,13 +5900,6 @@
      "starter": true
     },
     {
-     "age": 22,
-     "name": "Tomás Rodríguez",
-     "num": "9",
-     "pos": "M",
-     "starter": true
-    },
-    {
      "age": 32,
      "name": "Édgar Yoel Bárcenas",
      "num": "11",
@@ -5933,6 +5926,13 @@
      "num": "20",
      "pos": "M",
      "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Tomás Rodríguez",
+     "num": "9",
+     "pos": "F",
+     "starter": true
     },
     {
      "age": 29,
@@ -6641,7 +6641,7 @@
      "starter": true
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Abdullah Al-Khaibari",
      "num": "15",
      "pos": "M",
@@ -7022,13 +7022,6 @@
      "starter": true
     },
     {
-     "age": 22,
-     "name": "Lamine Camara",
-     "num": "8",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 23,
      "name": "Pape Matar Sarr",
      "num": "17",
@@ -7067,6 +7060,13 @@
      "age": 20,
      "name": "Assane Diao",
      "num": "7",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Lamine Camara",
+     "num": "8",
      "pos": "F",
      "starter": false
     },
