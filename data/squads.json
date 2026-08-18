@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-08-17T13:31:53.170220+00:00",
+ "fetched_at": "2026-08-18T13:34:29.646054+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -968,7 +968,7 @@
      "starter": true
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Amar Dedic",
      "num": "7",
      "pos": "D",
@@ -1702,7 +1702,7 @@
      "starter": false
     },
     {
-     "age": 30,
+     "age": 20,
      "name": "Daniel Muñoz",
      "num": "2",
      "pos": "D",
@@ -5234,7 +5234,7 @@
    "as_of": "Morocco at Netherlands",
    "players": [
     {
-     "age": 23,
+     "age": 24,
      "name": "Bart Verbruggen",
      "num": "1",
      "pos": "G",
@@ -5477,7 +5477,7 @@
      "starter": false
     },
     {
-     "age": 37,
+     "age": 38,
      "name": "Michael Boxall",
      "num": "5",
      "pos": "D",
@@ -5900,6 +5900,13 @@
      "starter": true
     },
     {
+     "age": 24,
+     "name": "Tomás Rodríguez",
+     "num": "9",
+     "pos": "M",
+     "starter": true
+    },
+    {
      "age": 32,
      "name": "Édgar Yoel Bárcenas",
      "num": "11",
@@ -5928,13 +5935,6 @@
      "starter": false
     },
     {
-     "age": 27,
-     "name": "Tomás Rodríguez",
-     "num": "9",
-     "pos": "F",
-     "starter": true
-    },
-    {
      "age": 29,
      "name": "Ismael Díaz",
      "num": "10",
@@ -5942,7 +5942,7 @@
      "starter": false
     },
     {
-     "age": 32,
+     "age": 33,
      "name": "José Fajardo",
      "num": "17",
      "pos": "F",
@@ -8621,7 +8621,7 @@
      "starter": false
     },
     {
-     "age": 26,
+     "age": 27,
      "name": "Sebastián Cáceres",
      "num": "3",
      "pos": "D",
