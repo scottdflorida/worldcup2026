@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-08-19T13:35:58.335754+00:00",
+ "fetched_at": "2026-08-20T13:37:58.707778+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -934,7 +934,7 @@
    "players": [
     {
      "age": 30,
-     "name": "Nikola Vasilj",
+     "name": "Nikola Vasiljevic",
      "num": "1",
      "pos": "G",
      "starter": true
@@ -2312,7 +2312,7 @@
      "starter": false
     },
     {
-     "age": 33,
+     "age": 34,
      "name": "Jaroslav Zelený",
      "num": "20",
      "pos": "D",
@@ -4369,7 +4369,7 @@
      "starter": false
     },
     {
-     "age": 26,
+     "age": 27,
      "name": "Evan Ndicka",
      "num": "21",
      "pos": "D",
