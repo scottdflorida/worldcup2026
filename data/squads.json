@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-08-21T13:36:44.880940+00:00",
+ "fetched_at": "2026-08-22T13:24:03.332029+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -367,7 +367,7 @@
      "starter": false
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Lautaro Martínez",
      "num": "22",
      "pos": "F",
@@ -1356,13 +1356,6 @@
      "starter": true
     },
     {
-     "age": 28,
-     "name": "Alfie Jones",
-     "num": "3",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 30,
      "name": "Joel Waterman",
      "num": "5",
@@ -1403,6 +1396,13 @@
      "num": "23",
      "pos": "M",
      "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Alfie Jones",
+     "num": "3",
+     "pos": "M",
+     "starter": false
     },
     {
      "age": 27,
@@ -1702,7 +1702,7 @@
      "starter": false
     },
     {
-     "age": 20,
+     "age": 30,
      "name": "Daniel Muñoz",
      "num": "2",
      "pos": "D",
@@ -2277,7 +2277,7 @@
      "starter": true
     },
     {
-     "age": 33,
+     "age": 34,
      "name": "Vladimír Coufal",
      "num": "5",
      "pos": "D",
@@ -4231,13 +4231,6 @@
      "starter": false
     },
     {
-     "age": 22,
-     "name": "Marko Farji",
-     "num": "21",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 24,
      "name": "Zaid Ismael",
      "num": "24",
@@ -4290,6 +4283,13 @@
      "age": 30,
      "name": "Aymen Hussein",
      "num": "18",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Marko Farji",
+     "num": "21",
      "pos": "F",
      "starter": false
     }
