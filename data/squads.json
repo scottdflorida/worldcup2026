@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-08-22T13:24:03.332029+00:00",
+ "fetched_at": "2026-08-23T13:24:16.420241+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -2083,7 +2083,7 @@
      "starter": true
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Sherel Floranus",
      "num": "5",
      "pos": "D",
@@ -4273,8 +4273,8 @@
      "starter": false
     },
     {
-     "age": 30,
-     "name": "Ali Yousif",
+     "age": 26,
+     "name": "Hashim Ali",
      "num": "13",
      "pos": "F",
      "starter": false
@@ -4923,13 +4923,6 @@
      "starter": false
     },
     {
-     "age": 19,
-     "name": "Brian Gutiérrez",
-     "num": "26",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 26,
      "name": "Érik Lira",
      "num": "6",
@@ -4989,6 +4982,13 @@
      "age": 30,
      "name": "Luis Chávez",
      "num": "24",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Brian Gutiérrez",
+     "num": "26",
      "pos": "M",
      "starter": false
     },
@@ -6038,7 +6038,7 @@
      "starter": true
     },
     {
-     "age": 34,
+     "age": 35,
      "name": "Fabián Balbuena",
      "num": "5",
      "pos": "D",
