@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-08-24T13:41:55.571954+00:00",
+ "fetched_at": "2026-08-25T13:40:20.594357+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1356,6 +1356,13 @@
      "starter": true
     },
     {
+     "age": 28,
+     "name": "Alfie Jones",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 30,
      "name": "Joel Waterman",
      "num": "5",
@@ -1396,13 +1403,6 @@
      "num": "23",
      "pos": "M",
      "starter": true
-    },
-    {
-     "age": 28,
-     "name": "Alfie Jones",
-     "num": "3",
-     "pos": "M",
-     "starter": false
     },
     {
      "age": 27,
@@ -6239,7 +6239,7 @@
      "starter": false
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Gonçalo Inácio",
      "num": "14",
      "pos": "D",
@@ -6426,7 +6426,7 @@
      "starter": false
     },
     {
-     "age": 26,
+     "age": 27,
      "name": "Homam Ahmed",
      "num": "14",
      "pos": "D",
@@ -7237,7 +7237,7 @@
      "starter": false
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Oswin Appollis",
      "num": "7",
      "pos": "F",
@@ -7354,7 +7354,7 @@
      "starter": false
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Cho Wi-Je",
      "num": "14",
      "pos": "D",
@@ -7887,7 +7887,7 @@
      "starter": true
     },
     {
-     "age": 33,
+     "age": 34,
      "name": "Ricardo Rodríguez",
      "num": "13",
      "pos": "D",
@@ -8046,7 +8046,7 @@
      "starter": true
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Mouhib Chamakh",
      "num": "1",
      "pos": "G",
