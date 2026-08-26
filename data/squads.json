@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-08-25T13:40:20.594357+00:00",
+ "fetched_at": "2026-08-26T13:44:21.417797+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -6952,13 +6952,6 @@
      "starter": true
     },
     {
-     "age": 20,
-     "name": "Mamadou Sarr",
-     "num": "2",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 35,
      "name": "Kalidou Koulibaly",
      "num": "3",
@@ -7062,6 +7055,13 @@
      "num": "18",
      "pos": "F",
      "starter": true
+    },
+    {
+     "age": 20,
+     "name": "Mamadou Sarr",
+     "num": "2",
+     "pos": "F",
+     "starter": false
     },
     {
      "age": 20,
