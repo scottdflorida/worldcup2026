@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-08-27T22:41:20.543828+00:00",
+ "fetched_at": "2026-08-28T22:46:56.610007+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -934,7 +934,7 @@
    "players": [
     {
      "age": 30,
-     "name": "Nikola Vasilj",
+     "name": "Nikola Vasiljevic",
      "num": "1",
      "pos": "G",
      "starter": true
@@ -1356,13 +1356,6 @@
      "starter": true
     },
     {
-     "age": 28,
-     "name": "Alfie Jones",
-     "num": "3",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 30,
      "name": "Joel Waterman",
      "num": "5",
@@ -1403,6 +1396,13 @@
      "num": "23",
      "pos": "M",
      "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Alfie Jones",
+     "num": "3",
+     "pos": "M",
+     "starter": false
     },
     {
      "age": 27,
@@ -2672,6 +2672,13 @@
      "starter": false
     },
     {
+     "age": 20,
+     "name": "Kevin Rodríguez",
+     "num": "11",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 28,
      "name": "Ángelo Preciado",
      "num": "17",
@@ -2766,13 +2773,6 @@
      "age": 23,
      "name": "Anthony Valencia",
      "num": "8",
-     "pos": "F",
-     "starter": false
-    },
-    {
-     "age": 26,
-     "name": "Kevin Rodríguez",
-     "num": "11",
      "pos": "F",
      "starter": false
     },
@@ -4633,7 +4633,7 @@
      "starter": true
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Ayase Ueda",
      "num": "18",
      "pos": "F",
@@ -4923,6 +4923,13 @@
      "starter": false
     },
     {
+     "age": 19,
+     "name": "Brian Gutiérrez",
+     "num": "26",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 26,
      "name": "Érik Lira",
      "num": "6",
@@ -4982,13 +4989,6 @@
      "age": 30,
      "name": "Luis Chávez",
      "num": "24",
-     "pos": "M",
-     "starter": false
-    },
-    {
-     "age": 23,
-     "name": "Brian Gutiérrez",
-     "num": "26",
      "pos": "M",
      "starter": false
     },
@@ -6412,6 +6412,13 @@
      "starter": true
     },
     {
+     "age": 33,
+     "name": "Ahmed Fathy",
+     "num": "20",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 36,
      "name": "Lucas Mendes",
      "num": "3",
@@ -6443,13 +6450,6 @@
      "age": 35,
      "name": "Karim Boudiaf",
      "num": "12",
-     "pos": "M",
-     "starter": true
-    },
-    {
-     "age": 33,
-     "name": "Ahmed Fathy",
-     "num": "20",
      "pos": "M",
      "starter": true
     },
@@ -8511,7 +8511,7 @@
      "starter": true
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Weston McKennie",
      "num": "8",
      "pos": "M",
