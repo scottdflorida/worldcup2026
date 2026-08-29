@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-08-28T22:46:56.610007+00:00",
+ "fetched_at": "2026-08-29T16:54:54.326427+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -2506,7 +2506,7 @@
      "starter": false
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Gédéon Kalulu",
      "num": "24",
      "pos": "D",
@@ -3572,7 +3572,7 @@
      "starter": false
     },
     {
-     "age": 28,
+     "age": 25,
      "name": "Gideon Mensah",
      "num": "14",
      "pos": "D",
@@ -6412,13 +6412,6 @@
      "starter": true
     },
     {
-     "age": 33,
-     "name": "Ahmed Fathy",
-     "num": "20",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 36,
      "name": "Lucas Mendes",
      "num": "3",
@@ -6450,6 +6443,13 @@
      "age": 35,
      "name": "Karim Boudiaf",
      "num": "12",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Ahmed Fathy",
+     "num": "20",
      "pos": "M",
      "starter": true
     },
@@ -6952,7 +6952,7 @@
      "starter": true
     },
     {
-     "age": 20,
+     "age": 21,
      "name": "Mamadou Sarr",
      "num": "2",
      "pos": "D",
