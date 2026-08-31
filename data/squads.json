@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-08-30T17:03:00.850569+00:00",
+ "fetched_at": "2026-08-31T19:18:03.398525+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -213,7 +213,7 @@
      "starter": false
     },
     {
-     "age": 33,
+     "age": 34,
      "name": "Nicolás Tagliafico",
      "num": "3",
      "pos": "D",
@@ -1688,7 +1688,7 @@
      "starter": true
     },
     {
-     "age": 37,
+     "age": 38,
      "name": "David Ospina",
      "num": "1",
      "pos": "G",
@@ -2672,13 +2672,6 @@
      "starter": false
     },
     {
-     "age": 20,
-     "name": "Kevin Rodríguez",
-     "num": "11",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 28,
      "name": "Ángelo Preciado",
      "num": "17",
@@ -2773,6 +2766,13 @@
      "age": 23,
      "name": "Anthony Valencia",
      "num": "8",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Kevin Rodríguez",
+     "num": "11",
      "pos": "F",
      "starter": false
     },
@@ -6122,7 +6122,7 @@
      "starter": true
     },
     {
-     "age": 26,
+     "age": 27,
      "name": "Ramón Sosa",
      "num": "7",
      "pos": "F",
