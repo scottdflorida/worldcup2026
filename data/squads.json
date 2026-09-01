@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-08-31T19:18:03.398525+00:00",
+ "fetched_at": "2026-09-01T17:02:44.088397+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -3399,6 +3399,13 @@
      "starter": true
     },
     {
+     "age": 22,
+     "name": "Aleksandar Pavlović",
+     "num": "5",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 23,
      "name": "Nathaniel Brown",
      "num": "18",
@@ -3432,13 +3439,6 @@
      "num": "24",
      "pos": "D",
      "starter": false
-    },
-    {
-     "age": 22,
-     "name": "Aleksandar Pavlovic",
-     "num": "5",
-     "pos": "M",
-     "starter": true
     },
     {
      "age": 31,
@@ -3572,7 +3572,7 @@
      "starter": false
     },
     {
-     "age": 25,
+     "age": 28,
      "name": "Gideon Mensah",
      "num": "14",
      "pos": "D",
@@ -5816,13 +5816,6 @@
      "starter": false
     },
     {
-     "age": 25,
-     "name": "José Córdoba",
-     "num": "3",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 31,
      "name": "Fidel Escobar",
      "num": "4",
@@ -5844,7 +5837,7 @@
      "starter": true
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Jorge Gutiérrez",
      "num": "26",
      "pos": "D",
@@ -5900,13 +5893,6 @@
      "starter": true
     },
     {
-     "age": 24,
-     "name": "Tomás Rodríguez",
-     "num": "9",
-     "pos": "M",
-     "starter": true
-    },
-    {
      "age": 32,
      "name": "Édgar Yoel Bárcenas",
      "num": "11",
@@ -5933,6 +5919,20 @@
      "num": "20",
      "pos": "M",
      "starter": false
+    },
+    {
+     "age": 27,
+     "name": "José Córdoba",
+     "num": "3",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Tomás Rodríguez",
+     "num": "9",
+     "pos": "F",
+     "starter": true
     },
     {
      "age": 29,
@@ -8913,7 +8913,7 @@
      "starter": false
     },
     {
-     "age": 32,
+     "age": 33,
      "name": "Jaloliddin Masharipov",
      "num": "10",
      "pos": "M",
@@ -8927,7 +8927,7 @@
      "starter": false
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Abdulla Abdullaev",
      "num": "18",
      "pos": "M",
