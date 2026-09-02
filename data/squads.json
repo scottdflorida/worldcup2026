@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-09-01T17:02:44.088397+00:00",
+ "fetched_at": "2026-09-02T16:54:39.231033+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -192,7 +192,7 @@
    "as_of": "Argentina at Spain",
    "players": [
     {
-     "age": 33,
+     "age": 34,
      "name": "Emiliano Martínez",
      "num": "23",
      "pos": "G",
@@ -934,7 +934,7 @@
    "players": [
     {
      "age": 30,
-     "name": "Nikola Vasiljevic",
+     "name": "Nikola Vasilj",
      "num": "1",
      "pos": "G",
      "starter": true
@@ -1751,7 +1751,7 @@
      "starter": false
     },
     {
-     "age": 32,
+     "age": 33,
      "name": "Deiver Machado",
      "num": "22",
      "pos": "D",
@@ -3345,7 +3345,7 @@
      "starter": false
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Bradley Barcola",
      "num": "12",
      "pos": "F",
@@ -3399,13 +3399,6 @@
      "starter": true
     },
     {
-     "age": 22,
-     "name": "Aleksandar Pavlović",
-     "num": "5",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 23,
      "name": "Nathaniel Brown",
      "num": "18",
@@ -3439,6 +3432,13 @@
      "num": "24",
      "pos": "D",
      "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Aleksandar Pavlovic",
+     "num": "5",
+     "pos": "M",
+     "starter": true
     },
     {
      "age": 31,
@@ -5816,6 +5816,13 @@
      "starter": false
     },
     {
+     "age": 25,
+     "name": "José Córdoba",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 31,
      "name": "Fidel Escobar",
      "num": "4",
@@ -5919,13 +5926,6 @@
      "num": "20",
      "pos": "M",
      "starter": false
-    },
-    {
-     "age": 27,
-     "name": "José Córdoba",
-     "num": "3",
-     "pos": "F",
-     "starter": true
     },
     {
      "age": 27,
@@ -6952,6 +6952,13 @@
      "starter": true
     },
     {
+     "age": 21,
+     "name": "Mamadou Sarr",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 35,
      "name": "Kalidou Koulibaly",
      "num": "3",
@@ -7055,13 +7062,6 @@
      "num": "18",
      "pos": "F",
      "starter": true
-    },
-    {
-     "age": 21,
-     "name": "Mamadou Sarr",
-     "num": "2",
-     "pos": "F",
-     "starter": false
     },
     {
      "age": 20,
@@ -8413,7 +8413,7 @@
    "as_of": "Belgium at United States",
    "players": [
     {
-     "age": 27,
+     "age": 28,
      "name": "Matt Freese",
      "num": "24",
      "pos": "G",
