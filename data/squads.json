@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-09-02T16:54:39.231033+00:00",
+ "fetched_at": "2026-09-03T16:44:26.712191+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -2569,7 +2569,7 @@
      "starter": true
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Yoane Wissa",
      "num": "20",
      "pos": "F",
@@ -2672,6 +2672,13 @@
      "starter": false
     },
     {
+     "age": 20,
+     "name": "Kevin Rodríguez",
+     "num": "11",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 28,
      "name": "Ángelo Preciado",
      "num": "17",
@@ -2766,13 +2773,6 @@
      "age": 23,
      "name": "Anthony Valencia",
      "num": "8",
-     "pos": "F",
-     "starter": false
-    },
-    {
-     "age": 26,
-     "name": "Kevin Rodríguez",
-     "num": "11",
      "pos": "F",
      "starter": false
     },
@@ -6952,13 +6952,6 @@
      "starter": true
     },
     {
-     "age": 21,
-     "name": "Mamadou Sarr",
-     "num": "2",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 35,
      "name": "Kalidou Koulibaly",
      "num": "3",
@@ -7062,6 +7055,13 @@
      "num": "18",
      "pos": "F",
      "starter": true
+    },
+    {
+     "age": 21,
+     "name": "Mamadou Sarr",
+     "num": "2",
+     "pos": "F",
+     "starter": false
     },
     {
      "age": 20,
@@ -7272,7 +7272,7 @@
      "starter": false
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Lyle Foster",
      "num": "9",
      "pos": "F",
