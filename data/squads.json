@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-09-04T16:38:51.904291+00:00",
+ "fetched_at": "2026-09-05T15:42:24.961936+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -428,7 +428,7 @@
      "starter": true
     },
     {
-     "age": 18,
+     "age": 19,
      "name": "Lucas Herrington",
      "num": "25",
      "pos": "D",
@@ -982,7 +982,7 @@
      "starter": true
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Stjepan Radeljic",
      "num": "21",
      "pos": "D",
@@ -1356,13 +1356,6 @@
      "starter": true
     },
     {
-     "age": 28,
-     "name": "Alfie Jones",
-     "num": "3",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 30,
      "name": "Joel Waterman",
      "num": "5",
@@ -1403,6 +1396,13 @@
      "num": "23",
      "pos": "M",
      "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Alfie Jones",
+     "num": "3",
+     "pos": "M",
+     "starter": false
     },
     {
      "age": 27,
@@ -2672,6 +2672,13 @@
      "starter": false
     },
     {
+     "age": 20,
+     "name": "Kevin Rodríguez",
+     "num": "11",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 28,
      "name": "Ángelo Preciado",
      "num": "17",
@@ -2766,13 +2773,6 @@
      "age": 23,
      "name": "Anthony Valencia",
      "num": "8",
-     "pos": "F",
-     "starter": false
-    },
-    {
-     "age": 26,
-     "name": "Kevin Rodríguez",
-     "num": "11",
      "pos": "F",
      "starter": false
     },
@@ -3123,7 +3123,7 @@
      "starter": false
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Bukayo Saka",
      "num": "7",
      "pos": "F",
@@ -3913,8 +3913,8 @@
      "starter": false
     },
     {
-     "age": 31,
-     "name": "Frantzdy Pierrot",
+     "age": 27,
+     "name": "Frantz Pierrot",
      "num": "20",
      "pos": "F",
      "starter": false
