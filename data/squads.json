@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-09-05T15:42:24.961936+00:00",
+ "fetched_at": "2026-09-06T15:53:05.389950+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -180,7 +180,7 @@
      "starter": false
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Farès Ghedjemis",
      "num": "25",
      "pos": "F",
@@ -1807,13 +1807,6 @@
      "starter": false
     },
     {
-     "age": 26,
-     "name": "Jhon Córdoba",
-     "num": "9",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 27,
      "name": "Juan Portilla",
      "num": "15",
@@ -1847,6 +1840,13 @@
      "num": "25",
      "pos": "F",
      "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Jhon Córdoba",
+     "num": "9",
+     "pos": "F",
+     "starter": false
     },
     {
      "age": 27,
@@ -2672,13 +2672,6 @@
      "starter": false
     },
     {
-     "age": 20,
-     "name": "Kevin Rodríguez",
-     "num": "11",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 28,
      "name": "Ángelo Preciado",
      "num": "17",
@@ -2773,6 +2766,13 @@
      "age": 23,
      "name": "Anthony Valencia",
      "num": "8",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Kevin Rodríguez",
+     "num": "11",
      "pos": "F",
      "starter": false
     },
@@ -4023,7 +4023,7 @@
      "starter": true
     },
     {
-     "age": 32,
+     "age": 33,
      "name": "Saman Ghoddos",
      "num": "14",
      "pos": "M",
@@ -6952,13 +6952,6 @@
      "starter": true
     },
     {
-     "age": 21,
-     "name": "Mamadou Sarr",
-     "num": "2",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 35,
      "name": "Kalidou Koulibaly",
      "num": "3",
@@ -7062,6 +7055,13 @@
      "num": "18",
      "pos": "F",
      "starter": true
+    },
+    {
+     "age": 21,
+     "name": "Mamadou Sarr",
+     "num": "2",
+     "pos": "F",
+     "starter": false
     },
     {
      "age": 20,
@@ -8614,7 +8614,7 @@
      "starter": false
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Santiago Mele",
      "num": "12",
      "pos": "G",
@@ -8857,6 +8857,13 @@
      "starter": false
     },
     {
+     "age": 28,
+     "name": "Azizbek Amonov",
+     "num": "20",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 19,
      "name": "Behruzjon Karimov",
      "num": "24",
@@ -8953,13 +8960,6 @@
      "num": "14",
      "pos": "F",
      "starter": true
-    },
-    {
-     "age": 28,
-     "name": "Azizbek Amonov",
-     "num": "20",
-     "pos": "F",
-     "starter": false
     },
     {
      "age": 33,
