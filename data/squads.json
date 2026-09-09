@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-09-08T16:54:51.252225+00:00",
+ "fetched_at": "2026-09-09T16:55:55.641782+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1398,7 +1398,7 @@
      "starter": true
     },
     {
-     "age": 22,
+     "age": 23,
      "name": "Niko Sigur",
      "num": "23",
      "pos": "M",
@@ -1945,7 +1945,7 @@
      "starter": true
     },
     {
-     "age": 40,
+     "age": 41,
      "name": "Luka Modric",
      "num": "10",
      "pos": "M",
@@ -2284,13 +2284,6 @@
      "starter": true
     },
     {
-     "age": 27,
-     "name": "Ladislav Krejcí",
-     "num": "7",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 25,
      "name": "David Zima",
      "num": "2",
@@ -2317,6 +2310,13 @@
      "num": "20",
      "pos": "D",
      "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Ladislav Krejcí",
+     "num": "7",
+     "pos": "M",
+     "starter": true
     },
     {
      "age": 25,
@@ -2623,7 +2623,7 @@
      "starter": true
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Moisés Ramírez",
      "num": "12",
      "pos": "G",
