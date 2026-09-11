@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-09-10T16:44:37.860353+00:00",
+ "fetched_at": "2026-09-11T16:48:59.261521+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -934,7 +934,7 @@
    "players": [
     {
      "age": 30,
-     "name": "Nikola Vasilj",
+     "name": "Nikola Vasiljevic",
      "num": "1",
      "pos": "G",
      "starter": true
@@ -1702,7 +1702,7 @@
      "starter": false
     },
     {
-     "age": 20,
+     "age": 30,
      "name": "Daniel Muñoz",
      "num": "2",
      "pos": "D",
@@ -1728,6 +1728,13 @@
      "num": "23",
      "pos": "D",
      "starter": true
+    },
+    {
+     "age": 34,
+     "name": "Santiago Arias",
+     "num": "4",
+     "pos": "D",
+     "starter": false
     },
     {
      "age": 31,
@@ -1800,13 +1807,6 @@
      "starter": false
     },
     {
-     "age": 26,
-     "name": "Jhon Córdoba",
-     "num": "9",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 27,
      "name": "Juan Portilla",
      "num": "15",
@@ -1842,9 +1842,9 @@
      "starter": true
     },
     {
-     "age": 34,
-     "name": "Santiago Arias",
-     "num": "4",
+     "age": 33,
+     "name": "Jhon Córdoba",
+     "num": "9",
      "pos": "F",
      "starter": false
     },
@@ -1896,7 +1896,7 @@
      "starter": true
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Marin Pongracic",
      "num": "3",
      "pos": "D",
@@ -2125,7 +2125,7 @@
      "starter": false
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Tyrese Noslin",
      "num": "13",
      "pos": "D",
@@ -2284,6 +2284,13 @@
      "starter": true
     },
     {
+     "age": 27,
+     "name": "Ladislav Krejcí",
+     "num": "7",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 25,
      "name": "David Zima",
      "num": "2",
@@ -2310,13 +2317,6 @@
      "num": "20",
      "pos": "D",
      "starter": false
-    },
-    {
-     "age": 34,
-     "name": "Ladislav Krejcí",
-     "num": "7",
-     "pos": "M",
-     "starter": true
     },
     {
      "age": 25,
@@ -2672,13 +2672,6 @@
      "starter": false
     },
     {
-     "age": 20,
-     "name": "Kevin Rodríguez",
-     "num": "11",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 28,
      "name": "Ángelo Preciado",
      "num": "17",
@@ -2773,6 +2766,13 @@
      "age": 23,
      "name": "Anthony Valencia",
      "num": "8",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Kevin Rodríguez",
+     "num": "11",
      "pos": "F",
      "starter": false
     },
@@ -3663,7 +3663,7 @@
      "starter": false
     },
     {
-     "age": 34,
+     "age": 35,
      "name": "Jordan Ayew",
      "num": "9",
      "pos": "F",
@@ -4273,8 +4273,8 @@
      "starter": false
     },
     {
-     "age": 26,
-     "name": "Hashim Ali",
+     "age": 30,
+     "name": "Ali Yousif",
      "num": "13",
      "pos": "F",
      "starter": false
@@ -4923,6 +4923,13 @@
      "starter": false
     },
     {
+     "age": 19,
+     "name": "Brian Gutiérrez",
+     "num": "26",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 26,
      "name": "Érik Lira",
      "num": "6",
@@ -4982,13 +4989,6 @@
      "age": 30,
      "name": "Luis Chávez",
      "num": "24",
-     "pos": "M",
-     "starter": false
-    },
-    {
-     "age": 23,
-     "name": "Brian Gutiérrez",
-     "num": "26",
      "pos": "M",
      "starter": false
     },
@@ -5823,13 +5823,6 @@
      "starter": true
     },
     {
-     "age": 27,
-     "name": "Andrés Andrade",
-     "num": "16",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 30,
      "name": "Amir Murillo",
      "num": "23",
@@ -5907,6 +5900,13 @@
      "starter": true
     },
     {
+     "age": 37,
+     "name": "Andrés Andrade",
+     "num": "16",
+     "pos": "M",
+     "starter": true
+    },
+    {
      "age": 27,
      "name": "Adalberto Carrasquilla",
      "num": "8",
@@ -5973,6 +5973,193 @@
      "age": 25,
      "name": "Azarias Londoño",
      "num": "24",
+     "pos": "F",
+     "starter": false
+    }
+   ]
+  },
+  "Paraguay": {
+   "as_of": "France at Paraguay",
+   "players": [
+    {
+     "age": 26,
+     "name": "Orlando Gill",
+     "num": "12",
+     "pos": "G",
+     "starter": true
+    },
+    {
+     "age": 38,
+     "name": "Gatito Fernández",
+     "num": "1",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Gastón Olveira",
+     "num": "22",
+     "pos": "G",
+     "starter": false
+    },
+    {
+     "age": 35,
+     "name": "Gustavo Velázquez",
+     "num": "2",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Omar Alderete",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 26,
+     "name": "Juan Jose Cáceres",
+     "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Júnior Alonso",
+     "num": "6",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Gustavo Gómez",
+     "num": "15",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 35,
+     "name": "Fabián Balbuena",
+     "num": "5",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "José Canale",
+     "num": "13",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 21,
+     "name": "Alexandro Maidana",
+     "num": "26",
+     "pos": "D",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Diego Gómez",
+     "num": "8",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 30,
+     "name": "Andrés Cubas",
+     "num": "14",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 22,
+     "name": "Julio Enciso",
+     "num": "19",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 24,
+     "name": "Matías Galarza",
+     "num": "23",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 25,
+     "name": "Maurício",
+     "num": "11",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Damián Bobadilla",
+     "num": "16",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Alejandro Romero Gamarra",
+     "num": "17",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Braian Ojeda",
+     "num": "20",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 32,
+     "name": "Miguel Almirón",
+     "num": "10",
+     "pos": "F",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Ramón Sosa",
+     "num": "7",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 30,
+     "name": "Antonio Sanabria",
+     "num": "9",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 31,
+     "name": "Alex Arce",
+     "num": "18",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 35,
+     "name": "Gabriel Ávalos",
+     "num": "21",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 24,
+     "name": "Gustavo Caballero",
+     "num": "24",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 27,
+     "name": "Isidro Pitta",
+     "num": "25",
      "pos": "F",
      "starter": false
     }
