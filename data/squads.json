@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-09-11T16:48:59.261521+00:00",
+ "fetched_at": "2026-09-12T15:55:53.966735+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -809,7 +809,7 @@
      "starter": false
     },
     {
-     "age": 34,
+     "age": 35,
      "name": "Thomas Meunier",
      "num": "15",
      "pos": "D",
@@ -1807,7 +1807,7 @@
      "starter": false
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Juan Portilla",
      "num": "15",
      "pos": "M",
@@ -1856,7 +1856,7 @@
      "starter": false
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Andrés Gómez",
      "num": "26",
      "pos": "F",
@@ -4542,7 +4542,7 @@
      "starter": false
     },
     {
-     "age": 39,
+     "age": 40,
      "name": "Yuto Nagatomo",
      "num": "5",
      "pos": "D",
