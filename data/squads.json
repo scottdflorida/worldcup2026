@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-09-13T16:43:55.413048+00:00",
+ "fetched_at": "2026-09-14T18:15:48.126209+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -934,7 +934,7 @@
    "players": [
     {
      "age": 30,
-     "name": "Nikola Vasiljevic",
+     "name": "Nikola Vasilj",
      "num": "1",
      "pos": "G",
      "starter": true
@@ -2036,7 +2036,7 @@
      "starter": false
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Marco Pasalic",
      "num": "24",
      "pos": "F",
@@ -4273,8 +4273,8 @@
      "starter": false
     },
     {
-     "age": 30,
-     "name": "Ali Yousif",
+     "age": 26,
+     "name": "Hashim Ali",
      "num": "13",
      "pos": "F",
      "starter": false
@@ -7029,7 +7029,7 @@
      "starter": false
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Pape Matar Sarr",
      "num": "17",
      "pos": "M",
@@ -7672,7 +7672,7 @@
      "starter": true
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Viktor Johansson",
      "num": "12",
      "pos": "G",
