@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-09-14T18:15:48.126209+00:00",
+ "fetched_at": "2026-09-15T17:23:54.543866+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -505,7 +505,7 @@
      "starter": false
     },
     {
-     "age": 30,
+     "age": 31,
      "name": "Awer Mabil",
      "num": "11",
      "pos": "M",
@@ -1356,6 +1356,13 @@
      "starter": true
     },
     {
+     "age": 28,
+     "name": "Alfie Jones",
+     "num": "3",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 30,
      "name": "Joel Waterman",
      "num": "5",
@@ -1396,13 +1403,6 @@
      "num": "23",
      "pos": "M",
      "starter": true
-    },
-    {
-     "age": 28,
-     "name": "Alfie Jones",
-     "num": "3",
-     "pos": "M",
-     "starter": false
     },
     {
      "age": 27,
@@ -7485,7 +7485,7 @@
      "starter": true
     },
     {
-     "age": 30,
+     "age": 31,
      "name": "David Raya",
      "num": "1",
      "pos": "G",
