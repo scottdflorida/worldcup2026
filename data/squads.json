@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-09-17T17:21:19.586961+00:00",
+ "fetched_at": "2026-09-18T16:47:50.807525+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1529,7 +1529,7 @@
      "starter": true
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Sidny Lopes Cabral",
      "num": "13",
      "pos": "D",
@@ -1702,7 +1702,7 @@
      "starter": false
     },
     {
-     "age": 20,
+     "age": 30,
      "name": "Daniel Muñoz",
      "num": "2",
      "pos": "D",
@@ -1728,13 +1728,6 @@
      "num": "23",
      "pos": "D",
      "starter": true
-    },
-    {
-     "age": 34,
-     "name": "Santiago Arias",
-     "num": "4",
-     "pos": "D",
-     "starter": false
     },
     {
      "age": 31,
@@ -1784,6 +1777,13 @@
      "num": "16",
      "pos": "M",
      "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Santiago Arias",
+     "num": "4",
+     "pos": "M",
+     "starter": false
     },
     {
      "age": 25,
@@ -3399,13 +3399,6 @@
      "starter": true
     },
     {
-     "age": 22,
-     "name": "Aleksandar Pavlović",
-     "num": "5",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 23,
      "name": "Nathaniel Brown",
      "num": "18",
@@ -3439,6 +3432,13 @@
      "num": "24",
      "pos": "D",
      "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Aleksandar Pavlovic",
+     "num": "5",
+     "pos": "M",
+     "starter": true
     },
     {
      "age": 31,
@@ -8518,7 +8518,7 @@
      "starter": true
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Christian Pulisic",
      "num": "10",
      "pos": "M",
