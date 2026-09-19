@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-09-18T16:47:50.807525+00:00",
+ "fetched_at": "2026-09-19T16:09:11.638516+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -587,7 +587,7 @@
      "starter": false
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Kevin Danso",
      "num": "3",
      "pos": "D",
@@ -2223,7 +2223,7 @@
      "starter": false
     },
     {
-     "age": 33,
+     "age": 34,
      "name": "Brandley Kuwas",
      "num": "17",
      "pos": "F",
@@ -5823,13 +5823,6 @@
      "starter": true
     },
     {
-     "age": 27,
-     "name": "Andrés Andrade",
-     "num": "16",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 30,
      "name": "Amir Murillo",
      "num": "23",
@@ -5903,6 +5896,13 @@
      "age": 26,
      "name": "Carlos Harvey",
      "num": "14",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 37,
+     "name": "Andrés Andrade",
+     "num": "16",
      "pos": "M",
      "starter": true
     },
@@ -6169,7 +6169,7 @@
    "as_of": "Spain at Portugal",
    "players": [
     {
-     "age": 26,
+     "age": 27,
      "name": "Diogo Costa",
      "num": "1",
      "pos": "G",
@@ -7132,7 +7132,7 @@
      "starter": true
     },
     {
-     "age": 20,
+     "age": 21,
      "name": "Mbekezeli Mbokazi",
      "num": "14",
      "pos": "D",
