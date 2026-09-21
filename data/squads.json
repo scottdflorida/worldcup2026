@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-09-20T16:37:38.513683+00:00",
+ "fetched_at": "2026-09-21T18:22:23.553440+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1080,7 +1080,7 @@
      "starter": true
     },
     {
-     "age": 18,
+     "age": 19,
      "name": "Kerim Alajbegovic",
      "num": "19",
      "pos": "F",
@@ -1758,7 +1758,7 @@
      "starter": true
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Jhon Arias",
      "num": "11",
      "pos": "M",
@@ -3925,7 +3925,7 @@
    "as_of": "Iran at Egypt",
    "players": [
     {
-     "age": 33,
+     "age": 34,
      "name": "Alireza Beiranvand",
      "num": "1",
      "pos": "G",
@@ -4273,8 +4273,8 @@
      "starter": false
     },
     {
-     "age": 26,
-     "name": "Hashim Ali",
+     "age": 30,
+     "name": "Ali Yousif",
      "num": "13",
      "pos": "F",
      "starter": false
@@ -5816,9 +5816,23 @@
      "starter": false
     },
     {
+     "age": 25,
+     "name": "José Córdoba",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 31,
      "name": "Fidel Escobar",
      "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 27,
+     "name": "Andrés Andrade",
+     "num": "16",
      "pos": "D",
      "starter": true
     },
@@ -5900,13 +5914,6 @@
      "starter": true
     },
     {
-     "age": 37,
-     "name": "Andrés Andrade",
-     "num": "16",
-     "pos": "M",
-     "starter": true
-    },
-    {
      "age": 27,
      "name": "Adalberto Carrasquilla",
      "num": "8",
@@ -5919,13 +5926,6 @@
      "num": "20",
      "pos": "M",
      "starter": false
-    },
-    {
-     "age": 27,
-     "name": "José Córdoba",
-     "num": "3",
-     "pos": "F",
-     "starter": true
     },
     {
      "age": 27,
@@ -6150,7 +6150,7 @@
      "starter": false
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Gustavo Caballero",
      "num": "24",
      "pos": "F",
@@ -7805,7 +7805,7 @@
      "starter": false
     },
     {
-     "age": 26,
+     "age": 27,
      "name": "Alexander Isak",
      "num": "9",
      "pos": "F",
@@ -8857,13 +8857,6 @@
      "starter": false
     },
     {
-     "age": 28,
-     "name": "Azizbek Amonov",
-     "num": "20",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 19,
      "name": "Behruzjon Karimov",
      "num": "24",
@@ -8960,6 +8953,13 @@
      "num": "14",
      "pos": "F",
      "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Azizbek Amonov",
+     "num": "20",
+     "pos": "F",
+     "starter": false
     },
     {
      "age": 33,
