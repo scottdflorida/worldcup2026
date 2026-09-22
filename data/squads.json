@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-09-21T18:22:23.553440+00:00",
+ "fetched_at": "2026-09-22T17:25:17.575724+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -4923,6 +4923,13 @@
      "starter": false
     },
     {
+     "age": 19,
+     "name": "Brian Gutiérrez",
+     "num": "26",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 26,
      "name": "Érik Lira",
      "num": "6",
@@ -4982,13 +4989,6 @@
      "age": 30,
      "name": "Luis Chávez",
      "num": "24",
-     "pos": "M",
-     "starter": false
-    },
-    {
-     "age": 23,
-     "name": "Brian Gutiérrez",
-     "num": "26",
      "pos": "M",
      "starter": false
     },
@@ -6517,7 +6517,7 @@
      "starter": false
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Ahmed Al-Ganehi",
      "num": "17",
      "pos": "F",
@@ -6648,7 +6648,7 @@
      "starter": true
     },
     {
-     "age": 31,
+     "age": 32,
      "name": "Mohamed Kanno",
      "num": "23",
      "pos": "M",
@@ -6952,13 +6952,6 @@
      "starter": true
     },
     {
-     "age": 21,
-     "name": "Mamadou Sarr",
-     "num": "2",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 35,
      "name": "Kalidou Koulibaly",
      "num": "3",
@@ -7062,6 +7055,13 @@
      "num": "18",
      "pos": "F",
      "starter": true
+    },
+    {
+     "age": 21,
+     "name": "Mamadou Sarr",
+     "num": "2",
+     "pos": "F",
+     "starter": false
     },
     {
      "age": 21,
@@ -7174,7 +7174,7 @@
      "starter": false
     },
     {
-     "age": 30,
+     "age": 31,
      "name": "Nkosinathi Sibisi",
      "num": "19",
      "pos": "D",
