@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-09-22T17:25:17.575724+00:00",
+ "fetched_at": "2026-09-23T17:32:58.992082+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -124,7 +124,7 @@
      "starter": true
     },
     {
-     "age": 26,
+     "age": 27,
      "name": "Hicham Boudaoui",
      "num": "14",
      "pos": "M",
@@ -1730,7 +1730,7 @@
      "starter": true
     },
     {
-     "age": 31,
+     "age": 32,
      "name": "Yerry Mina",
      "num": "13",
      "pos": "D",
@@ -2284,13 +2284,6 @@
      "starter": true
     },
     {
-     "age": 27,
-     "name": "Ladislav Krejcí",
-     "num": "7",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 25,
      "name": "David Zima",
      "num": "2",
@@ -2317,6 +2310,13 @@
      "num": "20",
      "pos": "D",
      "starter": false
+    },
+    {
+     "age": 34,
+     "name": "Ladislav Krejcí",
+     "num": "7",
+     "pos": "M",
+     "starter": true
     },
     {
      "age": 25,
@@ -3726,7 +3726,7 @@
      "starter": false
     },
     {
-     "age": 22,
+     "age": 23,
      "name": "Prince Adu",
      "num": "25",
      "pos": "F",
@@ -5463,7 +5463,7 @@
      "starter": true
     },
     {
-     "age": 22,
+     "age": 23,
      "name": "Finn Surman",
      "num": "16",
      "pos": "D",
@@ -6952,6 +6952,13 @@
      "starter": true
     },
     {
+     "age": 21,
+     "name": "Mamadou Sarr",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 35,
      "name": "Kalidou Koulibaly",
      "num": "3",
@@ -7015,13 +7022,6 @@
      "starter": true
     },
     {
-     "age": 22,
-     "name": "Lamine Camara",
-     "num": "8",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 24,
      "name": "Pape Matar Sarr",
      "num": "17",
@@ -7058,15 +7058,15 @@
     },
     {
      "age": 21,
-     "name": "Mamadou Sarr",
-     "num": "2",
+     "name": "Assane Diao",
+     "num": "7",
      "pos": "F",
      "starter": false
     },
     {
-     "age": 21,
-     "name": "Assane Diao",
-     "num": "7",
+     "age": 24,
+     "name": "Lamine Camara",
+     "num": "8",
      "pos": "F",
      "starter": false
     },
