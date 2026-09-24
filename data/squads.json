@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-09-23T17:32:58.992082+00:00",
+ "fetched_at": "2026-09-24T17:38:01.785278+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -900,7 +900,7 @@
      "starter": false
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Dodi Lukébakio",
      "num": "14",
      "pos": "F",
@@ -2284,6 +2284,13 @@
      "starter": true
     },
     {
+     "age": 27,
+     "name": "Ladislav Krejcí",
+     "num": "7",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 25,
      "name": "David Zima",
      "num": "2",
@@ -2310,13 +2317,6 @@
      "num": "20",
      "pos": "D",
      "starter": false
-    },
-    {
-     "age": 34,
-     "name": "Ladislav Krejcí",
-     "num": "7",
-     "pos": "M",
-     "starter": true
     },
     {
      "age": 25,
@@ -3878,7 +3878,7 @@
      "starter": true
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Josué Casimir",
      "num": "21",
      "pos": "F",
@@ -4182,7 +4182,7 @@
      "starter": false
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Ahmed Hasan",
      "num": "15",
      "pos": "D",
