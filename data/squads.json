@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-09-24T17:38:01.785278+00:00",
+ "fetched_at": "2026-09-25T17:37:21.998888+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -4923,13 +4923,6 @@
      "starter": false
     },
     {
-     "age": 19,
-     "name": "Brian Gutiérrez",
-     "num": "26",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 26,
      "name": "Érik Lira",
      "num": "6",
@@ -4989,6 +4982,13 @@
      "age": 30,
      "name": "Luis Chávez",
      "num": "24",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 23,
+     "name": "Brian Gutiérrez",
+     "num": "26",
      "pos": "M",
      "starter": false
     },
@@ -6800,7 +6800,7 @@
      "starter": false
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "John Souttar",
      "num": "15",
      "pos": "D",
@@ -7305,7 +7305,7 @@
      "starter": false
     },
     {
-     "age": 34,
+     "age": 35,
      "name": "Jo Hyeon-Woo",
      "num": "21",
      "pos": "G",
