@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-09-26T16:48:59.221353+00:00",
+ "fetched_at": "2026-09-27T17:21:08.135497+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1461,7 +1461,7 @@
      "starter": false
     },
     {
-     "age": 26,
+     "age": 27,
      "name": "Liam Millar",
      "num": "11",
      "pos": "F",
@@ -4923,6 +4923,13 @@
      "starter": false
     },
     {
+     "age": 19,
+     "name": "Brian Gutiérrez",
+     "num": "26",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 26,
      "name": "Érik Lira",
      "num": "6",
@@ -4982,13 +4989,6 @@
      "age": 30,
      "name": "Luis Chávez",
      "num": "24",
-     "pos": "M",
-     "starter": false
-    },
-    {
-     "age": 23,
-     "name": "Brian Gutiérrez",
-     "num": "26",
      "pos": "M",
      "starter": false
     },
@@ -5456,7 +5456,7 @@
      "starter": true
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Liberato Cacace",
      "num": "13",
      "pos": "D",
@@ -6253,7 +6253,7 @@
      "starter": true
     },
     {
-     "age": 21,
+     "age": 22,
      "name": "João Neves",
      "num": "15",
      "pos": "M",
@@ -7943,7 +7943,7 @@
      "starter": true
     },
     {
-     "age": 33,
+     "age": 34,
      "name": "Granit Xhaka",
      "num": "10",
      "pos": "M",
