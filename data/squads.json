@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-09-29T18:22:25.937240+00:00",
+ "fetched_at": "2026-09-30T18:11:59.015752+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -3378,7 +3378,7 @@
      "starter": false
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Alexander Nübel",
      "num": "21",
      "pos": "G",
@@ -7022,6 +7022,13 @@
      "starter": true
     },
     {
+     "age": 22,
+     "name": "Lamine Camara",
+     "num": "8",
+     "pos": "M",
+     "starter": false
+    },
+    {
      "age": 24,
      "name": "Pape Matar Sarr",
      "num": "17",
@@ -7060,13 +7067,6 @@
      "age": 21,
      "name": "Assane Diao",
      "num": "7",
-     "pos": "F",
-     "starter": false
-    },
-    {
-     "age": 24,
-     "name": "Lamine Camara",
-     "num": "8",
      "pos": "F",
      "starter": false
     },
@@ -7291,7 +7291,7 @@
    "as_of": "South Korea at South Africa",
    "players": [
     {
-     "age": 35,
+     "age": 36,
      "name": "Kim Seung-Gyu",
      "num": "1",
      "pos": "G",
@@ -7763,7 +7763,7 @@
      "starter": false
     },
     {
-     "age": 32,
+     "age": 33,
      "name": "Ken Sema",
      "num": "13",
      "pos": "M",
@@ -7873,7 +7873,7 @@
      "starter": false
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Nico Elvedi",
      "num": "4",
      "pos": "D",
