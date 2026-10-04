@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-10-03T16:51:11.461178+00:00",
+ "fetched_at": "2026-10-04T14:46:17.507123+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1730,13 +1730,6 @@
      "starter": true
     },
     {
-     "age": 34,
-     "name": "Santiago Arias",
-     "num": "4",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 32,
      "name": "Yerry Mina",
      "num": "13",
@@ -1849,6 +1842,13 @@
      "starter": true
     },
     {
+     "age": 34,
+     "name": "Santiago Arias",
+     "num": "4",
+     "pos": "F",
+     "starter": false
+    },
+    {
      "age": 27,
      "name": "Cucho Hernández",
      "num": "19",
@@ -1952,7 +1952,7 @@
      "starter": true
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Nikola Vlasic",
      "num": "13",
      "pos": "M",
