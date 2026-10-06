@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-10-05T13:09:04.589561+00:00",
+ "fetched_at": "2026-10-06T13:05:09.692379+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -2909,6 +2909,13 @@
     },
     {
      "age": 32,
+     "name": "Trézéguet",
+     "num": "7",
+     "pos": "M",
+     "starter": false
+    },
+    {
+     "age": 32,
      "name": "Hamdy Fathy",
      "num": "14",
      "pos": "M",
@@ -2955,13 +2962,6 @@
      "num": "12",
      "pos": "F",
      "starter": true
-    },
-    {
-     "age": 32,
-     "name": "Trézéguet",
-     "num": "7",
-     "pos": "F",
-     "starter": false
     },
     {
      "age": 18,
@@ -3212,7 +3212,7 @@
      "starter": true
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Theo Hernández",
      "num": "19",
      "pos": "D",
@@ -4848,7 +4848,7 @@
      "starter": false
     },
     {
-     "age": 32,
+     "age": 33,
      "name": "Mahmoud Al-Mardi",
      "num": "13",
      "pos": "F",
@@ -5180,7 +5180,7 @@
      "starter": false
     },
     {
-     "age": 20,
+     "age": 21,
      "name": "Samir El Mourabet",
      "num": "15",
      "pos": "M",
@@ -7742,7 +7742,7 @@
      "starter": true
     },
     {
-     "age": 22,
+     "age": 23,
      "name": "Yasin Ayari",
      "num": "18",
      "pos": "M",
