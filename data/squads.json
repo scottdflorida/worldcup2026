@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-10-06T13:05:09.692379+00:00",
+ "fetched_at": "2026-10-07T13:09:03.278999+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -940,7 +940,7 @@
      "starter": true
     },
     {
-     "age": 18,
+     "age": 19,
      "name": "Mladen Jurkas",
      "num": "12",
      "pos": "G",
@@ -1398,7 +1398,7 @@
      "starter": true
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Alfie Jones",
      "num": "3",
      "pos": "M",
@@ -4030,7 +4030,7 @@
      "starter": true
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Mohammad Ghorbani",
      "num": "21",
      "pos": "M",
@@ -6877,7 +6877,7 @@
      "starter": true
     },
     {
-     "age": 30,
+     "age": 31,
      "name": "Lyndon Dykes",
      "num": "9",
      "pos": "F",
@@ -8296,7 +8296,7 @@
      "starter": false
     },
     {
-     "age": 26,
+     "age": 27,
      "name": "Ferdi Kadioglu",
      "num": "20",
      "pos": "D",
