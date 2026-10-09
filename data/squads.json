@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-10-08T13:09:16.209438+00:00",
+ "fetched_at": "2026-10-09T13:06:59.977994+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1017,7 +1017,7 @@
      "starter": true
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Ivan Sunjic",
      "num": "14",
      "pos": "M",
@@ -1730,13 +1730,6 @@
      "starter": true
     },
     {
-     "age": 34,
-     "name": "Santiago Arias",
-     "num": "4",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 32,
      "name": "Yerry Mina",
      "num": "13",
@@ -1784,6 +1777,13 @@
      "num": "16",
      "pos": "M",
      "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Santiago Arias",
+     "num": "4",
+     "pos": "M",
+     "starter": false
     },
     {
      "age": 26,
