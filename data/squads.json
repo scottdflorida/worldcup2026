@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-10-09T13:06:59.977994+00:00",
+ "fetched_at": "2026-10-10T13:03:24.020918+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -400,7 +400,7 @@
      "starter": false
     },
     {
-     "age": 22,
+     "age": 23,
      "name": "Alessandro Circati",
      "num": "3",
      "pos": "D",
@@ -975,7 +975,7 @@
      "starter": true
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Nikola Katic",
      "num": "18",
      "pos": "D",
@@ -1384,7 +1384,7 @@
      "starter": true
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Ali Ahmed",
      "num": "20",
      "pos": "M",
@@ -3004,7 +3004,7 @@
      "starter": false
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "James Trafford",
      "num": "23",
      "pos": "G",
@@ -3455,7 +3455,7 @@
      "starter": true
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Felix Nmecha",
      "num": "23",
      "pos": "M",
@@ -4217,7 +4217,7 @@
      "starter": true
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Kevin Yakob",
      "num": "19",
      "pos": "M",
@@ -6543,7 +6543,7 @@
    "as_of": "Saudi Arabia at Cape Verde",
    "players": [
     {
-     "age": 34,
+     "age": 35,
      "name": "Mohammed Al-Owais",
      "num": "21",
      "pos": "G",
