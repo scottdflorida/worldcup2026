@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-10-10T13:03:24.020918+00:00",
+ "fetched_at": "2026-10-11T13:04:22.567612+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -19,7 +19,7 @@
      "starter": false
     },
     {
-     "age": 31,
+     "age": 32,
      "name": "Oussama Benbot",
      "num": "16",
      "pos": "G",
@@ -1779,13 +1779,6 @@
      "starter": true
     },
     {
-     "age": 31,
-     "name": "Santiago Arias",
-     "num": "4",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 26,
      "name": "Kevin Castaño",
      "num": "5",
@@ -1847,6 +1840,13 @@
      "num": "25",
      "pos": "F",
      "starter": true
+    },
+    {
+     "age": 31,
+     "name": "Santiago Arias",
+     "num": "4",
+     "pos": "F",
+     "starter": false
     },
     {
      "age": 27,
@@ -3572,7 +3572,7 @@
      "starter": false
     },
     {
-     "age": 28,
+     "age": 26,
      "name": "Gideon Mensah",
      "num": "14",
      "pos": "D",
@@ -3913,8 +3913,8 @@
      "starter": false
     },
     {
-     "age": 31,
-     "name": "Frantzdy Pierrot",
+     "age": 27,
+     "name": "Frantz Pierrot",
      "num": "20",
      "pos": "F",
      "starter": false
@@ -5816,13 +5816,6 @@
      "starter": false
     },
     {
-     "age": 25,
-     "name": "José Córdoba",
-     "num": "3",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 31,
      "name": "Fidel Escobar",
      "num": "4",
@@ -5926,6 +5919,13 @@
      "num": "20",
      "pos": "M",
      "starter": false
+    },
+    {
+     "age": 27,
+     "name": "José Córdoba",
+     "num": "3",
+     "pos": "F",
+     "starter": true
     },
     {
      "age": 27,
