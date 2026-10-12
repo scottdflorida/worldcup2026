@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-10-11T13:04:22.567612+00:00",
+ "fetched_at": "2026-10-12T13:24:58.014397+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1335,7 +1335,7 @@
      "starter": true
     },
     {
-     "age": 20,
+     "age": 21,
      "name": "Luc de Fougerolles",
      "num": "4",
      "pos": "D",
@@ -2139,7 +2139,7 @@
      "starter": false
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Riechedly Bazoer",
      "num": "23",
      "pos": "D",
@@ -2672,13 +2672,6 @@
      "starter": false
     },
     {
-     "age": 20,
-     "name": "Kevin Rodríguez",
-     "num": "11",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 28,
      "name": "Ángelo Preciado",
      "num": "17",
@@ -2773,6 +2766,13 @@
      "age": 23,
      "name": "Anthony Valencia",
      "num": "8",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Kevin Rodríguez",
+     "num": "11",
      "pos": "F",
      "starter": false
     },
@@ -3864,7 +3864,7 @@
      "starter": true
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Lenny Joseph",
      "num": "16",
      "pos": "F",
@@ -5755,7 +5755,7 @@
      "starter": false
     },
     {
-     "age": 26,
+     "age": 27,
      "name": "Jens Petter Hauge",
      "num": "23",
      "pos": "M",
@@ -6143,7 +6143,7 @@
      "starter": false
     },
     {
-     "age": 35,
+     "age": 36,
      "name": "Gabriel Ávalos",
      "num": "21",
      "pos": "F",
