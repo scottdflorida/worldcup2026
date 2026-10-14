@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-10-13T13:11:46.665288+00:00",
+ "fetched_at": "2026-10-14T13:03:12.721078+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1702,7 +1702,7 @@
      "starter": false
     },
     {
-     "age": 20,
+     "age": 30,
      "name": "Daniel Muñoz",
      "num": "2",
      "pos": "D",
@@ -1800,13 +1800,6 @@
      "starter": false
     },
     {
-     "age": 26,
-     "name": "Jhon Córdoba",
-     "num": "9",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 28,
      "name": "Juan Portilla",
      "num": "15",
@@ -1845,6 +1838,13 @@
      "age": 31,
      "name": "Santiago Arias",
      "num": "4",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 33,
+     "name": "Jhon Córdoba",
+     "num": "9",
      "pos": "F",
      "starter": false
     },
@@ -3579,7 +3579,7 @@
      "starter": true
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Jerome Opoku",
      "num": "18",
      "pos": "D",
@@ -3801,7 +3801,7 @@
      "starter": false
     },
     {
-     "age": 32,
+     "age": 33,
      "name": "Markhus Lacroix",
      "num": "13",
      "pos": "D",
@@ -4937,7 +4937,7 @@
      "starter": true
     },
     {
-     "age": 17,
+     "age": 18,
      "name": "Gilberto Mora",
      "num": "19",
      "pos": "M",
@@ -6952,6 +6952,13 @@
      "starter": true
     },
     {
+     "age": 21,
+     "name": "Mamadou Sarr",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 35,
      "name": "Kalidou Koulibaly",
      "num": "3",
@@ -7055,13 +7062,6 @@
      "num": "18",
      "pos": "F",
      "starter": true
-    },
-    {
-     "age": 21,
-     "name": "Mamadou Sarr",
-     "num": "2",
-     "pos": "F",
-     "starter": false
     },
     {
      "age": 21,
@@ -7964,7 +7964,7 @@
      "starter": true
     },
     {
-     "age": 20,
+     "age": 21,
      "name": "Johan Manzambi",
      "num": "9",
      "pos": "M",
