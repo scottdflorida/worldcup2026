@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-10-15T13:05:01.963304+00:00",
+ "fetched_at": "2026-10-16T13:04:35.238650+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -2651,7 +2651,7 @@
      "starter": true
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Willian Pacho",
      "num": "6",
      "pos": "D",
@@ -5823,7 +5823,7 @@
      "starter": true
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Andrés Andrade",
      "num": "16",
      "pos": "D",
@@ -6765,7 +6765,7 @@
      "starter": true
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Nathan Patterson",
      "num": "22",
      "pos": "D",
@@ -7756,7 +7756,7 @@
      "starter": true
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Herman Johansson",
      "num": "6",
      "pos": "M",
@@ -8899,7 +8899,7 @@
      "starter": true
     },
     {
-     "age": 32,
+     "age": 33,
      "name": "Jamshid Iskanderov",
      "num": "8",
      "pos": "M",
