@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-10-16T13:04:35.238650+00:00",
+ "fetched_at": "2026-10-17T13:02:51.363352+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -3539,7 +3539,7 @@
      "starter": false
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Maximilian Beier",
      "num": "14",
      "pos": "F",
@@ -3572,7 +3572,7 @@
      "starter": false
     },
     {
-     "age": 26,
+     "age": 28,
      "name": "Gideon Mensah",
      "num": "14",
      "pos": "D",
@@ -4334,7 +4334,7 @@
      "starter": true
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Guela Doué",
      "num": "17",
      "pos": "D",
@@ -6697,7 +6697,7 @@
      "starter": true
     },
     {
-     "age": 31,
+     "age": 32,
      "name": "Sultan Mandash",
      "num": "20",
      "pos": "F",
