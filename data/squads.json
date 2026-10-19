@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-10-18T13:03:09.415461+00:00",
+ "fetched_at": "2026-10-19T13:05:48.715058+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -934,7 +934,7 @@
    "players": [
     {
      "age": 30,
-     "name": "Nikola Vasilj",
+     "name": "Nikola Vasiljevic",
      "num": "1",
      "pos": "G",
      "starter": true
@@ -1702,7 +1702,7 @@
      "starter": false
     },
     {
-     "age": 30,
+     "age": 20,
      "name": "Daniel Muñoz",
      "num": "2",
      "pos": "D",
@@ -5851,7 +5851,7 @@
      "starter": false
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Edgardo Fariña",
      "num": "5",
      "pos": "D",
