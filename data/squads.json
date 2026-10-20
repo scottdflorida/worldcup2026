@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-10-19T13:05:48.715058+00:00",
+ "fetched_at": "2026-10-20T13:04:36.043958+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -699,7 +699,7 @@
      "starter": false
     },
     {
-     "age": 22,
+     "age": 23,
      "name": "Carney Chukwuemeka",
      "num": "17",
      "pos": "M",
@@ -4612,7 +4612,7 @@
      "starter": false
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Daizen Maeda",
      "num": "11",
      "pos": "F",
@@ -7597,7 +7597,7 @@
      "starter": false
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Yéremy Pino",
      "num": "11",
      "pos": "M",
