@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-10-21T13:05:33.141674+00:00",
+ "fetched_at": "2026-10-22T13:05:19.992801+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -26,7 +26,7 @@
      "starter": false
     },
     {
-     "age": 34,
+     "age": 35,
      "name": "Aïssa Mandi",
      "num": "2",
      "pos": "D",
@@ -421,7 +421,7 @@
      "starter": true
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Harry Souttar",
      "num": "19",
      "pos": "D",
@@ -3399,13 +3399,6 @@
      "starter": true
     },
     {
-     "age": 22,
-     "name": "Aleksandar Pavlović",
-     "num": "5",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 23,
      "name": "Nathaniel Brown",
      "num": "18",
@@ -3439,6 +3432,13 @@
      "num": "24",
      "pos": "D",
      "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Aleksandar Pavlovic",
+     "num": "5",
+     "pos": "M",
+     "starter": true
     },
     {
      "age": 31,
@@ -4895,7 +4895,7 @@
      "starter": true
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Johan Vásquez",
      "num": "5",
      "pos": "D",
@@ -6461,7 +6461,7 @@
      "starter": false
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Assim Madibo",
      "num": "23",
      "pos": "M",
@@ -6952,13 +6952,6 @@
      "starter": true
     },
     {
-     "age": 21,
-     "name": "Mamadou Sarr",
-     "num": "2",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 35,
      "name": "Kalidou Koulibaly",
      "num": "3",
@@ -7062,6 +7055,13 @@
      "num": "18",
      "pos": "F",
      "starter": true
+    },
+    {
+     "age": 21,
+     "name": "Mamadou Sarr",
+     "num": "2",
+     "pos": "F",
+     "starter": false
     },
     {
      "age": 21,
@@ -8539,7 +8539,7 @@
      "starter": false
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Brenden Aaronson",
      "num": "11",
      "pos": "M",
