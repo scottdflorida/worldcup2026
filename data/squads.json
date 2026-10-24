@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-10-23T13:03:48.093426+00:00",
+ "fetched_at": "2026-10-24T13:03:18.431421+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -795,7 +795,7 @@
      "starter": true
     },
     {
-     "age": 22,
+     "age": 23,
      "name": "Zeno Debast",
      "num": "2",
      "pos": "D",
@@ -4944,7 +4944,7 @@
      "starter": true
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Edson Álvarez",
      "num": "4",
      "pos": "M",
@@ -8650,7 +8650,7 @@
     },
     {
      "age": 27,
-     "name": "Ronald Araújo",
+     "name": "Ronald Araujo",
      "num": "4",
      "pos": "D",
      "starter": false
