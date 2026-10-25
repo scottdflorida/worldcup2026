@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-10-24T13:03:18.431421+00:00",
+ "fetched_at": "2026-10-25T13:02:37.866603+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1772,7 +1772,7 @@
      "starter": true
     },
     {
-     "age": 31,
+     "age": 32,
      "name": "Jefferson Lerma",
      "num": "16",
      "pos": "M",
@@ -1966,7 +1966,7 @@
      "starter": true
     },
     {
-     "age": 22,
+     "age": 23,
      "name": "Petar Sucic",
      "num": "17",
      "pos": "M",
@@ -4411,7 +4411,7 @@
      "starter": false
     },
     {
-     "age": 22,
+     "age": 23,
      "name": "Ange-Yoan Bonny",
      "num": "9",
      "pos": "F",
@@ -4605,7 +4605,7 @@
      "starter": false
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Yuito Suzuki",
      "num": "17",
      "pos": "M",
@@ -6468,7 +6468,7 @@
      "starter": false
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Mohamed Manai",
      "num": "26",
      "pos": "M",
@@ -8006,7 +8006,7 @@
      "starter": true
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Dan Ndoye",
      "num": "11",
      "pos": "F",
