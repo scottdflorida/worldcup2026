@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-10-25T13:02:37.866603+00:00",
+ "fetched_at": "2026-10-26T14:39:39.895326+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -3399,6 +3399,13 @@
      "starter": true
     },
     {
+     "age": 22,
+     "name": "Aleksandar Pavlović",
+     "num": "5",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 23,
      "name": "Nathaniel Brown",
      "num": "18",
@@ -3432,13 +3439,6 @@
      "num": "24",
      "pos": "D",
      "starter": false
-    },
-    {
-     "age": 22,
-     "name": "Aleksandar Pavlovic",
-     "num": "5",
-     "pos": "M",
-     "starter": true
     },
     {
      "age": 31,
@@ -4002,7 +4002,7 @@
      "starter": false
     },
     {
-     "age": 22,
+     "age": 23,
      "name": "Danial Iri",
      "num": "25",
      "pos": "D",
@@ -5816,13 +5816,6 @@
      "starter": false
     },
     {
-     "age": 25,
-     "name": "José Córdoba",
-     "num": "3",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 31,
      "name": "Fidel Escobar",
      "num": "4",
@@ -5926,6 +5919,13 @@
      "num": "20",
      "pos": "M",
      "starter": false
+    },
+    {
+     "age": 27,
+     "name": "José Córdoba",
+     "num": "3",
+     "pos": "F",
+     "starter": true
     },
     {
      "age": 27,
