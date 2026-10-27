@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-10-26T14:39:39.895326+00:00",
+ "fetched_at": "2026-10-27T13:08:28.279430+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1807,6 +1807,13 @@
      "starter": false
     },
     {
+     "age": 26,
+     "name": "Jhon Córdoba",
+     "num": "9",
+     "pos": "M",
+     "starter": false
+    },
+    {
      "age": 28,
      "name": "Juan Portilla",
      "num": "15",
@@ -1840,13 +1847,6 @@
      "num": "25",
      "pos": "F",
      "starter": true
-    },
-    {
-     "age": 33,
-     "name": "Jhon Córdoba",
-     "num": "9",
-     "pos": "F",
-     "starter": false
     },
     {
      "age": 27,
@@ -3233,7 +3233,7 @@
      "starter": false
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Dayot Upamecano",
      "num": "4",
      "pos": "D",
@@ -3399,13 +3399,6 @@
      "starter": true
     },
     {
-     "age": 22,
-     "name": "Aleksandar Pavlović",
-     "num": "5",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 23,
      "name": "Nathaniel Brown",
      "num": "18",
@@ -3439,6 +3432,13 @@
      "num": "24",
      "pos": "D",
      "starter": false
+    },
+    {
+     "age": 22,
+     "name": "Aleksandar Pavlovic",
+     "num": "5",
+     "pos": "M",
+     "starter": true
     },
     {
      "age": 31,
@@ -3490,7 +3490,7 @@
      "starter": false
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Nadiem Amiri",
      "num": "20",
      "pos": "M",
@@ -6952,6 +6952,13 @@
      "starter": true
     },
     {
+     "age": 21,
+     "name": "Mamadou Sarr",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 35,
      "name": "Kalidou Koulibaly",
      "num": "3",
@@ -7055,13 +7062,6 @@
      "num": "18",
      "pos": "F",
      "starter": true
-    },
-    {
-     "age": 21,
-     "name": "Mamadou Sarr",
-     "num": "2",
-     "pos": "F",
-     "starter": false
     },
     {
      "age": 21,
@@ -8380,7 +8380,7 @@
      "starter": true
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Oguz Aydin",
      "num": "24",
      "pos": "F",
