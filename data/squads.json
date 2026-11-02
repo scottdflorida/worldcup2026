@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-01T13:01:52.366831+00:00",
+ "fetched_at": "2026-11-02T13:02:09.986164+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1377,7 +1377,7 @@
      "starter": false
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Alphonso Davies",
      "num": "19",
      "pos": "D",
@@ -2707,7 +2707,7 @@
      "starter": true
     },
     {
-     "age": 24,
+     "age": 25,
      "name": "Moisés Caicedo",
      "num": "23",
      "pos": "M",
@@ -3572,7 +3572,7 @@
      "starter": false
     },
     {
-     "age": 28,
+     "age": 26,
      "name": "Gideon Mensah",
      "num": "14",
      "pos": "D",
@@ -6952,6 +6952,13 @@
      "starter": true
     },
     {
+     "age": 21,
+     "name": "Mamadou Sarr",
+     "num": "2",
+     "pos": "D",
+     "starter": false
+    },
+    {
      "age": 35,
      "name": "Kalidou Koulibaly",
      "num": "3",
@@ -7055,13 +7062,6 @@
      "num": "18",
      "pos": "F",
      "starter": true
-    },
-    {
-     "age": 21,
-     "name": "Mamadou Sarr",
-     "num": "2",
-     "pos": "F",
-     "starter": false
     },
     {
      "age": 21,
