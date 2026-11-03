@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-02T13:02:09.986164+00:00",
+ "fetched_at": "2026-11-03T13:01:58.973801+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1557,7 +1557,7 @@
      "starter": false
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Wagner Pina",
      "num": "24",
      "pos": "D",
@@ -2513,7 +2513,7 @@
      "starter": false
     },
     {
-     "age": 21,
+     "age": 22,
      "name": "Ngal'ayel Mukau",
      "num": "6",
      "pos": "M",
@@ -3705,7 +3705,7 @@
      "starter": false
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Augustine Boakye",
      "num": "20",
      "pos": "F",
@@ -6952,13 +6952,6 @@
      "starter": true
     },
     {
-     "age": 21,
-     "name": "Mamadou Sarr",
-     "num": "2",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 35,
      "name": "Kalidou Koulibaly",
      "num": "3",
@@ -7062,6 +7055,13 @@
      "num": "18",
      "pos": "F",
      "starter": true
+    },
+    {
+     "age": 21,
+     "name": "Mamadou Sarr",
+     "num": "2",
+     "pos": "F",
+     "starter": false
     },
     {
      "age": 21,
@@ -8434,7 +8434,7 @@
      "starter": false
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Sergiño Dest",
      "num": "2",
      "pos": "D",
