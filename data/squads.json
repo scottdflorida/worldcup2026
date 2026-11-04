@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-03T13:01:58.973801+00:00",
+ "fetched_at": "2026-11-04T13:01:41.303564+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -2742,7 +2742,7 @@
      "starter": true
     },
     {
-     "age": 36,
+     "age": 37,
      "name": "Enner Valencia",
      "num": "13",
      "pos": "F",
@@ -5068,7 +5068,7 @@
      "starter": false
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Achraf Hakimi",
      "num": "2",
      "pos": "D",
@@ -5816,13 +5816,6 @@
      "starter": false
     },
     {
-     "age": 25,
-     "name": "José Córdoba",
-     "num": "3",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 31,
      "name": "Fidel Escobar",
      "num": "4",
@@ -5933,6 +5926,13 @@
      "num": "20",
      "pos": "M",
      "starter": false
+    },
+    {
+     "age": 27,
+     "name": "José Córdoba",
+     "num": "3",
+     "pos": "F",
+     "starter": true
     },
     {
      "age": 29,
