@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-05T13:02:35.295614+00:00",
+ "fetched_at": "2026-11-06T13:01:59.956752+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1356,13 +1356,6 @@
      "starter": true
     },
     {
-     "age": 29,
-     "name": "Alfie Jones",
-     "num": "3",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 30,
      "name": "Joel Waterman",
      "num": "5",
@@ -1403,6 +1396,13 @@
      "num": "23",
      "pos": "M",
      "starter": true
+    },
+    {
+     "age": 29,
+     "name": "Alfie Jones",
+     "num": "3",
+     "pos": "M",
+     "starter": false
     },
     {
      "age": 27,
@@ -3095,7 +3095,7 @@
      "starter": true
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Elliot Anderson",
      "num": "8",
      "pos": "M",
