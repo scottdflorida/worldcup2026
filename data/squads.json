@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-06T13:01:59.956752+00:00",
+ "fetched_at": "2026-11-07T13:01:37.626757+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -2188,7 +2188,7 @@
      "starter": false
     },
     {
-     "age": 32,
+     "age": 33,
      "name": "Jürgen Locadia",
      "num": "9",
      "pos": "F",
@@ -2471,7 +2471,7 @@
      "starter": true
     },
     {
-     "age": 32,
+     "age": 33,
      "name": "Arthur Masuaku",
      "num": "26",
      "pos": "D",
@@ -3656,7 +3656,7 @@
      "starter": true
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Elisha Owusu",
      "num": "15",
      "pos": "M",
@@ -5816,16 +5816,16 @@
      "starter": false
     },
     {
-     "age": 31,
-     "name": "Fidel Escobar",
-     "num": "4",
+     "age": 25,
+     "name": "José Córdoba",
+     "num": "3",
      "pos": "D",
      "starter": true
     },
     {
-     "age": 28,
-     "name": "Andrés Andrade",
-     "num": "16",
+     "age": 31,
+     "name": "Fidel Escobar",
+     "num": "4",
      "pos": "D",
      "starter": true
     },
@@ -5893,13 +5893,6 @@
      "starter": true
     },
     {
-     "age": 24,
-     "name": "Tomás Rodríguez",
-     "num": "9",
-     "pos": "M",
-     "starter": true
-    },
-    {
      "age": 33,
      "name": "Édgar Yoel Bárcenas",
      "num": "11",
@@ -5910,6 +5903,13 @@
      "age": 26,
      "name": "Carlos Harvey",
      "num": "14",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 37,
+     "name": "Andrés Andrade",
+     "num": "16",
      "pos": "M",
      "starter": true
     },
@@ -5929,8 +5929,8 @@
     },
     {
      "age": 27,
-     "name": "José Córdoba",
-     "num": "3",
+     "name": "Tomás Rodríguez",
+     "num": "9",
      "pos": "F",
      "starter": true
     },
