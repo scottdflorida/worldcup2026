@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-08T13:01:43.145528+00:00",
+ "fetched_at": "2026-11-09T13:02:11.138369+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -3913,8 +3913,8 @@
      "starter": false
     },
     {
-     "age": 27,
-     "name": "Frantz Pierrot",
+     "age": 31,
+     "name": "Frantzdy Pierrot",
      "num": "20",
      "pos": "F",
      "starter": false
@@ -5418,7 +5418,7 @@
    ]
   },
   "New Zealand": {
-   "as_of": "Belgium at New Zealand",
+   "as_of": "Egypt at New Zealand",
    "players": [
     {
      "age": 33,
@@ -5449,9 +5449,9 @@
      "starter": true
     },
     {
-     "age": 21,
-     "name": "Tyler Bindon",
-     "num": "4",
+     "age": 38,
+     "name": "Michael Boxall",
+     "num": "5",
      "pos": "D",
      "starter": true
     },
@@ -5477,9 +5477,9 @@
      "starter": false
     },
     {
-     "age": 38,
-     "name": "Michael Boxall",
-     "num": "5",
+     "age": 21,
+     "name": "Tyler Bindon",
+     "num": "4",
      "pos": "D",
      "starter": false
     },
@@ -5526,9 +5526,9 @@
      "starter": true
     },
     {
-     "age": 31,
-     "name": "Ryan Thomas",
-     "num": "23",
+     "age": 27,
+     "name": "Callum McCowatt",
+     "num": "20",
      "pos": "M",
      "starter": true
     },
@@ -5547,9 +5547,9 @@
      "starter": false
     },
     {
-     "age": 27,
-     "name": "Callum McCowatt",
-     "num": "20",
+     "age": 31,
+     "name": "Ryan Thomas",
+     "num": "23",
      "pos": "M",
      "starter": false
     },
@@ -5816,9 +5816,23 @@
      "starter": false
     },
     {
+     "age": 25,
+     "name": "José Córdoba",
+     "num": "3",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 31,
      "name": "Fidel Escobar",
      "num": "4",
+     "pos": "D",
+     "starter": true
+    },
+    {
+     "age": 28,
+     "name": "Andrés Andrade",
+     "num": "16",
      "pos": "D",
      "starter": true
     },
@@ -5900,13 +5914,6 @@
      "starter": true
     },
     {
-     "age": 37,
-     "name": "Andrés Andrade",
-     "num": "16",
-     "pos": "M",
-     "starter": true
-    },
-    {
      "age": 27,
      "name": "Adalberto Carrasquilla",
      "num": "8",
@@ -5919,13 +5926,6 @@
      "num": "20",
      "pos": "M",
      "starter": false
-    },
-    {
-     "age": 27,
-     "name": "José Córdoba",
-     "num": "3",
-     "pos": "F",
-     "starter": true
     },
     {
      "age": 27,
@@ -8656,7 +8656,7 @@
      "starter": false
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Matías Viña",
      "num": "17",
      "pos": "D",
@@ -8670,7 +8670,7 @@
      "starter": false
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Santiago Bueno",
      "num": "24",
      "pos": "D",
