@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-13T13:02:00.635592+00:00",
+ "fetched_at": "2026-11-14T13:02:12.384988+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -2457,7 +2457,7 @@
      "starter": true
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Axel Tuanzebe",
      "num": "4",
      "pos": "D",
@@ -4418,7 +4418,7 @@
      "starter": true
     },
     {
-     "age": 19,
+     "age": 20,
      "name": "Yan Diomande",
      "num": "11",
      "pos": "F",
@@ -5075,7 +5075,7 @@
      "starter": true
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Noussair Mazraoui",
      "num": "3",
      "pos": "D",
@@ -5830,13 +5830,6 @@
      "starter": true
     },
     {
-     "age": 28,
-     "name": "Andrés Andrade",
-     "num": "16",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 30,
      "name": "Amir Murillo",
      "num": "23",
@@ -5910,6 +5903,13 @@
      "age": 26,
      "name": "Carlos Harvey",
      "num": "14",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 37,
+     "name": "Andrés Andrade",
+     "num": "16",
      "pos": "M",
      "starter": true
     },
