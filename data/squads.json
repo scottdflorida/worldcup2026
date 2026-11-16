@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-15T13:01:45.539117+00:00",
+ "fetched_at": "2026-11-16T13:09:52.793870+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1204,7 +1204,7 @@
      "starter": true
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Bruno Guimarães",
      "num": "8",
      "pos": "M",
@@ -3399,6 +3399,13 @@
      "starter": true
     },
     {
+     "age": 22,
+     "name": "Aleksandar Pavlović",
+     "num": "5",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 23,
      "name": "Nathaniel Brown",
      "num": "18",
@@ -3432,13 +3439,6 @@
      "num": "24",
      "pos": "D",
      "starter": false
-    },
-    {
-     "age": 22,
-     "name": "Aleksandar Pavlovic",
-     "num": "5",
-     "pos": "M",
-     "starter": true
     },
     {
      "age": 31,
@@ -4175,7 +4175,7 @@
      "starter": false
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Munaf Younus",
      "num": "6",
      "pos": "D",
@@ -5325,7 +5325,7 @@
      "starter": false
     },
     {
-     "age": 26,
+     "age": 27,
      "name": "Mats Wieffer",
      "num": "12",
      "pos": "M",
@@ -6218,7 +6218,7 @@
      "starter": true
     },
     {
-     "age": 32,
+     "age": 33,
      "name": "Nélson Semedo",
      "num": "2",
      "pos": "D",
@@ -6814,7 +6814,7 @@
      "starter": false
     },
     {
-     "age": 27,
+     "age": 28,
      "name": "Anthony Ralston",
      "num": "24",
      "pos": "D",
@@ -6924,7 +6924,7 @@
      "starter": true
     },
     {
-     "age": 26,
+     "age": 27,
      "name": "Yehvann Diouf",
      "num": "1",
      "pos": "G",
