@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-17T13:02:31.919437+00:00",
+ "fetched_at": "2026-11-18T13:02:20.058981+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -2784,7 +2784,7 @@
      "starter": false
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Jordy Caicedo",
      "num": "16",
      "pos": "F",
@@ -3572,7 +3572,7 @@
      "starter": false
     },
     {
-     "age": 28,
+     "age": 26,
      "name": "Gideon Mensah",
      "num": "14",
      "pos": "D",
@@ -6489,7 +6489,7 @@
      "starter": true
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Akram Afif",
      "num": "11",
      "pos": "F",
