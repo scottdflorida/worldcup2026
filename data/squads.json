@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-19T13:01:56.511761+00:00",
+ "fetched_at": "2026-11-20T13:01:47.796613+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1620,13 +1620,6 @@
      "starter": false
     },
     {
-     "age": 25,
-     "name": "Telmo Arcanjo",
-     "num": "18",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 28,
      "name": "Jovane Cabral",
      "num": "7",
@@ -1658,6 +1651,13 @@
      "age": 35,
      "name": "Garry Rodrigues",
      "num": "11",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 25,
+     "name": "Telmo Arcanjo",
+     "num": "18",
      "pos": "F",
      "starter": false
     },
@@ -2576,7 +2576,7 @@
      "starter": true
     },
     {
-     "age": 30,
+     "age": 31,
      "name": "Théo Bongonda",
      "num": "10",
      "pos": "F",
@@ -6786,7 +6786,7 @@
      "starter": false
     },
     {
-     "age": 34,
+     "age": 35,
      "name": "Grant Hanley",
      "num": "5",
      "pos": "D",
@@ -7929,7 +7929,7 @@
      "starter": false
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Denis Zakaria",
      "num": "6",
      "pos": "M",
