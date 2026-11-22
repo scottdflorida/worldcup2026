@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-21T13:01:41.789165+00:00",
+ "fetched_at": "2026-11-22T13:01:47.021530+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1807,13 +1807,6 @@
      "starter": false
     },
     {
-     "age": 26,
-     "name": "Jhon Córdoba",
-     "num": "9",
-     "pos": "M",
-     "starter": false
-    },
-    {
      "age": 28,
      "name": "Juan Portilla",
      "num": "15",
@@ -1847,6 +1840,13 @@
      "num": "25",
      "pos": "F",
      "starter": true
+    },
+    {
+     "age": 33,
+     "name": "Jhon Córdoba",
+     "num": "9",
+     "pos": "F",
+     "starter": false
     },
     {
      "age": 27,
@@ -4820,7 +4820,7 @@
      "starter": true
     },
     {
-     "age": 20,
+     "age": 21,
      "name": "Odeh Fakhoury",
      "num": "11",
      "pos": "F",
@@ -5201,7 +5201,7 @@
      "starter": false
     },
     {
-     "age": 20,
+     "age": 21,
      "name": "Gessime Yassine",
      "num": "16",
      "pos": "F",
@@ -5830,6 +5830,13 @@
      "starter": true
     },
     {
+     "age": 28,
+     "name": "Andrés Andrade",
+     "num": "16",
+     "pos": "D",
+     "starter": true
+    },
+    {
      "age": 30,
      "name": "Amir Murillo",
      "num": "23",
@@ -5893,6 +5900,13 @@
      "starter": true
     },
     {
+     "age": 24,
+     "name": "Tomás Rodríguez",
+     "num": "9",
+     "pos": "M",
+     "starter": true
+    },
+    {
      "age": 33,
      "name": "Édgar Yoel Bárcenas",
      "num": "11",
@@ -5903,13 +5917,6 @@
      "age": 26,
      "name": "Carlos Harvey",
      "num": "14",
-     "pos": "M",
-     "starter": true
-    },
-    {
-     "age": 37,
-     "name": "Andrés Andrade",
-     "num": "16",
      "pos": "M",
      "starter": true
     },
@@ -5926,13 +5933,6 @@
      "num": "20",
      "pos": "M",
      "starter": false
-    },
-    {
-     "age": 27,
-     "name": "Tomás Rodríguez",
-     "num": "9",
-     "pos": "F",
-     "starter": true
     },
     {
      "age": 29,
