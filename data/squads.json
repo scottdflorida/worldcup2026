@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-23T13:02:17.449633+00:00",
+ "fetched_at": "2026-11-24T13:02:14.458894+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -110,14 +110,14 @@
      "starter": true
     },
     {
-     "age": 31,
+     "age": 32,
      "name": "Nabil Bentaleb",
      "num": "19",
      "pos": "M",
      "starter": true
     },
     {
-     "age": 20,
+     "age": 21,
      "name": "Ibrahim Maza",
      "num": "22",
      "pos": "M",
@@ -5692,7 +5692,7 @@
      "starter": false
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Patrick Berg",
      "num": "6",
      "pos": "M",
