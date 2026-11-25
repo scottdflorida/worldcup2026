@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-24T13:02:14.458894+00:00",
+ "fetched_at": "2026-11-25T13:01:53.188849+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1363,7 +1363,7 @@
      "starter": false
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Derek Cornelius",
      "num": "13",
      "pos": "D",
@@ -3885,7 +3885,7 @@
      "starter": true
     },
     {
-     "age": 29,
+     "age": 30,
      "name": "Derrick Etienne Jr.",
      "num": "7",
      "pos": "F",
@@ -5014,7 +5014,7 @@
      "starter": true
     },
     {
-     "age": 28,
+     "age": 29,
      "name": "Alexis Vega",
      "num": "10",
      "pos": "F",
@@ -5830,13 +5830,6 @@
      "starter": true
     },
     {
-     "age": 28,
-     "name": "Andrés Andrade",
-     "num": "16",
-     "pos": "D",
-     "starter": true
-    },
-    {
      "age": 30,
      "name": "Amir Murillo",
      "num": "23",
@@ -5917,6 +5910,13 @@
      "age": 26,
      "name": "Carlos Harvey",
      "num": "14",
+     "pos": "M",
+     "starter": true
+    },
+    {
+     "age": 37,
+     "name": "Andrés Andrade",
+     "num": "16",
      "pos": "M",
      "starter": true
     },
@@ -7611,7 +7611,7 @@
      "starter": false
     },
     {
-     "age": 23,
+     "age": 24,
      "name": "Pedri",
      "num": "20",
      "pos": "M",
