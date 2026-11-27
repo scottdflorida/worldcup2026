@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-26T13:02:05.470419+00:00",
+ "fetched_at": "2026-11-27T13:02:04.766498+00:00",
  "teams": {
   "Algeria": {
    "as_of": "Algeria at Switzerland",
@@ -1321,7 +1321,7 @@
      "starter": false
     },
     {
-     "age": 22,
+     "age": 23,
      "name": "Owen Goodman",
      "num": "18",
      "pos": "G",
@@ -1648,7 +1648,7 @@
      "starter": false
     },
     {
-     "age": 35,
+     "age": 36,
      "name": "Garry Rodrigues",
      "num": "11",
      "pos": "F",
@@ -2672,13 +2672,6 @@
      "starter": false
     },
     {
-     "age": 21,
-     "name": "Kevin Rodríguez",
-     "num": "11",
-     "pos": "D",
-     "starter": false
-    },
-    {
      "age": 28,
      "name": "Ángelo Preciado",
      "num": "17",
@@ -2773,6 +2766,13 @@
      "age": 23,
      "name": "Anthony Valencia",
      "num": "8",
+     "pos": "F",
+     "starter": false
+    },
+    {
+     "age": 26,
+     "name": "Kevin Rodríguez",
+     "num": "11",
      "pos": "F",
      "starter": false
     },
@@ -6288,7 +6288,7 @@
      "starter": false
     },
     {
-     "age": 25,
+     "age": 26,
      "name": "Samú Costa",
      "num": "24",
      "pos": "M",
